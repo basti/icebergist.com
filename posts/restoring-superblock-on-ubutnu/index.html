@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Restoring superblock on Ubutnu - Icebergist</title>
+  <meta name="author" content="Slobodan Kovačević">
+
+  
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://basti.github.io/icebergist/posts/restoring-superblock-on-ubutnu">
+  <link href="/favicon.png" type="image/png" rel="icon">
+  <link href="http://feeds.feedburner.com/icebergist" rel="alternate" title="Icebergist" type="application/atom+xml">
+
+  <link href="/assets/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+<link href="/assets/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css">
+<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+
+  <script src="/javascripts/libs/jquery/jquery-2.0.3.min.js"></script>
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-4735545-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+  <body   >
+    <div id="wrap">
+      <header role="banner">
+        <nav class="navbar navbar-default" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Icebergist</a>
+        </div>
+
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li class="active">
+                    <a href="/">Blog</a>
+                </li>
+                <li >
+                    <a href="/blog/archives">Archives</a>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a class="subscribe-rss" href="http://feeds.feedburner.com/icebergist" title="subscribe via RSS">
+                        <span class="visible-xs">RSS</span>
+                        <img class="hidden-xs" src="/images/rss.png" alt="RSS">
+                    </a>
+                </li>
+                
+            </ul>
+            
+                <form class="search navbar-form navbar-right" action="http://google.com/search" method="GET">
+                    <input type="hidden" name="q" value="site:basti.github.io/icebergist">
+                    <div class="form-group">
+                        <input class="form-control" type="text" name="q" placeholder="Search">
+                    </div>
+                </form>
+            
+        </div>
+    </div>
+</nav>
+
+
+      </header>
+      <div id="main" class="container">
+        <div id="content">
+          <div class="row">
+  <div class="page-content col-md-9">
+    <article class="hentry" role="article">
+      
+  <header class="page-header">
+    
+      <p class="meta text-muted text-uppercase">
+        
+
+
+
+
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2008-11-09T09:00:00+01:00" pubdate data-updated="true">Nov 9<span>th</span>, 2008</time>
+        
+      </p>
+    
+    
+    <h1 class="entry-title">
+        Restoring Superblock on Ubutnu
+        
+    </h1>
+    
+  </header>
+
+
+<div class="entry-content clearfix"><p>Recently I had a problem on my Torrent box (an old PC that I use as dedicated torrent client) that runs Ubuntu. For some reason my root partition was being mounted as read-only. Everything else seemed to work (all other partitions were mounted properly), but I couldn&#8217;t change any of my config or do anything on root partition.</p>
+
+<p>I did the usual stuff:</p>
+
+<ul>
+<li>Run fsck checks and it said that everything is fine</li>
+<li>Used Ubuntu&#8217;s live CD to boot, which got me read-write access to root partition. I changed some things in fstab, tried to get it to be rw permanently. No matter what I did as soon as I rebooted the root partition was once again read-only.</li>
+<li>I tried booting from some repair disks I have, but all checks passed and no problem was detected. <img src='http://icebergist.com/wp-includes/images/smilies/icon_sad.gif' alt=':(' class='wp-smiley' /></li>
+</ul>
+
+
+<p>Finally, I read somewhere that a similar problem was caused by faulty superblock on hard drive. Fortunately Ubuntu stores superblock backups in different places around disk, so I decided to try to restore it from one of those backups.</p>
+
+<p>It turned out that all I needed was a single command (this <a href="http://ubuntuforums.org/showpost.php?s=72da065bbe1506b27f41a8cfc252c732&amp;p=1424786&amp;postcount=5" title="Bad superblock">Ubuntu forum post helped</a>) to restore superblock:</p>
+
+<p><code>e2fsck -b 32768 /dev/hdc1</code></p>
+
+<p>After that my root partition was back to read-write mode. <img src='http://icebergist.com/wp-includes/images/smilies/icon_smile.gif' alt=':)' class='wp-smiley' /></p>
+
+<p>Before you do stuff like that to your computer I suggest that you read man pages for <a href="http://linux.die.net/man/8/mke2fs" title="mke2fs">mke2fs</a> and <a href="http://linux.die.net/man/8/e2fsck" title="e2fsck">e2fsck</a>. It will prevent you from doing something foolish like deleting your whole hard drive. <img src='http://icebergist.com/wp-includes/images/smilies/icon_smile.gif' alt=':)' class='wp-smiley' /></p>
+</div>
+
+
+      <footer>
+        <p class="meta text-muted">
+          
+  
+
+<span class="glyphicon glyphicon-user"></span> <span class="byline author vcard">Posted by <span class="fn">Slobodan Kovačević</span></span>
+
+          
+
+
+
+
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2008-11-09T09:00:00+01:00" pubdate data-updated="true">Nov 9<span>th</span>, 2008</time>
+          
+
+<span class="glyphicon glyphicon-tags"></span>&nbsp;
+<span class="categories">
+  
+    <a class='category' href='/category/misc/'>Misc</a>
+  
+</span>
+
+
+        </p>
+        
+          <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://basti.github.io/icebergist/posts/restoring-superblock-on-ubutnu" data-via="icebergist" data-counturl="http://basti.github.io/icebergist/posts/restoring-superblock-on-ubutnu" >Tweet</a>
+  
+  
+  
+</div>
+
+        
+        
+          <ul class="meta text-muted pager">
+            
+            <li class="previous"><a href="/posts/restful-admin-namespaced-controller-using-scaffolding" title="Previous Post: RESTful admin namespaced controller using scaffolding">&laquo; RESTful admin namespaced controller using scaffolding</a></li>
+            
+            
+            <li class="next"><a href="/posts/simple-password-protected-administration-with-codeigniter" title="Next Post: Simple password protected administration with CodeIgniter">Simple password protected administration with CodeIgniter &raquo;</a></li>
+            
+          </ul>
+        
+      </footer>
+    </article>
+    
+  </div>
+
+  
+  <aside class="sidebar col-md-3">
+    
+      <section>
+  <h2>About Me</h2>
+  <div><img src="http://orangeiceberg.com/images/slobodan-110x110.gif" class="sidebar_avatar" alt="Slobodan Kovacevic" />
+  <div id="sidebar-about">
+    <p>
+      Hello, my name is <a href="http://slobodankovacevic.com">Slobodan Kovačević</a>. I am a freelance Ruby developer. <!-- building web application using Ruby and Ruby on Rails -->
+    </p>
+    <p>
+      <strong>Icebergist</strong> is my personal blog where I write mainly about Ruby and Ruby on Rails.
+      <!-- a blog about technical and business challenges faced daily by a web application developer running his own business. From dealing with clients to dealing with Ruby code. -->
+    </p>
+    <p style="text-align:center;padding:10px;border:1px dashed #e89646;">
+      <strong style="font-size:14px;font-weight:bold;">I am available for hire.</strong>
+      <br />
+      <!-- <a href="http://orangeiceberg.com/contact">Want to contact me</a>?-->
+      <a href="http://orangeiceberg.com/contact">Contact me and find out how I can help you.</a> <!--Contact me through Orange Iceberg (my company).-->
+    </p>
+  </div>
+</section>
+<section class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Recent Posts</h3>
+  </div>
+  
+  <div id="recent_posts" class="list-group">
+    
+    <a class="list-group-item " href="/posts/quick-virtualboxvagrant-setup-with-heroku-like-box">Quick VirtualBox/Vagrant Setup With Heroku-like Box</a>
+    
+    <a class="list-group-item " href="/posts/railsdiff">RailsDiff</a>
+    
+    <a class="list-group-item " href="/posts/rspec-and-factorygirl-setup-for-testing-carrierwave-uploaders">RSpec and FactoryGirl Setup for Testing Carrierwave Uploaders</a>
+    
+    <a class="list-group-item " href="/posts/random-rails-tips">Random Rails Tips</a>
+    
+    <a class="list-group-item " href="/posts/paperclip-heroku-and-amazon-s3-credentials">Paperclip, Heroku and Amazon S3 Credentials</a>
+    
+  </div>
+</section>
+<section class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Categories</h3>
+  </div>
+  <div class="list-group">
+    
+    
+    <a class="list-group-item " href="/category/misc/index.html">
+        <span class="badge">8</span>
+        Misc
+      </a>
+    
+    
+    <a class="list-group-item " href="/category/javascript/index.html">
+        <span class="badge">1</span>
+        Javascript
+      </a>
+    
+    
+    <a class="list-group-item " href="/category/ruby-and-rails/index.html">
+        <span class="badge">11</span>
+        Ruby and Rails
+      </a>
+    
+    
+    <a class="list-group-item " href="/category/this-should-be-interesting---weekly/index.html">
+        <span class="badge">2</span>
+        This should be interesting - weekly
+      </a>
+    
+    
+    <a class="list-group-item " href="/category/php/index.html">
+        <span class="badge">1</span>
+        PHP
+      </a>
+    
+    
+    <a class="list-group-item " href="/category/testing/index.html">
+        <span class="badge">1</span>
+        Testing
+      </a>
+    
+  </div>
+</section>
+
+<section class="panel panel-default clearfix">
+  <div class="panel-heading">
+      <h3 class="panel-title">GitHub Repos</h3>
+  </div>
+  <div class="list-group" id="gh_repos">
+    <p class="loading">Status updating...</p>
+  </div>
+  
+    <div class="gh-profile-link pull-right text-muted">
+      <a href="https://github.com/basti">@basti</a> on GitHub
+    </div>
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'basti',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+
+    
+  </aside>
+  
+</div>
+
+        </div>
+      </div>
+    </div>
+    <footer role="contentinfo"><div class="container">
+    <p class="text-muted credits">
+  Copyright &copy; 2013 - Slobodan Kovačević<br>
+  <small>
+      <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>,
+      <span class="credit">customized with <a href="https://github.com/kAworu/octostrap3">octostrap3</a></span>.
+  </small>
+</p>
+
+</div>
+</footer>
+    <script src="/assets/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="/javascripts/modernizr-2.0.js"></script>
+
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+  </body>
+</html>

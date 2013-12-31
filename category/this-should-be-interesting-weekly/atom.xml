@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: This should be interesting - weekly | Icebergist]]></title>
+  <link href="http://basti.github.io/icebergist/category/this-should-be-interesting-weekly/atom.xml" rel="self"/>
+  <link href="http://basti.github.io/icebergist/"/>
+  <updated>2013-12-31T21:55:32+01:00</updated>
+  <id>http://basti.github.io/icebergist/</id>
+  <author>
+    <name><![CDATA[Slobodan Kovačević]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[This should be interesting weekly &#8211; week 28]]></title>
+    <link href="http://basti.github.io/icebergist/posts/this-should-be-interesting-weekly-week-28"/>
+    <updated>2008-07-13T10:00:00+02:00</updated>
+    <id>http://basti.github.io/icebergist/posts/this-should-be-interesting-weekly-week-28</id>
+    <content type="html"><![CDATA[<ul>
+<li>What&#8217;s New in Edge Rails: <a href="http://tumblelog.slobodankovacevic.com/post/41430445/whats-new-in-edge-rails-easy-join-table-conditions">Easy Join Table Conditions.</a></li>
+<li><a href="http://tumblelog.slobodankovacevic.com/post/41483353/faces-of-millions">Faces of Millions</a> &#8211; Art project which aims to gather one million photos of people faces and create 10m x 10m photo mosaic.</li>
+<li><a href="http://tumblelog.slobodankovacevic.com/post/41727168/uni-form">Uni-Form</a> is an attempt to standardize form markup (xhtml) and css.</li>
+<li><a href="http://tumblelog.slobodankovacevic.com/post/41886839/mac-fullscreen-quicklook-a-k-a-slideshow">Mac OS X full screen QuickLook shortcut.</a></li>
+<li>A guide to <a href="http://tumblelog.slobodankovacevic.com/post/41978415/a-guide-to-css-support-in-email">CSS support in Email</a>.</li>
+</ul>
+
+
+<p>condensed from &lsquo;<a href="http://tumblelog.slobodankovacevic.com/">this should be interesting</a>&rsquo; tumblelog</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[This should be interesting weekly &#8211; week 27]]></title>
+    <link href="http://basti.github.io/icebergist/posts/this-should-be-interesting-weekly-week-27"/>
+    <updated>2008-07-06T10:00:00+02:00</updated>
+    <id>http://basti.github.io/icebergist/posts/this-should-be-interesting-weekly-week-27</id>
+    <content type="html"><![CDATA[<p>This is the first weekly condensed edition of my <a href="http://tumblelog.slobodankovacevic.com/" title="Tumblelog by Slobodan Kovacevic">&#8220;This should be interesting&#8221; tumblelog</a>. Every Sunday I will re-post most interesting posts here on the Icebergist.</p>
+
+<ul>
+<li><a href="http://tumblelog.slobodankovacevic.com/post/40966961/new-free-book-ruby-on-rails-2-1-whats-new" title="Free Book: &quot;Ruby on Rails 2.1 - What’s new&quot;">Free Book: &#8220;Ruby on Rails 2.1 &#8211; What’s new&#8221;</a></li>
+<li><a href="http://tumblelog.slobodankovacevic.com/post/40888615/better-blockquotes-blockquotes-examples" title="Better Blockquotes - Blockquotes examples">Better Blockquotes</a> &#8211; blockquotes CSS styling examples</li>
+<li><a href="http://tumblelog.slobodankovacevic.com/post/39785793/slife-free-automatic-time-tracking-for-mac" title="Slife - free automatic time tracking for Mac">Slife</a> &#8211; free automatic time tracking for Mac</li>
+<li><a href="http://tumblelog.slobodankovacevic.com/post/39263529/unfocus-history-keeper-back-button-enabling-deep" title="unfocus-history-keeper">unfocus-history-keeper</a> &#8211; back button enabling, deep linking, event driven Javascrpt/DHTML/Ajax Library (works for Flash too)</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>

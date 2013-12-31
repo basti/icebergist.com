@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Ruby and Rails | Icebergist]]></title>
+  <link href="http://basti.github.io/icebergist/category/ruby-and-rails/atom.xml" rel="self"/>
+  <link href="http://basti.github.io/icebergist/"/>
+  <updated>2013-12-31T21:55:32+01:00</updated>
+  <id>http://basti.github.io/icebergist/</id>
+  <author>
+    <name><![CDATA[Slobodan Kovačević]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Quick VirtualBox/Vagrant setup with Heroku-like box]]></title>
+    <link href="http://basti.github.io/icebergist/posts/quick-virtualboxvagrant-setup-with-heroku-like-box"/>
+    <updated>2013-09-16T10:00:00+02:00</updated>
+    <id>http://basti.github.io/icebergist/posts/quick-virtualboxvagrant-setup-with-heroku-like-box</id>
+    <content type="html"><![CDATA[<p>Here is a quick way to setup VirtualBox using Vagrant with Heroku-like box on Mac.</p>
+
+<ol>
+<li><p>Install VirtualBox from <a href="https://www.virtualbox.org/wiki/Downloads" target="_blank"><a href="https://www.virtualbox.org/wiki/Downloads">https://www.virtualbox.org/wiki/Downloads</a></a></p></li>
+<li><p>Install Vagrant from <a href="http://downloads.vagrantup.com/" target="_blank"><a href="http://downloads.vagrantup.com/">http://downloads.vagrantup.com/</a></a></p></li>
+<li><p>Create Vagrantfile for Heroku-like box (based on <a href="https://github.com/ejholmes/vagrant-heroku" target="_blank"><a href="https://github.com/ejholmes/vagrant-heroku">https://github.com/ejholmes/vagrant-heroku</a></a>) that looks something like:</p></li>
+</ol>
+
+
+<p>``` ruby</p>
+
+<pre><code>    Vagrant.configure("2") do |config|        
+        config.vm.box = "heroku"
+        config.vm.box_url = "https://dl.dropboxusercontent.com/s/rnc0p8zl91borei/heroku.box"
+        config.vm.synced_folder ".", "/vagrant", :nfs =&amp;gt; true
+        config.vm.network :private_network, ip: "192.168.1.42"  # required for NFS
+    end
+</code></pre>
+
+<p>```</p>
+
+<p>Beside telling Vagrant to use Heroku-like box from <a href="https://github.com/ejholmes/vagrant-heroku" target="_blank"><a href="https://github.com/ejholmes/vagrant-heroku">https://github.com/ejholmes/vagrant-heroku</a></a> it also sets up shared dir between host and VM machine. It will mount Vagrantfile dir (.) to /vagrant in VM.</p>
+
+<p><code>vagrant up</code> will setup the VM and start it up.</p>
+
+<p>Now you can use <code>vagrant ssh</code> to login to VM.</p>
+
+<p>Vagrant Heroku-like box comes with Postgresql, but if you want you can easily setup sqlite:</p>
+
+<p><code>sh
+sudo apt-get install libsqlite3-dev
+</code></p>
+
+<p><strong>Bonus tip</strong>: when you are working on multiple projects sometimes you can forget which VMs are running. You can list all running VMs using:</p>
+
+<p><code>sh
+VBoxManage list runningvms
+</code></p>
+
+<p>Further reading:</p>
+
+<ul>
+<li><a href="http://docs.vagrantup.com/v2/" target="_blank">Vagrant docs</a></li>
+<li><a href="https://github.com/ejholmes/vagrant-heroku" target="_blank">Vagrant Heroku-like box</a> which can be easily customized.</li>
+<li><a href="http://loudcoding.com/posts/how-to-use-vagrant-to-run-celadon-cedar-stack-on-heroku/" target="_blank">Another Vagrant setup tutorial</a></li>
+<li><a href="https://www.stackmachine.com/blog/web-development-on-a-vm-is-it-slower" target="_blank">VM speed benchmarks</a> in case you doubt in VM speed.</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[RailsDiff]]></title>
+    <link href="http://basti.github.io/icebergist/posts/railsdiff"/>
+    <updated>2013-09-10T10:00:00+02:00</updated>
+    <id>http://basti.github.io/icebergist/posts/railsdiff</id>
+    <content type="html"><![CDATA[<p><a title="RailsDiff - compare Rails default app" href="http://railsdiff.org/" target="_blank">RailsDiff</a>
+is a very useful site when upgrading Rails versions (for example, from Rails 3.2 to Rails 4). It will generate default Rails app using two different Rails versions and it will compare them. The result is that you can see all the configuration changes (like in application.rb) and all other changes &#8211; which is really useful when upgrading to new Rails version.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[RSpec and FactoryGirl setup for testing Carrierwave uploaders]]></title>
+    <link href="http://basti.github.io/icebergist/posts/rspec-and-factorygirl-setup-for-testing-carrierwave-uploaders"/>
+    <updated>2013-09-07T10:00:00+02:00</updated>
+    <id>http://basti.github.io/icebergist/posts/rspec-and-factorygirl-setup-for-testing-carrierwave-uploaders</id>
+    <content type="html"><![CDATA[<p>Assume that you have the usual setup with model (MyFile) using simple Carrierwave uploader (MyFileUploader):</p>
+
+<pre># app/models/my_file.rb
+class MyFile &lt; ActiveRecord::Base
+  mount_uploader :file, MyFileUploader
+end</pre>
+
+
+<p>To be able to test Carrierwave uploaders with RSpec using FactoryGirl factories you need:</p>
+
+<ul>
+<li><span style="line-height: 13px;">define factory with uploaded file</span></li>
+<li>modify test environment storage so test file uploads are separated from other uploads</li>
+<li>turn off image processing to speed up tests</li>
+<li>perform cleanup after each test</li>
+</ul>
+
+
+<h2>Define factory</h2>
+
+<pre># spec/factories/my_files.rb
+FactoryGirl.define do
+ factory :my_file do
+   photo Rack::Test::UploadedFile.new(File.open(File.join(Rails.root, '/spec/fixtures/myfiles/myfile.jpg')))
+ end
+end</pre>
+
+
+<h2>Setup Carrierwave</h2>
+
+<p>First we need to make sure Carrierwave is using local file system for storage and to disable file processing for testing environments. Disabling file processing will speed up tests considerably. We can do that by adding following to Carrierwave initializer:</p>
+
+<pre>if Rails.env.test? || Rails.env.cucumber?
+  CarrierWave.configure do |config|
+    config.storage = :file
+    config.enable_processing = false
+  end
+end</pre>
+
+
+<p>Next we should separate test uploads from any other uploads. We can do that by modifying cache_dir and store_dir methods for all Carrierwave models (i.e. all models that are descendants of CarrierWave::Uploader::Base). So the whole Carrierwave initializer looks something like:</p>
+
+<pre># config/initializers/carrierwave.rb
+if Rails.env.test? || Rails.env.cucumber?
+  CarrierWave.configure do |config|
+    config.storage = :file
+    config.enable_processing = false
+  end
+
+  # make sure our uploader is auto-loaded
+  MyFileUploader
+
+  # use different dirs when testing
+  CarrierWave::Uploader::Base.descendants.each do |klass|
+    next if klass.anonymous?
+    klass.class_eval do
+      def cache_dir
+        "#{Rails.root}/spec/support/uploads/tmp"
+      end
+
+      def store_dir
+        "#{Rails.root}/spec/support/uploads/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}"
+      end
+    end
+  end
+end</pre>
+
+
+<h2>Clean up uploaded files</h2>
+
+<p>Using factory defined above will create uploaded files in cache_dir and store_dir. These are just temporary files and should be removed after each test, so each of them has a clean slate. By adding after :each hook in RSpec configuration block we can remove these files simply by deleting spec/support/uploads dir.</p>
+
+<pre># spec_helper.rb
+RSpec.configure do |config|
+  config.after(:each) do
+    if Rails.env.test? || Rails.env.cucumber?
+      FileUtils.rm_rf(Dir["#{Rails.root}/spec/support/uploads"])
+    end 
+  end
+end</pre>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Random Rails tips]]></title>
+    <link href="http://basti.github.io/icebergist/posts/random-rails-tips"/>
+    <updated>2013-03-09T09:00:00+01:00</updated>
+    <id>http://basti.github.io/icebergist/posts/random-rails-tips</id>
+    <content type="html"><![CDATA[<p>Here are some random Rails tips I&#8217;ve found useful:</p>
+
+<ul>
+<li><strong>rails console sandbox</strong> &#8211; if you open console like this it will rollback all database changes once you exit. Pretty useful for playing around without making any changes to database.</li>
+<li><strong>rake db:migrate:status</strong> &#8211; useful when you want to see the status of current database. It will show the status of all migrations.</li>
+<li><strong>User.pluck(:email)</strong> &#8211; since Rails 3.2.1 you can use <a href="http://apidock.com/rails/ActiveRecord/Calculations/pluck">pluck</a> method to get an array of values in one particular column. It&#8217;s the equvivalent of doing User.select(:email).map(&amp;:email)</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Paperclip, Heroku and Amazon S3 credentials]]></title>
+    <link href="http://basti.github.io/icebergist/posts/paperclip-heroku-and-amazon-s3-credentials"/>
+    <updated>2011-01-24T09:00:00+01:00</updated>
+    <id>http://basti.github.io/icebergist/posts/paperclip-heroku-and-amazon-s3-credentials</id>
+    <content type="html"><![CDATA[<p>Setting up Paperclip to use Amazon&#8217;s S3 is as simple as setting :storage => :s3 and providing right credentials to Paperclip by setting :s3_credentials option. Best way to provide S3 credentials is to use an YML file (usually config/s3.yml) which allows you to set different credentials for each environment. For example:</p>
+
+<pre># config/s3.yml
+development:
+  access_key_id: XYZXYZXYZ
+  secret_access_key: XYZXYZXYZ
+  bucket: mygreatapp-development
+production:
+  access_key_id: XYZXYZXYZ
+  secret_access_key: XYZXYZXYZ
+  bucket: mygreatapp-production
+</pre>
+
+
+<p>Of course you want to treat s3.yml same as database.yml &#8211; i.e. you don&#8217;t want to track it with git and you want for each person/server to have it&#8217;s own.</p>
+
+<p>However, consider this: you are working on Open Source app in a public git repository and you are deploying it on Heroku. Heroku doesn&#8217;t allow you to create files (unless they are in git repository) and you can&#8217;t commit s3.yml with your credentials to public repository.</p>
+
+<p>One solution is to define different :s3_credentials hash in one of the environment files or to load different YML file for each environment and generate hash from it. Downside is that you need to have a separate YML file for each environment and/or you need to convert YML to hash. Other solution could be to have separate local branch from which you will push to Heroku. Problem with this is that you have to have a local branch for deploying. This means if there are multiple developers who deploy to production each should have separate local branch.</p>
+
+<p>Much simpler way to deploy Paperclip with different S3 credentials for each environment (with one of the environment being deployed on Heroku; and repository being public) is to create s3.yml file as usual (and don&#8217;t commit it to git), but define values only for local environment.</p>
+
+<p>For production deployment on Heroku you can write initializer which will set :s3_credentials from ENV variables.</p>
+
+<pre># initializers/s3.rb
+if Rails.env == "production"
+  # set credentials from ENV hash
+  S3_CREDENTIALS = { :access_key_id => ENV['S3_KEY'], :secret_access_key => ENV['S3_SECRET'], :bucket => "sharedearth-production"}
+else
+  # get credentials from YML file
+  S3_CREDENTIALS = Rails.root.join("config/s3.yml")
+end
+
+# in your model
+has_attached_file :photo, :storage => :s3, :s3_credentials => S3_CREDENTIALS
+</pre>
+
+
+<p>and you can easily set persistant ENV vars on Heroku with:</p>
+
+<pre>$ heroku config:add S3_KEY=XYZXYZ S3_SECRET=XYZXYZ
+</pre>
+
+
+<p>(<a href="http://docs.heroku.com/config-vars#quick-example">according to Heroku docs</a>)</p>
+]]></content>
+  </entry>
+  
+</feed>

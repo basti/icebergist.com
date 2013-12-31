@@ -1,15 +1,13 @@
-
 <!DOCTYPE html>
 <!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
 <!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>My Octopress Blog</title>
-  <meta name="author" content="Your Name">
+  <title>Icebergist</title>
+  <meta name="author" content="Slobodan Kovačević">
 
   
-  <meta name="description" content=" Blog Archives Recent Posts ">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -19,84 +17,968 @@
 
   
   <link rel="canonical" href="http://basti.github.io/icebergist">
-  <link href="/icebergist/favicon.png" rel="icon">
-  <link href="/icebergist/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
-  <link href="/icebergist/atom.xml" rel="alternate" title="My Octopress Blog" type="application/atom+xml">
-  <script src="/icebergist/javascripts/modernizr-2.0.js"></script>
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
-  <script src="/icebergist/javascripts/octopress.js" type="text/javascript"></script>
-  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
-<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
-<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+  <link href="/favicon.png" type="image/png" rel="icon">
+  <link href="http://feeds.feedburner.com/icebergist" rel="alternate" title="Icebergist" type="application/atom+xml">
 
+  <link href="/assets/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+<link href="/assets/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css">
+<link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+
+  <script src="/javascripts/libs/jquery/jquery-2.0.3.min.js"></script>
   
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-4735545-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
 
 </head>
 
-<body   >
-  <header role="banner"><hgroup>
-  <h1><a href="/icebergist/">My Octopress Blog</a></h1>
-  
-    <h2>A blogging framework for hackers.</h2>
-  
-</hgroup>
+  <body   >
+    <div id="wrap">
+      <header role="banner">
+        <nav class="navbar navbar-default" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Icebergist</a>
+        </div>
 
-</header>
-  <nav role="navigation"><ul class="subscription" data-subscription="rss">
-  <li><a href="/icebergist/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
-  
-</ul>
-  
-<form action="http://google.com/search" method="get">
-  <fieldset role="search">
-    <input type="hidden" name="q" value="site:basti.github.io/icebergist" />
-    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
-  </fieldset>
-</form>
-  
-<ul class="main-navigation">
-  <li><a href="/icebergist/">Blog</a></li>
-  <li><a href="/icebergist/blog/archives">Archives</a></li>
-</ul>
-
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li class="active">
+                    <a href="/">Blog</a>
+                </li>
+                <li >
+                    <a href="/blog/archives">Archives</a>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a class="subscribe-rss" href="http://feeds.feedburner.com/icebergist" title="subscribe via RSS">
+                        <span class="visible-xs">RSS</span>
+                        <img class="hidden-xs" src="/images/rss.png" alt="RSS">
+                    </a>
+                </li>
+                
+            </ul>
+            
+                <form class="search navbar-form navbar-right" action="http://google.com/search" method="GET">
+                    <input type="hidden" name="q" value="site:basti.github.io/icebergist">
+                    <div class="form-group">
+                        <input class="form-control" type="text" name="q" placeholder="Search">
+                    </div>
+                </form>
+            
+        </div>
+    </div>
 </nav>
-  <div id="main">
-    <div id="content">
-      <div class="blog-index">
-  
-  
-  <div class="pagination">
+
+
+      </header>
+      <div id="main" class="container">
+        <div id="content">
+          <div class="row">
+  <div class="page-content col-md-9">
+    <div class="blog-index">
+      
+      
+      
+        <article class="post">
+          
+  <header class="page-header">
     
-    <a href="/icebergist/blog/archives">Blog Archives</a>
+      <p class="meta text-muted text-uppercase">
+        
+
+
+
+
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2013-09-16T10:00:00+02:00" pubdate data-updated="true">Sep 16<span>th</span>, 2013</time>
+        
+      </p>
+    
+    
+      <h1 class="entry-title"><a href="/posts/quick-virtualboxvagrant-setup-with-heroku-like-box">Quick VirtualBox/Vagrant Setup With Heroku-like Box</a></h1>
+    
+  </header>
+
+
+  <div class="entry-content clearfix"><p>Here is a quick way to setup VirtualBox using Vagrant with Heroku-like box on Mac.</p>
+
+<ol>
+<li><p>Install VirtualBox from <a href="https://www.virtualbox.org/wiki/Downloads" target="_blank"><a href="https://www.virtualbox.org/wiki/Downloads">https://www.virtualbox.org/wiki/Downloads</a></a></p></li>
+<li><p>Install Vagrant from <a href="http://downloads.vagrantup.com/" target="_blank"><a href="http://downloads.vagrantup.com/">http://downloads.vagrantup.com/</a></a></p></li>
+<li><p>Create Vagrantfile for Heroku-like box (based on <a href="https://github.com/ejholmes/vagrant-heroku" target="_blank"><a href="https://github.com/ejholmes/vagrant-heroku">https://github.com/ejholmes/vagrant-heroku</a></a>) that looks something like:</p></li>
+</ol>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>    <span class="no">Vagrant</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="s2">&quot;2&quot;</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
+</span><span class='line'>        <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">box</span> <span class="o">=</span> <span class="s2">&quot;heroku&quot;</span>
+</span><span class='line'>        <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">box_url</span> <span class="o">=</span> <span class="s2">&quot;https://dl.dropboxusercontent.com/s/rnc0p8zl91borei/heroku.box&quot;</span>
+</span><span class='line'>        <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">synced_folder</span> <span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="s2">&quot;/vagrant&quot;</span><span class="p">,</span> <span class="ss">:nfs</span> <span class="o">=&amp;</span><span class="n">gt</span><span class="p">;</span> <span class="kp">true</span>
+</span><span class='line'>        <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">network</span> <span class="ss">:private_network</span><span class="p">,</span> <span class="ss">ip</span><span class="p">:</span> <span class="s2">&quot;192.168.1.42&quot;</span>  <span class="c1"># required for NFS</span>
+</span><span class='line'>    <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Beside telling Vagrant to use Heroku-like box from <a href="https://github.com/ejholmes/vagrant-heroku" target="_blank"><a href="https://github.com/ejholmes/vagrant-heroku">https://github.com/ejholmes/vagrant-heroku</a></a> it also sets up shared dir between host and VM machine. It will mount Vagrantfile dir (.) to /vagrant in VM.</p>
+
+<p><code>vagrant up</code> will setup the VM and start it up.</p>
+
+<p>Now you can use <code>vagrant ssh</code> to login to VM.</p>
+
+<p>Vagrant Heroku-like box comes with Postgresql, but if you want you can easily setup sqlite:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>sudo apt-get install libsqlite3-dev
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>Bonus tip</strong>: when you are working on multiple projects sometimes you can forget which VMs are running. You can list all running VMs using:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>VBoxManage list runningvms
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Further reading:</p>
+
+<ul>
+<li><a href="http://docs.vagrantup.com/v2/" target="_blank">Vagrant docs</a></li>
+<li><a href="https://github.com/ejholmes/vagrant-heroku" target="_blank">Vagrant Heroku-like box</a> which can be easily customized.</li>
+<li><a href="http://loudcoding.com/posts/how-to-use-vagrant-to-run-celadon-cedar-stack-on-heroku/" target="_blank">Another Vagrant setup tutorial</a></li>
+<li><a href="https://www.stackmachine.com/blog/web-development-on-a-vm-is-it-slower" target="_blank">VM speed benchmarks</a> in case you doubt in VM speed.</li>
+</ul>
+
+</div>
+  
+  
+
+
+        </article>
+      
+      
+        <article class="post">
+          
+  <header class="page-header">
+    
+      <p class="meta text-muted text-uppercase">
+        
+
+
+
+
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2013-09-10T10:00:00+02:00" pubdate data-updated="true">Sep 10<span>th</span>, 2013</time>
+        
+      </p>
+    
+    
+      <h1 class="entry-title"><a href="/posts/railsdiff">RailsDiff</a></h1>
+    
+  </header>
+
+
+  <div class="entry-content clearfix"><p><a title="RailsDiff - compare Rails default app" href="http://railsdiff.org/" target="_blank">RailsDiff</a>
+is a very useful site when upgrading Rails versions (for example, from Rails 3.2 to Rails 4). It will generate default Rails app using two different Rails versions and it will compare them. The result is that you can see all the configuration changes (like in application.rb) and all other changes &#8211; which is really useful when upgrading to new Rails version.</p>
+</div>
+  
+  
+
+
+        </article>
+      
+      
+        <article class="post">
+          
+  <header class="page-header">
+    
+      <p class="meta text-muted text-uppercase">
+        
+
+
+
+
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2013-09-07T10:00:00+02:00" pubdate data-updated="true">Sep 7<span>th</span>, 2013</time>
+        
+      </p>
+    
+    
+      <h1 class="entry-title"><a href="/posts/rspec-and-factorygirl-setup-for-testing-carrierwave-uploaders">RSpec and FactoryGirl Setup for Testing Carrierwave Uploaders</a></h1>
+    
+  </header>
+
+
+  <div class="entry-content clearfix"><p>Assume that you have the usual setup with model (MyFile) using simple Carrierwave uploader (MyFileUploader):</p>
+
+<pre># app/models/my_file.rb
+class MyFile &lt; ActiveRecord::Base
+  mount_uploader :file, MyFileUploader
+end</pre>
+
+
+<p>To be able to test Carrierwave uploaders with RSpec using FactoryGirl factories you need:</p>
+
+<ul>
+<li><span style="line-height: 13px;">define factory with uploaded file</span></li>
+<li>modify test environment storage so test file uploads are separated from other uploads</li>
+<li>turn off image processing to speed up tests</li>
+<li>perform cleanup after each test</li>
+</ul>
+
+
+<h2>Define factory</h2>
+
+<pre># spec/factories/my_files.rb
+FactoryGirl.define do
+ factory :my_file do
+   photo Rack::Test::UploadedFile.new(File.open(File.join(Rails.root, '/spec/fixtures/myfiles/myfile.jpg')))
+ end
+end</pre>
+
+
+<h2>Setup Carrierwave</h2>
+
+<p>First we need to make sure Carrierwave is using local file system for storage and to disable file processing for testing environments. Disabling file processing will speed up tests considerably. We can do that by adding following to Carrierwave initializer:</p>
+
+<pre>if Rails.env.test? || Rails.env.cucumber?
+  CarrierWave.configure do |config|
+    config.storage = :file
+    config.enable_processing = false
+  end
+end</pre>
+
+
+<p>Next we should separate test uploads from any other uploads. We can do that by modifying cache_dir and store_dir methods for all Carrierwave models (i.e. all models that are descendants of CarrierWave::Uploader::Base). So the whole Carrierwave initializer looks something like:</p>
+
+<pre># config/initializers/carrierwave.rb
+if Rails.env.test? || Rails.env.cucumber?
+  CarrierWave.configure do |config|
+    config.storage = :file
+    config.enable_processing = false
+  end
+
+  # make sure our uploader is auto-loaded
+  MyFileUploader
+
+  # use different dirs when testing
+  CarrierWave::Uploader::Base.descendants.each do |klass|
+    next if klass.anonymous?
+    klass.class_eval do
+      def cache_dir
+        "#{Rails.root}/spec/support/uploads/tmp"
+      end
+
+      def store_dir
+        "#{Rails.root}/spec/support/uploads/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}"
+      end
+    end
+  end
+end</pre>
+
+
+<h2>Clean up uploaded files</h2>
+
+<p>Using factory defined above will create uploaded files in cache_dir and store_dir. These are just temporary files and should be removed after each test, so each of them has a clean slate. By adding after :each hook in RSpec configuration block we can remove these files simply by deleting spec/support/uploads dir.</p>
+
+<pre># spec_helper.rb
+RSpec.configure do |config|
+  config.after(:each) do
+    if Rails.env.test? || Rails.env.cucumber?
+      FileUtils.rm_rf(Dir["#{Rails.root}/spec/support/uploads"])
+    end 
+  end
+end</pre>
+
+</div>
+  
+  
+
+
+        </article>
+      
+      
+        <article class="post">
+          
+  <header class="page-header">
+    
+      <p class="meta text-muted text-uppercase">
+        
+
+
+
+
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2013-03-09T09:00:00+01:00" pubdate data-updated="true">Mar 9<span>th</span>, 2013</time>
+        
+      </p>
+    
+    
+      <h1 class="entry-title"><a href="/posts/random-rails-tips">Random Rails Tips</a></h1>
+    
+  </header>
+
+
+  <div class="entry-content clearfix"><p>Here are some random Rails tips I&#8217;ve found useful:</p>
+
+<ul>
+<li><strong>rails console sandbox</strong> &#8211; if you open console like this it will rollback all database changes once you exit. Pretty useful for playing around without making any changes to database.</li>
+<li><strong>rake db:migrate:status</strong> &#8211; useful when you want to see the status of current database. It will show the status of all migrations.</li>
+<li><strong>User.pluck(:email)</strong> &#8211; since Rails 3.2.1 you can use <a href="http://apidock.com/rails/ActiveRecord/Calculations/pluck">pluck</a> method to get an array of values in one particular column. It&#8217;s the equvivalent of doing User.select(:email).map(&amp;:email)</li>
+</ul>
+
+</div>
+  
+  
+
+
+        </article>
+      
+      
+        <article class="post">
+          
+  <header class="page-header">
+    
+      <p class="meta text-muted text-uppercase">
+        
+
+
+
+
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2011-01-24T09:00:00+01:00" pubdate data-updated="true">Jan 24<span>th</span>, 2011</time>
+        
+      </p>
+    
+    
+      <h1 class="entry-title"><a href="/posts/paperclip-heroku-and-amazon-s3-credentials">Paperclip, Heroku and Amazon S3 Credentials</a></h1>
+    
+  </header>
+
+
+  <div class="entry-content clearfix"><p>Setting up Paperclip to use Amazon&#8217;s S3 is as simple as setting :storage => :s3 and providing right credentials to Paperclip by setting :s3_credentials option. Best way to provide S3 credentials is to use an YML file (usually config/s3.yml) which allows you to set different credentials for each environment. For example:</p>
+
+<pre># config/s3.yml
+development:
+  access_key_id: XYZXYZXYZ
+  secret_access_key: XYZXYZXYZ
+  bucket: mygreatapp-development
+production:
+  access_key_id: XYZXYZXYZ
+  secret_access_key: XYZXYZXYZ
+  bucket: mygreatapp-production
+</pre>
+
+
+<p>Of course you want to treat s3.yml same as database.yml &#8211; i.e. you don&#8217;t want to track it with git and you want for each person/server to have it&#8217;s own.</p>
+
+<p>However, consider this: you are working on Open Source app in a public git repository and you are deploying it on Heroku. Heroku doesn&#8217;t allow you to create files (unless they are in git repository) and you can&#8217;t commit s3.yml with your credentials to public repository.</p>
+
+<p>One solution is to define different :s3_credentials hash in one of the environment files or to load different YML file for each environment and generate hash from it. Downside is that you need to have a separate YML file for each environment and/or you need to convert YML to hash. Other solution could be to have separate local branch from which you will push to Heroku. Problem with this is that you have to have a local branch for deploying. This means if there are multiple developers who deploy to production each should have separate local branch.</p>
+
+<p>Much simpler way to deploy Paperclip with different S3 credentials for each environment (with one of the environment being deployed on Heroku; and repository being public) is to create s3.yml file as usual (and don&#8217;t commit it to git), but define values only for local environment.</p>
+
+<p>For production deployment on Heroku you can write initializer which will set :s3_credentials from ENV variables.</p>
+
+<pre># initializers/s3.rb
+if Rails.env == "production"
+  # set credentials from ENV hash
+  S3_CREDENTIALS = { :access_key_id => ENV['S3_KEY'], :secret_access_key => ENV['S3_SECRET'], :bucket => "sharedearth-production"}
+else
+  # get credentials from YML file
+  S3_CREDENTIALS = Rails.root.join("config/s3.yml")
+end
+
+# in your model
+has_attached_file :photo, :storage => :s3, :s3_credentials => S3_CREDENTIALS
+</pre>
+
+
+<p>and you can easily set persistant ENV vars on Heroku with:</p>
+
+<pre>$ heroku config:add S3_KEY=XYZXYZ S3_SECRET=XYZXYZ
+</pre>
+
+
+<p>(<a href="http://docs.heroku.com/config-vars#quick-example">according to Heroku docs</a>)</p>
+</div>
+  
+  
+
+
+        </article>
+      
+      
+        <article class="post">
+          
+  <header class="page-header">
+    
+      <p class="meta text-muted text-uppercase">
+        
+
+
+
+
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2010-03-29T10:00:00+02:00" pubdate data-updated="true">Mar 29<span>th</span>, 2010</time>
+        
+      </p>
+    
+    
+      <h1 class="entry-title"><a href="/posts/rails-3-reading-list">Rails 3 Reading List</a></h1>
+    
+  </header>
+
+
+  <div class="entry-content clearfix"><p>I&#8217;ve been planning to catchup with all the new Rails 3 stuff. To get me started I&#8217;ve compiled a small Rails 3 related reading list.</p>
+
+<ol>
+<li><a href="http://guides.rails.info/3_0_release_notes.html">Ruby on Rails 3.0 Release Notes</a></li>
+<li><a href="http://m.onkey.org/2010/1/22/active-record-query-interface">Active Record Query Interface 3.0</a></li>
+<li><a href="http://edgerails.info/articles/what-s-new-in-edge-rails/2010/02/23/the-skinny-on-scopes-formerly-named-scope/">The Skinny on Scopes (Formerly named_scope)</a></li>
+<li><a href="http://blog.envylabs.com/2010/02/rails-3-beautiful-code/">Rails 3 Beautiful Code</a></li>
+<li><a href="http://railscasts.com/tags/27">Railscasts &#8211; rails-3.0 episodes</a></li>
+<li><a href="http://joshhuckabee.com/jquery-rails-3">jQuery with Rails 3</a></li>
+<li><a href="http://litanyagainstfear.com/blog/2010/02/03/the-rails-module/">The Rails Module (in Rails 3)</a></li>
+</ol>
+
+
+<p>Once I&#8217;m done with it I plan to get even more from:</p>
+
+<ul>
+<li><a href="http://edgerails.info/articles/what-s-new-in-edge-rails/2010/02/10/rails-3-resources/">Rails 3 Resources</a></li>
+<li><a href="http://www.rubyinside.com/rails-3-0-beta-links-2966.html">Rails 3.0 Beta: 36 Links and Resources To Get You Going</a></li>
+</ul>
+
+</div>
+  
+  
+
+
+        </article>
+      
+      
+        <article class="post">
+          
+  <header class="page-header">
+    
+      <p class="meta text-muted text-uppercase">
+        
+
+
+
+
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2009-04-15T10:00:00+02:00" pubdate data-updated="true">Apr 15<span>th</span>, 2009</time>
+        
+      </p>
+    
+    
+      <h1 class="entry-title"><a href="/posts/expected-xrb-to-define-x-loaderror">Expected x.rb to Define X (LoadError)</a></h1>
+    
+  </header>
+
+
+  <div class="entry-content clearfix"><p>I have been working on extending Rails&#8217; I18n Simple backend to make it work with Serbian grammar (post on that will follow soon), but I kept getting an error:</p>
+
+<p><code>Expected ./lib/serbian_simple.rb to define SerbianSimple (LoadError)</code></p>
+
+<p>I&#8217;ve just spent an hour trying to figure out why this keeps happening and I found that there&#8217;s a lot of people with similar problem.</p>
+
+<p>It seems that the problem appears when Rails tries to autoload files. In my case there was a simple solution &#8211; I just added require &#8216;serbian_simple.rb&#8217; in environment.rb to manually load the file.</p>
+</div>
+  
+  
+
+
+        </article>
+      
+      
+        <article class="post">
+          
+  <header class="page-header">
+    
+      <p class="meta text-muted text-uppercase">
+        
+
+
+
+
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2009-03-08T09:00:00+01:00" pubdate data-updated="true">Mar 8<span>th</span>, 2009</time>
+        
+      </p>
+    
+    
+      <h1 class="entry-title"><a href="/posts/simple-password-protected-administration-with-codeigniter">Simple Password Protected Administration With CodeIgniter</a></h1>
+    
+  </header>
+
+
+  <div class="entry-content clearfix"><p>Last week I&#8217;ve taken a break from Ruby/Rails development and I&#8217;ve worked on a site that uses PHP with <a href="http://codeigniter.com/">CodeIgniter</a> framework.</p>
+
+<p>Despite the fact that CodeIgniter has a very nice documentation I found it very difficult to find a way to do some simple things, that are more or less obvious, but which can be a problem for someone who hasn&#8217;t worked with CodeIgniter before. (for example, I found myself more than once looking at CI code to figure out how it works, so I can use it)</p>
+
+<p>I had to make a simple password protected administration section. One admin user, one password, no user registrations, no roles &#8211; simple as possible. As I was using CI framework I decided to find a plugin/library that does this. Unfortunately most CI authorization plugins/libraries are very bloated and too complicated for this simple task. I tried to find some examples how to handle this simple use case, but nothing came up.</p>
+
+<p>Finally I&#8217;ve found a small authorization plugin: <a href="http://codeigniter.com/wiki/Erkana/">Erkanaauth</a>.</p>
+
+<p>First you need a user table (must be named &#8216;users&#8217;) which only needs to have an id field and all other fields are optional because you will manually specify what other columns will be used. I opted for simple id, username, password:</p>
+
+<pre>CREATE TABLE IF NOT EXISTS `users` (
+  `id` int(11) NOT NULL auto_increment,
+  `username` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  PRIMARY KEY  (`id`)
+);</pre>
+
+
+<p>We will need to &#8220;install&#8221; ErkanaAuth library. You should <a href="http://codeigniter.com/wiki/File:erkanaauth.zip/">download it</a> and unzip it.</p>
+
+<p>Next we should create an Admin controller which will handle all administration tasks (remember I&#8217;m making simple admin here, so I don&#8217;t need to protect multiple controllers).</p>
+
+<pre>&lt;?php
+class Admin extends Controller {
+  function Admin()
+  {
+    parent::Controller();   
+    $this->load->database();
+    $this->load->helper(array('url', 'form', 'date'));
+    $this->load->library(array('form_validation', 'upload', 'Erkanaauth', 'session'));
+  }
+}
+?&gt;</pre>
+
+
+<p>Constructor just connects to database and loads some standard helpers and libraries (including Erkanaauth) that are usually used.</p>
+
+<p>Next step is to add a function which we can call to verify if user is logged in:</p>
+
+<pre>private
+  function authorize()
+  {
+      if($this->erkanaauth->try_session_login())
+          return true;
+  
+      redirect('admin/login');
+  }
+</pre>
+
+
+<p>Function uses Erkanaauth&#8217;s try_session_login which checks if user is already logged in (checks session for user id). If user isn&#8217;t logged in we&#8217;ll redirect him to our login page:</p>
+
+<pre>function login()
+  {
+    $username = $this->input->post('username', true);
+    $password = $this->input->post('password', true);
+    if($username || $password)
+    {
+      if($this->erkanaauth->try_login(array('username' => $username, 'password' => $password)))
+        redirect('admin');
+    }
+    
+    $this->load->view('admin_login');
+  }
+
+  function logout()
+  {
+    $this->erkanaauth->logout();
+    redirect('admin');
+  }
+</pre>
+
+
+<p>Key command here is try_login in login function which tries to find an entry in users table that fulfills given conditions. If you have different users table than the one I made this is the place where you should enter your column names.</p>
+
+<p>Logout function is has just a simple call to Erkana&#8217;s logout function. Nothing special there.</p>
+
+<p>Of course we also need a login page template which should contain a simple user/pass form. It&#8217;s pretty basic and you can see it if you get the complete code (see at the end).</p>
+
+<p>Finally we have everything needed to protect any page in Admin controller. In order to protect a page all you need to do is to add a call to authorize function to any function you want to protect. Like this:</p>
+
+<pre>function index()
+  {
+    $this->authorize();
+    echo "Do something useful... For now just display logout link: ";
+    echo anchor('admin/logout', "Logout");
+  }
+</pre>
+
+
+<p>That&#8217;s it. Now you have fully functional administration section which requires username and password authorization.</p>
+
+<p>You can get the complete sample application from <a href="http://github.com/basti/ci-admin-section/tree/master">Github repository</a>. Feel free to expand on it or use it any way you like.</p>
+</div>
+  
+  
+
+
+        </article>
+      
+      
+        <article class="post">
+          
+  <header class="page-header">
+    
+      <p class="meta text-muted text-uppercase">
+        
+
+
+
+
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2008-11-09T09:00:00+01:00" pubdate data-updated="true">Nov 9<span>th</span>, 2008</time>
+        
+      </p>
+    
+    
+      <h1 class="entry-title"><a href="/posts/restoring-superblock-on-ubutnu">Restoring Superblock on Ubutnu</a></h1>
+    
+  </header>
+
+
+  <div class="entry-content clearfix"><p>Recently I had a problem on my Torrent box (an old PC that I use as dedicated torrent client) that runs Ubuntu. For some reason my root partition was being mounted as read-only. Everything else seemed to work (all other partitions were mounted properly), but I couldn&#8217;t change any of my config or do anything on root partition.</p>
+
+<p>I did the usual stuff:</p>
+
+<ul>
+<li>Run fsck checks and it said that everything is fine</li>
+<li>Used Ubuntu&#8217;s live CD to boot, which got me read-write access to root partition. I changed some things in fstab, tried to get it to be rw permanently. No matter what I did as soon as I rebooted the root partition was once again read-only.</li>
+<li>I tried booting from some repair disks I have, but all checks passed and no problem was detected. <img src='http://icebergist.com/wp-includes/images/smilies/icon_sad.gif' alt=':(' class='wp-smiley' /></li>
+</ul>
+
+
+<p>Finally, I read somewhere that a similar problem was caused by faulty superblock on hard drive. Fortunately Ubuntu stores superblock backups in different places around disk, so I decided to try to restore it from one of those backups.</p>
+
+<p>It turned out that all I needed was a single command (this <a href="http://ubuntuforums.org/showpost.php?s=72da065bbe1506b27f41a8cfc252c732&amp;p=1424786&amp;postcount=5" title="Bad superblock">Ubuntu forum post helped</a>) to restore superblock:</p>
+
+<p><code>e2fsck -b 32768 /dev/hdc1</code></p>
+
+<p>After that my root partition was back to read-write mode. <img src='http://icebergist.com/wp-includes/images/smilies/icon_smile.gif' alt=':)' class='wp-smiley' /></p>
+
+<p>Before you do stuff like that to your computer I suggest that you read man pages for <a href="http://linux.die.net/man/8/mke2fs" title="mke2fs">mke2fs</a> and <a href="http://linux.die.net/man/8/e2fsck" title="e2fsck">e2fsck</a>. It will prevent you from doing something foolish like deleting your whole hard drive. <img src='http://icebergist.com/wp-includes/images/smilies/icon_smile.gif' alt=':)' class='wp-smiley' /></p>
+</div>
+  
+  
+
+
+        </article>
+      
+      
+        <article class="post">
+          
+  <header class="page-header">
+    
+      <p class="meta text-muted text-uppercase">
+        
+
+
+
+
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2008-09-17T10:00:00+02:00" pubdate data-updated="true">Sep 17<span>th</span>, 2008</time>
+        
+      </p>
+    
+    
+      <h1 class="entry-title"><a href="/posts/restful-admin-namespaced-controller-using-scaffolding">RESTful Admin Namespaced Controller Using Scaffolding</a></h1>
+    
+  </header>
+
+
+  <div class="entry-content clearfix"><p>Most of my clients prefer to have a separate admin section. In turn, I like to have separate controllers for admin section and front-end in my Rails app. This is not as straightforward as it might seem, especially if you like to use scaffolding for admin controller.</p>
+
+<p>The goal is to get 2 separate RESTful controllers, admin &amp; front-end controller, one model and for admin pages to have scaffolding.</p>
+
+<p>Here is the easiest way I found so far to accomplish this. This example generates categories model and controllers for it.</p>
+
+<p><code>./script/generate controller admin/categories&lt;br /&gt;
+./script/generate scaffold category name:string</code></p>
+
+<p>This will generate an empty controller in admin namespace and a scaffolded resource for front-end controller.</p>
+
+<p>Now we have everything generated we just need to make it work with admin controller and not with front-end.</p>
+
+<ul>
+<li>move all templates from app/views/categories to app/views/<strong>admin</strong>/categories</li>
+<li>copy all functions from categories_controller.rb to admin/categories_controller.rb</li>
+<li>add namespace for admin controller in routes.rb:<code>map.namespace :admin do |admin|&lt;br /&gt;
+admin.resources :categories&lt;br /&gt;
+end</code></li>
+<li>in admin/categories_controller.rb replace in 3 places redirect_to calls to work with admin namespace. It will have something like redirect_to(@category), but to work with namespace it needs to have redirect_to([:admin, @category])</li>
+<li>make similar changes in all templates, i.e. make it work within an admin namespace. You need to make following changes:
+
+<ul>
+<li>form_for(@category) => <strong>form_for([:admin, @category])</strong></li>
+<li>&lt;%= link_to &#8216;Show&#8217;, @category %> => <strong>&lt;%= link_to &#8216;Show&#8217;, [:admin, @category] %></strong></li>
+<li>categories_path => <strong>admin_categories_path</strong></li>
+<li>edit_category_path(@category) => <strong>edit_admin_category_path(@category)</strong></li>
+<li>new_category_path => <strong>new_admin_category_path</strong></li>
+</ul>
+</li>
+</ul>
+
+
+<p>That&#8217;s it. Now you&#8217;ll have /admin/categories for all administrative tasks and you have a free controller for front-end actions.</p>
+
+<p>You might wonder why not just generate scaffold for admin/categories&#8230; The reason is that you&#8217;ll also get a model that is namespaced in admin (i.e. model would be Admin::Category). Scaffolded views also wouldn&#8217;t work as it seems that generator doesn&#8217;t take into account the fact that you are using a namespace.</p>
+</div>
+  
+  
+
+
+        </article>
+      
+    </div>
+
+    <ul class="pager">
+      
+        <li class="previous"><a href="/page/2/">&larr;&nbsp;Older</a></li>
+      
+      <li><a href="/blog/archives">Blog Archives</a></li>
+      
+        <li class="next disabled"><a href="#">Newer&nbsp;&rarr;</a></li>
+      
+    </ul>
+  </div>
+
+  
+    <aside class="sidebar col-md-3">
+      
+        <section>
+  <h2>About Me</h2>
+  <div><img src="http://orangeiceberg.com/images/slobodan-110x110.gif" class="sidebar_avatar" alt="Slobodan Kovacevic" />
+  <div id="sidebar-about">
+    <p>
+      Hello, my name is <a href="http://slobodankovacevic.com">Slobodan Kovačević</a>. I am a freelance Ruby developer. <!-- building web application using Ruby and Ruby on Rails -->
+    </p>
+    <p>
+      <strong>Icebergist</strong> is my personal blog where I write mainly about Ruby and Ruby on Rails.
+      <!-- a blog about technical and business challenges faced daily by a web application developer running his own business. From dealing with clients to dealing with Ruby code. -->
+    </p>
+    <p style="text-align:center;padding:10px;border:1px dashed #e89646;">
+      <strong style="font-size:14px;font-weight:bold;">I am available for hire.</strong>
+      <br />
+      <!-- <a href="http://orangeiceberg.com/contact">Want to contact me</a>?&#8211;>
+      <a href="http://orangeiceberg.com/contact">Contact me and find out how I can help you.</a> <!--Contact me through Orange Iceberg (my company).-->
+    </p>
+  </div>
+</section>
+<section class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Recent Posts</h3>
+  </div>
+  
+  <div id="recent_posts" class="list-group">
+    
+    <a class="list-group-item " href="/posts/quick-virtualboxvagrant-setup-with-heroku-like-box">Quick VirtualBox/Vagrant Setup With Heroku-like Box</a>
+    
+    <a class="list-group-item " href="/posts/railsdiff">RailsDiff</a>
+    
+    <a class="list-group-item " href="/posts/rspec-and-factorygirl-setup-for-testing-carrierwave-uploaders">RSpec and FactoryGirl Setup for Testing Carrierwave Uploaders</a>
+    
+    <a class="list-group-item " href="/posts/random-rails-tips">Random Rails Tips</a>
+    
+    <a class="list-group-item " href="/posts/paperclip-heroku-and-amazon-s3-credentials">Paperclip, Heroku and Amazon S3 Credentials</a>
     
   </div>
-</div>
-<aside class="sidebar">
-  
-    <section>
-  <h1>Recent Posts</h1>
-  <ul id="recent_posts">
+</section>
+<section class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Categories</h3>
+  </div>
+  <div class="list-group">
     
-  </ul>
+    
+    <a class="list-group-item " href="/category/misc/index.html">
+        <span class="badge">8</span>
+        Misc
+      </a>
+    
+    
+    <a class="list-group-item " href="/category/javascript/index.html">
+        <span class="badge">1</span>
+        Javascript
+      </a>
+    
+    
+    <a class="list-group-item " href="/category/ruby-and-rails/index.html">
+        <span class="badge">11</span>
+        Ruby and Rails
+      </a>
+    
+    
+    <a class="list-group-item " href="/category/this-should-be-interesting---weekly/index.html">
+        <span class="badge">2</span>
+        This should be interesting - weekly
+      </a>
+    
+    
+    <a class="list-group-item " href="/category/php/index.html">
+        <span class="badge">1</span>
+        PHP
+      </a>
+    
+    
+    <a class="list-group-item " href="/category/testing/index.html">
+        <span class="badge">1</span>
+        Testing
+      </a>
+    
+  </div>
+</section>
+
+<section class="panel panel-default clearfix">
+  <div class="panel-heading">
+      <h3 class="panel-title">GitHub Repos</h3>
+  </div>
+  <div class="list-group" id="gh_repos">
+    <p class="loading">Status updating&#8230;</p>
+  </div>
+  
+    <div class="gh-profile-link pull-right text-muted">
+      <a href="https://github.com/basti">@basti</a> on GitHub
+    </div>
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'basti',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
 </section>
 
 
 
 
 
-  
-</aside>
 
+      
+    </aside>
+  
+</div>
+
+        </div>
+      </div>
     </div>
-  </div>
-  <footer role="contentinfo"><p>
-  Copyright &copy; 2013 - Your Name -
-  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+    <footer role="contentinfo"><div class="container">
+    <p class="text-muted credits">
+  Copyright &copy; 2013 - Slobodan Kovačević<br>
+  <small>
+      <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>,
+      <span class="credit">customized with <a href="https://github.com/kAworu/octostrap3">octostrap3</a></span>.
+  </small>
 </p>
 
+</div>
 </footer>
-  
+    <script src="/assets/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="/javascripts/modernizr-2.0.js"></script>
+
 
 
 
@@ -118,5 +1000,5 @@
 
 
 
-</body>
+  </body>
 </html>
