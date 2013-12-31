@@ -1,5 +1,10 @@
 source "https://rubygems.org"
 
+# export LANG="en_US.UTF-8"
+# export LC_ALL="en_US.UTF-8"
+Encoding.default_external = Encoding::UTF_8
+Encoding.default_internal = Encoding::UTF_8
+
 group :development do
   gem 'rake', '~> 0.9'
   gem 'jekyll', '~> 0.12'
