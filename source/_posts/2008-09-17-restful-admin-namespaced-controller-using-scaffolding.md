@@ -1,4 +1,5 @@
 ---
+date: 2008-09-17 09:00:00 +0100
 title: RESTful admin namespaced controller using scaffolding
 author: Slobodan Kovačević
 layout: post

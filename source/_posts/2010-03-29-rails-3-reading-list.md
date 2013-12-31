@@ -1,4 +1,5 @@
 ---
+date: 2010-03-29 09:00:00 +0100
 title: Rails 3 reading list
 author: Slobodan Kovačević
 layout: post

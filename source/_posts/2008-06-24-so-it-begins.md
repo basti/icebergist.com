@@ -1,4 +1,5 @@
 ---
+date: 2008-06-24 09:00:00 +0100
 title: 'So it begins&#8230;'
 author: Slobodan Kovačević
 layout: post

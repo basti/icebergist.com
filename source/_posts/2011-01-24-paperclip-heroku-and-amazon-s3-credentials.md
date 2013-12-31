@@ -1,4 +1,5 @@
 ---
+date: 2011-01-24 09:00:00 +0100
 title: Paperclip, Heroku and Amazon S3 credentials
 author: Slobodan Kovačević
 layout: post

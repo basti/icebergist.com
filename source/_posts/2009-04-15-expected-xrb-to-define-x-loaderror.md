@@ -1,4 +1,5 @@
 ---
+date: 2009-04-15 09:00:00 +0100
 title: Expected x.rb to define X (LoadError)
 author: Slobodan Kovačević
 layout: post

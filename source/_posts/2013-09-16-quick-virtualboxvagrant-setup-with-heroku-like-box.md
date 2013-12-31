@@ -1,4 +1,5 @@
 ---
+date: 2013-09-16 09:00:00 +0100
 title: Quick VirtualBox/Vagrant setup with Heroku-like box
 author: Slobodan Kovačević
 layout: post

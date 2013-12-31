@@ -1,4 +1,5 @@
 ---
+date: 2008-07-03 09:00:00 +0100
 title: 'SproutCore &#8211; a javascript framework'
 author: Slobodan Kovačević
 layout: post

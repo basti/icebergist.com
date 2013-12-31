@@ -1,4 +1,5 @@
 ---
+date: 2008-07-24 09:00:00 +0100
 title: 'InnoDB per-table tablespaces &#8211; split ibdata1 to smaller chunks'
 author: Slobodan Kovačević
 layout: post

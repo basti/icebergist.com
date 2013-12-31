@@ -1,4 +1,5 @@
 ---
+date: 2008-11-09 09:00:00 +0100
 title: Restoring superblock on Ubutnu
 author: Slobodan Kovačević
 layout: post

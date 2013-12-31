@@ -1,4 +1,5 @@
 ---
+date: 2008-07-04 09:00:00 +0100
 title: Mac OS X problems upgrading from 10.5.3 to 10.5.4
 author: Slobodan Kovačević
 layout: post

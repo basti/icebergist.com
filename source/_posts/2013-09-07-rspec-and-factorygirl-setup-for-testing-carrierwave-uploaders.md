@@ -1,4 +1,5 @@
 ---
+date: 2013-09-07 09:00:00 +0100
 title: RSpec and FactoryGirl setup for testing Carrierwave uploaders
 author: Slobodan Kovačević
 layout: post

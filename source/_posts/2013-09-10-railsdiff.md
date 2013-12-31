@@ -1,4 +1,5 @@
 ---
+date: 2013-09-10 09:00:00 +0100
 title: RailsDiff
 author: Slobodan Kovačević
 layout: post
