@@ -104,6 +104,6 @@ facebook_like: true
 # Taken from: https://github.com/tedkulp/octopress/find/master
 # Found at: https://github.com/imathis/octopress/pull/282
 # Just took all the *tag* files and modified as needed.
-# See this commit: ##commit goes here after I make it##
+# See this commit: https://github.com/basti/icebergist.com/commit/6ebeb823cdea747a391468441d8640bc30de5c58
 tag_dir: tag
 tag_title_prefix: 'Tag: '
