@@ -4,6 +4,7 @@ title: Restoring superblock on Ubutnu
 author: Slobodan Kovačević
 layout: post
 permalink: /posts/restoring-superblock-on-ubutnu
+comments: true
 categories:
   - Misc
 tags:

@@ -4,6 +4,7 @@ title: 'SproutCore &#8211; a javascript framework'
 author: Slobodan Kovačević
 layout: post
 permalink: /posts/sproutcore-javascript-framework
+comments: true
 categories:
   - Javascript
   - Ruby and Rails

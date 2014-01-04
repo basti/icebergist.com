@@ -4,6 +4,7 @@ title: RESTful admin namespaced controller using scaffolding
 author: Slobodan Kovačević
 layout: post
 permalink: /posts/restful-admin-namespaced-controller-using-scaffolding
+comments: true
 categories:
   - Ruby and Rails
 tags:

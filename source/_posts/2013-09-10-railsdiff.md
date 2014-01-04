@@ -4,6 +4,7 @@ title: RailsDiff
 author: Slobodan Kovačević
 layout: post
 permalink: /posts/railsdiff
+comments: true
 categories:
   - Ruby and Rails
 tags:

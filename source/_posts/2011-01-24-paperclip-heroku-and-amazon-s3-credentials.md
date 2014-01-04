@@ -4,6 +4,7 @@ title: Paperclip, Heroku and Amazon S3 credentials
 author: Slobodan Kovačević
 layout: post
 permalink: /posts/paperclip-heroku-and-amazon-s3-credentials
+comments: true
 categories:
   - Ruby and Rails
 tags:

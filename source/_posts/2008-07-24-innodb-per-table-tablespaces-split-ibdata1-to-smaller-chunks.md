@@ -4,6 +4,7 @@ title: 'InnoDB per-table tablespaces &#8211; split ibdata1 to smaller chunks'
 author: Slobodan Kovačević
 layout: post
 permalink: /posts/innodb-per-table-tablespaces-split-ibdata1-to-smaller-chunks
+comments: true
 categories:
   - Misc
 ---

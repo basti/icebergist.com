@@ -4,6 +4,7 @@ title: Rails 3 reading list
 author: Slobodan Kovačević
 layout: post
 permalink: /posts/rails-3-reading-list
+comments: true
 categories:
   - Ruby and Rails
 tags:

@@ -4,6 +4,7 @@ title: 'This should be interesting weekly &#8211; week 27'
 author: Slobodan Kovačević
 layout: post
 permalink: /posts/this-should-be-interesting-weekly-week-27
+comments: true
 categories:
   - Misc
   - 'This should be interesting - weekly'

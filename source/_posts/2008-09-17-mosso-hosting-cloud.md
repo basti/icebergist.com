@@ -4,6 +4,7 @@ title: Mosso hosting cloud
 author: Slobodan Kovačević
 layout: post
 permalink: /posts/mosso-hosting-cloud
+comments: true
 categories:
   - Misc
   - Ruby and Rails

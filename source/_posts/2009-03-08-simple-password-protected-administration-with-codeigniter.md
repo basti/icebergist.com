@@ -4,6 +4,7 @@ title: Simple password protected administration with CodeIgniter
 author: Slobodan Kovačević
 layout: post
 permalink: /posts/simple-password-protected-administration-with-codeigniter
+comments: true
 categories:
   - PHP
 tags:

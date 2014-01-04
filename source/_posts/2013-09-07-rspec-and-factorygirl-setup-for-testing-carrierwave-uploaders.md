@@ -4,6 +4,7 @@ title: RSpec and FactoryGirl setup for testing Carrierwave uploaders
 author: Slobodan Kovačević
 layout: post
 permalink: /posts/rspec-and-factorygirl-setup-for-testing-carrierwave-uploaders
+comments: true
 categories:
   - Ruby and Rails
   - Testing

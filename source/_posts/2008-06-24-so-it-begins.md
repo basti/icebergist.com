@@ -4,6 +4,7 @@ title: 'So it begins&#8230;'
 author: Slobodan Kovačević
 layout: post
 permalink: /posts/so-it-begins
+comments: true
 categories:
   - Misc
 ---

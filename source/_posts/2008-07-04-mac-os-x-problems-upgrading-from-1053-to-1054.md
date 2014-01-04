@@ -4,6 +4,7 @@ title: Mac OS X problems upgrading from 10.5.3 to 10.5.4
 author: Slobodan Kovačević
 layout: post
 permalink: /posts/mac-os-x-problems-upgrading-from-1053-to-1054
+comments: true
 categories:
   - Misc
 tags:

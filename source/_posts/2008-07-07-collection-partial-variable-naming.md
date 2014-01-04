@@ -4,6 +4,7 @@ title: 'Collection partial variable naming &#8211; new in edge rails'
 author: Slobodan Kovačević
 layout: post
 permalink: /posts/collection-partial-variable-naming
+comments: true
 categories:
   - Ruby and Rails
 tags:

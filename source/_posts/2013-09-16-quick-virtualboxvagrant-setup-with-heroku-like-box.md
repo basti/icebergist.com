@@ -4,6 +4,7 @@ title: Quick VirtualBox/Vagrant setup with Heroku-like box
 author: Slobodan Kovačević
 layout: post
 permalink: /posts/quick-virtualboxvagrant-setup-with-heroku-like-box
+comments: true
 categories:
   - Misc
   - Ruby and Rails

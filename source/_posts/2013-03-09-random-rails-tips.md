@@ -4,6 +4,7 @@ title: Random Rails tips
 author: Slobodan Kovačević
 layout: post
 permalink: /posts/random-rails-tips
+comments: true
 categories:
   - Ruby and Rails
 ---

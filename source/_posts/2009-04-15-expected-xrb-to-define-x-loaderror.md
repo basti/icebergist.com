@@ -4,6 +4,7 @@ title: Expected x.rb to define X (LoadError)
 author: Slobodan Kovačević
 layout: post
 permalink: /posts/expected-xrb-to-define-x-loaderror
+comments: true
 categories:
   - Ruby and Rails
 ---
