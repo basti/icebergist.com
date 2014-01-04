@@ -1,4 +1,4 @@
 User-agent: *
 Disallow: 
 
-Sitemap: http://basti.github.io/icebergist/sitemap.xml 
+Sitemap: http://icebergist.com/sitemap.xml 

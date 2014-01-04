@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: PHP | Icebergist]]></title>
-  <link href="http://basti.github.io/icebergist/category/php/atom.xml" rel="self"/>
-  <link href="http://basti.github.io/icebergist/"/>
-  <updated>2014-01-04T11:21:14+01:00</updated>
-  <id>http://basti.github.io/icebergist/</id>
+  <link href="http://icebergist.com/category/php/atom.xml" rel="self"/>
+  <link href="http://icebergist.com/"/>
+  <updated>2014-01-04T14:23:45+01:00</updated>
+  <id>http://icebergist.com/</id>
   <author>
     <name><![CDATA[Slobodan Kovačević]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Simple password protected administration with CodeIgniter]]></title>
-    <link href="http://basti.github.io/icebergist/posts/simple-password-protected-administration-with-codeigniter"/>
+    <link href="http://icebergist.com/posts/simple-password-protected-administration-with-codeigniter"/>
     <updated>2009-03-08T09:00:00+01:00</updated>
-    <id>http://basti.github.io/icebergist/posts/simple-password-protected-administration-with-codeigniter</id>
+    <id>http://icebergist.com/posts/simple-password-protected-administration-with-codeigniter</id>
     <content type="html"><![CDATA[<p>Last week I&#8217;ve taken a break from Ruby/Rails development and I&#8217;ve worked on a site that uses PHP with <a href="http://codeigniter.com/">CodeIgniter</a> framework.</p>
 
 <p>Despite the fact that CodeIgniter has a very nice documentation I found it very difficult to find a way to do some simple things, that are more or less obvious, but which can be a problem for someone who hasn&#8217;t worked with CodeIgniter before. (for example, I found myself more than once looking at CI code to figure out how it works, so I can use it)</p>

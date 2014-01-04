@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Testing | Icebergist]]></title>
-  <link href="http://basti.github.io/icebergist/category/testing/atom.xml" rel="self"/>
-  <link href="http://basti.github.io/icebergist/"/>
-  <updated>2014-01-04T11:21:14+01:00</updated>
-  <id>http://basti.github.io/icebergist/</id>
+  <link href="http://icebergist.com/category/testing/atom.xml" rel="self"/>
+  <link href="http://icebergist.com/"/>
+  <updated>2014-01-04T14:23:45+01:00</updated>
+  <id>http://icebergist.com/</id>
   <author>
     <name><![CDATA[Slobodan Kovačević]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[RSpec and FactoryGirl setup for testing Carrierwave uploaders]]></title>
-    <link href="http://basti.github.io/icebergist/posts/rspec-and-factorygirl-setup-for-testing-carrierwave-uploaders"/>
+    <link href="http://icebergist.com/posts/rspec-and-factorygirl-setup-for-testing-carrierwave-uploaders"/>
     <updated>2013-09-07T10:00:00+02:00</updated>
-    <id>http://basti.github.io/icebergist/posts/rspec-and-factorygirl-setup-for-testing-carrierwave-uploaders</id>
+    <id>http://icebergist.com/posts/rspec-and-factorygirl-setup-for-testing-carrierwave-uploaders</id>
     <content type="html"><![CDATA[<p>Assume that you have the usual setup with model (MyFile) using simple Carrierwave uploader (MyFileUploader):</p>
 
 <pre># app/models/my_file.rb

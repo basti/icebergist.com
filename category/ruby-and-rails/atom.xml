@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Ruby and Rails | Icebergist]]></title>
-  <link href="http://basti.github.io/icebergist/category/ruby-and-rails/atom.xml" rel="self"/>
-  <link href="http://basti.github.io/icebergist/"/>
-  <updated>2014-01-04T11:21:14+01:00</updated>
-  <id>http://basti.github.io/icebergist/</id>
+  <link href="http://icebergist.com/category/ruby-and-rails/atom.xml" rel="self"/>
+  <link href="http://icebergist.com/"/>
+  <updated>2014-01-04T14:23:45+01:00</updated>
+  <id>http://icebergist.com/</id>
   <author>
     <name><![CDATA[Slobodan Kovačević]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Quick VirtualBox/Vagrant setup with Heroku-like box]]></title>
-    <link href="http://basti.github.io/icebergist/posts/quick-virtualboxvagrant-setup-with-heroku-like-box"/>
+    <link href="http://icebergist.com/posts/quick-virtualboxvagrant-setup-with-heroku-like-box"/>
     <updated>2013-09-16T10:00:00+02:00</updated>
-    <id>http://basti.github.io/icebergist/posts/quick-virtualboxvagrant-setup-with-heroku-like-box</id>
+    <id>http://icebergist.com/posts/quick-virtualboxvagrant-setup-with-heroku-like-box</id>
     <content type="html"><![CDATA[<p>Here is a quick way to setup VirtualBox using Vagrant with Heroku-like box on Mac.</p>
 
 <ol>
@@ -71,9 +71,9 @@ VBoxManage list runningvms
   
   <entry>
     <title type="html"><![CDATA[RailsDiff]]></title>
-    <link href="http://basti.github.io/icebergist/posts/railsdiff"/>
+    <link href="http://icebergist.com/posts/railsdiff"/>
     <updated>2013-09-10T10:00:00+02:00</updated>
-    <id>http://basti.github.io/icebergist/posts/railsdiff</id>
+    <id>http://icebergist.com/posts/railsdiff</id>
     <content type="html"><![CDATA[<p><a title="RailsDiff - compare Rails default app" href="http://railsdiff.org/" target="_blank">RailsDiff</a>
 is a very useful site when upgrading Rails versions (for example, from Rails 3.2 to Rails 4). It will generate default Rails app using two different Rails versions and it will compare them. The result is that you can see all the configuration changes (like in application.rb) and all other changes &#8211; which is really useful when upgrading to new Rails version.</p>
 ]]></content>
@@ -81,9 +81,9 @@ is a very useful site when upgrading Rails versions (for example, from Rails 3.2
   
   <entry>
     <title type="html"><![CDATA[RSpec and FactoryGirl setup for testing Carrierwave uploaders]]></title>
-    <link href="http://basti.github.io/icebergist/posts/rspec-and-factorygirl-setup-for-testing-carrierwave-uploaders"/>
+    <link href="http://icebergist.com/posts/rspec-and-factorygirl-setup-for-testing-carrierwave-uploaders"/>
     <updated>2013-09-07T10:00:00+02:00</updated>
-    <id>http://basti.github.io/icebergist/posts/rspec-and-factorygirl-setup-for-testing-carrierwave-uploaders</id>
+    <id>http://icebergist.com/posts/rspec-and-factorygirl-setup-for-testing-carrierwave-uploaders</id>
     <content type="html"><![CDATA[<p>Assume that you have the usual setup with model (MyFile) using simple Carrierwave uploader (MyFileUploader):</p>
 
 <pre># app/models/my_file.rb
@@ -170,9 +170,9 @@ end</pre>
   
   <entry>
     <title type="html"><![CDATA[Random Rails tips]]></title>
-    <link href="http://basti.github.io/icebergist/posts/random-rails-tips"/>
+    <link href="http://icebergist.com/posts/random-rails-tips"/>
     <updated>2013-03-09T09:00:00+01:00</updated>
-    <id>http://basti.github.io/icebergist/posts/random-rails-tips</id>
+    <id>http://icebergist.com/posts/random-rails-tips</id>
     <content type="html"><![CDATA[<p>Here are some random Rails tips I&#8217;ve found useful:</p>
 
 <ul>
@@ -186,9 +186,9 @@ end</pre>
   
   <entry>
     <title type="html"><![CDATA[Paperclip, Heroku and Amazon S3 credentials]]></title>
-    <link href="http://basti.github.io/icebergist/posts/paperclip-heroku-and-amazon-s3-credentials"/>
+    <link href="http://icebergist.com/posts/paperclip-heroku-and-amazon-s3-credentials"/>
     <updated>2011-01-24T09:00:00+01:00</updated>
-    <id>http://basti.github.io/icebergist/posts/paperclip-heroku-and-amazon-s3-credentials</id>
+    <id>http://icebergist.com/posts/paperclip-heroku-and-amazon-s3-credentials</id>
     <content type="html"><![CDATA[<p>Setting up Paperclip to use Amazon&#8217;s S3 is as simple as setting :storage => :s3 and providing right credentials to Paperclip by setting :s3_credentials option. Best way to provide S3 credentials is to use an YML file (usually config/s3.yml) which allows you to set different credentials for each environment. For example:</p>
 
 <pre># config/s3.yml

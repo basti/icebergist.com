@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Category: Javascript | Icebergist]]></title>
-  <link href="http://basti.github.io/icebergist/category/javascript/atom.xml" rel="self"/>
-  <link href="http://basti.github.io/icebergist/"/>
-  <updated>2014-01-04T11:21:14+01:00</updated>
-  <id>http://basti.github.io/icebergist/</id>
+  <link href="http://icebergist.com/category/javascript/atom.xml" rel="self"/>
+  <link href="http://icebergist.com/"/>
+  <updated>2014-01-04T14:23:45+01:00</updated>
+  <id>http://icebergist.com/</id>
   <author>
     <name><![CDATA[Slobodan Kovačević]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[SproutCore &#8211; a javascript framework]]></title>
-    <link href="http://basti.github.io/icebergist/posts/sproutcore-javascript-framework"/>
+    <link href="http://icebergist.com/posts/sproutcore-javascript-framework"/>
     <updated>2008-07-03T10:00:00+02:00</updated>
-    <id>http://basti.github.io/icebergist/posts/sproutcore-javascript-framework</id>
+    <id>http://icebergist.com/posts/sproutcore-javascript-framework</id>
     <content type="html"><![CDATA[<p><a href="http://www.sproutcore.com" title="SproutCore - Javascript Framework">SproutCore</a> is a javascript framework which tries to enable developers to build web apps that look and act more like a desktop apps.</p>
 
 <p>It steps away from a classic web app model by moving a lot of app into the browser itself, which then interacts with server via AJAX. As it says on the <a href="http://www.sproutcore.com/about/" title="About SproutCore">SproutCore site</a>:</p>

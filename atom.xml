@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[Icebergist]]></title>
-  <link href="http://basti.github.io/icebergist/atom.xml" rel="self"/>
-  <link href="http://basti.github.io/icebergist/"/>
-  <updated>2014-01-04T11:21:14+01:00</updated>
-  <id>http://basti.github.io/icebergist/</id>
+  <link href="http://icebergist.com/atom.xml" rel="self"/>
+  <link href="http://icebergist.com/"/>
+  <updated>2014-01-04T14:23:45+01:00</updated>
+  <id>http://icebergist.com/</id>
   <author>
     <name><![CDATA[Slobodan Kovačević]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Quick VirtualBox/Vagrant setup with Heroku-like box]]></title>
-    <link href="http://basti.github.io/icebergist/posts/quick-virtualboxvagrant-setup-with-heroku-like-box"/>
+    <link href="http://icebergist.com/posts/quick-virtualboxvagrant-setup-with-heroku-like-box"/>
     <updated>2013-09-16T10:00:00+02:00</updated>
-    <id>http://basti.github.io/icebergist/posts/quick-virtualboxvagrant-setup-with-heroku-like-box</id>
+    <id>http://icebergist.com/posts/quick-virtualboxvagrant-setup-with-heroku-like-box</id>
     <content type="html"><![CDATA[<p>Here is a quick way to setup VirtualBox using Vagrant with Heroku-like box on Mac.</p>
 
 <ol>
@@ -76,9 +76,9 @@
   
   <entry>
     <title type="html"><![CDATA[RailsDiff]]></title>
-    <link href="http://basti.github.io/icebergist/posts/railsdiff"/>
+    <link href="http://icebergist.com/posts/railsdiff"/>
     <updated>2013-09-10T10:00:00+02:00</updated>
-    <id>http://basti.github.io/icebergist/posts/railsdiff</id>
+    <id>http://icebergist.com/posts/railsdiff</id>
     <content type="html"><![CDATA[<p><a title="RailsDiff - compare Rails default app" href="http://railsdiff.org/" target="_blank">RailsDiff</a>
 is a very useful site when upgrading Rails versions (for example, from Rails 3.2 to Rails 4). It will generate default Rails app using two different Rails versions and it will compare them. The result is that you can see all the configuration changes (like in application.rb) and all other changes &#8211; which is really useful when upgrading to new Rails version.</p>
 ]]></content>
@@ -86,9 +86,9 @@ is a very useful site when upgrading Rails versions (for example, from Rails 3.2
   
   <entry>
     <title type="html"><![CDATA[RSpec and FactoryGirl setup for testing Carrierwave uploaders]]></title>
-    <link href="http://basti.github.io/icebergist/posts/rspec-and-factorygirl-setup-for-testing-carrierwave-uploaders"/>
+    <link href="http://icebergist.com/posts/rspec-and-factorygirl-setup-for-testing-carrierwave-uploaders"/>
     <updated>2013-09-07T10:00:00+02:00</updated>
-    <id>http://basti.github.io/icebergist/posts/rspec-and-factorygirl-setup-for-testing-carrierwave-uploaders</id>
+    <id>http://icebergist.com/posts/rspec-and-factorygirl-setup-for-testing-carrierwave-uploaders</id>
     <content type="html"><![CDATA[<p>Assume that you have the usual setup with model (MyFile) using simple Carrierwave uploader (MyFileUploader):</p>
 
 <pre># app/models/my_file.rb
@@ -175,9 +175,9 @@ end</pre>
   
   <entry>
     <title type="html"><![CDATA[Random Rails tips]]></title>
-    <link href="http://basti.github.io/icebergist/posts/random-rails-tips"/>
+    <link href="http://icebergist.com/posts/random-rails-tips"/>
     <updated>2013-03-09T09:00:00+01:00</updated>
-    <id>http://basti.github.io/icebergist/posts/random-rails-tips</id>
+    <id>http://icebergist.com/posts/random-rails-tips</id>
     <content type="html"><![CDATA[<p>Here are some random Rails tips I&#8217;ve found useful:</p>
 
 <ul>
@@ -191,9 +191,9 @@ end</pre>
   
   <entry>
     <title type="html"><![CDATA[Paperclip, Heroku and Amazon S3 credentials]]></title>
-    <link href="http://basti.github.io/icebergist/posts/paperclip-heroku-and-amazon-s3-credentials"/>
+    <link href="http://icebergist.com/posts/paperclip-heroku-and-amazon-s3-credentials"/>
     <updated>2011-01-24T09:00:00+01:00</updated>
-    <id>http://basti.github.io/icebergist/posts/paperclip-heroku-and-amazon-s3-credentials</id>
+    <id>http://icebergist.com/posts/paperclip-heroku-and-amazon-s3-credentials</id>
     <content type="html"><![CDATA[<p>Setting up Paperclip to use Amazon&#8217;s S3 is as simple as setting :storage => :s3 and providing right credentials to Paperclip by setting :s3_credentials option. Best way to provide S3 credentials is to use an YML file (usually config/s3.yml) which allows you to set different credentials for each environment. For example:</p>
 
 <pre># config/s3.yml
@@ -244,9 +244,9 @@ has_attached_file :photo, :storage => :s3, :s3_credentials => S3_CREDENTIALS
   
   <entry>
     <title type="html"><![CDATA[Rails 3 reading list]]></title>
-    <link href="http://basti.github.io/icebergist/posts/rails-3-reading-list"/>
+    <link href="http://icebergist.com/posts/rails-3-reading-list"/>
     <updated>2010-03-29T10:00:00+02:00</updated>
-    <id>http://basti.github.io/icebergist/posts/rails-3-reading-list</id>
+    <id>http://icebergist.com/posts/rails-3-reading-list</id>
     <content type="html"><![CDATA[<p>I&#8217;ve been planning to catchup with all the new Rails 3 stuff. To get me started I&#8217;ve compiled a small Rails 3 related reading list.</p>
 
 <ol>
@@ -272,9 +272,9 @@ has_attached_file :photo, :storage => :s3, :s3_credentials => S3_CREDENTIALS
   
   <entry>
     <title type="html"><![CDATA[Expected x.rb to define X (LoadError)]]></title>
-    <link href="http://basti.github.io/icebergist/posts/expected-xrb-to-define-x-loaderror"/>
+    <link href="http://icebergist.com/posts/expected-xrb-to-define-x-loaderror"/>
     <updated>2009-04-15T10:00:00+02:00</updated>
-    <id>http://basti.github.io/icebergist/posts/expected-xrb-to-define-x-loaderror</id>
+    <id>http://icebergist.com/posts/expected-xrb-to-define-x-loaderror</id>
     <content type="html"><![CDATA[<p>I have been working on extending Rails&#8217; I18n Simple backend to make it work with Serbian grammar (post on that will follow soon), but I kept getting an error:</p>
 
 <p><code>Expected ./lib/serbian_simple.rb to define SerbianSimple (LoadError)</code></p>
@@ -287,9 +287,9 @@ has_attached_file :photo, :storage => :s3, :s3_credentials => S3_CREDENTIALS
   
   <entry>
     <title type="html"><![CDATA[Simple password protected administration with CodeIgniter]]></title>
-    <link href="http://basti.github.io/icebergist/posts/simple-password-protected-administration-with-codeigniter"/>
+    <link href="http://icebergist.com/posts/simple-password-protected-administration-with-codeigniter"/>
     <updated>2009-03-08T09:00:00+01:00</updated>
-    <id>http://basti.github.io/icebergist/posts/simple-password-protected-administration-with-codeigniter</id>
+    <id>http://icebergist.com/posts/simple-password-protected-administration-with-codeigniter</id>
     <content type="html"><![CDATA[<p>Last week I&#8217;ve taken a break from Ruby/Rails development and I&#8217;ve worked on a site that uses PHP with <a href="http://codeigniter.com/">CodeIgniter</a> framework.</p>
 
 <p>Despite the fact that CodeIgniter has a very nice documentation I found it very difficult to find a way to do some simple things, that are more or less obvious, but which can be a problem for someone who hasn&#8217;t worked with CodeIgniter before. (for example, I found myself more than once looking at CI code to figure out how it works, so I can use it)</p>
@@ -388,9 +388,9 @@ class Admin extends Controller {
   
   <entry>
     <title type="html"><![CDATA[Restoring superblock on Ubutnu]]></title>
-    <link href="http://basti.github.io/icebergist/posts/restoring-superblock-on-ubutnu"/>
+    <link href="http://icebergist.com/posts/restoring-superblock-on-ubutnu"/>
     <updated>2008-11-09T09:00:00+01:00</updated>
-    <id>http://basti.github.io/icebergist/posts/restoring-superblock-on-ubutnu</id>
+    <id>http://icebergist.com/posts/restoring-superblock-on-ubutnu</id>
     <content type="html"><![CDATA[<p>Recently I had a problem on my Torrent box (an old PC that I use as dedicated torrent client) that runs Ubuntu. For some reason my root partition was being mounted as read-only. Everything else seemed to work (all other partitions were mounted properly), but I couldn&#8217;t change any of my config or do anything on root partition.</p>
 
 <p>I did the usual stuff:</p>
@@ -416,9 +416,9 @@ class Admin extends Controller {
   
   <entry>
     <title type="html"><![CDATA[RESTful admin namespaced controller using scaffolding]]></title>
-    <link href="http://basti.github.io/icebergist/posts/restful-admin-namespaced-controller-using-scaffolding"/>
+    <link href="http://icebergist.com/posts/restful-admin-namespaced-controller-using-scaffolding"/>
     <updated>2008-09-17T10:00:00+02:00</updated>
-    <id>http://basti.github.io/icebergist/posts/restful-admin-namespaced-controller-using-scaffolding</id>
+    <id>http://icebergist.com/posts/restful-admin-namespaced-controller-using-scaffolding</id>
     <content type="html"><![CDATA[<p>Most of my clients prefer to have a separate admin section. In turn, I like to have separate controllers for admin section and front-end in my Rails app. This is not as straightforward as it might seem, especially if you like to use scaffolding for admin controller.</p>
 
 <p>The goal is to get 2 separate RESTful controllers, admin &amp; front-end controller, one model and for admin pages to have scaffolding.</p>
@@ -460,9 +460,9 @@ end</code></li>
   
   <entry>
     <title type="html"><![CDATA[Mosso hosting cloud]]></title>
-    <link href="http://basti.github.io/icebergist/posts/mosso-hosting-cloud"/>
+    <link href="http://icebergist.com/posts/mosso-hosting-cloud"/>
     <updated>2008-09-17T10:00:00+02:00</updated>
-    <id>http://basti.github.io/icebergist/posts/mosso-hosting-cloud</id>
+    <id>http://icebergist.com/posts/mosso-hosting-cloud</id>
     <content type="html"><![CDATA[<p><a class="external" href="http://www.mosso.com/">Mosso&#8217;s hosting cloud</a>
 at $100 / month seems like a good solution to get a scalable server. However one thing bugs me, actually two things&#8230;</p>
 
@@ -478,9 +478,9 @@ at $100 / month seems like a good solution to get a scalable server. However one
   
   <entry>
     <title type="html"><![CDATA[InnoDB per-table tablespaces &#8211; split ibdata1 to smaller chunks]]></title>
-    <link href="http://basti.github.io/icebergist/posts/innodb-per-table-tablespaces-split-ibdata1-to-smaller-chunks"/>
+    <link href="http://icebergist.com/posts/innodb-per-table-tablespaces-split-ibdata1-to-smaller-chunks"/>
     <updated>2008-07-24T10:00:00+02:00</updated>
-    <id>http://basti.github.io/icebergist/posts/innodb-per-table-tablespaces-split-ibdata1-to-smaller-chunks</id>
+    <id>http://icebergist.com/posts/innodb-per-table-tablespaces-split-ibdata1-to-smaller-chunks</id>
     <content type="html"><![CDATA[<p>Today I had to import 3GB of InnoDB tables in MySQL. Unfortunately, while importing the server run out of disk space &#8211; which caused whole server to grind to a halt. Naively I tried to delete imported data to free up space&#8230; I was in for an unpleasant surprise.</p>
 
 <p>By default when MySQL uses InnoDB engine it stores most of the information in single file called ibdata1. One downside is that once ibdata1 file grows it cannot shrink &#8211; even if you delete all InnoDB tables. For some reason MySQL is set to use single file instead of per-table tablespaces similar to MyISAM.</p>
@@ -502,9 +502,9 @@ at $100 / month seems like a good solution to get a scalable server. However one
   
   <entry>
     <title type="html"><![CDATA[This should be interesting weekly &#8211; week 28]]></title>
-    <link href="http://basti.github.io/icebergist/posts/this-should-be-interesting-weekly-week-28"/>
+    <link href="http://icebergist.com/posts/this-should-be-interesting-weekly-week-28"/>
     <updated>2008-07-13T10:00:00+02:00</updated>
-    <id>http://basti.github.io/icebergist/posts/this-should-be-interesting-weekly-week-28</id>
+    <id>http://icebergist.com/posts/this-should-be-interesting-weekly-week-28</id>
     <content type="html"><![CDATA[<ul>
 <li>What&#8217;s New in Edge Rails: <a href="http://tumblelog.slobodankovacevic.com/post/41430445/whats-new-in-edge-rails-easy-join-table-conditions">Easy Join Table Conditions.</a></li>
 <li><a href="http://tumblelog.slobodankovacevic.com/post/41483353/faces-of-millions">Faces of Millions</a> &#8211; Art project which aims to gather one million photos of people faces and create 10m x 10m photo mosaic.</li>
@@ -520,9 +520,9 @@ at $100 / month seems like a good solution to get a scalable server. However one
   
   <entry>
     <title type="html"><![CDATA[Collection partial variable naming &#8211; new in edge rails]]></title>
-    <link href="http://basti.github.io/icebergist/posts/collection-partial-variable-naming"/>
+    <link href="http://icebergist.com/posts/collection-partial-variable-naming"/>
     <updated>2008-07-07T10:00:00+02:00</updated>
-    <id>http://basti.github.io/icebergist/posts/collection-partial-variable-naming</id>
+    <id>http://icebergist.com/posts/collection-partial-variable-naming</id>
     <content type="html"><![CDATA[<p>One thing that always annoyed me when rendering collection partials is that a local var in partial is named same as a partial template name. So, to go around this I always created another local variable in partial and gave it a more meaningful name.</p>
 
 <p>No longer&#8230; As the <a href="http://ryandaigle.com/articles/2008/7/7/what-s-new-in-edge-rails-collection-partial-variable-naming" title="What's New in Edge Rails: Collection Partial Variable Naming ">Ryan says</a> from now on in the Edge Rails you can specify the name of the local variable in which each collection element will be exposed within a partial. You will can do this:</p>
@@ -536,9 +536,9 @@ at $100 / month seems like a good solution to get a scalable server. However one
   
   <entry>
     <title type="html"><![CDATA[This should be interesting weekly &#8211; week 27]]></title>
-    <link href="http://basti.github.io/icebergist/posts/this-should-be-interesting-weekly-week-27"/>
+    <link href="http://icebergist.com/posts/this-should-be-interesting-weekly-week-27"/>
     <updated>2008-07-06T10:00:00+02:00</updated>
-    <id>http://basti.github.io/icebergist/posts/this-should-be-interesting-weekly-week-27</id>
+    <id>http://icebergist.com/posts/this-should-be-interesting-weekly-week-27</id>
     <content type="html"><![CDATA[<p>This is the first weekly condensed edition of my <a href="http://tumblelog.slobodankovacevic.com/" title="Tumblelog by Slobodan Kovacevic">&#8220;This should be interesting&#8221; tumblelog</a>. Every Sunday I will re-post most interesting posts here on the Icebergist.</p>
 
 <ul>
@@ -553,9 +553,9 @@ at $100 / month seems like a good solution to get a scalable server. However one
   
   <entry>
     <title type="html"><![CDATA[Mac OS X problems upgrading from 10.5.3 to 10.5.4]]></title>
-    <link href="http://basti.github.io/icebergist/posts/mac-os-x-problems-upgrading-from-1053-to-1054"/>
+    <link href="http://icebergist.com/posts/mac-os-x-problems-upgrading-from-1053-to-1054"/>
     <updated>2008-07-04T10:00:00+02:00</updated>
-    <id>http://basti.github.io/icebergist/posts/mac-os-x-problems-upgrading-from-1053-to-1054</id>
+    <id>http://icebergist.com/posts/mac-os-x-problems-upgrading-from-1053-to-1054</id>
     <content type="html"><![CDATA[<p>Today I tried to upgrade my Mac from 10.5.3 to 10.5.4 using normal Software Update. That didn&#8217;t go as planned as installation hanged at &#8220;Configuring Installation&#8221; and only thing I could do is shutdown the computer.</p>
 
 <p>After some research and few unsuccessful retries I have finally managed to solve the upgrade problem by downloading standalone 10.5.4 update from <a href="http://www.apple.com/support/downloads/" title="Download Apple Mac OS X update">Apple download section</a>; booting in safe mode (hold shift key when booting) and then installing the update.</p>
@@ -564,9 +564,9 @@ at $100 / month seems like a good solution to get a scalable server. However one
   
   <entry>
     <title type="html"><![CDATA[SproutCore &#8211; a javascript framework]]></title>
-    <link href="http://basti.github.io/icebergist/posts/sproutcore-javascript-framework"/>
+    <link href="http://icebergist.com/posts/sproutcore-javascript-framework"/>
     <updated>2008-07-03T10:00:00+02:00</updated>
-    <id>http://basti.github.io/icebergist/posts/sproutcore-javascript-framework</id>
+    <id>http://icebergist.com/posts/sproutcore-javascript-framework</id>
     <content type="html"><![CDATA[<p><a href="http://www.sproutcore.com" title="SproutCore - Javascript Framework">SproutCore</a> is a javascript framework which tries to enable developers to build web apps that look and act more like a desktop apps.</p>
 
 <p>It steps away from a classic web app model by moving a lot of app into the browser itself, which then interacts with server via AJAX. As it says on the <a href="http://www.sproutcore.com/about/" title="About SproutCore">SproutCore site</a>:</p>
@@ -596,9 +596,9 @@ Another great thing about SproutCore is that it can be hooked up with any backen
   
   <entry>
     <title type="html"><![CDATA[So it begins&#8230;]]></title>
-    <link href="http://basti.github.io/icebergist/posts/so-it-begins"/>
+    <link href="http://icebergist.com/posts/so-it-begins"/>
     <updated>2008-06-24T10:00:00+02:00</updated>
-    <id>http://basti.github.io/icebergist/posts/so-it-begins</id>
+    <id>http://icebergist.com/posts/so-it-begins</id>
     <content type="html"><![CDATA[<p>Welcome to an icebergist blog. The Icebergist will be a blog about both technical and business stuff I deal with daily. From Ruby on Rails programming to time organizing, everything that’s important in my daily work as a freelance developer.</p>
 
 <p>As you can see I just setup the Icebergist blog, so at the moment it&#8217;s content-free. While I write some posts you can checkout <a href="http://www.google.com/search?hl=en&amp;rlz=1B3GGGL_enYU233YU234&amp;q=%22Posted+by+Slobodan+Kovacevic%22+site%3Aarraystudio.com+inurl%3Ahtml&amp;btnG=Search" title="Slobodan Kovacevic's blog posts in AS Workshop">my posts from my previous blog AS Workshop</a>.</p>
