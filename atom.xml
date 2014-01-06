@@ -4,7 +4,7 @@
   <title><![CDATA[Icebergist]]></title>
   <link href="http://icebergist.com/atom.xml" rel="self"/>
   <link href="http://icebergist.com/"/>
-  <updated>2014-01-04T14:23:45+01:00</updated>
+  <updated>2014-01-06T11:52:29+01:00</updated>
   <id>http://icebergist.com/</id>
   <author>
     <name><![CDATA[Slobodan Kovačević]]></name>
@@ -12,6 +12,36 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Upgrade Ubuntu 8.04 LTS server]]></title>
+    <link href="http://icebergist.com/posts/upgrade-ubuntu-8-dot-04-lts-server/"/>
+    <updated>2014-01-06T11:36:43+01:00</updated>
+    <id>http://icebergist.com/posts/upgrade-ubuntu-8-dot-04-lts-server</id>
+    <content type="html"><![CDATA[<p>Note to self: here is how to upgrade Ubuntu 8.04 LTS (or any other release that is no longer supported) to newer Ubuntu release.</p>
+
+<p>When you are upgrading unsupported release of Ubuntu if you try to do the usual <code>sudo apt-get update</code> it will most likely fail because&hellip; well, it&rsquo;s unsupported. The simple fix for this is to change your <code>/etc/apt/sources.list</code> and replace repository URLs from something like <code>us.archive.ubuntu.com</code> to <code>old-releases.ubuntu.com</code>.</p>
+
+<p>After that you should be able follow normal upgrade procedure (use sudo if you are not root):</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>apt-get update
+</span><span class='line'>apt-get install update-manager-core
+</span><span class='line'><span class="k">do</span>-release-upgrade
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>References:</p>
+
+<ul>
+<li><a href="http://rimuhosting.com/knowledgebase/linux/distros/ubuntu" title="Rimuhosting's page on upgrading Ubuntu">Rimuhosting&rsquo;s page on upgrading Ubuntu</a></li>
+<li><a href="http://askubuntu.com/questions/91815/how-to-install-software-or-upgrade-from-old-unsupported-release" title="Discussion on upgrading unsupported Ubuntu release">Discussion on upgrading unsupported Ubuntu release</a></li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Quick VirtualBox/Vagrant setup with Heroku-like box]]></title>

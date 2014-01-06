@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Misc | Icebergist]]></title>
   <link href="http://icebergist.com/category/misc/atom.xml" rel="self"/>
   <link href="http://icebergist.com/"/>
-  <updated>2014-01-04T14:23:45+01:00</updated>
+  <updated>2014-01-06T11:52:29+01:00</updated>
   <id>http://icebergist.com/</id>
   <author>
     <name><![CDATA[Slobodan Kovačević]]></name>
@@ -12,6 +12,33 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Upgrade Ubuntu 8.04 LTS server]]></title>
+    <link href="http://icebergist.com/posts/upgrade-ubuntu-8-dot-04-lts-server/"/>
+    <updated>2014-01-06T11:36:43+01:00</updated>
+    <id>http://icebergist.com/posts/upgrade-ubuntu-8-dot-04-lts-server</id>
+    <content type="html"><![CDATA[<p>Note to self: here is how to upgrade Ubuntu 8.04 LTS (or any other release that is no longer supported) to newer Ubuntu release.</p>
+
+<p>When you are upgrading unsupported release of Ubuntu if you try to do the usual <code>sudo apt-get update</code> it will most likely fail because&hellip; well, it&rsquo;s unsupported. The simple fix for this is to change your <code>/etc/apt/sources.list</code> and replace repository URLs from something like <code>us.archive.ubuntu.com</code> to <code>old-releases.ubuntu.com</code>.</p>
+
+<p>After that you should be able follow normal upgrade procedure (use sudo if you are not root):</p>
+
+<p><code>sh
+apt-get update
+apt-get install update-manager-core
+do-release-upgrade
+</code></p>
+
+<p>References:</p>
+
+<ul>
+<li><a href="http://rimuhosting.com/knowledgebase/linux/distros/ubuntu" title="Rimuhosting's page on upgrading Ubuntu">Rimuhosting&rsquo;s page on upgrading Ubuntu</a></li>
+<li><a href="http://askubuntu.com/questions/91815/how-to-install-software-or-upgrade-from-old-unsupported-release" title="Discussion on upgrading unsupported Ubuntu release">Discussion on upgrading unsupported Ubuntu release</a></li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Quick VirtualBox/Vagrant setup with Heroku-like box]]></title>
@@ -136,24 +163,6 @@ at $100 / month seems like a good solution to get a scalable server. However one
 
 
 <p>I choose option 2 because I luckily had only 40 InnoDB tables and much more using MyISAM. For details on how to apply each solution and down/up sides of each read <a href="http://vdachev.net/blog/2007/02/22/mysql-reducing-ibdata1/en/" title="MySQL Reducing ibdata1">MySQL: Reducing ibdata1</a>.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[This should be interesting weekly &#8211; week 28]]></title>
-    <link href="http://icebergist.com/posts/this-should-be-interesting-weekly-week-28"/>
-    <updated>2008-07-13T10:00:00+02:00</updated>
-    <id>http://icebergist.com/posts/this-should-be-interesting-weekly-week-28</id>
-    <content type="html"><![CDATA[<ul>
-<li>What&#8217;s New in Edge Rails: <a href="http://tumblelog.slobodankovacevic.com/post/41430445/whats-new-in-edge-rails-easy-join-table-conditions">Easy Join Table Conditions.</a></li>
-<li><a href="http://tumblelog.slobodankovacevic.com/post/41483353/faces-of-millions">Faces of Millions</a> &#8211; Art project which aims to gather one million photos of people faces and create 10m x 10m photo mosaic.</li>
-<li><a href="http://tumblelog.slobodankovacevic.com/post/41727168/uni-form">Uni-Form</a> is an attempt to standardize form markup (xhtml) and css.</li>
-<li><a href="http://tumblelog.slobodankovacevic.com/post/41886839/mac-fullscreen-quicklook-a-k-a-slideshow">Mac OS X full screen QuickLook shortcut.</a></li>
-<li>A guide to <a href="http://tumblelog.slobodankovacevic.com/post/41978415/a-guide-to-css-support-in-email">CSS support in Email</a>.</li>
-</ul>
-
-
-<p>condensed from &lsquo;<a href="http://tumblelog.slobodankovacevic.com/">this should be interesting</a>&rsquo; tumblelog</p>
 ]]></content>
   </entry>
   

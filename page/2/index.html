@@ -118,6 +118,86 @@
 <span class="glyphicon glyphicon-user"></span> <span class="byline author vcard">Posted by <span class="fn"><a href="https://plus.google.com/113548610124685160907?rel=author">Slobodan Kovačević</a></span></span>
 
         
+           | <a href="/posts/restful-admin-namespaced-controller-using-scaffolding#disqus_thread"
+             data-disqus-identifier="http://icebergist.com/posts/restful-admin-namespaced-controller-using-scaffolding">Comments</a>
+        
+      </p>
+    
+    
+      <h1 class="entry-title"><a href="/posts/restful-admin-namespaced-controller-using-scaffolding">RESTful Admin Namespaced Controller Using Scaffolding</a></h1>
+    
+  </header>
+
+
+  <div class="entry-content clearfix"><p>Most of my clients prefer to have a separate admin section. In turn, I like to have separate controllers for admin section and front-end in my Rails app. This is not as straightforward as it might seem, especially if you like to use scaffolding for admin controller.</p>
+
+<p>The goal is to get 2 separate RESTful controllers, admin &amp; front-end controller, one model and for admin pages to have scaffolding.</p>
+
+<p>Here is the easiest way I found so far to accomplish this. This example generates categories model and controllers for it.</p>
+
+<p><code>./script/generate controller admin/categories&lt;br /&gt;
+./script/generate scaffold category name:string</code></p>
+
+<p>This will generate an empty controller in admin namespace and a scaffolded resource for front-end controller.</p>
+
+<p>Now we have everything generated we just need to make it work with admin controller and not with front-end.</p>
+
+<ul>
+<li>move all templates from app/views/categories to app/views/<strong>admin</strong>/categories</li>
+<li>copy all functions from categories_controller.rb to admin/categories_controller.rb</li>
+<li>add namespace for admin controller in routes.rb:<code>map.namespace :admin do |admin|&lt;br /&gt;
+admin.resources :categories&lt;br /&gt;
+end</code></li>
+<li>in admin/categories_controller.rb replace in 3 places redirect_to calls to work with admin namespace. It will have something like redirect_to(@category), but to work with namespace it needs to have redirect_to([:admin, @category])</li>
+<li>make similar changes in all templates, i.e. make it work within an admin namespace. You need to make following changes:
+
+<ul>
+<li>form_for(@category) => <strong>form_for([:admin, @category])</strong></li>
+<li>&lt;%= link_to &#8216;Show&#8217;, @category %> => <strong>&lt;%= link_to &#8216;Show&#8217;, [:admin, @category] %></strong></li>
+<li>categories_path => <strong>admin_categories_path</strong></li>
+<li>edit_category_path(@category) => <strong>edit_admin_category_path(@category)</strong></li>
+<li>new_category_path => <strong>new_admin_category_path</strong></li>
+</ul>
+</li>
+</ul>
+
+
+<p>That&#8217;s it. Now you&#8217;ll have /admin/categories for all administrative tasks and you have a free controller for front-end actions.</p>
+
+<p>You might wonder why not just generate scaffold for admin/categories&#8230; The reason is that you&#8217;ll also get a model that is namespaced in admin (i.e. model would be Admin::Category). Scaffolded views also wouldn&#8217;t work as it seems that generator doesn&#8217;t take into account the fact that you are using a namespace.</p>
+</div>
+  
+  
+
+
+        </article>
+      
+      
+        <article class="post">
+          
+  <header class="page-header">
+    
+      <p class="meta text-muted">
+        
+
+
+
+
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2008-09-17T10:00:00+02:00" pubdate data-updated="true">Sep 17<span>th</span>, 2008</time>
+        | 
+  
+
+<span class="glyphicon glyphicon-user"></span> <span class="byline author vcard">Posted by <span class="fn"><a href="https://plus.google.com/113548610124685160907?rel=author">Slobodan Kovačević</a></span></span>
+
+        
            | <a href="/posts/mosso-hosting-cloud#disqus_thread"
              data-disqus-identifier="http://icebergist.com/posts/mosso-hosting-cloud">Comments</a>
         
@@ -575,6 +655,8 @@ Another great thing about SproutCore is that it can be hooked up with any backen
   
   <div id="recent_posts" class="list-group">
     
+    <a class="list-group-item " href="/posts/upgrade-ubuntu-8-dot-04-lts-server/">Upgrade Ubuntu 8.04 LTS Server</a>
+    
     <a class="list-group-item " href="/posts/quick-virtualboxvagrant-setup-with-heroku-like-box">Quick VirtualBox/Vagrant Setup With Heroku-like Box</a>
     
     <a class="list-group-item " href="/posts/railsdiff">RailsDiff</a>
@@ -582,8 +664,6 @@ Another great thing about SproutCore is that it can be hooked up with any backen
     <a class="list-group-item " href="/posts/rspec-and-factorygirl-setup-for-testing-carrierwave-uploaders">RSpec and FactoryGirl Setup for Testing Carrierwave Uploaders</a>
     
     <a class="list-group-item " href="/posts/random-rails-tips">Random Rails Tips</a>
-    
-    <a class="list-group-item " href="/posts/paperclip-heroku-and-amazon-s3-credentials">Paperclip, Heroku and Amazon S3 Credentials</a>
     
   </div>
   <div class="panel-heading">
@@ -598,7 +678,7 @@ Another great thing about SproutCore is that it can be hooked up with any backen
     
     
     <a class="list-group-item " href="/category/misc/index.html">
-        <span class="badge">8</span>
+        <span class="badge">9</span>
         Misc
       </a>
     
@@ -639,7 +719,7 @@ Another great thing about SproutCore is that it can be hooked up with any backen
     <h3 class="panel-title">Tags</h3>
   </div>
   <div class="tag-cloud">
-    <span class='rank-4'><a href='/tag/tutorial'>tutorial</a></span> <span class='rank-5'><a href='/tag/admin'>admin</a></span> <span class='rank-5'><a href='/tag/factorygirl'>factorygirl</a></span> <span class='rank-4'><a href='/tag/resources'>resources</a></span> <span class='rank-5'><a href='/tag/cloud-computing'>cloud computing</a></span> <span class='rank-5'><a href='/tag/tdd'>tdd</a></span> <span class='rank-5'><a href='/tag/mac'>mac</a></span> <span class='rank-4'><a href='/tag/heroku'>heroku</a></span> <span class='rank-3'><a href='/tag/links'>links</a></span> <span class='rank-5'><a href='/tag/amazon-s3'>amazon s3</a></span> <span class='rank-5'><a href='/tag/restful'>restful</a></span> <span class='rank-5'><a href='/tag/rest'>rest</a></span> <span class='rank-2'><a href='/tag/ruby'>ruby</a></span> <span class='rank-5'><a href='/tag/css'>css</a></span> <span class='rank-5'><a href='/tag/password-protected'>password protected</a></span> <span class='rank-5'><a href='/tag/rails4'>rails4</a></span> <span class='rank-5'><a href='/tag/paperclip'>paperclip</a></span> <span class='rank-5'><a href='/tag/codeigniter'>codeigniter</a></span> <span class='rank-5'><a href='/tag/ubuntu'>ubuntu</a></span> <span class='rank-4'><a href='/tag/tips'>tips</a></span> <span class='rank-4'><a href='/tag/rails3'>rails3</a></span> <span class='rank-4'><a href='/tag/weekly'>weekly</a></span> <span class='rank-5'><a href='/tag/scaffold'>scaffold</a></span> <span class='rank-5'><a href='/tag/hosting'>hosting</a></span> <span class='rank-5'><a href='/tag/vagrant'>vagrant</a></span> <span class='rank-5'><a href='/tag/PHP'>PHP</a></span> <span class='rank-5'><a href='/tag/Javascript'>Javascript</a></span> <span class='rank-5'><a href='/tag/edge'>edge</a></span> <span class='rank-5'><a href='/tag/rspec'>rspec</a></span> <span class='rank-1'><a href='/tag/rails'>rails</a></span> <span class='rank-5'><a href='/tag/factory-girl'>factory_girl</a></span> <span class='rank-5'><a href='/tag/erkanaauth'>erkanaauth</a></span> <span class='rank-5'><a href='/tag/carrierwave'>carrierwave</a></span> <span class='rank-5'><a href='/tag/linux'>linux</a></span> <span class='rank-4'><a href='/tag/howto'>howto</a></span> <span class='rank-5'><a href='/tag/virtualbox'>virtualbox</a></span> 
+    <span class='rank-3'><a href='/tag/links'>links</a></span> <span class='rank-5'><a href='/tag/mac'>mac</a></span> <span class='rank-5'><a href='/tag/virtualbox'>virtualbox</a></span> <span class='rank-5'><a href='/tag/factory-girl'>factory_girl</a></span> <span class='rank-5'><a href='/tag/css'>css</a></span> <span class='rank-5'><a href='/tag/codeigniter'>codeigniter</a></span> <span class='rank-5'><a href='/tag/amazon-s3'>amazon s3</a></span> <span class='rank-5'><a href='/tag/linux'>linux</a></span> <span class='rank-3'><a href='/tag/howto'>howto</a></span> <span class='rank-5'><a href='/tag/edge'>edge</a></span> <span class='rank-4'><a href='/tag/hosting'>hosting</a></span> <span class='rank-5'><a href='/tag/rspec'>rspec</a></span> <span class='rank-5'><a href='/tag/restful'>restful</a></span> <span class='rank-2'><a href='/tag/ruby'>ruby</a></span> <span class='rank-5'><a href='/tag/admin'>admin</a></span> <span class='rank-5'><a href='/tag/tdd'>tdd</a></span> <span class='rank-5'><a href='/tag/factorygirl'>factorygirl</a></span> <span class='rank-5'><a href='/tag/rails4'>rails4</a></span> <span class='rank-1'><a href='/tag/rails'>rails</a></span> <span class='rank-5'><a href='/tag/PHP'>PHP</a></span> <span class='rank-5'><a href='/tag/carrierwave'>carrierwave</a></span> <span class='rank-4'><a href='/tag/heroku'>heroku</a></span> <span class='rank-4'><a href='/tag/resources'>resources</a></span> <span class='rank-5'><a href='/tag/paperclip'>paperclip</a></span> <span class='rank-5'><a href='/tag/scaffold'>scaffold</a></span> <span class='rank-5'><a href='/tag/password-protected'>password protected</a></span> <span class='rank-4'><a href='/tag/weekly'>weekly</a></span> <span class='rank-4'><a href='/tag/tutorial'>tutorial</a></span> <span class='rank-5'><a href='/tag/cloud-computing'>cloud computing</a></span> <span class='rank-5'><a href='/tag/vagrant'>vagrant</a></span> <span class='rank-4'><a href='/tag/rails3'>rails3</a></span> <span class='rank-5'><a href='/tag/rest'>rest</a></span> <span class='rank-5'><a href='/tag/Javascript'>Javascript</a></span> <span class='rank-3'><a href='/tag/tips'>tips</a></span> <span class='rank-5'><a href='/tag/erkanaauth'>erkanaauth</a></span> <span class='rank-4'><a href='/tag/ubuntu'>ubuntu</a></span> 
   </div>
 </section>
 
