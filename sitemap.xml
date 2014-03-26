@@ -2,7 +2,7 @@
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
         <loc>http://icebergist.com/posts/so-it-begins</loc>
-        <lastmod>2014-01-04T14:18:28+01:00</lastmod>
+        <lastmod>2014-03-26T15:43:42+01:00</lastmod>
     </url>
     <url>
         <loc>http://icebergist.com/posts/sproutcore-javascript-framework</loc>
@@ -110,7 +110,7 @@
     </url>
     <url>
         <loc>http://icebergist.com/assets/bootstrap/</loc>
-        <lastmod>2014-01-06T11:52:29+01:00</lastmod>
+        <lastmod>2014-03-26T15:43:42+01:00</lastmod>
     </url>
     <url>
         <loc>http://icebergist.com/assets/bootstrap/javascript.html</loc>
@@ -118,11 +118,11 @@
     </url>
     <url>
         <loc>http://icebergist.com/blog/archives/</loc>
-        <lastmod>2014-01-06T11:52:29+01:00</lastmod>
+        <lastmod>2014-03-26T15:43:42+01:00</lastmod>
     </url>
     <url>
         <loc>http://icebergist.com/</loc>
-        <lastmod>2014-01-06T11:52:29+01:00</lastmod>
+        <lastmod>2014-03-26T15:43:42+01:00</lastmod>
     </url>
     <url>
         <loc>http://icebergist.com/robots.txt</loc>
