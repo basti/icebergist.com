@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby and Rails | Icebergist]]></title>
   <link href="http://icebergist.com/category/ruby-and-rails/atom.xml" rel="self"/>
   <link href="http://icebergist.com/"/>
-  <updated>2014-03-26T16:17:26+01:00</updated>
+  <updated>2014-05-12T19:28:40+02:00</updated>
   <id>http://icebergist.com/</id>
   <author>
     <name><![CDATA[Slobodan Kovačević]]></name>
@@ -12,6 +12,31 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[How to skip Devise trackable updates]]></title>
+    <link href="http://icebergist.com/posts/how-to-skip-devise-trackable-updates/"/>
+    <updated>2014-05-12T19:10:06+02:00</updated>
+    <id>http://icebergist.com/posts/how-to-skip-devise-trackable-updates</id>
+    <content type="html"><![CDATA[<p>Devise has a very useful Trackable module used to track user&rsquo;s sign in count, timestamps and IP address. There are some occasions when you need to disable tracking. For example for API requests where user signs in on every request; for instances where admin might sign in as an user; and similar.</p>
+
+<p>To disable Devise Trackable module you need to set <code>request.env["devise.skip_trackable"] = true</code>. You have to do that before trying to authenticate user, so you&rsquo;ll want to put it in a before_filter, or even better prepend_before_filter to make sure it&rsquo;s before authentication.</p>
+
+<p>Add this to your controller in which you want to disable tracking:</p>
+
+<p>```
+prepend_before_filter :disable_devise_trackable</p>
+
+<p>protected
+  def disable_devise_trackable</p>
+
+<pre><code>request.env["devise.skip_trackable"] = true
+</code></pre>
+
+<p>  end
+```</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Quick VirtualBox/Vagrant setup with Heroku-like box]]></title>
@@ -181,59 +206,6 @@ end</pre>
 <li><strong>User.pluck(:email)</strong> &#8211; since Rails 3.2.1 you can use <a href="http://apidock.com/rails/ActiveRecord/Calculations/pluck">pluck</a> method to get an array of values in one particular column. It&#8217;s the equvivalent of doing User.select(:email).map(&amp;:email)</li>
 </ul>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Paperclip, Heroku and Amazon S3 credentials]]></title>
-    <link href="http://icebergist.com/posts/paperclip-heroku-and-amazon-s3-credentials"/>
-    <updated>2011-01-24T09:00:00+01:00</updated>
-    <id>http://icebergist.com/posts/paperclip-heroku-and-amazon-s3-credentials</id>
-    <content type="html"><![CDATA[<p>Setting up Paperclip to use Amazon&#8217;s S3 is as simple as setting :storage => :s3 and providing right credentials to Paperclip by setting :s3_credentials option. Best way to provide S3 credentials is to use an YML file (usually config/s3.yml) which allows you to set different credentials for each environment. For example:</p>
-
-<pre># config/s3.yml
-development:
-  access_key_id: XYZXYZXYZ
-  secret_access_key: XYZXYZXYZ
-  bucket: mygreatapp-development
-production:
-  access_key_id: XYZXYZXYZ
-  secret_access_key: XYZXYZXYZ
-  bucket: mygreatapp-production
-</pre>
-
-
-<p>Of course you want to treat s3.yml same as database.yml &#8211; i.e. you don&#8217;t want to track it with git and you want for each person/server to have it&#8217;s own.</p>
-
-<p>However, consider this: you are working on Open Source app in a public git repository and you are deploying it on Heroku. Heroku doesn&#8217;t allow you to create files (unless they are in git repository) and you can&#8217;t commit s3.yml with your credentials to public repository.</p>
-
-<p>One solution is to define different :s3_credentials hash in one of the environment files or to load different YML file for each environment and generate hash from it. Downside is that you need to have a separate YML file for each environment and/or you need to convert YML to hash. Other solution could be to have separate local branch from which you will push to Heroku. Problem with this is that you have to have a local branch for deploying. This means if there are multiple developers who deploy to production each should have separate local branch.</p>
-
-<p>Much simpler way to deploy Paperclip with different S3 credentials for each environment (with one of the environment being deployed on Heroku; and repository being public) is to create s3.yml file as usual (and don&#8217;t commit it to git), but define values only for local environment.</p>
-
-<p>For production deployment on Heroku you can write initializer which will set :s3_credentials from ENV variables.</p>
-
-<pre># initializers/s3.rb
-if Rails.env == "production"
-  # set credentials from ENV hash
-  S3_CREDENTIALS = { :access_key_id => ENV['S3_KEY'], :secret_access_key => ENV['S3_SECRET'], :bucket => "sharedearth-production"}
-else
-  # get credentials from YML file
-  S3_CREDENTIALS = Rails.root.join("config/s3.yml")
-end
-
-# in your model
-has_attached_file :photo, :storage => :s3, :s3_credentials => S3_CREDENTIALS
-</pre>
-
-
-<p>and you can easily set persistant ENV vars on Heroku with:</p>
-
-<pre>$ heroku config:add S3_KEY=XYZXYZ S3_SECRET=XYZXYZ
-</pre>
-
-
-<p>(<a href="http://docs.heroku.com/config-vars#quick-example">according to Heroku docs</a>)</p>
 ]]></content>
   </entry>
   

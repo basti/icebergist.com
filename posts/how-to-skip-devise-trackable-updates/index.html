@@ -4,7 +4,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Page not found - Icebergist</title>
+  <title>How to skip Devise trackable updates - Icebergist</title>
   <meta name="author" content="Slobodan Kovačević">
 
   
@@ -16,7 +16,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://icebergist.com/404.html">
+  <link rel="canonical" href="http://icebergist.com/posts/how-to-skip-devise-trackable-updates">
   <link href="/favicon.png" type="image/png" rel="icon">
   <link href="http://feeds.feedburner.com/icebergist" rel="alternate" title="Icebergist" type="application/atom+xml">
 
@@ -89,36 +89,148 @@
         <div id="content">
           <div class="row">
   <div class="page-content col-md-9">
-    <article role="article">
+    <article class="hentry" role="article">
       
-        <header class="page-header">
-          
-          
-            <h1 class="entry-title">
-              Page Not Found
-              
-            </h1>
-          
-        </header>
-      
-      <div class="entry-content">
-        <p>Page not found. Sorry. Maybe try one of the links in the sidebar?</p>
+  <header class="page-header">
+    
+      <p class="meta text-muted">
+        
 
-      </div>
-      
-        <footer>
+
+
+
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-05-12T19:10:06+02:00" pubdate data-updated="true">May 12<span>th</span>, 2014</time>
+        | 
+  
+
+<span class="glyphicon glyphicon-user"></span> <span class="byline author vcard">Posted by <span class="fn"><a href="https://plus.google.com/113548610124685160907?rel=author">Slobodan Kovačević</a></span></span>
+
+        
+           | <a href="#disqus_thread"
+             data-disqus-identifier="http://icebergist.com">Comments</a>
+        
+      </p>
+    
+    
+    <h1 class="entry-title">
+        How to Skip Devise Trackable Updates
+        
+    </h1>
+    
+  </header>
+
+
+<div class="entry-content clearfix"><p>Devise has a very useful Trackable module used to track user&rsquo;s sign in count, timestamps and IP address. There are some occasions when you need to disable tracking. For example for API requests where user signs in on every request; for instances where admin might sign in as an user; and similar.</p>
+
+<p>To disable Devise Trackable module you need to set <code>request.env["devise.skip_trackable"] = true</code>. You have to do that before trying to authenticate user, so you&rsquo;ll want to put it in a before_filter, or even better prepend_before_filter to make sure it&rsquo;s before authentication.</p>
+
+<p>Add this to your controller in which you want to disable tracking:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>prepend_before_filter :disable_devise_trackable
+</span><span class='line'>
+</span><span class='line'>protected
+</span><span class='line'>  def disable_devise_trackable
+</span><span class='line'>    request.env["devise.skip_trackable"] = true
+</span><span class='line'>  end</span></code></pre></td></tr></table></div></figure>
+
+</div>
+
+
+      <footer>
+        <p class="meta text-muted">
           
+  
+
+<span class="glyphicon glyphicon-user"></span> <span class="byline author vcard">Posted by <span class="fn"><a href="https://plus.google.com/113548610124685160907?rel=author">Slobodan Kovačević</a></span></span>
+
           
-        </footer>
-      
+
+
+
+
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-05-12T19:10:06+02:00" pubdate data-updated="true">May 12<span>th</span>, 2014</time>
+          
+
+<span class="glyphicon glyphicon-tags"></span>&nbsp;
+<span class="categories">
+  
+    <a class='category' href='/category/ruby-and-rails/'>Ruby and Rails</a>
+  
+</span>
+
+
+          
+
+<span class="tags">
+  
+    Tags:
+  
+  
+    <a class='tag' href='/tag/devise/'>devise</a>, <a class='tag' href='/tag/howto/'>howto</a>, <a class='tag' href='/tag/rails/'>rails</a>, <a class='tag' href='/tag/ruby/'>ruby</a>, <a class='tag' href='/tag/tips/'>tips</a>
+  
+</span>
+
+
+        </p>
+        
+          <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://icebergist.com/posts/how-to-skip-devise-trackable-updates/" data-via="icebergist" data-counturl="http://icebergist.com/posts/how-to-skip-devise-trackable-updates/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
+</div>
+
+        
+        
+          <ul class="meta text-muted pager">
+            
+            <li class="previous"><a href="/posts/upgrade-ubuntu-8-dot-04-lts-server/" title="Previous Post: Upgrade Ubuntu 8.04 LTS server">&laquo; Upgrade Ubuntu 8.04 LTS server</a></li>
+            
+            
+          </ul>
+        
+      </footer>
     </article>
+    
+      <section>
+        <h1>Comments</h1>
+        <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+      </section>
     
   </div>
 
   
-    <aside class="sidebar col-md-3">
-      
-        <section>
+  <aside class="sidebar col-md-3">
+    
+      <section>
   <h2>About Me</h2>
   <div><img src="http://orangeiceberg.com/images/slobodan-110x110.gif" class="sidebar_avatar" alt="Slobodan Kovacevic" />
   <div id="sidebar-about">
@@ -147,7 +259,7 @@
   
   <div id="recent_posts" class="list-group">
     
-    <a class="list-group-item " href="/posts/how-to-skip-devise-trackable-updates/">How to Skip Devise Trackable Updates</a>
+    <a class="list-group-item active" href="/posts/how-to-skip-devise-trackable-updates/">How to Skip Devise Trackable Updates</a>
     
     <a class="list-group-item " href="/posts/upgrade-ubuntu-8-dot-04-lts-server/">Upgrade Ubuntu 8.04 LTS Server</a>
     
@@ -211,13 +323,13 @@
     <h3 class="panel-title">Tags</h3>
   </div>
   <div class="tag-cloud">
-    <span class='rank-5'><a href='/tag/amazon-s3'>amazon s3</a></span> <span class='rank-5'><a href='/tag/rails4'>rails4</a></span> <span class='rank-4'><a href='/tag/rails3'>rails3</a></span> <span class='rank-3'><a href='/tag/howto'>howto</a></span> <span class='rank-4'><a href='/tag/heroku'>heroku</a></span> <span class='rank-5'><a href='/tag/devise'>devise</a></span> <span class='rank-5'><a href='/tag/rspec'>rspec</a></span> <span class='rank-5'><a href='/tag/scaffold'>scaffold</a></span> <span class='rank-3'><a href='/tag/tips'>tips</a></span> <span class='rank-5'><a href='/tag/linux'>linux</a></span> <span class='rank-5'><a href='/tag/restful'>restful</a></span> <span class='rank-4'><a href='/tag/links'>links</a></span> <span class='rank-4'><a href='/tag/hosting'>hosting</a></span> <span class='rank-5'><a href='/tag/css'>css</a></span> <span class='rank-5'><a href='/tag/factorygirl'>factorygirl</a></span> <span class='rank-5'><a href='/tag/edge'>edge</a></span> <span class='rank-5'><a href='/tag/carrierwave'>carrierwave</a></span> <span class='rank-2'><a href='/tag/ruby'>ruby</a></span> <span class='rank-5'><a href='/tag/vagrant'>vagrant</a></span> <span class='rank-4'><a href='/tag/ubuntu'>ubuntu</a></span> <span class='rank-4'><a href='/tag/weekly'>weekly</a></span> <span class='rank-5'><a href='/tag/paperclip'>paperclip</a></span> <span class='rank-5'><a href='/tag/tdd'>tdd</a></span> <span class='rank-4'><a href='/tag/tutorial'>tutorial</a></span> <span class='rank-5'><a href='/tag/virtualbox'>virtualbox</a></span> <span class='rank-5'><a href='/tag/factory-girl'>factory_girl</a></span> <span class='rank-5'><a href='/tag/mac'>mac</a></span> <span class='rank-5'><a href='/tag/PHP'>PHP</a></span> <span class='rank-5'><a href='/tag/cloud-computing'>cloud computing</a></span> <span class='rank-5'><a href='/tag/erkanaauth'>erkanaauth</a></span> <span class='rank-5'><a href='/tag/codeigniter'>codeigniter</a></span> <span class='rank-5'><a href='/tag/password-protected'>password protected</a></span> <span class='rank-5'><a href='/tag/admin'>admin</a></span> <span class='rank-5'><a href='/tag/rest'>rest</a></span> <span class='rank-5'><a href='/tag/Javascript'>Javascript</a></span> <span class='rank-4'><a href='/tag/resources'>resources</a></span> <span class='rank-2'><a href='/tag/rails'>rails</a></span> 
+    <span class='rank-5'><a href='/tag/cloud-computing'>cloud computing</a></span> <span class='rank-5'><a href='/tag/edge'>edge</a></span> <span class='rank-5'><a href='/tag/mac'>mac</a></span> <span class='rank-5'><a href='/tag/devise'>devise</a></span> <span class='rank-4'><a href='/tag/rails3'>rails3</a></span> <span class='rank-4'><a href='/tag/hosting'>hosting</a></span> <span class='rank-5'><a href='/tag/Javascript'>Javascript</a></span> <span class='rank-5'><a href='/tag/password-protected'>password protected</a></span> <span class='rank-2'><a href='/tag/ruby'>ruby</a></span> <span class='rank-3'><a href='/tag/tips'>tips</a></span> <span class='rank-5'><a href='/tag/virtualbox'>virtualbox</a></span> <span class='rank-5'><a href='/tag/rspec'>rspec</a></span> <span class='rank-5'><a href='/tag/erkanaauth'>erkanaauth</a></span> <span class='rank-5'><a href='/tag/factory-girl'>factory_girl</a></span> <span class='rank-5'><a href='/tag/restful'>restful</a></span> <span class='rank-5'><a href='/tag/css'>css</a></span> <span class='rank-5'><a href='/tag/PHP'>PHP</a></span> <span class='rank-5'><a href='/tag/scaffold'>scaffold</a></span> <span class='rank-4'><a href='/tag/weekly'>weekly</a></span> <span class='rank-5'><a href='/tag/admin'>admin</a></span> <span class='rank-2'><a href='/tag/rails'>rails</a></span> <span class='rank-4'><a href='/tag/links'>links</a></span> <span class='rank-4'><a href='/tag/tutorial'>tutorial</a></span> <span class='rank-4'><a href='/tag/heroku'>heroku</a></span> <span class='rank-5'><a href='/tag/linux'>linux</a></span> <span class='rank-4'><a href='/tag/ubuntu'>ubuntu</a></span> <span class='rank-5'><a href='/tag/paperclip'>paperclip</a></span> <span class='rank-5'><a href='/tag/amazon-s3'>amazon s3</a></span> <span class='rank-3'><a href='/tag/howto'>howto</a></span> <span class='rank-5'><a href='/tag/factorygirl'>factorygirl</a></span> <span class='rank-5'><a href='/tag/codeigniter'>codeigniter</a></span> <span class='rank-5'><a href='/tag/vagrant'>vagrant</a></span> <span class='rank-4'><a href='/tag/resources'>resources</a></span> <span class='rank-5'><a href='/tag/rest'>rest</a></span> <span class='rank-5'><a href='/tag/tdd'>tdd</a></span> <span class='rank-5'><a href='/tag/carrierwave'>carrierwave</a></span> <span class='rank-5'><a href='/tag/rails4'>rails4</a></span> 
   </div>
 </section>
 
 
-      
-    </aside>
+    
+  </aside>
   
 </div>
 
@@ -244,6 +356,22 @@
     <script src="/assets/bootstrap/dist/js/bootstrap.min.js"></script>
 <script src="/javascripts/modernizr-2.0.js"></script>
 
+
+<script type="text/javascript">
+      var disqus_shortname = 'icebergist';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://icebergist.com/posts/how-to-skip-devise-trackable-updates/';
+        var disqus_url = 'http://icebergist.com/posts/how-to-skip-devise-trackable-updates/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
 
 
 

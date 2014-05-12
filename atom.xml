@@ -4,7 +4,7 @@
   <title><![CDATA[Icebergist]]></title>
   <link href="http://icebergist.com/atom.xml" rel="self"/>
   <link href="http://icebergist.com/"/>
-  <updated>2014-03-26T16:17:26+01:00</updated>
+  <updated>2014-05-12T19:28:40+02:00</updated>
   <id>http://icebergist.com/</id>
   <author>
     <name><![CDATA[Slobodan Kovačević]]></name>
@@ -12,6 +12,33 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[How to skip Devise trackable updates]]></title>
+    <link href="http://icebergist.com/posts/how-to-skip-devise-trackable-updates/"/>
+    <updated>2014-05-12T19:10:06+02:00</updated>
+    <id>http://icebergist.com/posts/how-to-skip-devise-trackable-updates</id>
+    <content type="html"><![CDATA[<p>Devise has a very useful Trackable module used to track user&rsquo;s sign in count, timestamps and IP address. There are some occasions when you need to disable tracking. For example for API requests where user signs in on every request; for instances where admin might sign in as an user; and similar.</p>
+
+<p>To disable Devise Trackable module you need to set <code>request.env["devise.skip_trackable"] = true</code>. You have to do that before trying to authenticate user, so you&rsquo;ll want to put it in a before_filter, or even better prepend_before_filter to make sure it&rsquo;s before authentication.</p>
+
+<p>Add this to your controller in which you want to disable tracking:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>prepend_before_filter :disable_devise_trackable
+</span><span class='line'>
+</span><span class='line'>protected
+</span><span class='line'>  def disable_devise_trackable
+</span><span class='line'>    request.env["devise.skip_trackable"] = true
+</span><span class='line'>  end</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Upgrade Ubuntu 8.04 LTS server]]></title>
