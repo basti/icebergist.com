@@ -5,9 +5,9 @@
 url: http://icebergist.com
 title: Icebergist
 subtitle: Exploring hidden depths of web development
-author: Slobodan Kovačević
+author: Orange Iceberg
 simple_search: http://google.com/search
-description: Icebergist is my personal blog where I write mainly about Ruby and Ruby on Rails.
+description: Icebergist is a place where Orange Iceberg team writes about Ruby and Ruby on Rails.
 
 # Default date format is "ordinal" (resulting in "July 22nd 2007")
 # You can customize the format as defined in
