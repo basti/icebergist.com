@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby and Rails | Icebergist]]></title>
   <link href="http://icebergist.com/category/ruby-and-rails/atom.xml" rel="self"/>
   <link href="http://icebergist.com/"/>
-  <updated>2015-05-04T13:44:10+02:00</updated>
+  <updated>2015-05-04T16:31:57+02:00</updated>
   <id>http://icebergist.com/</id>
   <author>
     <name><![CDATA[Orange Iceberg]]></name>
@@ -12,6 +12,23 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Customize Devise permitted parameters]]></title>
+    <link href="http://icebergist.com/posts/customize-devise-permitted-parameters/"/>
+    <updated>2015-05-04T16:07:22+02:00</updated>
+    <id>http://icebergist.com/posts/customize-devise-permitted-parameters</id>
+    <content type="html"><![CDATA[<p>If you are using Devise gem for authentication and you have been adding custom fields to your model you’ll get in trouble when you try to create a new instance or update an existing one. All your added fields will be treated as unpermitted. The solution for this problem is to customise Devise’s configure_permited_parameters action. All you need to do is to add this action to your Application controller and push parameters that need to be permitted to devise_paremeter_sanitizer array. So let’s say you have a User Model and you have added company_name and website fields to your user’s table, to permit this parameters on sign_up you need to add this to your Application controller:</p>
+
+<p><code>
+def configure_permitted_parameters
+  devise_parameter_sanitizer.for(:sign_up).push(:company_name, :website)
+end
+</code></p>
+
+<p>It is the same principle for the :sign_in and :edit_account. You can see what are <a href="https://github.com/plataformatec/devise/blob/master/lib/devise/parameter_sanitizer.rb#L83">default permitted parameters here</a>.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[How to skip Devise trackable updates]]></title>
@@ -189,22 +206,6 @@ RSpec.configure do |config|
     end 
   end
 end</pre>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Random Rails tips]]></title>
-    <link href="http://icebergist.com/posts/random-rails-tips"/>
-    <updated>2013-03-09T09:00:00+01:00</updated>
-    <id>http://icebergist.com/posts/random-rails-tips</id>
-    <content type="html"><![CDATA[<p>Here are some random Rails tips I&#8217;ve found useful:</p>
-
-<ul>
-<li><strong>rails console sandbox</strong> &#8211; if you open console like this it will rollback all database changes once you exit. Pretty useful for playing around without making any changes to database.</li>
-<li><strong>rake db:migrate:status</strong> &#8211; useful when you want to see the status of current database. It will show the status of all migrations.</li>
-<li><strong>User.pluck(:email)</strong> &#8211; since Rails 3.2.1 you can use <a href="http://apidock.com/rails/ActiveRecord/Calculations/pluck">pluck</a> method to get an array of values in one particular column. It&#8217;s the equvivalent of doing User.select(:email).map(&amp;:email)</li>
-</ul>
 
 ]]></content>
   </entry>
