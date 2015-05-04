@@ -4,7 +4,7 @@
   <title><![CDATA[Icebergist]]></title>
   <link href="http://icebergist.com/atom.xml" rel="self"/>
   <link href="http://icebergist.com/"/>
-  <updated>2015-05-04T11:27:44+02:00</updated>
+  <updated>2015-05-04T11:40:09+02:00</updated>
   <id>http://icebergist.com/</id>
   <author>
     <name><![CDATA[Orange Iceberg]]></name>
@@ -12,6 +12,15 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[New begining]]></title>
+    <link href="http://icebergist.com/posts/new-begining/"/>
+    <updated>2015-05-04T11:30:55+02:00</updated>
+    <id>http://icebergist.com/posts/new-begining</id>
+    <content type="html"><![CDATA[<p>Blah</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[How to skip Devise trackable updates]]></title>
@@ -648,21 +657,6 @@ Another great thing about SproutCore is that it can be hooked up with any backen
 
 
 <p>In next few days I will try to build a sample application powered by SproutCore and Rails to see how it goes. I will post my impressions here. After all if it&#8217;s something Apple used for Mobile.me &#8211; well, it can&#8217;t be that bad. <img src='http://icebergist.com/wp-includes/images/smilies/icon_wink.gif' alt=';)' class='wp-smiley' /></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[So it begins&#8230;]]></title>
-    <link href="http://icebergist.com/posts/so-it-begins"/>
-    <updated>2008-06-24T10:00:00+02:00</updated>
-    <id>http://icebergist.com/posts/so-it-begins</id>
-    <content type="html"><![CDATA[<p>Welcome to an icebergist blog. The Icebergist will be a blog about both technical and business stuff I deal with daily. From Ruby on Rails programming to time organizing, everything that’s important in my daily work as a freelance developer.</p>
-
-<p>As you can see I just setup the Icebergist blog, so at the moment it&#8217;s content-free. While I write some posts you can checkout <a href="http://www.google.com/search?hl=en&amp;rlz=1B3GGGL_enYU233YU234&amp;q=%22Posted+by+Slobodan+Kovacevic%22+site%3Aarraystudio.com+inurl%3Ahtml&amp;btnG=Search" title="Slobodan Kovacevic's blog posts in AS Workshop">my posts from my previous blog AS Workshop</a>.</p>
-
-<p>Also I maintain a tumble log called &ldquo;<a href="http://tumblelog.slobodankovacevic.com/" title="Tumblelog by Slobodan Kovacevic">this should be interesting</a>&rdquo; where I post small bits of information which I find useful or interesting.</p>
-
-<p>If that&#8217;s not enough for you then check out my <a href="http://twitter.com/thebasti" title="Slobodan Kovacevic's Twitter feed">Twitter feed</a> where I ramble daily (unless I am to lazy or too busy to do so).</p>
 ]]></content>
   </entry>
   

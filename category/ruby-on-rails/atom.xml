@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Ruby on Rails | Icebergist]]></title>
+  <link href="http://icebergist.com/category/ruby-on-rails/atom.xml" rel="self"/>
+  <link href="http://icebergist.com/"/>
+  <updated>2015-05-04T11:40:09+02:00</updated>
+  <id>http://icebergist.com/</id>
+  <author>
+    <name><![CDATA[Orange Iceberg]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[New begining]]></title>
+    <link href="http://icebergist.com/posts/new-begining/"/>
+    <updated>2015-05-04T11:30:55+02:00</updated>
+    <id>http://icebergist.com/posts/new-begining</id>
+    <content type="html"><![CDATA[<p>Blah</p>
+]]></content>
+  </entry>
+  
+</feed>

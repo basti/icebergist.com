@@ -111,11 +111,166 @@
 
 
 
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2009-03-08T09:00:00+01:00" pubdate data-updated="true">Mar 8<span>th</span>, 2009</time>
+        | 
+  
+
+
+  <span class="glyphicon glyphicon-user"></span>
+  <span class="byline author vcard">Posted by
+    <span class="fn">
+      
+        <a href="https://plus.google.com/113548610124685160907?rel=author">Slobodan Kovačević</a>
+      
+    </span>
+  </span>
+
+
+        
+           | <a href="/posts/simple-password-protected-administration-with-codeigniter#disqus_thread"
+             data-disqus-identifier="http://icebergist.com/posts/simple-password-protected-administration-with-codeigniter">Comments</a>
+        
+      </p>
+    
+    
+      <h1 class="entry-title"><a href="/posts/simple-password-protected-administration-with-codeigniter">Simple Password Protected Administration With CodeIgniter</a></h1>
+    
+  </header>
+
+
+  <div class="entry-content clearfix"><p>Last week I&#8217;ve taken a break from Ruby/Rails development and I&#8217;ve worked on a site that uses PHP with <a href="http://codeigniter.com/">CodeIgniter</a> framework.</p>
+
+<p>Despite the fact that CodeIgniter has a very nice documentation I found it very difficult to find a way to do some simple things, that are more or less obvious, but which can be a problem for someone who hasn&#8217;t worked with CodeIgniter before. (for example, I found myself more than once looking at CI code to figure out how it works, so I can use it)</p>
+
+<p>I had to make a simple password protected administration section. One admin user, one password, no user registrations, no roles &#8211; simple as possible. As I was using CI framework I decided to find a plugin/library that does this. Unfortunately most CI authorization plugins/libraries are very bloated and too complicated for this simple task. I tried to find some examples how to handle this simple use case, but nothing came up.</p>
+
+<p>Finally I&#8217;ve found a small authorization plugin: <a href="http://codeigniter.com/wiki/Erkana/">Erkanaauth</a>.</p>
+
+<p>First you need a user table (must be named &#8216;users&#8217;) which only needs to have an id field and all other fields are optional because you will manually specify what other columns will be used. I opted for simple id, username, password:</p>
+
+<pre>CREATE TABLE IF NOT EXISTS `users` (
+  `id` int(11) NOT NULL auto_increment,
+  `username` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  PRIMARY KEY  (`id`)
+);</pre>
+
+
+<p>We will need to &#8220;install&#8221; ErkanaAuth library. You should <a href="http://codeigniter.com/wiki/File:erkanaauth.zip/">download it</a> and unzip it.</p>
+
+<p>Next we should create an Admin controller which will handle all administration tasks (remember I&#8217;m making simple admin here, so I don&#8217;t need to protect multiple controllers).</p>
+
+<pre>&lt;?php
+class Admin extends Controller {
+  function Admin()
+  {
+    parent::Controller();   
+    $this->load->database();
+    $this->load->helper(array('url', 'form', 'date'));
+    $this->load->library(array('form_validation', 'upload', 'Erkanaauth', 'session'));
+  }
+}
+?&gt;</pre>
+
+
+<p>Constructor just connects to database and loads some standard helpers and libraries (including Erkanaauth) that are usually used.</p>
+
+<p>Next step is to add a function which we can call to verify if user is logged in:</p>
+
+<pre>private
+  function authorize()
+  {
+      if($this->erkanaauth->try_session_login())
+          return true;
+  
+      redirect('admin/login');
+  }
+</pre>
+
+
+<p>Function uses Erkanaauth&#8217;s try_session_login which checks if user is already logged in (checks session for user id). If user isn&#8217;t logged in we&#8217;ll redirect him to our login page:</p>
+
+<pre>function login()
+  {
+    $username = $this->input->post('username', true);
+    $password = $this->input->post('password', true);
+    if($username || $password)
+    {
+      if($this->erkanaauth->try_login(array('username' => $username, 'password' => $password)))
+        redirect('admin');
+    }
+    
+    $this->load->view('admin_login');
+  }
+
+  function logout()
+  {
+    $this->erkanaauth->logout();
+    redirect('admin');
+  }
+</pre>
+
+
+<p>Key command here is try_login in login function which tries to find an entry in users table that fulfills given conditions. If you have different users table than the one I made this is the place where you should enter your column names.</p>
+
+<p>Logout function is has just a simple call to Erkana&#8217;s logout function. Nothing special there.</p>
+
+<p>Of course we also need a login page template which should contain a simple user/pass form. It&#8217;s pretty basic and you can see it if you get the complete code (see at the end).</p>
+
+<p>Finally we have everything needed to protect any page in Admin controller. In order to protect a page all you need to do is to add a call to authorize function to any function you want to protect. Like this:</p>
+
+<pre>function index()
+  {
+    $this->authorize();
+    echo "Do something useful... For now just display logout link: ";
+    echo anchor('admin/logout', "Logout");
+  }
+</pre>
+
+
+<p>That&#8217;s it. Now you have fully functional administration section which requires username and password authorization.</p>
+
+<p>You can get the complete sample application from <a href="http://github.com/basti/ci-admin-section/tree/master">Github repository</a>. Feel free to expand on it or use it any way you like.</p>
+</div>
+  
+  
+
+
+        </article>
+      
+      
+        <article class="post">
+          
+  <header class="page-header">
+    
+      <p class="meta text-muted">
+        
+
+
+
+
+
+
+
+
+
+
+
+
 <span class="glyphicon glyphicon-calendar"></span> <time datetime="2008-11-09T09:00:00+01:00" pubdate data-updated="true">Nov 9<span>th</span>, 2008</time>
         | 
   
 
-<span class="glyphicon glyphicon-user"></span> <span class="byline author vcard">Posted by <span class="fn"><a href="https://plus.google.com/113548610124685160907?rel=author">Slobodan Kovačević</a></span></span>
+
+  <span class="glyphicon glyphicon-user"></span>
+  <span class="byline author vcard">Posted by
+    <span class="fn">
+      
+        <a href="https://plus.google.com/113548610124685160907?rel=author">Slobodan Kovačević</a>
+      
+    </span>
+  </span>
+
 
         
            | <a href="/posts/restoring-superblock-on-ubutnu#disqus_thread"
@@ -179,7 +334,16 @@
         | 
   
 
-<span class="glyphicon glyphicon-user"></span> <span class="byline author vcard">Posted by <span class="fn"><a href="https://plus.google.com/113548610124685160907?rel=author">Slobodan Kovačević</a></span></span>
+
+  <span class="glyphicon glyphicon-user"></span>
+  <span class="byline author vcard">Posted by
+    <span class="fn">
+      
+        <a href="https://plus.google.com/113548610124685160907?rel=author">Slobodan Kovačević</a>
+      
+    </span>
+  </span>
+
 
         
            | <a href="/posts/restful-admin-namespaced-controller-using-scaffolding#disqus_thread"
@@ -259,7 +423,16 @@ end</code></li>
         | 
   
 
-<span class="glyphicon glyphicon-user"></span> <span class="byline author vcard">Posted by <span class="fn"><a href="https://plus.google.com/113548610124685160907?rel=author">Slobodan Kovačević</a></span></span>
+
+  <span class="glyphicon glyphicon-user"></span>
+  <span class="byline author vcard">Posted by
+    <span class="fn">
+      
+        <a href="https://plus.google.com/113548610124685160907?rel=author">Slobodan Kovačević</a>
+      
+    </span>
+  </span>
+
 
         
            | <a href="/posts/mosso-hosting-cloud#disqus_thread"
@@ -313,7 +486,16 @@ at $100 / month seems like a good solution to get a scalable server. However one
         | 
   
 
-<span class="glyphicon glyphicon-user"></span> <span class="byline author vcard">Posted by <span class="fn"><a href="https://plus.google.com/113548610124685160907?rel=author">Slobodan Kovačević</a></span></span>
+
+  <span class="glyphicon glyphicon-user"></span>
+  <span class="byline author vcard">Posted by
+    <span class="fn">
+      
+        <a href="https://plus.google.com/113548610124685160907?rel=author">Slobodan Kovačević</a>
+      
+    </span>
+  </span>
+
 
         
            | <a href="/posts/innodb-per-table-tablespaces-split-ibdata1-to-smaller-chunks#disqus_thread"
@@ -373,7 +555,16 @@ at $100 / month seems like a good solution to get a scalable server. However one
         | 
   
 
-<span class="glyphicon glyphicon-user"></span> <span class="byline author vcard">Posted by <span class="fn"><a href="https://plus.google.com/113548610124685160907?rel=author">Slobodan Kovačević</a></span></span>
+
+  <span class="glyphicon glyphicon-user"></span>
+  <span class="byline author vcard">Posted by
+    <span class="fn">
+      
+        <a href="https://plus.google.com/113548610124685160907?rel=author">Slobodan Kovačević</a>
+      
+    </span>
+  </span>
+
 
         
            | <a href="/posts/this-should-be-interesting-weekly-week-28#disqus_thread"
@@ -427,7 +618,16 @@ at $100 / month seems like a good solution to get a scalable server. However one
         | 
   
 
-<span class="glyphicon glyphicon-user"></span> <span class="byline author vcard">Posted by <span class="fn"><a href="https://plus.google.com/113548610124685160907?rel=author">Slobodan Kovačević</a></span></span>
+
+  <span class="glyphicon glyphicon-user"></span>
+  <span class="byline author vcard">Posted by
+    <span class="fn">
+      
+        <a href="https://plus.google.com/113548610124685160907?rel=author">Slobodan Kovačević</a>
+      
+    </span>
+  </span>
+
 
         
            | <a href="/posts/collection-partial-variable-naming#disqus_thread"
@@ -479,7 +679,16 @@ at $100 / month seems like a good solution to get a scalable server. However one
         | 
   
 
-<span class="glyphicon glyphicon-user"></span> <span class="byline author vcard">Posted by <span class="fn"><a href="https://plus.google.com/113548610124685160907?rel=author">Slobodan Kovačević</a></span></span>
+
+  <span class="glyphicon glyphicon-user"></span>
+  <span class="byline author vcard">Posted by
+    <span class="fn">
+      
+        <a href="https://plus.google.com/113548610124685160907?rel=author">Slobodan Kovačević</a>
+      
+    </span>
+  </span>
+
 
         
            | <a href="/posts/this-should-be-interesting-weekly-week-27#disqus_thread"
@@ -532,7 +741,16 @@ at $100 / month seems like a good solution to get a scalable server. However one
         | 
   
 
-<span class="glyphicon glyphicon-user"></span> <span class="byline author vcard">Posted by <span class="fn"><a href="https://plus.google.com/113548610124685160907?rel=author">Slobodan Kovačević</a></span></span>
+
+  <span class="glyphicon glyphicon-user"></span>
+  <span class="byline author vcard">Posted by
+    <span class="fn">
+      
+        <a href="https://plus.google.com/113548610124685160907?rel=author">Slobodan Kovačević</a>
+      
+    </span>
+  </span>
+
 
         
            | <a href="/posts/mac-os-x-problems-upgrading-from-1053-to-1054#disqus_thread"
@@ -579,7 +797,16 @@ at $100 / month seems like a good solution to get a scalable server. However one
         | 
   
 
-<span class="glyphicon glyphicon-user"></span> <span class="byline author vcard">Posted by <span class="fn"><a href="https://plus.google.com/113548610124685160907?rel=author">Slobodan Kovačević</a></span></span>
+
+  <span class="glyphicon glyphicon-user"></span>
+  <span class="byline author vcard">Posted by
+    <span class="fn">
+      
+        <a href="https://plus.google.com/113548610124685160907?rel=author">Slobodan Kovačević</a>
+      
+    </span>
+  </span>
+
 
         
            | <a href="/posts/sproutcore-javascript-framework#disqus_thread"
@@ -624,62 +851,11 @@ Another great thing about SproutCore is that it can be hooked up with any backen
 
         </article>
       
-      
-        <article class="post">
-          
-  <header class="page-header">
-    
-      <p class="meta text-muted">
-        
-
-
-
-
-
-
-
-
-
-
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2008-06-24T10:00:00+02:00" pubdate data-updated="true">Jun 24<span>th</span>, 2008</time>
-        | 
-  
-
-<span class="glyphicon glyphicon-user"></span> <span class="byline author vcard">Posted by <span class="fn"><a href="https://plus.google.com/113548610124685160907?rel=author">Slobodan Kovačević</a></span></span>
-
-        
-           | <a href="/posts/so-it-begins#disqus_thread"
-             data-disqus-identifier="http://icebergist.com/posts/so-it-begins">Comments</a>
-        
-      </p>
-    
-    
-      <h1 class="entry-title"><a href="/posts/so-it-begins">So It Begins&#8230;</a></h1>
-    
-  </header>
-
-
-  <div class="entry-content clearfix"><p>Welcome to an icebergist blog. The Icebergist will be a blog about both technical and business stuff I deal with daily. From Ruby on Rails programming to time organizing, everything that’s important in my daily work as a freelance developer.</p>
-
-<p>As you can see I just setup the Icebergist blog, so at the moment it&#8217;s content-free. While I write some posts you can checkout <a href="http://www.google.com/search?hl=en&amp;rlz=1B3GGGL_enYU233YU234&amp;q=%22Posted+by+Slobodan+Kovacevic%22+site%3Aarraystudio.com+inurl%3Ahtml&amp;btnG=Search" title="Slobodan Kovacevic's blog posts in AS Workshop">my posts from my previous blog AS Workshop</a>.</p>
-
-<p>Also I maintain a tumble log called &ldquo;<a href="http://tumblelog.slobodankovacevic.com/" title="Tumblelog by Slobodan Kovacevic">this should be interesting</a>&rdquo; where I post small bits of information which I find useful or interesting.</p>
-
-<p>If that&#8217;s not enough for you then check out my <a href="http://twitter.com/thebasti" title="Slobodan Kovacevic's Twitter feed">Twitter feed</a> where I ramble daily (unless I am to lazy or too busy to do so).</p>
-</div>
-  
-  
-
-
-        </article>
-      
     </div>
 
     <ul class="pager">
       
-        <li class="previous disabled"><a href="#">&larr;&nbsp;Older</a></li>
+        <li class="previous"><a href="/page/3/">&larr;&nbsp;Older</a></li>
       
       <li><a href="/blog/archives">Blog Archives</a></li>
       
@@ -721,6 +897,8 @@ Another great thing about SproutCore is that it can be hooked up with any backen
   
   <div id="recent_posts" class="list-group">
     
+    <a class="list-group-item " href="/posts/new-begining/">New Begining</a>
+    
     <a class="list-group-item " href="/posts/how-to-skip-devise-trackable-updates/">How to Skip Devise Trackable Updates</a>
     
     <a class="list-group-item " href="/posts/upgrade-ubuntu-8-dot-04-lts-server/">Upgrade Ubuntu 8.04 LTS Server</a>
@@ -728,8 +906,6 @@ Another great thing about SproutCore is that it can be hooked up with any backen
     <a class="list-group-item " href="/posts/quick-virtualboxvagrant-setup-with-heroku-like-box">Quick VirtualBox/Vagrant Setup With Heroku-like Box</a>
     
     <a class="list-group-item " href="/posts/railsdiff">RailsDiff</a>
-    
-    <a class="list-group-item " href="/posts/rspec-and-factorygirl-setup-for-testing-carrierwave-uploaders">RSpec and FactoryGirl Setup for Testing Carrierwave Uploaders</a>
     
   </div>
   <div class="panel-heading">
@@ -778,6 +954,12 @@ Another great thing about SproutCore is that it can be hooked up with any backen
         Testing
       </a>
     
+    
+    <a class="list-group-item " href="/category/ruby-on-rails/index.html">
+        <span class="badge">1</span>
+        Ruby on Rails
+      </a>
+    
   </div>
 </section>
 <section class="panel panel-default">
@@ -785,7 +967,7 @@ Another great thing about SproutCore is that it can be hooked up with any backen
     <h3 class="panel-title">Tags</h3>
   </div>
   <div class="tag-cloud">
-    <span class='rank-5'><a href='/tag/vagrant'>vagrant</a></span> <span class='rank-5'><a href='/tag/virtualbox'>virtualbox</a></span> <span class='rank-5'><a href='/tag/Javascript'>Javascript</a></span> <span class='rank-3'><a href='/tag/tips'>tips</a></span> <span class='rank-4'><a href='/tag/ubuntu'>ubuntu</a></span> <span class='rank-5'><a href='/tag/css'>css</a></span> <span class='rank-5'><a href='/tag/cloud-computing'>cloud computing</a></span> <span class='rank-5'><a href='/tag/password-protected'>password protected</a></span> <span class='rank-5'><a href='/tag/erkanaauth'>erkanaauth</a></span> <span class='rank-5'><a href='/tag/admin'>admin</a></span> <span class='rank-2'><a href='/tag/ruby'>ruby</a></span> <span class='rank-5'><a href='/tag/carrierwave'>carrierwave</a></span> <span class='rank-4'><a href='/tag/hosting'>hosting</a></span> <span class='rank-5'><a href='/tag/rspec'>rspec</a></span> <span class='rank-4'><a href='/tag/weekly'>weekly</a></span> <span class='rank-4'><a href='/tag/links'>links</a></span> <span class='rank-5'><a href='/tag/restful'>restful</a></span> <span class='rank-5'><a href='/tag/scaffold'>scaffold</a></span> <span class='rank-5'><a href='/tag/rest'>rest</a></span> <span class='rank-5'><a href='/tag/PHP'>PHP</a></span> <span class='rank-5'><a href='/tag/amazon-s3'>amazon s3</a></span> <span class='rank-5'><a href='/tag/devise'>devise</a></span> <span class='rank-5'><a href='/tag/paperclip'>paperclip</a></span> <span class='rank-5'><a href='/tag/tdd'>tdd</a></span> <span class='rank-3'><a href='/tag/howto'>howto</a></span> <span class='rank-5'><a href='/tag/edge'>edge</a></span> <span class='rank-5'><a href='/tag/codeigniter'>codeigniter</a></span> <span class='rank-4'><a href='/tag/heroku'>heroku</a></span> <span class='rank-5'><a href='/tag/rails4'>rails4</a></span> <span class='rank-4'><a href='/tag/resources'>resources</a></span> <span class='rank-4'><a href='/tag/tutorial'>tutorial</a></span> <span class='rank-5'><a href='/tag/factory-girl'>factory_girl</a></span> <span class='rank-2'><a href='/tag/rails'>rails</a></span> <span class='rank-4'><a href='/tag/rails3'>rails3</a></span> <span class='rank-5'><a href='/tag/factorygirl'>factorygirl</a></span> <span class='rank-5'><a href='/tag/mac'>mac</a></span> <span class='rank-5'><a href='/tag/linux'>linux</a></span> 
+    <span class='rank-5'><a href='/tag/rest'>rest</a></span> <span class='rank-4'><a href='/tag/links'>links</a></span> <span class='rank-5'><a href='/tag/linux'>linux</a></span> <span class='rank-3'><a href='/tag/howto'>howto</a></span> <span class='rank-4'><a href='/tag/devise'>devise</a></span> <span class='rank-5'><a href='/tag/vagrant'>vagrant</a></span> <span class='rank-5'><a href='/tag/PHP'>PHP</a></span> <span class='rank-5'><a href='/tag/codeigniter'>codeigniter</a></span> <span class='rank-2'><a href='/tag/ruby'>ruby</a></span> <span class='rank-5'><a href='/tag/factorygirl'>factorygirl</a></span> <span class='rank-5'><a href='/tag/rspec'>rspec</a></span> <span class='rank-5'><a href='/tag/css'>css</a></span> <span class='rank-4'><a href='/tag/ubuntu'>ubuntu</a></span> <span class='rank-4'><a href='/tag/tutorial'>tutorial</a></span> <span class='rank-3'><a href='/tag/tips'>tips</a></span> <span class='rank-4'><a href='/tag/hosting'>hosting</a></span> <span class='rank-5'><a href='/tag/mac'>mac</a></span> <span class='rank-5'><a href='/tag/tdd'>tdd</a></span> <span class='rank-5'><a href='/tag/password-protected'>password protected</a></span> <span class='rank-5'><a href='/tag/factory-girl'>factory_girl</a></span> <span class='rank-5'><a href='/tag/virtualbox'>virtualbox</a></span> <span class='rank-5'><a href='/tag/carrierwave'>carrierwave</a></span> <span class='rank-4'><a href='/tag/rails3'>rails3</a></span> <span class='rank-5'><a href='/tag/scaffold'>scaffold</a></span> <span class='rank-4'><a href='/tag/heroku'>heroku</a></span> <span class='rank-4'><a href='/tag/weekly'>weekly</a></span> <span class='rank-5'><a href='/tag/restful'>restful</a></span> <span class='rank-1'><a href='/tag/rails'>rails</a></span> <span class='rank-5'><a href='/tag/admin'>admin</a></span> <span class='rank-5'><a href='/tag/paperclip'>paperclip</a></span> <span class='rank-5'><a href='/tag/amazon-s3'>amazon s3</a></span> <span class='rank-4'><a href='/tag/resources'>resources</a></span> <span class='rank-5'><a href='/tag/cloud-computing'>cloud computing</a></span> <span class='rank-5'><a href='/tag/rails4'>rails4</a></span> <span class='rank-5'><a href='/tag/edge'>edge</a></span> <span class='rank-5'><a href='/tag/Javascript'>Javascript</a></span> <span class='rank-5'><a href='/tag/erkanaauth'>erkanaauth</a></span> 
   </div>
 </section>
 
