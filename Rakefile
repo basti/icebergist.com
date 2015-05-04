@@ -110,8 +110,15 @@ task :new_post, :title do |t, args|
     post.puts "title: \"#{title.gsub(/&/,'&amp;')}\""
     post.puts "date: #{Time.now.strftime('%Y-%m-%d %H:%M:%S %z')}"
     post.puts "comments: true"
+    post.puts "author: YOUR NAME GOES HERE"
     post.puts "categories: "
+    post.puts "  - Ruby and Rails"
+    post.puts "tags: "
+    post.puts "  - ruby"
+    post.puts "  - rails"
+    post.puts "published: false"
     post.puts "---"
+    post.puts ""
   end
 end
 
