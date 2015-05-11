@@ -28,3 +28,12 @@ To deploy latest changes run:
 bundle exec rake generate
 bundle exec rake deploy
 ```
+ 
+-------------
+
+
+# Icebergist - ist suffix
+
+The suffix -ist is used to denote a person who either practices something or a person who is “user of/expert in” something or a person who holds certain principles, doctrines, etc.
+
+http://en.wiktionary.org/wiki/-ist
