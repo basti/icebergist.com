@@ -28,7 +28,7 @@ This will create your task in lib/tasks with chosen namespace and task name.
 
 Here is our task and an explanation that follows.
 
-```
+```ruby
 namespace :database do
   desc "Detect database that's being used and then increment its id"
   task autoincrement: :environment do
@@ -55,13 +55,13 @@ end
 We need to change the starting id of our database to 1000 so we check that we don't have a record with id higher than 1000. Link is our Active Record model and links is the name of our table.
 
 ActiveRecord::Base.connection returns the connection currently associated with the class. We use it to detect the name of database and execute appropriate changes.
-
+###MySQL
 For MySQL we need to set AUTO_INCREMENT value to 1000, Auto-increment allows a unique number to be generated when a new record is inserted into a table. When first record is created it sets its primary key to 1 by default  and it will auto increment by 1 for each new record.
-
+###PostgreSQL
 For Postgres we have to explain what a sequence is. A sequence is a special kind of a database object designed for generating unique numeric identifiers. It is typically used to generate artificial primary keys. Sequences are similar to the Auto-increment concept in MySQL.
-
+###SQLite
 For SQlite we altered sqlite_sequence table, which is an internal table used to implement AUTOINCREMENT. It is created automatically whenever any ordinary table with an AUTOINCREMENT integer primary key is created.
 
-You can check [this Stack Overflow discussion](http://stackoverflow.com/questions/2075331/change-starting-id-number) that was very helpfull to me.
+You can check [this Stack Overflow discussion](http://stackoverflow.com/questions/2075331/change-starting-id-number) that was very helpful to me.
 
     
