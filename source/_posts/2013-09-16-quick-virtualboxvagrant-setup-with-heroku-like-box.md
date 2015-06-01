@@ -27,7 +27,7 @@ Here is a quick way to setup VirtualBox using Vagrant with Heroku-like box on Ma
         Vagrant.configure("2") do |config|        
 	        config.vm.box = "heroku"
 	        config.vm.box_url = "https://dl.dropboxusercontent.com/s/rnc0p8zl91borei/heroku.box"
-	        config.vm.synced_folder ".", "/vagrant", :nfs =&gt; true
+          config.vm.synced_folder ".", "/vagrant", :nfs => true
 	        config.vm.network :private_network, ip: "192.168.1.42"  # required for NFS
         end
 ```
