@@ -4,7 +4,7 @@
   <title><![CDATA[Icebergist]]></title>
   <link href="http://icebergist.com/atom.xml" rel="self"/>
   <link href="http://icebergist.com/"/>
-  <updated>2015-05-04T16:31:57+02:00</updated>
+  <updated>2015-06-01T14:01:15+02:00</updated>
   <id>http://icebergist.com/</id>
   <author>
     <name><![CDATA[Orange Iceberg]]></name>
@@ -112,7 +112,7 @@
 </pre></td><td class='code'><pre><code class='ruby'><span class='line'>    <span class="no">Vagrant</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="s2">&quot;2&quot;</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
 </span><span class='line'>        <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">box</span> <span class="o">=</span> <span class="s2">&quot;heroku&quot;</span>
 </span><span class='line'>        <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">box_url</span> <span class="o">=</span> <span class="s2">&quot;https://dl.dropboxusercontent.com/s/rnc0p8zl91borei/heroku.box&quot;</span>
-</span><span class='line'>        <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">synced_folder</span> <span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="s2">&quot;/vagrant&quot;</span><span class="p">,</span> <span class="ss">:nfs</span> <span class="o">=&amp;</span><span class="n">gt</span><span class="p">;</span> <span class="kp">true</span>
+</span><span class='line'>      <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">synced_folder</span> <span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="s2">&quot;/vagrant&quot;</span><span class="p">,</span> <span class="ss">:nfs</span> <span class="o">=&gt;</span> <span class="kp">true</span>
 </span><span class='line'>        <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">network</span> <span class="ss">:private_network</span><span class="p">,</span> <span class="ss">ip</span><span class="p">:</span> <span class="s2">&quot;192.168.1.42&quot;</span>  <span class="c1"># required for NFS</span>
 </span><span class='line'>    <span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure>

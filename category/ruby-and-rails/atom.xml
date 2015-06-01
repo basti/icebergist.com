@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby and Rails | Icebergist]]></title>
   <link href="http://icebergist.com/category/ruby-and-rails/atom.xml" rel="self"/>
   <link href="http://icebergist.com/"/>
-  <updated>2015-05-04T16:31:57+02:00</updated>
+  <updated>2015-06-01T14:01:15+02:00</updated>
   <id>http://icebergist.com/</id>
   <author>
     <name><![CDATA[Orange Iceberg]]></name>
@@ -74,7 +74,7 @@ prepend_before_filter :disable_devise_trackable</p>
 <pre><code>    Vagrant.configure("2") do |config|        
         config.vm.box = "heroku"
         config.vm.box_url = "https://dl.dropboxusercontent.com/s/rnc0p8zl91borei/heroku.box"
-        config.vm.synced_folder ".", "/vagrant", :nfs =&amp;gt; true
+      config.vm.synced_folder ".", "/vagrant", :nfs =&gt; true
         config.vm.network :private_network, ip: "192.168.1.42"  # required for NFS
     end
 </code></pre>
