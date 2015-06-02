@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby and Rails | Icebergist]]></title>
   <link href="http://icebergist.com/category/ruby-and-rails/atom.xml" rel="self"/>
   <link href="http://icebergist.com/"/>
-  <updated>2015-06-01T14:01:15+02:00</updated>
+  <updated>2015-06-02T09:47:36+02:00</updated>
   <id>http://icebergist.com/</id>
   <author>
     <name><![CDATA[Orange Iceberg]]></name>
@@ -12,6 +12,69 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[changing database starting id]]></title>
+    <link href="http://icebergist.com/posts/changing-database-starting-id/"/>
+    <updated>2015-06-01T11:03:47+02:00</updated>
+    <id>http://icebergist.com/posts/changing-database-starting-id</id>
+    <content type="html"><![CDATA[<p>For our new project it was necessary to modify the starting id of our database. This can be handled through migration for creating table but we decided to create a rake task that handled this for us.</p>
+
+<p>The rake task that we created detects what database is being used and executes appropriate changes according to that.</p>
+
+<p>You can create a rake task using rails generate command for rake task:</p>
+
+<p><code>
+rails g task namespace task_name
+</code>
+This will create your task in lib/tasks with chosen namespace and task name.</p>
+
+<p>Here is our task and an explanation that follows.</p>
+
+<p>```ruby
+namespace :database do
+  desc &ldquo;Detect database that&rsquo;s being used and then increment its id&rdquo;
+  task autoincrement: :environment do</p>
+
+<pre><code>db_name_downcase = ActiveRecord::Base.connection.adapter_name.downcase
+
+if Link.maximum(:id).to_i &lt; 1000
+  if db_name_downcase.start_with? "mysql"
+    ActiveRecord::Base.connection.execute("ALTER TABLE links AUTO_INCREMENT = 1000")
+  end
+  if db_name_downcase.start_with? "postgres"
+    ActiveRecord::Base.connection.execute("ALTER SEQUENCE links_id_seq START with 1000 RESTART;")
+  end
+  if db_name_downcase.start_with? "sqlite"
+    ActiveRecord::Base.connection.execute("insert into sqlite_sequence(name,seq) values('links', 1000)")
+  end
+else
+  puts "To perform this task your database shouldn't have records with id number higher than 1000"
+end
+</code></pre>
+
+<p>  end
+end
+```
+We need to change the starting id of our database to 1000 so we check that we don&rsquo;t have a record with id higher than 1000. Link is our Active Record model and links is the name of our table.</p>
+
+<p>ActiveRecord::Base.connection returns the connection currently associated with the class. We use it to detect the name of database and execute appropriate changes.</p>
+
+<h3>MySQL</h3>
+
+<p>For MySQL we need to set AUTO_INCREMENT value to 1000, Auto-increment allows a unique number to be generated when a new record is inserted into a table. When first record is created it sets its primary key to 1 by default  and it will auto increment by 1 for each new record.</p>
+
+<h3>PostgreSQL</h3>
+
+<p>For Postgres we have to explain what a sequence is. A sequence is a special kind of a database object designed for generating unique numeric identifiers. It is typically used to generate artificial primary keys. Sequences are similar to the Auto-increment concept in MySQL.</p>
+
+<h3>SQLite</h3>
+
+<p>For SQlite we altered sqlite_sequence table, which is an internal table used to implement AUTOINCREMENT. It is created automatically whenever any ordinary table with an AUTOINCREMENT integer primary key is created.</p>
+
+<p>You can check <a href="http://stackoverflow.com/questions/2075331/change-starting-id-number">this Stack Overflow discussion</a> that was very helpful to me.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Customize Devise permitted parameters]]></title>
@@ -118,95 +181,6 @@ VBoxManage list runningvms
     <id>http://icebergist.com/posts/railsdiff</id>
     <content type="html"><![CDATA[<p><a title="RailsDiff - compare Rails default app" href="http://railsdiff.org/" target="_blank">RailsDiff</a>
 is a very useful site when upgrading Rails versions (for example, from Rails 3.2 to Rails 4). It will generate default Rails app using two different Rails versions and it will compare them. The result is that you can see all the configuration changes (like in application.rb) and all other changes &#8211; which is really useful when upgrading to new Rails version.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[RSpec and FactoryGirl setup for testing Carrierwave uploaders]]></title>
-    <link href="http://icebergist.com/posts/rspec-and-factorygirl-setup-for-testing-carrierwave-uploaders"/>
-    <updated>2013-09-07T10:00:00+02:00</updated>
-    <id>http://icebergist.com/posts/rspec-and-factorygirl-setup-for-testing-carrierwave-uploaders</id>
-    <content type="html"><![CDATA[<p>Assume that you have the usual setup with model (MyFile) using simple Carrierwave uploader (MyFileUploader):</p>
-
-<pre># app/models/my_file.rb
-class MyFile &lt; ActiveRecord::Base
-  mount_uploader :file, MyFileUploader
-end</pre>
-
-
-<p>To be able to test Carrierwave uploaders with RSpec using FactoryGirl factories you need:</p>
-
-<ul>
-<li><span style="line-height: 13px;">define factory with uploaded file</span></li>
-<li>modify test environment storage so test file uploads are separated from other uploads</li>
-<li>turn off image processing to speed up tests</li>
-<li>perform cleanup after each test</li>
-</ul>
-
-
-<h2>Define factory</h2>
-
-<pre># spec/factories/my_files.rb
-FactoryGirl.define do
- factory :my_file do
-   photo Rack::Test::UploadedFile.new(File.open(File.join(Rails.root, '/spec/fixtures/myfiles/myfile.jpg')))
- end
-end</pre>
-
-
-<h2>Setup Carrierwave</h2>
-
-<p>First we need to make sure Carrierwave is using local file system for storage and to disable file processing for testing environments. Disabling file processing will speed up tests considerably. We can do that by adding following to Carrierwave initializer:</p>
-
-<pre>if Rails.env.test? || Rails.env.cucumber?
-  CarrierWave.configure do |config|
-    config.storage = :file
-    config.enable_processing = false
-  end
-end</pre>
-
-
-<p>Next we should separate test uploads from any other uploads. We can do that by modifying cache_dir and store_dir methods for all Carrierwave models (i.e. all models that are descendants of CarrierWave::Uploader::Base). So the whole Carrierwave initializer looks something like:</p>
-
-<pre># config/initializers/carrierwave.rb
-if Rails.env.test? || Rails.env.cucumber?
-  CarrierWave.configure do |config|
-    config.storage = :file
-    config.enable_processing = false
-  end
-
-  # make sure our uploader is auto-loaded
-  MyFileUploader
-
-  # use different dirs when testing
-  CarrierWave::Uploader::Base.descendants.each do |klass|
-    next if klass.anonymous?
-    klass.class_eval do
-      def cache_dir
-        "#{Rails.root}/spec/support/uploads/tmp"
-      end
-
-      def store_dir
-        "#{Rails.root}/spec/support/uploads/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}"
-      end
-    end
-  end
-end</pre>
-
-
-<h2>Clean up uploaded files</h2>
-
-<p>Using factory defined above will create uploaded files in cache_dir and store_dir. These are just temporary files and should be removed after each test, so each of them has a clean slate. By adding after :each hook in RSpec configuration block we can remove these files simply by deleting spec/support/uploads dir.</p>
-
-<pre># spec_helper.rb
-RSpec.configure do |config|
-  config.after(:each) do
-    if Rails.env.test? || Rails.env.cucumber?
-      FileUtils.rm_rf(Dir["#{Rails.root}/spec/support/uploads"])
-    end 
-  end
-end</pre>
-
 ]]></content>
   </entry>
   

@@ -4,7 +4,7 @@
   <title><![CDATA[Icebergist]]></title>
   <link href="http://icebergist.com/atom.xml" rel="self"/>
   <link href="http://icebergist.com/"/>
-  <updated>2015-06-01T14:01:15+02:00</updated>
+  <updated>2015-06-02T09:47:36+02:00</updated>
   <id>http://icebergist.com/</id>
   <author>
     <name><![CDATA[Orange Iceberg]]></name>
@@ -12,6 +12,92 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[changing database starting id]]></title>
+    <link href="http://icebergist.com/posts/changing-database-starting-id/"/>
+    <updated>2015-06-01T11:03:47+02:00</updated>
+    <id>http://icebergist.com/posts/changing-database-starting-id</id>
+    <content type="html"><![CDATA[<p>For our new project it was necessary to modify the starting id of our database. This can be handled through migration for creating table but we decided to create a rake task that handled this for us.</p>
+
+<p>The rake task that we created detects what database is being used and executes appropriate changes according to that.</p>
+
+<p>You can create a rake task using rails generate command for rake task:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>rails g task namespace task_name</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This will create your task in lib/tasks with chosen namespace and task name.</p>
+
+<p>Here is our task and an explanation that follows.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">namespace</span> <span class="ss">:database</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">desc</span> <span class="s2">&quot;Detect database that&#39;s being used and then increment its id&quot;</span>
+</span><span class='line'>  <span class="n">task</span> <span class="ss">autoincrement</span><span class="p">:</span> <span class="ss">:environment</span> <span class="k">do</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">db_name_downcase</span> <span class="o">=</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">adapter_name</span><span class="o">.</span><span class="n">downcase</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">if</span> <span class="no">Link</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="ss">:id</span><span class="p">)</span><span class="o">.</span><span class="n">to_i</span> <span class="o">&lt;</span> <span class="mi">1000</span>
+</span><span class='line'>      <span class="k">if</span> <span class="n">db_name_downcase</span><span class="o">.</span><span class="n">start_with?</span> <span class="s2">&quot;mysql&quot;</span>
+</span><span class='line'>        <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;ALTER TABLE links AUTO_INCREMENT = 1000&quot;</span><span class="p">)</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>      <span class="k">if</span> <span class="n">db_name_downcase</span><span class="o">.</span><span class="n">start_with?</span> <span class="s2">&quot;postgres&quot;</span>
+</span><span class='line'>        <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;ALTER SEQUENCE links_id_seq START with 1000 RESTART;&quot;</span><span class="p">)</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>      <span class="k">if</span> <span class="n">db_name_downcase</span><span class="o">.</span><span class="n">start_with?</span> <span class="s2">&quot;sqlite&quot;</span>
+</span><span class='line'>        <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;insert into sqlite_sequence(name,seq) values(&#39;links&#39;, 1000)&quot;</span><span class="p">)</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>    <span class="k">else</span>
+</span><span class='line'>      <span class="nb">puts</span> <span class="s2">&quot;To perform this task your database shouldn&#39;t have records with id number higher than 1000&quot;</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>We need to change the starting id of our database to 1000 so we check that we don&rsquo;t have a record with id higher than 1000. Link is our Active Record model and links is the name of our table.</p>
+
+<p>ActiveRecord::Base.connection returns the connection currently associated with the class. We use it to detect the name of database and execute appropriate changes.</p>
+
+<h3>MySQL</h3>
+
+<p>For MySQL we need to set AUTO_INCREMENT value to 1000, Auto-increment allows a unique number to be generated when a new record is inserted into a table. When first record is created it sets its primary key to 1 by default  and it will auto increment by 1 for each new record.</p>
+
+<h3>PostgreSQL</h3>
+
+<p>For Postgres we have to explain what a sequence is. A sequence is a special kind of a database object designed for generating unique numeric identifiers. It is typically used to generate artificial primary keys. Sequences are similar to the Auto-increment concept in MySQL.</p>
+
+<h3>SQLite</h3>
+
+<p>For SQlite we altered sqlite_sequence table, which is an internal table used to implement AUTOINCREMENT. It is created automatically whenever any ordinary table with an AUTOINCREMENT integer primary key is created.</p>
+
+<p>You can check <a href="http://stackoverflow.com/questions/2075331/change-starting-id-number">this Stack Overflow discussion</a> that was very helpful to me.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Customize Devise permitted parameters]]></title>
@@ -635,38 +721,6 @@ at $100 / month seems like a good solution to get a scalable server. However one
     <content type="html"><![CDATA[<p>Today I tried to upgrade my Mac from 10.5.3 to 10.5.4 using normal Software Update. That didn&#8217;t go as planned as installation hanged at &#8220;Configuring Installation&#8221; and only thing I could do is shutdown the computer.</p>
 
 <p>After some research and few unsuccessful retries I have finally managed to solve the upgrade problem by downloading standalone 10.5.4 update from <a href="http://www.apple.com/support/downloads/" title="Download Apple Mac OS X update">Apple download section</a>; booting in safe mode (hold shift key when booting) and then installing the update.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[SproutCore &#8211; a javascript framework]]></title>
-    <link href="http://icebergist.com/posts/sproutcore-javascript-framework"/>
-    <updated>2008-07-03T10:00:00+02:00</updated>
-    <id>http://icebergist.com/posts/sproutcore-javascript-framework</id>
-    <content type="html"><![CDATA[<p><a href="http://www.sproutcore.com" title="SproutCore - Javascript Framework">SproutCore</a> is a javascript framework which tries to enable developers to build web apps that look and act more like a desktop apps.</p>
-
-<p>It steps away from a classic web app model by moving a lot of app into the browser itself, which then interacts with server via AJAX. As it says on the <a href="http://www.sproutcore.com/about/" title="About SproutCore">SproutCore site</a>:</p>
-
-<blockquote><p>After lots of testing, we have found that the most efficient way to server a SproutCore application is as a …. static web page!</p></blockquote>
-
-<p>This means that a &#8220;simple&#8221; static HTML page (which is easily served by Apache) makes browser do most of the work (i.e. server doesn&#8217;t have to generate the pages) which frees up server to respond only to AJAX initiated requests.</p>
-
-<p><a href="http://www.sproutcore.com" title="SproutCore - Javascript Framework written in Ruby">SproutCore</a> is written in Ruby, but once you build the app it will generate a set of HTML, JS and CSS files, so you don&#8217;t need to know Ruby in order to use it. As the site says:</p>
-
-<blockquote><p>The code you write with SproutCore will resemble a desktop app written in Cocoa more than it will a web application written in Rails.</p></blockquote>
-
-<p><img class="alignright size-full wp-image-6" title="SproutCore Photos Demo" src="http://icebergist.com/wp-content/uploads/2008/07/sprout-photos-demo.jpg" alt="SproutCore Photos Demo Screenshot" width="500" height="236" />
-Another great thing about SproutCore is that it can be hooked up with any backend as long as it can communicate with it using HTTP. It can be anything: Rails, PHP, Perl, Java, ASP&#8230;</p>
-
-<p>Actions speak louder than words, so take a look at the SproutCore demos which shows you exactly what it&#8217;s all about.</p>
-
-<ul>
-<li><a href="http://www.sproutcore.com/static/photos/" title="SproutCore demo photo gallery">SproutCore based photo gallery</a> &#8211; iPhoto anyone? <img src='http://icebergist.com/wp-includes/images/smilies/icon_smile.gif' alt=':)' class='wp-smiley' /></li>
-<li><a href="http://www.sproutcore.com/static/sample_controls/" title="SproutCore demo sample controls">SproutCore sample controls</a> &#8211; demonstrates what kind of controls are already available in SproutCore.</li>
-</ul>
-
-
-<p>In next few days I will try to build a sample application powered by SproutCore and Rails to see how it goes. I will post my impressions here. After all if it&#8217;s something Apple used for Mobile.me &#8211; well, it can&#8217;t be that bad. <img src='http://icebergist.com/wp-includes/images/smilies/icon_wink.gif' alt=';)' class='wp-smiley' /></p>
 ]]></content>
   </entry>
   

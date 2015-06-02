@@ -4,7 +4,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Quick VirtualBox/Vagrant setup with Heroku-like box - Icebergist</title>
+  <title>changing database starting id - Icebergist</title>
   <meta name="author" content="Orange Iceberg">
 
   
@@ -16,7 +16,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://icebergist.com/posts/quick-virtualboxvagrant-setup-with-heroku-like-box">
+  <link rel="canonical" href="http://icebergist.com/posts/changing-database-starting-id">
   <link href="/favicon.png" type="image/png" rel="icon">
   <link href="http://feeds.feedburner.com/icebergist" rel="alternate" title="Icebergist" type="application/atom+xml">
 
@@ -107,7 +107,7 @@
 
 
 
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2013-09-16T10:00:00+02:00" pubdate data-updated="true">Sep 16<span>th</span>, 2013</time>
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2015-06-01T11:03:47+02:00" pubdate data-updated="true">Jun 1<span>st</span>, 2015</time>
         | 
   
 
@@ -116,7 +116,7 @@
   <span class="byline author vcard">Posted by
     <span class="fn">
       
-        <a href="https://plus.google.com/113548610124685160907?rel=author">Slobodan Kovačević</a>
+        <a href="http://orangeiceberg.com/about/">Jovica Šuša</a>
       
     </span>
   </span>
@@ -130,21 +130,26 @@
     
     
     <h1 class="entry-title">
-        Quick VirtualBox/Vagrant Setup With Heroku-like Box
+        Changing Database Starting Id
         
     </h1>
     
   </header>
 
 
-<div class="entry-content clearfix"><p>Here is a quick way to setup VirtualBox using Vagrant with Heroku-like box on Mac.</p>
+<div class="entry-content clearfix"><p>For our new project it was necessary to modify the starting id of our database. This can be handled through migration for creating table but we decided to create a rake task that handled this for us.</p>
 
-<ol>
-<li><p>Install VirtualBox from <a href="https://www.virtualbox.org/wiki/Downloads" target="_blank"><a href="https://www.virtualbox.org/wiki/Downloads">https://www.virtualbox.org/wiki/Downloads</a></a></p></li>
-<li><p>Install Vagrant from <a href="http://downloads.vagrantup.com/" target="_blank"><a href="http://downloads.vagrantup.com/">http://downloads.vagrantup.com/</a></a></p></li>
-<li><p>Create Vagrantfile for Heroku-like box (based on <a href="https://github.com/ejholmes/vagrant-heroku" target="_blank"><a href="https://github.com/ejholmes/vagrant-heroku">https://github.com/ejholmes/vagrant-heroku</a></a>) that looks something like:</p></li>
-</ol>
+<p>The rake task that we created detects what database is being used and executes appropriate changes according to that.</p>
 
+<p>You can create a rake task using rails generate command for rake task:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>rails g task namespace task_name</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This will create your task in lib/tasks with chosen namespace and task name.</p>
+
+<p>Here is our task and an explanation that follows.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -152,44 +157,64 @@
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'>    <span class="no">Vagrant</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="s2">&quot;2&quot;</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
-</span><span class='line'>        <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">box</span> <span class="o">=</span> <span class="s2">&quot;heroku&quot;</span>
-</span><span class='line'>        <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">box_url</span> <span class="o">=</span> <span class="s2">&quot;https://dl.dropboxusercontent.com/s/rnc0p8zl91borei/heroku.box&quot;</span>
-</span><span class='line'>      <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">synced_folder</span> <span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="s2">&quot;/vagrant&quot;</span><span class="p">,</span> <span class="ss">:nfs</span> <span class="o">=&gt;</span> <span class="kp">true</span>
-</span><span class='line'>        <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">network</span> <span class="ss">:private_network</span><span class="p">,</span> <span class="ss">ip</span><span class="p">:</span> <span class="s2">&quot;192.168.1.42&quot;</span>  <span class="c1"># required for NFS</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">namespace</span> <span class="ss">:database</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">desc</span> <span class="s2">&quot;Detect database that&#39;s being used and then increment its id&quot;</span>
+</span><span class='line'>  <span class="n">task</span> <span class="ss">autoincrement</span><span class="p">:</span> <span class="ss">:environment</span> <span class="k">do</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">db_name_downcase</span> <span class="o">=</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">adapter_name</span><span class="o">.</span><span class="n">downcase</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">if</span> <span class="no">Link</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="ss">:id</span><span class="p">)</span><span class="o">.</span><span class="n">to_i</span> <span class="o">&lt;</span> <span class="mi">1000</span>
+</span><span class='line'>      <span class="k">if</span> <span class="n">db_name_downcase</span><span class="o">.</span><span class="n">start_with?</span> <span class="s2">&quot;mysql&quot;</span>
+</span><span class='line'>        <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;ALTER TABLE links AUTO_INCREMENT = 1000&quot;</span><span class="p">)</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>      <span class="k">if</span> <span class="n">db_name_downcase</span><span class="o">.</span><span class="n">start_with?</span> <span class="s2">&quot;postgres&quot;</span>
+</span><span class='line'>        <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;ALTER SEQUENCE links_id_seq START with 1000 RESTART;&quot;</span><span class="p">)</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>      <span class="k">if</span> <span class="n">db_name_downcase</span><span class="o">.</span><span class="n">start_with?</span> <span class="s2">&quot;sqlite&quot;</span>
+</span><span class='line'>        <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span><span class="o">.</span><span class="n">connection</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;insert into sqlite_sequence(name,seq) values(&#39;links&#39;, 1000)&quot;</span><span class="p">)</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>    <span class="k">else</span>
+</span><span class='line'>      <span class="nb">puts</span> <span class="s2">&quot;To perform this task your database shouldn&#39;t have records with id number higher than 1000&quot;</span>
 </span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Beside telling Vagrant to use Heroku-like box from <a href="https://github.com/ejholmes/vagrant-heroku" target="_blank"><a href="https://github.com/ejholmes/vagrant-heroku">https://github.com/ejholmes/vagrant-heroku</a></a> it also sets up shared dir between host and VM machine. It will mount Vagrantfile dir (.) to /vagrant in VM.</p>
+<p>We need to change the starting id of our database to 1000 so we check that we don&rsquo;t have a record with id higher than 1000. Link is our Active Record model and links is the name of our table.</p>
 
-<p><code>vagrant up</code> will setup the VM and start it up.</p>
+<p>ActiveRecord::Base.connection returns the connection currently associated with the class. We use it to detect the name of database and execute appropriate changes.</p>
 
-<p>Now you can use <code>vagrant ssh</code> to login to VM.</p>
+<h3>MySQL</h3>
 
-<p>Vagrant Heroku-like box comes with Postgresql, but if you want you can easily setup sqlite:</p>
+<p>For MySQL we need to set AUTO_INCREMENT value to 1000, Auto-increment allows a unique number to be generated when a new record is inserted into a table. When first record is created it sets its primary key to 1 by default  and it will auto increment by 1 for each new record.</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>sudo apt-get install libsqlite3-dev
-</span></code></pre></td></tr></table></div></figure>
+<h3>PostgreSQL</h3>
 
+<p>For Postgres we have to explain what a sequence is. A sequence is a special kind of a database object designed for generating unique numeric identifiers. It is typically used to generate artificial primary keys. Sequences are similar to the Auto-increment concept in MySQL.</p>
 
-<p><strong>Bonus tip</strong>: when you are working on multiple projects sometimes you can forget which VMs are running. You can list all running VMs using:</p>
+<h3>SQLite</h3>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>VBoxManage list runningvms
-</span></code></pre></td></tr></table></div></figure>
+<p>For SQlite we altered sqlite_sequence table, which is an internal table used to implement AUTOINCREMENT. It is created automatically whenever any ordinary table with an AUTOINCREMENT integer primary key is created.</p>
 
-
-<p>Further reading:</p>
-
-<ul>
-<li><a href="http://docs.vagrantup.com/v2/" target="_blank">Vagrant docs</a></li>
-<li><a href="https://github.com/ejholmes/vagrant-heroku" target="_blank">Vagrant Heroku-like box</a> which can be easily customized.</li>
-<li><a href="http://loudcoding.com/posts/how-to-use-vagrant-to-run-celadon-cedar-stack-on-heroku/" target="_blank">Another Vagrant setup tutorial</a></li>
-<li><a href="https://www.stackmachine.com/blog/web-development-on-a-vm-is-it-slower" target="_blank">VM speed benchmarks</a> in case you doubt in VM speed.</li>
-</ul>
-
+<p>You can check <a href="http://stackoverflow.com/questions/2075331/change-starting-id-number">this Stack Overflow discussion</a> that was very helpful to me.</p>
 </div>
 
 
@@ -203,7 +228,7 @@
   <span class="byline author vcard">Posted by
     <span class="fn">
       
-        <a href="https://plus.google.com/113548610124685160907?rel=author">Slobodan Kovačević</a>
+        <a href="http://orangeiceberg.com/about/">Jovica Šuša</a>
       
     </span>
   </span>
@@ -222,13 +247,13 @@
 
 
 
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2013-09-16T10:00:00+02:00" pubdate data-updated="true">Sep 16<span>th</span>, 2013</time>
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2015-06-01T11:03:47+02:00" pubdate data-updated="true">Jun 1<span>st</span>, 2015</time>
           
 
 <span class="glyphicon glyphicon-tags"></span>&nbsp;
 <span class="categories">
   
-    <a class='category' href='/category/misc/'>Misc</a>, <a class='category' href='/category/ruby-and-rails/'>Ruby and Rails</a>
+    <a class='category' href='/category/ruby-and-rails/'>Ruby and Rails</a>
   
 </span>
 
@@ -240,7 +265,7 @@
     Tags:
   
   
-    <a class='tag' href='/tag/heroku/'>heroku</a>, <a class='tag' href='/tag/howto/'>howto</a>, <a class='tag' href='/tag/tutorial/'>tutorial</a>, <a class='tag' href='/tag/vagrant/'>vagrant</a>, <a class='tag' href='/tag/virtualbox/'>virtualbox</a>
+    <a class='tag' href='/tag/mysql/'>mysql</a>, <a class='tag' href='/tag/postgres/'>postgres</a>, <a class='tag' href='/tag/rails/'>rails</a>, <a class='tag' href='/tag/ruby/'>ruby</a>, <a class='tag' href='/tag/sqlite/'>sqlite</a>
   
 </span>
 
@@ -249,7 +274,7 @@
         
           <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://icebergist.com/posts/quick-virtualboxvagrant-setup-with-heroku-like-box" data-via="icebergist" data-counturl="http://icebergist.com/posts/quick-virtualboxvagrant-setup-with-heroku-like-box" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://icebergist.com/posts/changing-database-starting-id/" data-via="icebergist" data-counturl="http://icebergist.com/posts/changing-database-starting-id/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
@@ -263,10 +288,8 @@
         
           <ul class="meta text-muted pager">
             
-            <li class="previous"><a href="/posts/railsdiff" title="Previous Post: RailsDiff">&laquo; RailsDiff</a></li>
+            <li class="previous"><a href="/posts/customize-devise-permitted-parameters/" title="Previous Post: Customize Devise permitted parameters">&laquo; Customize Devise permitted parameters</a></li>
             
-            
-            <li class="next"><a href="/posts/upgrade-ubuntu-8-dot-04-lts-server/" title="Next Post: Upgrade Ubuntu 8.04 LTS server">Upgrade Ubuntu 8.04 LTS server &raquo;</a></li>
             
           </ul>
         
@@ -314,7 +337,7 @@
   
   <div id="recent_posts" class="list-group">
     
-    <a class="list-group-item " href="/posts/changing-database-starting-id/">Changing Database Starting Id</a>
+    <a class="list-group-item active" href="/posts/changing-database-starting-id/">Changing Database Starting Id</a>
     
     <a class="list-group-item " href="/posts/customize-devise-permitted-parameters/">Customize Devise Permitted Parameters</a>
     
@@ -322,7 +345,7 @@
     
     <a class="list-group-item " href="/posts/upgrade-ubuntu-8-dot-04-lts-server/">Upgrade Ubuntu 8.04 LTS Server</a>
     
-    <a class="list-group-item active" href="/posts/quick-virtualboxvagrant-setup-with-heroku-like-box">Quick VirtualBox/Vagrant Setup With Heroku-like Box</a>
+    <a class="list-group-item " href="/posts/quick-virtualboxvagrant-setup-with-heroku-like-box">Quick VirtualBox/Vagrant Setup With Heroku-like Box</a>
     
   </div>
   <div class="panel-heading">
@@ -378,7 +401,7 @@
     <h3 class="panel-title">Tags</h3>
   </div>
   <div class="tag-cloud">
-    <span class='rank-5'><a href='/tag/password-protected'>password protected</a></span> <span class='rank-5'><a href='/tag/codeigniter'>codeigniter</a></span> <span class='rank-5'><a href='/tag/scaffold'>scaffold</a></span> <span class='rank-5'><a href='/tag/PHP'>PHP</a></span> <span class='rank-5'><a href='/tag/sqlite'>sqlite</a></span> <span class='rank-5'><a href='/tag/Javascript'>Javascript</a></span> <span class='rank-2'><a href='/tag/ruby'>ruby</a></span> <span class='rank-3'><a href='/tag/tips'>tips</a></span> <span class='rank-5'><a href='/tag/postgres'>postgres</a></span> <span class='rank-4'><a href='/tag/links'>links</a></span> <span class='rank-4'><a href='/tag/ubuntu'>ubuntu</a></span> <span class='rank-5'><a href='/tag/virtualbox'>virtualbox</a></span> <span class='rank-5'><a href='/tag/factory-girl'>factory_girl</a></span> <span class='rank-5'><a href='/tag/linux'>linux</a></span> <span class='rank-5'><a href='/tag/css'>css</a></span> <span class='rank-5'><a href='/tag/tdd'>tdd</a></span> <span class='rank-4'><a href='/tag/rails3'>rails3</a></span> <span class='rank-5'><a href='/tag/amazon-s3'>amazon s3</a></span> <span class='rank-5'><a href='/tag/cloud-computing'>cloud computing</a></span> <span class='rank-5'><a href='/tag/vagrant'>vagrant</a></span> <span class='rank-5'><a href='/tag/edge'>edge</a></span> <span class='rank-4'><a href='/tag/hosting'>hosting</a></span> <span class='rank-5'><a href='/tag/paperclip'>paperclip</a></span> <span class='rank-4'><a href='/tag/tutorial'>tutorial</a></span> <span class='rank-5'><a href='/tag/restful'>restful</a></span> <span class='rank-4'><a href='/tag/devise'>devise</a></span> <span class='rank-3'><a href='/tag/howto'>howto</a></span> <span class='rank-5'><a href='/tag/mac'>mac</a></span> <span class='rank-5'><a href='/tag/erkanaauth'>erkanaauth</a></span> <span class='rank-4'><a href='/tag/heroku'>heroku</a></span> <span class='rank-5'><a href='/tag/rest'>rest</a></span> <span class='rank-4'><a href='/tag/resources'>resources</a></span> <span class='rank-5'><a href='/tag/rails4'>rails4</a></span> <span class='rank-5'><a href='/tag/mysql'>mysql</a></span> <span class='rank-5'><a href='/tag/admin'>admin</a></span> <span class='rank-5'><a href='/tag/rspec'>rspec</a></span> <span class='rank-4'><a href='/tag/weekly'>weekly</a></span> <span class='rank-5'><a href='/tag/factorygirl'>factorygirl</a></span> <span class='rank-5'><a href='/tag/carrierwave'>carrierwave</a></span> <span class='rank-1'><a href='/tag/rails'>rails</a></span> 
+    <span class='rank-4'><a href='/tag/hosting'>hosting</a></span> <span class='rank-5'><a href='/tag/mac'>mac</a></span> <span class='rank-5'><a href='/tag/amazon-s3'>amazon s3</a></span> <span class='rank-5'><a href='/tag/rest'>rest</a></span> <span class='rank-5'><a href='/tag/PHP'>PHP</a></span> <span class='rank-5'><a href='/tag/mysql'>mysql</a></span> <span class='rank-5'><a href='/tag/virtualbox'>virtualbox</a></span> <span class='rank-5'><a href='/tag/factorygirl'>factorygirl</a></span> <span class='rank-5'><a href='/tag/css'>css</a></span> <span class='rank-5'><a href='/tag/paperclip'>paperclip</a></span> <span class='rank-2'><a href='/tag/ruby'>ruby</a></span> <span class='rank-4'><a href='/tag/heroku'>heroku</a></span> <span class='rank-5'><a href='/tag/rspec'>rspec</a></span> <span class='rank-5'><a href='/tag/postgres'>postgres</a></span> <span class='rank-4'><a href='/tag/resources'>resources</a></span> <span class='rank-5'><a href='/tag/scaffold'>scaffold</a></span> <span class='rank-3'><a href='/tag/howto'>howto</a></span> <span class='rank-5'><a href='/tag/cloud-computing'>cloud computing</a></span> <span class='rank-1'><a href='/tag/rails'>rails</a></span> <span class='rank-4'><a href='/tag/tutorial'>tutorial</a></span> <span class='rank-5'><a href='/tag/edge'>edge</a></span> <span class='rank-3'><a href='/tag/tips'>tips</a></span> <span class='rank-4'><a href='/tag/devise'>devise</a></span> <span class='rank-4'><a href='/tag/weekly'>weekly</a></span> <span class='rank-5'><a href='/tag/carrierwave'>carrierwave</a></span> <span class='rank-4'><a href='/tag/ubuntu'>ubuntu</a></span> <span class='rank-5'><a href='/tag/restful'>restful</a></span> <span class='rank-5'><a href='/tag/rails4'>rails4</a></span> <span class='rank-4'><a href='/tag/links'>links</a></span> <span class='rank-5'><a href='/tag/linux'>linux</a></span> <span class='rank-5'><a href='/tag/admin'>admin</a></span> <span class='rank-5'><a href='/tag/password-protected'>password protected</a></span> <span class='rank-5'><a href='/tag/codeigniter'>codeigniter</a></span> <span class='rank-5'><a href='/tag/tdd'>tdd</a></span> <span class='rank-5'><a href='/tag/Javascript'>Javascript</a></span> <span class='rank-4'><a href='/tag/rails3'>rails3</a></span> <span class='rank-5'><a href='/tag/sqlite'>sqlite</a></span> <span class='rank-5'><a href='/tag/erkanaauth'>erkanaauth</a></span> <span class='rank-5'><a href='/tag/vagrant'>vagrant</a></span> <span class='rank-5'><a href='/tag/factory-girl'>factory_girl</a></span> 
   </div>
 </section>
 
@@ -417,8 +440,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://icebergist.com/posts/quick-virtualboxvagrant-setup-with-heroku-like-box';
-        var disqus_url = 'http://icebergist.com/posts/quick-virtualboxvagrant-setup-with-heroku-like-box';
+        var disqus_identifier = 'http://icebergist.com/posts/changing-database-starting-id/';
+        var disqus_url = 'http://icebergist.com/posts/changing-database-starting-id/';
         var disqus_script = 'embed.js';
       
     (function () {
