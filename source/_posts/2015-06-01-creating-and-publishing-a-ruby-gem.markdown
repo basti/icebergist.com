@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Creating and publishing a ruby gem"
-date: 2015-06-03 09:12:04 +0200
+date: 2015-06-08 09:12:04 +0200
 comments: true
 author: Jovana Dačić
 categories: 
