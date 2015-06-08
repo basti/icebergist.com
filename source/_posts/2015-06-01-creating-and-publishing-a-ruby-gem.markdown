@@ -344,18 +344,24 @@ Now when we run the tests again, they should all pass.
 
 ###Making your gem configurabile
 
-In order to allow users to set their own alphabet that will be used by the SlugConverter, we needed to make our gem configurabile. To do this we used https://github.com/krautcomputing/gem_config gem
+In order to allow users to set their own alphabet that will be used by the SlugConverter, we needed to make our gem configurabile. To do this we used https://github.com/krautcomputing/gem_config gem.
 
-You will notice this code at the begining of the SlugConverter class
+You will notice this code at the begining of the SlugConverter class:
 ```ruby
-include GemConfig::Base
-	with_configuration do
-	has :alphabet, default: "qjeghxtrpnfmdzwvsybkuoca"
+class SlugConverter
+  include GemConfig::Base
+  
+  with_configuration do
+    has :alphabet, default: "qjeghxtrpnfmdzwvsybkuoca"
+  end
+
+  def initialize(number_or_slug)
+     @alphabet = SlugConverter.configuration.alphabet.split(//)
+     # ...
+  end	  
+  
+  # rest of the code omitted    
 end
-```
-and this line in the class initializer
-```ruby
-@alphabet = SlugConverter.configuration.alphabet.split(//)
 ```
 this code along with `spec.add_runtime_dependency 'gem_config'` added as a dependency in `slug_converter.gemspec` file, alows us to make the gem configureabile. 
 
