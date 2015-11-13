@@ -4,10 +4,10 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Tag: mac - Icebergist</title>
+  <title>Create and extract archives using tar and gzip - Icebergist</title>
   <meta name="author" content="Orange Iceberg">
 
-  <meta name="description" content="Tag: mac">
+  
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -16,7 +16,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://icebergist.comtag/mac">
+  <link rel="canonical" href="http://icebergist.com/posts/create-and-extract-archives-using-tar-and-gzip">
   <link href="/favicon.png" type="image/png" rel="icon">
   <link href="http://feeds.feedburner.com/icebergist" rel="alternate" title="Icebergist" type="application/atom+xml">
 
@@ -89,45 +89,127 @@
         <div id="content">
           <div class="row">
   <div class="page-content col-md-9">
-    <article role="article">
+    <article class="hentry" role="article">
       
-        <header class="page-header">
-          
-          
-            <h1 class="entry-title">
-              Tag: Mac
-              
-            </h1>
-          
-        </header>
+  <header class="page-header">
+    
+      <p class="meta text-muted">
+        
+
+
+
+
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2015-11-13T13:28:36+01:00" pubdate data-updated="true">Nov 13<span>th</span>, 2015</time>
+        | 
+  
+
+
+  <span class="glyphicon glyphicon-user"></span>
+  <span class="byline author vcard">Posted by
+    <span class="fn">
       
-      <div class="entry-content">
-        <div id="blog-archives" class="tag">
+        <a href="https://plus.google.com/113548610124685160907?rel=author">Slobodan Kovačević</a>
+      
+    </span>
+  </span>
 
 
+        
+           | <a href="#disqus_thread"
+             data-disqus-identifier="http://icebergist.com">Comments</a>
+        
+      </p>
+    
+    
+    <h1 class="entry-title">
+        Create and Extract Archives Using Tar and Gzip
+        
+    </h1>
+    
+  </header>
 
+
+<div class="entry-content clearfix"><p>One of the simplest tasks is creating and extracting files using <code>tar</code> and <code>gzip</code>. Yet for most new developers this is a daunting task. These days <code>tar</code> is mostly used to simply combine a few files into a single file and then <code>gzip</code> is used to compress that file.</p>
+
+<p>Here is a quick overview how to use <code>tar</code> and <code>gzip</code> to create and compress an archive:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="c"># archive individual files</span>
+</span><span class='line'>tar -cvzf myarchive.tar.gz /path/to/file1 /path/to/file2
+</span><span class='line'>
+</span><span class='line'><span class="c"># archive whole directory</span>
+</span><span class='line'>tar -cvzf myarchive.tar.gz /path/to/dir
+</span><span class='line'>
+</span><span class='line'><span class="c"># archive whole directory but don&#39;t store full path</span>
+</span><span class='line'>tar -cvzf myarchive.tar.gz -C /path/to/dir ./
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Options give to tar are: <code>c</code> to create new archive, <code>v</code> to be verbose, <code>z</code> to compress resulting archive with <code>gzip</code>, and <code>f</code> to write the archive to specified file. After options you can list files and dirs you want to archive.</p>
+
+<p>In all examples we provide a full path to a file or dir we want to archive. In this case <code>tar</code> will store files in the archive using the full path. This means once you extract the files you&rsquo;ll have a complete directory structure from root dir onwards.</p>
+
+<p>The way to avoid this is either to manually <code>cd</code> to dir in which files are stored, or to tell <code>tar</code> using <code>C</code> option to change dir before archiving files.</p>
+
+<p>Finally to extract an archive:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>tar -xvzf myarchive.tar.gz
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The <code>x</code> option tells <code>tar</code> to extract the archive into current directory.</p>
+
+<p>For more information you can consult manual using <code>man tar</code>.</p>
+</div>
+
+
+      <footer>
+        <p class="meta text-muted">
+          
   
-  <h2>2008</h2>
-
-<article>
-  
-<h1><a href="/posts/mac-os-x-problems-upgrading-from-1053-to-1054">Mac OS X problems upgrading from 10.5.3 to 10.5.4</a></h1>
-<p class="meta text-muted">
-  
 
 
+  <span class="glyphicon glyphicon-user"></span>
+  <span class="byline author vcard">Posted by
+    <span class="fn">
+      
+        <a href="https://plus.google.com/113548610124685160907?rel=author">Slobodan Kovačević</a>
+      
+    </span>
+  </span>
 
 
-
-
-
-
+          
 
 
 
 
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2008-07-04T10:00:00+02:00" pubdate data-updated="true">Jul 4<span>th</span>, 2008</time>
-  
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2015-11-13T13:28:36+01:00" pubdate data-updated="true">Nov 13<span>th</span>, 2015</time>
+          
 
 <span class="glyphicon glyphicon-tags"></span>&nbsp;
 <span class="categories">
@@ -137,22 +219,56 @@
 </span>
 
 
-</p>
+          
 
-</article>
+<span class="tags">
+  
+    Tags:
+  
+  
+    <a class='tag' href='/tag/howto/'>howto</a>, <a class='tag' href='/tag/linux/'>linux</a>, <a class='tag' href='/tag/tips/'>tips</a>
+  
+</span>
 
+
+        </p>
+        
+          <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://icebergist.com/posts/create-and-extract-archives-using-tar-and-gzip/" data-via="icebergist" data-counturl="http://icebergist.com/posts/create-and-extract-archives-using-tar-and-gzip/" >Tweet</a>
+  
+  
+  <div class="g-plusone" data-size="medium"></div>
+  
+  
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  
 </div>
 
-      </div>
-      
+        
+        
+          <ul class="meta text-muted pager">
+            
+            <li class="previous"><a href="/posts/creating-and-publishing-a-ruby-gem/" title="Previous Post: Creating and publishing a ruby gem">&laquo; Creating and publishing a ruby gem</a></li>
+            
+            
+          </ul>
+        
+      </footer>
     </article>
+    
+      <section>
+        <h1>Comments</h1>
+        <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+      </section>
     
   </div>
 
   
-    <aside class="sidebar col-md-3">
-      
-        <section>
+  <aside class="sidebar col-md-3">
+    
+      <section>
   <h2>About us</h2>
   <div>
     <a href="http://orangeiceberg.com">
@@ -182,7 +298,7 @@
   
   <div id="recent_posts" class="list-group">
     
-    <a class="list-group-item " href="/posts/create-and-extract-archives-using-tar-and-gzip/">Create and Extract Archives Using Tar and Gzip</a>
+    <a class="list-group-item active" href="/posts/create-and-extract-archives-using-tar-and-gzip/">Create and Extract Archives Using Tar and Gzip</a>
     
     <a class="list-group-item " href="/posts/creating-and-publishing-a-ruby-gem/">Creating and Publishing a Ruby Gem</a>
     
@@ -246,13 +362,13 @@
     <h3 class="panel-title">Tags</h3>
   </div>
   <div class="tag-cloud">
-    <span class='rank-2'><a href='/tag/ruby'>ruby</a></span> <span class='rank-3'><a href='/tag/tips'>tips</a></span> <span class='rank-5'><a href='/tag/erkanaauth'>erkanaauth</a></span> <span class='rank-4'><a href='/tag/linux'>linux</a></span> <span class='rank-5'><a href='/tag/factorygirl'>factorygirl</a></span> <span class='rank-5'><a href='/tag/edge'>edge</a></span> <span class='rank-4'><a href='/tag/ubuntu'>ubuntu</a></span> <span class='rank-5'><a href='/tag/codeigniter'>codeigniter</a></span> <span class='rank-5'><a href='/tag/tdd'>tdd</a></span> <span class='rank-5'><a href='/tag/cloud-computing'>cloud computing</a></span> <span class='rank-5'><a href='/tag/css'>css</a></span> <span class='rank-5'><a href='/tag/password-protected'>password protected</a></span> <span class='rank-4'><a href='/tag/rails3'>rails3</a></span> <span class='rank-5'><a href='/tag/rest'>rest</a></span> <span class='rank-4'><a href='/tag/hosting'>hosting</a></span> <span class='rank-5'><a href='/tag/rspec'>rspec</a></span> <span class='rank-5'><a href='/tag/PHP'>PHP</a></span> <span class='rank-5'><a href='/tag/restful'>restful</a></span> <span class='rank-5'><a href='/tag/factory-girl'>factory_girl</a></span> <span class='rank-5'><a href='/tag/admin'>admin</a></span> <span class='rank-5'><a href='/tag/mac'>mac</a></span> <span class='rank-5'><a href='/tag/vagrant'>vagrant</a></span> <span class='rank-4'><a href='/tag/resources'>resources</a></span> <span class='rank-4'><a href='/tag/tutorial'>tutorial</a></span> <span class='rank-5'><a href='/tag/paperclip'>paperclip</a></span> <span class='rank-4'><a href='/tag/weekly'>weekly</a></span> <span class='rank-4'><a href='/tag/links'>links</a></span> <span class='rank-4'><a href='/tag/devise'>devise</a></span> <span class='rank-4'><a href='/tag/heroku'>heroku</a></span> <span class='rank-5'><a href='/tag/mysql'>mysql</a></span> <span class='rank-5'><a href='/tag/sqlite'>sqlite</a></span> <span class='rank-5'><a href='/tag/postgres'>postgres</a></span> <span class='rank-5'><a href='/tag/amazon-s3'>amazon s3</a></span> <span class='rank-3'><a href='/tag/howto'>howto</a></span> <span class='rank-5'><a href='/tag/rails4'>rails4</a></span> <span class='rank-5'><a href='/tag/virtualbox'>virtualbox</a></span> <span class='rank-5'><a href='/tag/scaffold'>scaffold</a></span> <span class='rank-5'><a href='/tag/Javascript'>Javascript</a></span> <span class='rank-1'><a href='/tag/rails'>rails</a></span> <span class='rank-5'><a href='/tag/carrierwave'>carrierwave</a></span> 
+    <span class='rank-4'><a href='/tag/tutorial'>tutorial</a></span> <span class='rank-3'><a href='/tag/tips'>tips</a></span> <span class='rank-5'><a href='/tag/rspec'>rspec</a></span> <span class='rank-5'><a href='/tag/admin'>admin</a></span> <span class='rank-4'><a href='/tag/weekly'>weekly</a></span> <span class='rank-5'><a href='/tag/tdd'>tdd</a></span> <span class='rank-1'><a href='/tag/rails'>rails</a></span> <span class='rank-5'><a href='/tag/postgres'>postgres</a></span> <span class='rank-5'><a href='/tag/erkanaauth'>erkanaauth</a></span> <span class='rank-5'><a href='/tag/mac'>mac</a></span> <span class='rank-5'><a href='/tag/carrierwave'>carrierwave</a></span> <span class='rank-5'><a href='/tag/rails4'>rails4</a></span> <span class='rank-5'><a href='/tag/PHP'>PHP</a></span> <span class='rank-5'><a href='/tag/factory-girl'>factory_girl</a></span> <span class='rank-5'><a href='/tag/rest'>rest</a></span> <span class='rank-5'><a href='/tag/virtualbox'>virtualbox</a></span> <span class='rank-3'><a href='/tag/howto'>howto</a></span> <span class='rank-4'><a href='/tag/heroku'>heroku</a></span> <span class='rank-5'><a href='/tag/mysql'>mysql</a></span> <span class='rank-5'><a href='/tag/Javascript'>Javascript</a></span> <span class='rank-5'><a href='/tag/codeigniter'>codeigniter</a></span> <span class='rank-5'><a href='/tag/edge'>edge</a></span> <span class='rank-4'><a href='/tag/ubuntu'>ubuntu</a></span> <span class='rank-5'><a href='/tag/vagrant'>vagrant</a></span> <span class='rank-5'><a href='/tag/amazon-s3'>amazon s3</a></span> <span class='rank-4'><a href='/tag/devise'>devise</a></span> <span class='rank-4'><a href='/tag/hosting'>hosting</a></span> <span class='rank-4'><a href='/tag/linux'>linux</a></span> <span class='rank-5'><a href='/tag/restful'>restful</a></span> <span class='rank-5'><a href='/tag/password-protected'>password protected</a></span> <span class='rank-5'><a href='/tag/factorygirl'>factorygirl</a></span> <span class='rank-5'><a href='/tag/scaffold'>scaffold</a></span> <span class='rank-5'><a href='/tag/cloud-computing'>cloud computing</a></span> <span class='rank-5'><a href='/tag/sqlite'>sqlite</a></span> <span class='rank-2'><a href='/tag/ruby'>ruby</a></span> <span class='rank-4'><a href='/tag/resources'>resources</a></span> <span class='rank-5'><a href='/tag/css'>css</a></span> <span class='rank-5'><a href='/tag/paperclip'>paperclip</a></span> <span class='rank-4'><a href='/tag/links'>links</a></span> <span class='rank-4'><a href='/tag/rails3'>rails3</a></span> 
   </div>
 </section>
 
 
-      
-    </aside>
+    
+  </aside>
   
 </div>
 
@@ -284,7 +400,10 @@
       var disqus_shortname = 'icebergist';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://icebergist.com/posts/create-and-extract-archives-using-tar-and-gzip/';
+        var disqus_url = 'http://icebergist.com/posts/create-and-extract-archives-using-tar-and-gzip/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

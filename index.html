@@ -111,6 +111,98 @@
 
 
 
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2015-11-13T13:28:36+01:00" pubdate data-updated="true">Nov 13<span>th</span>, 2015</time>
+        | 
+  
+
+
+  <span class="glyphicon glyphicon-user"></span>
+  <span class="byline author vcard">Posted by
+    <span class="fn">
+      
+        <a href="https://plus.google.com/113548610124685160907?rel=author">Slobodan Kovačević</a>
+      
+    </span>
+  </span>
+
+
+        
+           | <a href="/posts/create-and-extract-archives-using-tar-and-gzip/#disqus_thread"
+             data-disqus-identifier="http://icebergist.com/posts/create-and-extract-archives-using-tar-and-gzip/">Comments</a>
+        
+      </p>
+    
+    
+      <h1 class="entry-title"><a href="/posts/create-and-extract-archives-using-tar-and-gzip/">Create and Extract Archives Using Tar and Gzip</a></h1>
+    
+  </header>
+
+
+  <div class="entry-content clearfix"><p>One of the simplest tasks is creating and extracting files using <code>tar</code> and <code>gzip</code>. Yet for most new developers this is a daunting task. These days <code>tar</code> is mostly used to simply combine a few files into a single file and then <code>gzip</code> is used to compress that file.</p>
+
+<p>Here is a quick overview how to use <code>tar</code> and <code>gzip</code> to create and compress an archive:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="c"># archive individual files</span>
+</span><span class='line'>tar -cvzf myarchive.tar.gz /path/to/file1 /path/to/file2
+</span><span class='line'>
+</span><span class='line'><span class="c"># archive whole directory</span>
+</span><span class='line'>tar -cvzf myarchive.tar.gz /path/to/dir
+</span><span class='line'>
+</span><span class='line'><span class="c"># archive whole directory but don&#39;t store full path</span>
+</span><span class='line'>tar -cvzf myarchive.tar.gz -C /path/to/dir ./
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Options give to tar are: <code>c</code> to create new archive, <code>v</code> to be verbose, <code>z</code> to compress resulting archive with <code>gzip</code>, and <code>f</code> to write the archive to specified file. After options you can list files and dirs you want to archive.</p>
+
+<p>In all examples we provide a full path to a file or dir we want to archive. In this case <code>tar</code> will store files in the archive using the full path. This means once you extract the files you&rsquo;ll have a complete directory structure from root dir onwards.</p>
+
+<p>The way to avoid this is either to manually <code>cd</code> to dir in which files are stored, or to tell <code>tar</code> using <code>C</code> option to change dir before archiving files.</p>
+
+<p>Finally to extract an archive:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>tar -xvzf myarchive.tar.gz
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The <code>x</code> option tells <code>tar</code> to extract the archive into current directory.</p>
+
+<p>For more information you can consult manual using <code>man tar</code>.</p>
+</div>
+  
+  
+
+
+        </article>
+      
+      
+        <article class="post">
+          
+  <header class="page-header">
+    
+      <p class="meta text-muted">
+        
+
+
+
+
+
+
+
+
+
+
+
+
 <span class="glyphicon glyphicon-calendar"></span> <time datetime="2015-06-08T09:12:04+02:00" pubdate data-updated="true">Jun 8<span>th</span>, 2015</time>
         | 
   
@@ -783,104 +875,6 @@ end</pre>
 
         </article>
       
-      
-        <article class="post">
-          
-  <header class="page-header">
-    
-      <p class="meta text-muted">
-        
-
-
-
-
-
-
-
-
-
-
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2011-01-24T09:00:00+01:00" pubdate data-updated="true">Jan 24<span>th</span>, 2011</time>
-        | 
-  
-
-
-  <span class="glyphicon glyphicon-user"></span>
-  <span class="byline author vcard">Posted by
-    <span class="fn">
-      
-        <a href="https://plus.google.com/113548610124685160907?rel=author">Slobodan Kovačević</a>
-      
-    </span>
-  </span>
-
-
-        
-           | <a href="/posts/paperclip-heroku-and-amazon-s3-credentials#disqus_thread"
-             data-disqus-identifier="http://icebergist.com/posts/paperclip-heroku-and-amazon-s3-credentials">Comments</a>
-        
-      </p>
-    
-    
-      <h1 class="entry-title"><a href="/posts/paperclip-heroku-and-amazon-s3-credentials">Paperclip, Heroku and Amazon S3 Credentials</a></h1>
-    
-  </header>
-
-
-  <div class="entry-content clearfix"><p>Setting up Paperclip to use Amazon&#8217;s S3 is as simple as setting :storage => :s3 and providing right credentials to Paperclip by setting :s3_credentials option. Best way to provide S3 credentials is to use an YML file (usually config/s3.yml) which allows you to set different credentials for each environment. For example:</p>
-
-<pre># config/s3.yml
-development:
-  access_key_id: XYZXYZXYZ
-  secret_access_key: XYZXYZXYZ
-  bucket: mygreatapp-development
-production:
-  access_key_id: XYZXYZXYZ
-  secret_access_key: XYZXYZXYZ
-  bucket: mygreatapp-production
-</pre>
-
-
-<p>Of course you want to treat s3.yml same as database.yml &#8211; i.e. you don&#8217;t want to track it with git and you want for each person/server to have it&#8217;s own.</p>
-
-<p>However, consider this: you are working on Open Source app in a public git repository and you are deploying it on Heroku. Heroku doesn&#8217;t allow you to create files (unless they are in git repository) and you can&#8217;t commit s3.yml with your credentials to public repository.</p>
-
-<p>One solution is to define different :s3_credentials hash in one of the environment files or to load different YML file for each environment and generate hash from it. Downside is that you need to have a separate YML file for each environment and/or you need to convert YML to hash. Other solution could be to have separate local branch from which you will push to Heroku. Problem with this is that you have to have a local branch for deploying. This means if there are multiple developers who deploy to production each should have separate local branch.</p>
-
-<p>Much simpler way to deploy Paperclip with different S3 credentials for each environment (with one of the environment being deployed on Heroku; and repository being public) is to create s3.yml file as usual (and don&#8217;t commit it to git), but define values only for local environment.</p>
-
-<p>For production deployment on Heroku you can write initializer which will set :s3_credentials from ENV variables.</p>
-
-<pre># initializers/s3.rb
-if Rails.env == "production"
-  # set credentials from ENV hash
-  S3_CREDENTIALS = { :access_key_id => ENV['S3_KEY'], :secret_access_key => ENV['S3_SECRET'], :bucket => "sharedearth-production"}
-else
-  # get credentials from YML file
-  S3_CREDENTIALS = Rails.root.join("config/s3.yml")
-end
-
-# in your model
-has_attached_file :photo, :storage => :s3, :s3_credentials => S3_CREDENTIALS
-</pre>
-
-
-<p>and you can easily set persistant ENV vars on Heroku with:</p>
-
-<pre>$ heroku config:add S3_KEY=XYZXYZ S3_SECRET=XYZXYZ
-</pre>
-
-
-<p>(<a href="http://docs.heroku.com/config-vars#quick-example">according to Heroku docs</a>)</p>
-</div>
-  
-  
-
-
-        </article>
-      
     </div>
 
     <ul class="pager">
@@ -927,6 +921,8 @@ has_attached_file :photo, :storage => :s3, :s3_credentials => S3_CREDENTIALS
   
   <div id="recent_posts" class="list-group">
     
+    <a class="list-group-item " href="/posts/create-and-extract-archives-using-tar-and-gzip/">Create and Extract Archives Using Tar and Gzip</a>
+    
     <a class="list-group-item " href="/posts/creating-and-publishing-a-ruby-gem/">Creating and Publishing a Ruby Gem</a>
     
     <a class="list-group-item " href="/posts/changing-database-starting-id/">Changing Database Starting Id</a>
@@ -934,8 +930,6 @@ has_attached_file :photo, :storage => :s3, :s3_credentials => S3_CREDENTIALS
     <a class="list-group-item " href="/posts/customize-devise-permitted-parameters/">Customize Devise Permitted Parameters</a>
     
     <a class="list-group-item " href="/posts/how-to-skip-devise-trackable-updates/">How to Skip Devise Trackable Updates</a>
-    
-    <a class="list-group-item " href="/posts/upgrade-ubuntu-8-dot-04-lts-server/">Upgrade Ubuntu 8.04 LTS Server</a>
     
   </div>
   <div class="panel-heading">
@@ -950,7 +944,7 @@ has_attached_file :photo, :storage => :s3, :s3_credentials => S3_CREDENTIALS
     
     
     <a class="list-group-item " href="/category/misc/index.html">
-        <span class="badge">9</span>
+        <span class="badge">10</span>
         Misc
       </a>
     
@@ -991,7 +985,7 @@ has_attached_file :photo, :storage => :s3, :s3_credentials => S3_CREDENTIALS
     <h3 class="panel-title">Tags</h3>
   </div>
   <div class="tag-cloud">
-    <span class='rank-5'><a href='/tag/PHP'>PHP</a></span> <span class='rank-5'><a href='/tag/virtualbox'>virtualbox</a></span> <span class='rank-5'><a href='/tag/linux'>linux</a></span> <span class='rank-5'><a href='/tag/sqlite'>sqlite</a></span> <span class='rank-3'><a href='/tag/howto'>howto</a></span> <span class='rank-5'><a href='/tag/vagrant'>vagrant</a></span> <span class='rank-4'><a href='/tag/hosting'>hosting</a></span> <span class='rank-4'><a href='/tag/ubuntu'>ubuntu</a></span> <span class='rank-5'><a href='/tag/admin'>admin</a></span> <span class='rank-5'><a href='/tag/amazon-s3'>amazon s3</a></span> <span class='rank-5'><a href='/tag/rails4'>rails4</a></span> <span class='rank-5'><a href='/tag/factorygirl'>factorygirl</a></span> <span class='rank-5'><a href='/tag/cloud-computing'>cloud computing</a></span> <span class='rank-5'><a href='/tag/scaffold'>scaffold</a></span> <span class='rank-5'><a href='/tag/mac'>mac</a></span> <span class='rank-5'><a href='/tag/password-protected'>password protected</a></span> <span class='rank-5'><a href='/tag/mysql'>mysql</a></span> <span class='rank-4'><a href='/tag/resources'>resources</a></span> <span class='rank-4'><a href='/tag/rails3'>rails3</a></span> <span class='rank-5'><a href='/tag/codeigniter'>codeigniter</a></span> <span class='rank-5'><a href='/tag/tdd'>tdd</a></span> <span class='rank-5'><a href='/tag/css'>css</a></span> <span class='rank-5'><a href='/tag/Javascript'>Javascript</a></span> <span class='rank-5'><a href='/tag/edge'>edge</a></span> <span class='rank-5'><a href='/tag/rspec'>rspec</a></span> <span class='rank-5'><a href='/tag/paperclip'>paperclip</a></span> <span class='rank-2'><a href='/tag/ruby'>ruby</a></span> <span class='rank-4'><a href='/tag/weekly'>weekly</a></span> <span class='rank-5'><a href='/tag/carrierwave'>carrierwave</a></span> <span class='rank-5'><a href='/tag/factory-girl'>factory_girl</a></span> <span class='rank-3'><a href='/tag/tips'>tips</a></span> <span class='rank-4'><a href='/tag/heroku'>heroku</a></span> <span class='rank-4'><a href='/tag/devise'>devise</a></span> <span class='rank-5'><a href='/tag/postgres'>postgres</a></span> <span class='rank-5'><a href='/tag/rest'>rest</a></span> <span class='rank-4'><a href='/tag/links'>links</a></span> <span class='rank-5'><a href='/tag/restful'>restful</a></span> <span class='rank-4'><a href='/tag/tutorial'>tutorial</a></span> <span class='rank-5'><a href='/tag/erkanaauth'>erkanaauth</a></span> <span class='rank-1'><a href='/tag/rails'>rails</a></span> 
+    <span class='rank-3'><a href='/tag/howto'>howto</a></span> <span class='rank-4'><a href='/tag/heroku'>heroku</a></span> <span class='rank-5'><a href='/tag/erkanaauth'>erkanaauth</a></span> <span class='rank-5'><a href='/tag/cloud-computing'>cloud computing</a></span> <span class='rank-5'><a href='/tag/tdd'>tdd</a></span> <span class='rank-4'><a href='/tag/resources'>resources</a></span> <span class='rank-5'><a href='/tag/rails4'>rails4</a></span> <span class='rank-5'><a href='/tag/css'>css</a></span> <span class='rank-5'><a href='/tag/paperclip'>paperclip</a></span> <span class='rank-3'><a href='/tag/tips'>tips</a></span> <span class='rank-5'><a href='/tag/postgres'>postgres</a></span> <span class='rank-4'><a href='/tag/rails3'>rails3</a></span> <span class='rank-5'><a href='/tag/factorygirl'>factorygirl</a></span> <span class='rank-4'><a href='/tag/weekly'>weekly</a></span> <span class='rank-5'><a href='/tag/PHP'>PHP</a></span> <span class='rank-5'><a href='/tag/admin'>admin</a></span> <span class='rank-4'><a href='/tag/devise'>devise</a></span> <span class='rank-5'><a href='/tag/Javascript'>Javascript</a></span> <span class='rank-5'><a href='/tag/carrierwave'>carrierwave</a></span> <span class='rank-5'><a href='/tag/scaffold'>scaffold</a></span> <span class='rank-5'><a href='/tag/codeigniter'>codeigniter</a></span> <span class='rank-5'><a href='/tag/password-protected'>password protected</a></span> <span class='rank-4'><a href='/tag/tutorial'>tutorial</a></span> <span class='rank-4'><a href='/tag/linux'>linux</a></span> <span class='rank-4'><a href='/tag/hosting'>hosting</a></span> <span class='rank-5'><a href='/tag/factory-girl'>factory_girl</a></span> <span class='rank-5'><a href='/tag/mysql'>mysql</a></span> <span class='rank-1'><a href='/tag/rails'>rails</a></span> <span class='rank-5'><a href='/tag/vagrant'>vagrant</a></span> <span class='rank-4'><a href='/tag/ubuntu'>ubuntu</a></span> <span class='rank-5'><a href='/tag/amazon-s3'>amazon s3</a></span> <span class='rank-5'><a href='/tag/virtualbox'>virtualbox</a></span> <span class='rank-5'><a href='/tag/edge'>edge</a></span> <span class='rank-4'><a href='/tag/links'>links</a></span> <span class='rank-2'><a href='/tag/ruby'>ruby</a></span> <span class='rank-5'><a href='/tag/sqlite'>sqlite</a></span> <span class='rank-5'><a href='/tag/restful'>restful</a></span> <span class='rank-5'><a href='/tag/mac'>mac</a></span> <span class='rank-5'><a href='/tag/rspec'>rspec</a></span> <span class='rank-5'><a href='/tag/rest'>rest</a></span> 
   </div>
 </section>
 

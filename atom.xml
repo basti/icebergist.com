@@ -4,7 +4,7 @@
   <title><![CDATA[Icebergist]]></title>
   <link href="http://icebergist.com/atom.xml" rel="self"/>
   <link href="http://icebergist.com/"/>
-  <updated>2015-11-13T12:12:37+01:00</updated>
+  <updated>2015-11-13T16:06:53+01:00</updated>
   <id>http://icebergist.com/</id>
   <author>
     <name><![CDATA[Orange Iceberg]]></name>
@@ -12,6 +12,53 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Create and extract archives using tar and gzip]]></title>
+    <link href="http://icebergist.com/posts/create-and-extract-archives-using-tar-and-gzip/"/>
+    <updated>2015-11-13T13:28:36+01:00</updated>
+    <id>http://icebergist.com/posts/create-and-extract-archives-using-tar-and-gzip</id>
+    <content type="html"><![CDATA[<p>One of the simplest tasks is creating and extracting files using <code>tar</code> and <code>gzip</code>. Yet for most new developers this is a daunting task. These days <code>tar</code> is mostly used to simply combine a few files into a single file and then <code>gzip</code> is used to compress that file.</p>
+
+<p>Here is a quick overview how to use <code>tar</code> and <code>gzip</code> to create and compress an archive:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="c"># archive individual files</span>
+</span><span class='line'>tar -cvzf myarchive.tar.gz /path/to/file1 /path/to/file2
+</span><span class='line'>
+</span><span class='line'><span class="c"># archive whole directory</span>
+</span><span class='line'>tar -cvzf myarchive.tar.gz /path/to/dir
+</span><span class='line'>
+</span><span class='line'><span class="c"># archive whole directory but don&#39;t store full path</span>
+</span><span class='line'>tar -cvzf myarchive.tar.gz -C /path/to/dir ./
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Options give to tar are: <code>c</code> to create new archive, <code>v</code> to be verbose, <code>z</code> to compress resulting archive with <code>gzip</code>, and <code>f</code> to write the archive to specified file. After options you can list files and dirs you want to archive.</p>
+
+<p>In all examples we provide a full path to a file or dir we want to archive. In this case <code>tar</code> will store files in the archive using the full path. This means once you extract the files you&rsquo;ll have a complete directory structure from root dir onwards.</p>
+
+<p>The way to avoid this is either to manually <code>cd</code> to dir in which files are stored, or to tell <code>tar</code> using <code>C</code> option to change dir before archiving files.</p>
+
+<p>Finally to extract an archive:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>tar -xvzf myarchive.tar.gz
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The <code>x</code> option tells <code>tar</code> to extract the archive into current directory.</p>
+
+<p>For more information you can consult manual using <code>man tar</code>.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Creating and publishing a ruby gem]]></title>
@@ -1349,23 +1396,6 @@ at $100 / month seems like a good solution to get a scalable server. However one
 
 
 <p>It&#8217;s a simple thing, but it&#8217;s just one of the things that bugged me. I am glad it&#8217;s gone now.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[This should be interesting weekly &#8211; week 27]]></title>
-    <link href="http://icebergist.com/posts/this-should-be-interesting-weekly-week-27"/>
-    <updated>2008-07-06T10:00:00+02:00</updated>
-    <id>http://icebergist.com/posts/this-should-be-interesting-weekly-week-27</id>
-    <content type="html"><![CDATA[<p>This is the first weekly condensed edition of my <a href="http://tumblelog.slobodankovacevic.com/" title="Tumblelog by Slobodan Kovacevic">&#8220;This should be interesting&#8221; tumblelog</a>. Every Sunday I will re-post most interesting posts here on the Icebergist.</p>
-
-<ul>
-<li><a href="http://tumblelog.slobodankovacevic.com/post/40966961/new-free-book-ruby-on-rails-2-1-whats-new" title="Free Book: &quot;Ruby on Rails 2.1 - What’s new&quot;">Free Book: &#8220;Ruby on Rails 2.1 &#8211; What’s new&#8221;</a></li>
-<li><a href="http://tumblelog.slobodankovacevic.com/post/40888615/better-blockquotes-blockquotes-examples" title="Better Blockquotes - Blockquotes examples">Better Blockquotes</a> &#8211; blockquotes CSS styling examples</li>
-<li><a href="http://tumblelog.slobodankovacevic.com/post/39785793/slife-free-automatic-time-tracking-for-mac" title="Slife - free automatic time tracking for Mac">Slife</a> &#8211; free automatic time tracking for Mac</li>
-<li><a href="http://tumblelog.slobodankovacevic.com/post/39263529/unfocus-history-keeper-back-button-enabling-deep" title="unfocus-history-keeper">unfocus-history-keeper</a> &#8211; back button enabling, deep linking, event driven Javascrpt/DHTML/Ajax Library (works for Flash too)</li>
-</ul>
-
 ]]></content>
   </entry>
   
