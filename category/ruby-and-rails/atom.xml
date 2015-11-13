@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby and Rails | Icebergist]]></title>
   <link href="http://icebergist.com/category/ruby-and-rails/atom.xml" rel="self"/>
   <link href="http://icebergist.com/"/>
-  <updated>2015-11-13T16:06:53+01:00</updated>
+  <updated>2015-11-13T16:57:13+01:00</updated>
   <id>http://icebergist.com/</id>
   <author>
     <name><![CDATA[Orange Iceberg]]></name>
@@ -93,7 +93,7 @@ require &lsquo;slug_converter/version&rsquo;</p>
   spec.name         = &ldquo;slug_converter&rdquo;
   spec.version      = SlugConverter::VERSION
   spec.authors      = [&ldquo;Your Name&rdquo;]
-  spec.email        = [&ldquo;<a href="&#x6d;&#97;&#x69;&#x6c;&#116;&#111;&#x3a;&#x79;&#111;&#117;&#x72;&#101;&#109;&#x61;&#x69;&#x6c;&#x40;&#101;&#x78;&#x61;&#x6d;&#x70;&#x6c;&#x65;&#46;&#99;&#x6f;&#109;">&#121;&#x6f;&#117;&#x72;&#x65;&#x6d;&#97;&#x69;&#108;&#64;&#101;&#120;&#97;&#x6d;&#112;&#x6c;&#x65;&#x2e;&#99;&#111;&#x6d;</a>&rdquo;]</p>
+  spec.email        = [&ldquo;<a href="&#109;&#x61;&#105;&#x6c;&#x74;&#x6f;&#58;&#x79;&#x6f;&#117;&#x72;&#101;&#x6d;&#x61;&#105;&#x6c;&#x40;&#101;&#x78;&#x61;&#x6d;&#112;&#x6c;&#101;&#46;&#x63;&#x6f;&#109;">&#121;&#111;&#117;&#114;&#x65;&#109;&#x61;&#105;&#x6c;&#x40;&#101;&#120;&#x61;&#x6d;&#x70;&#x6c;&#101;&#x2e;&#99;&#111;&#x6d;</a>&rdquo;]</p>
 
 <p>  # if spec.respond_to?(:metadata)
   #   spec.metadata[&lsquo;allowed_push_host&rsquo;] = &ldquo;TODO: Set to &lsquo;<a href="http://mygemserver.com">http://mygemserver.com</a>&rsquo; to prevent pushes to rubygems.org, or delete to allow pushes to any server.&rdquo;
