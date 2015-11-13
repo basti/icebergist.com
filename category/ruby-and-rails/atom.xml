@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby and Rails | Icebergist]]></title>
   <link href="http://icebergist.com/category/ruby-and-rails/atom.xml" rel="self"/>
   <link href="http://icebergist.com/"/>
-  <updated>2015-06-08T09:22:35+02:00</updated>
+  <updated>2015-11-13T12:12:37+01:00</updated>
   <id>http://icebergist.com/</id>
   <author>
     <name><![CDATA[Orange Iceberg]]></name>
@@ -23,6 +23,9 @@
 <p>But what if there is no gem available that will suit the functionality you need, and you find yourself writing the same code over and over again for different projects? Well, in that case you should consider making your own gem.</p>
 
 <p>It&rsquo;s considered a good practice to extract a gem out of an existing application, since that way you will have a better understanding of all the requirements as well as how the gem will be used. This blog post will illustrate just that on a real life example, and will take you through the process of creating a slug_converter gem.</p>
+
+<!--more-->
+
 
 <h3>Slug converter gem</h3>
 
@@ -90,7 +93,7 @@ require &lsquo;slug_converter/version&rsquo;</p>
   spec.name         = &ldquo;slug_converter&rdquo;
   spec.version      = SlugConverter::VERSION
   spec.authors      = [&ldquo;Your Name&rdquo;]
-  spec.email        = [&ldquo;<a href="&#x6d;&#97;&#105;&#x6c;&#116;&#x6f;&#58;&#121;&#x6f;&#x75;&#114;&#x65;&#x6d;&#x61;&#105;&#x6c;&#x40;&#101;&#120;&#97;&#109;&#x70;&#x6c;&#x65;&#46;&#x63;&#111;&#109;">&#121;&#111;&#x75;&#x72;&#101;&#109;&#97;&#105;&#x6c;&#64;&#101;&#x78;&#x61;&#x6d;&#112;&#108;&#101;&#x2e;&#99;&#x6f;&#x6d;</a>&rdquo;]</p>
+  spec.email        = [&ldquo;<a href="&#109;&#97;&#x69;&#x6c;&#x74;&#111;&#x3a;&#x79;&#111;&#117;&#114;&#101;&#109;&#97;&#105;&#108;&#x40;&#101;&#120;&#97;&#109;&#112;&#x6c;&#x65;&#x2e;&#99;&#x6f;&#x6d;">&#x79;&#x6f;&#x75;&#x72;&#x65;&#109;&#97;&#105;&#108;&#x40;&#x65;&#120;&#x61;&#x6d;&#112;&#108;&#x65;&#46;&#99;&#x6f;&#109;</a>&rdquo;]</p>
 
 <p>  # if spec.respond_to?(:metadata)
   #   spec.metadata[&lsquo;allowed_push_host&rsquo;] = &ldquo;TODO: Set to &lsquo;<a href="http://mygemserver.com">http://mygemserver.com</a>&rsquo; to prevent pushes to rubygems.org, or delete to allow pushes to any server.&rdquo;
@@ -457,6 +460,9 @@ SlugConverter.configuration.alphabet = "your_custom_alphabet_here"
     <content type="html"><![CDATA[<p>For our new project it was necessary to modify the starting id of our database. This can be handled through migration for creating table but we decided to create a rake task that handled this for us.</p>
 
 <p>The rake task that we created detects what database is being used and executes appropriate changes according to that.</p>
+
+<!--more-->
+
 
 <p>You can create a rake task using rails generate command for rake task:</p>
 
