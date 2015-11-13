@@ -14,11 +14,9 @@ published: true
 ---
 
 
-One of the simple tasks is creating and extracting files using `tar` and `gzip`. Yet for most new developers this is a daunting task. Here is a quick overview how to use `tar` and `gzip`.
+One of the simplest tasks is creating and extracting files using `tar` and `gzip`. Yet for most new developers this is a daunting task. These days `tar` is mostly used to simply combine a few files into a single file and then `gzip` is used to compress that file.
 
-These days `tar` is mostly used to simply combine a few files into a single file and then `gzip` is used to compress that file.
-
-Here's how to create and compress an archive:
+Here is a quick overview how to use `tar` and `gzip` to create and compress an archive:
 
 ```sh
 # archive individual files
@@ -33,7 +31,7 @@ tar -cvzf myarchive.tar.gz -C /path/to/dir ./
 
 Options give to tar are: `c` to create new archive, `v` to be verbose, `z` to compress resulting archive with `gzip`, and `f` to write the archive to specified file. After options you can list files and dirs you want to archive.
 
-In all examples we provide a full path to a file or dir we want to archive. In this case `tar` will store files in the archive using the full path. This means once you extract the files you'll have complete directory structure from root dir onwards.
+In all examples we provide a full path to a file or dir we want to archive. In this case `tar` will store files in the archive using the full path. This means once you extract the files you'll have a complete directory structure from root dir onwards.
 
 The way to avoid this is either to manually `cd` to dir in which files are stored, or to tell `tar` using `C` option to change dir before archiving files.
 
