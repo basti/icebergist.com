@@ -17,7 +17,7 @@ A gem is a simple way to distribute functionality, it can be a small plugin, a R
 But what if there is no gem available that will suit the functionality you need, and you find yourself writing the same code over and over again for different projects? Well, in that case you should consider making your own gem.
 
 It's considered a good practice to extract a gem out of an existing application, since that way you will have a better understanding of all the requirements as well as how the gem will be used. This blog post will illustrate just that on a real life example, and will take you through the process of creating a slug_converter gem. 
-
+<!--more-->
 ### Slug converter gem
 
 Source code for slug_converter gem was developed while working on a link shortener application, in order to generate a string consisting of predefined characters, based on a given id number of a link. As it will be described in this blog post, this code was easily extracted from the application into an independent gem that was released on  RubyGems.

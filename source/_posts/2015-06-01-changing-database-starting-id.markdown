@@ -18,7 +18,7 @@ published: true
 For our new project it was necessary to modify the starting id of our database. This can be handled through migration for creating table but we decided to create a rake task that handled this for us.
 
 The rake task that we created detects what database is being used and executes appropriate changes according to that.
-
+<!--more-->
 You can create a rake task using rails generate command for rake task:
 
 ```
