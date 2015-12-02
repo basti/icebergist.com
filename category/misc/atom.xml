@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Misc | Icebergist]]></title>
   <link href="http://icebergist.com/category/misc/atom.xml" rel="self"/>
   <link href="http://icebergist.com/"/>
-  <updated>2015-11-13T16:57:13+01:00</updated>
+  <updated>2015-12-02T11:22:55+01:00</updated>
   <id>http://icebergist.com/</id>
   <author>
     <name><![CDATA[Orange Iceberg]]></name>
@@ -12,6 +12,41 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Import and export MySQL dump]]></title>
+    <link href="http://icebergist.com/posts/import-and-export-mysql-dump/"/>
+    <updated>2015-12-02T10:44:23+01:00</updated>
+    <id>http://icebergist.com/posts/import-and-export-mysql-dump</id>
+    <content type="html"><![CDATA[<p>Another simple task that&rsquo;s often hard for beginners is importing and exporting MySQL dumps. Here is quick rundown on how to do it.</p>
+
+<p>To export data you need to use <code>mysqldump</code>:</p>
+
+<p><code>sh
+mysqldump -u db_user -p db_name &gt; dump_name.sql
+</code></p>
+
+<p>Options given to <code>mysqldump</code> are:</p>
+
+<ul>
+<li><code>-u db_user</code> &ndash; connect as user <code>db_user</code> to database</li>
+<li><code>-p</code> &ndash; use password, it will ask you to enter your password</li>
+<li><code>db_name</code> is the name of MySQL database you want to dump</li>
+<li><code>&gt; dump_name.sql</code> &ndash; by default <code>mysqldump</code> will print out the dump to terminal, but simple output redirect with <code>&gt;</code> will instead write it to given filename, in this case <code>dump_name.sql</code></li>
+</ul>
+
+
+<p>Now that you have <code>dump_name.sql</code> file with all SQL queries needed to replicate your database you can import it using general-purpose <code>mysql</code> client:</p>
+
+<p><code>sh
+mysql -u db_user -p db_name &lt; dump_name.sql
+</code></p>
+
+<p>User, password, and database name options are the same as for <code>mysqldump</code>. Since <code>mysql</code> reads input from terminal this time we can use <code>&lt;</code> to read input from given file instead.</p>
+
+<p>As always for more information you can consult manual using <code>man mysqldump</code> and <code>man mysql</code>.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Create and extract archives using tar and gzip]]></title>
@@ -163,24 +198,6 @@ VBoxManage list runningvms
 <p>After that my root partition was back to read-write mode. <img src='http://icebergist.com/wp-includes/images/smilies/icon_smile.gif' alt=':)' class='wp-smiley' /></p>
 
 <p>Before you do stuff like that to your computer I suggest that you read man pages for <a href="http://linux.die.net/man/8/mke2fs" title="mke2fs">mke2fs</a> and <a href="http://linux.die.net/man/8/e2fsck" title="e2fsck">e2fsck</a>. It will prevent you from doing something foolish like deleting your whole hard drive. <img src='http://icebergist.com/wp-includes/images/smilies/icon_smile.gif' alt=':)' class='wp-smiley' /></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Mosso hosting cloud]]></title>
-    <link href="http://icebergist.com/posts/mosso-hosting-cloud"/>
-    <updated>2008-09-17T10:00:00+02:00</updated>
-    <id>http://icebergist.com/posts/mosso-hosting-cloud</id>
-    <content type="html"><![CDATA[<p><a class="external" href="http://www.mosso.com/">Mosso&#8217;s hosting cloud</a>
-at $100 / month seems like a good solution to get a scalable server. However one thing bugs me, actually two things&#8230;</p>
-
-<p>First one: they offer <strong>FTP only access</strong>. Meaning you cannot deploy sites directly from code repositories (i.e. git or svn). That sucks.</p>
-
-<p>Second thing that bugs me: for $100 you get quite a lot of computing power which can be used to run multiple sites &#8211; but <strong>you are only allowed to have one Rails app running</strong>. Only one. If you want additional Rails apps (for example to have a test server) you need to pay an extra fee.</p>
-
-<p>I know it&#8217;s cloud computing and that you have to be able to run it with any additional configuration (that&#8217;s why I think it&#8217;s ok that you have to freeze your gems in Rails apps, because you cannot install any gems yourself)&#8230; but not being able to checkout my code from repository and having to upload the whole app each time you make changes <strong>is really annoying</strong>.</p>
-
-<p>In their defense, the support guy said that they are working on it, but he could give me an ETA when they&#8217;ll allow something like that.</p>
 ]]></content>
   </entry>
   

@@ -128,6 +128,88 @@
 
 
 
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2015-12-02T10:44:23+01:00" pubdate data-updated="true">Dec 2<span>nd</span>, 2015</time>
+        | 
+  
+
+
+  <span class="glyphicon glyphicon-user"></span>
+  <span class="byline author vcard">Posted by
+    <span class="fn">
+      
+        <a href="https://plus.google.com/113548610124685160907?rel=author">Slobodan Kovačević</a>
+      
+    </span>
+  </span>
+
+
+        
+           | <a href="/posts/import-and-export-mysql-dump/#disqus_thread"
+             data-disqus-identifier="http://icebergist.com/posts/import-and-export-mysql-dump/">Comments</a>
+        
+      </p>
+    
+    
+      <h1 class="entry-title"><a href="/posts/import-and-export-mysql-dump/">Import and Export MySQL Dump</a></h1>
+    
+  </header>
+
+
+  <div class="entry-content clearfix"><p>Another simple task that&rsquo;s often hard for beginners is importing and exporting MySQL dumps. Here is quick rundown on how to do it.</p>
+
+<p>To export data you need to use <code>mysqldump</code>:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>mysqldump -u db_user -p db_name &gt; dump_name.sql
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Options given to <code>mysqldump</code> are:</p>
+
+<ul>
+<li><code>-u db_user</code> &ndash; connect as user <code>db_user</code> to database</li>
+<li><code>-p</code> &ndash; use password, it will ask you to enter your password</li>
+<li><code>db_name</code> is the name of MySQL database you want to dump</li>
+<li><code>&gt; dump_name.sql</code> &ndash; by default <code>mysqldump</code> will print out the dump to terminal, but simple output redirect with <code>&gt;</code> will instead write it to given filename, in this case <code>dump_name.sql</code></li>
+</ul>
+
+
+<p>Now that you have <code>dump_name.sql</code> file with all SQL queries needed to replicate your database you can import it using general-purpose <code>mysql</code> client:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>mysql -u db_user -p db_name &lt; dump_name.sql
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>User, password, and database name options are the same as for <code>mysqldump</code>. Since <code>mysql</code> reads input from terminal this time we can use <code>&lt;</code> to read input from given file instead.</p>
+
+<p>As always for more information you can consult manual using <code>man mysqldump</code> and <code>man mysql</code>.</p>
+</div>
+  
+  
+
+
+        </article>
+      
+      
+        <article class="post">
+          
+  <header class="page-header">
+    
+      <p class="meta text-muted">
+        
+
+
+
+
+
+
+
+
+
+
+
+
 <span class="glyphicon glyphicon-calendar"></span> <time datetime="2015-11-13T13:28:36+01:00" pubdate data-updated="true">Nov 13<span>th</span>, 2015</time>
         | 
   
@@ -831,67 +913,6 @@ end</pre>
 
         </article>
       
-      
-        <article class="post">
-          
-  <header class="page-header">
-    
-      <p class="meta text-muted">
-        
-
-
-
-
-
-
-
-
-
-
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2013-03-09T09:00:00+01:00" pubdate data-updated="true">Mar 9<span>th</span>, 2013</time>
-        | 
-  
-
-
-  <span class="glyphicon glyphicon-user"></span>
-  <span class="byline author vcard">Posted by
-    <span class="fn">
-      
-        <a href="https://plus.google.com/113548610124685160907?rel=author">Slobodan Kovačević</a>
-      
-    </span>
-  </span>
-
-
-        
-           | <a href="/posts/random-rails-tips#disqus_thread"
-             data-disqus-identifier="http://icebergist.com/posts/random-rails-tips">Comments</a>
-        
-      </p>
-    
-    
-      <h1 class="entry-title"><a href="/posts/random-rails-tips">Random Rails Tips</a></h1>
-    
-  </header>
-
-
-  <div class="entry-content clearfix"><p>Here are some random Rails tips I&#8217;ve found useful:</p>
-
-<ul>
-<li><strong>rails console sandbox</strong> &#8211; if you open console like this it will rollback all database changes once you exit. Pretty useful for playing around without making any changes to database.</li>
-<li><strong>rake db:migrate:status</strong> &#8211; useful when you want to see the status of current database. It will show the status of all migrations.</li>
-<li><strong>User.pluck(:email)</strong> &#8211; since Rails 3.2.1 you can use <a href="http://apidock.com/rails/ActiveRecord/Calculations/pluck">pluck</a> method to get an array of values in one particular column. It&#8217;s the equvivalent of doing User.select(:email).map(&amp;:email)</li>
-</ul>
-
-</div>
-  
-  
-
-
-        </article>
-      
     </div>
 
     <ul class="pager">
@@ -938,6 +959,8 @@ end</pre>
   
   <div id="recent_posts" class="list-group">
     
+    <a class="list-group-item " href="/posts/import-and-export-mysql-dump/">Import and Export MySQL Dump</a>
+    
     <a class="list-group-item " href="/posts/create-and-extract-archives-using-tar-and-gzip/">Create and Extract Archives Using Tar and Gzip</a>
     
     <a class="list-group-item " href="/posts/creating-and-publishing-a-ruby-gem/">Creating and Publishing a Ruby Gem</a>
@@ -945,8 +968,6 @@ end</pre>
     <a class="list-group-item " href="/posts/changing-database-starting-id/">Changing Database Starting Id</a>
     
     <a class="list-group-item " href="/posts/customize-devise-permitted-parameters/">Customize Devise Permitted Parameters</a>
-    
-    <a class="list-group-item " href="/posts/how-to-skip-devise-trackable-updates/">How to Skip Devise Trackable Updates</a>
     
   </div>
   <div class="panel-heading">
@@ -961,7 +982,7 @@ end</pre>
     
     
     <a class="list-group-item " href="/category/misc/index.html">
-        <span class="badge">10</span>
+        <span class="badge">11</span>
         Misc
       </a>
     
@@ -1002,7 +1023,7 @@ end</pre>
     <h3 class="panel-title">Tags</h3>
   </div>
   <div class="tag-cloud">
-    <span class='rank-4'><a href='/tag/ubuntu'>ubuntu</a></span> <span class='rank-2'><a href='/tag/ruby'>ruby</a></span> <span class='rank-5'><a href='/tag/rspec'>rspec</a></span> <span class='rank-4'><a href='/tag/devise'>devise</a></span> <span class='rank-5'><a href='/tag/carrierwave'>carrierwave</a></span> <span class='rank-5'><a href='/tag/Javascript'>Javascript</a></span> <span class='rank-5'><a href='/tag/edge'>edge</a></span> <span class='rank-4'><a href='/tag/links'>links</a></span> <span class='rank-5'><a href='/tag/sqlite'>sqlite</a></span> <span class='rank-4'><a href='/tag/tutorial'>tutorial</a></span> <span class='rank-5'><a href='/tag/rails4'>rails4</a></span> <span class='rank-5'><a href='/tag/factory-girl'>factory_girl</a></span> <span class='rank-5'><a href='/tag/erkanaauth'>erkanaauth</a></span> <span class='rank-5'><a href='/tag/codeigniter'>codeigniter</a></span> <span class='rank-5'><a href='/tag/css'>css</a></span> <span class='rank-3'><a href='/tag/howto'>howto</a></span> <span class='rank-5'><a href='/tag/postgres'>postgres</a></span> <span class='rank-5'><a href='/tag/restful'>restful</a></span> <span class='rank-5'><a href='/tag/virtualbox'>virtualbox</a></span> <span class='rank-4'><a href='/tag/weekly'>weekly</a></span> <span class='rank-4'><a href='/tag/linux'>linux</a></span> <span class='rank-5'><a href='/tag/cloud-computing'>cloud computing</a></span> <span class='rank-5'><a href='/tag/admin'>admin</a></span> <span class='rank-5'><a href='/tag/paperclip'>paperclip</a></span> <span class='rank-4'><a href='/tag/heroku'>heroku</a></span> <span class='rank-5'><a href='/tag/mac'>mac</a></span> <span class='rank-5'><a href='/tag/factorygirl'>factorygirl</a></span> <span class='rank-5'><a href='/tag/rest'>rest</a></span> <span class='rank-4'><a href='/tag/resources'>resources</a></span> <span class='rank-4'><a href='/tag/rails3'>rails3</a></span> <span class='rank-1'><a href='/tag/rails'>rails</a></span> <span class='rank-5'><a href='/tag/PHP'>PHP</a></span> <span class='rank-5'><a href='/tag/vagrant'>vagrant</a></span> <span class='rank-5'><a href='/tag/scaffold'>scaffold</a></span> <span class='rank-5'><a href='/tag/password-protected'>password protected</a></span> <span class='rank-5'><a href='/tag/mysql'>mysql</a></span> <span class='rank-3'><a href='/tag/tips'>tips</a></span> <span class='rank-5'><a href='/tag/amazon-s3'>amazon s3</a></span> <span class='rank-4'><a href='/tag/hosting'>hosting</a></span> <span class='rank-5'><a href='/tag/tdd'>tdd</a></span> 
+    <span class='rank-5'><a href='/tag/erkanaauth'>erkanaauth</a></span> <span class='rank-5'><a href='/tag/scaffold'>scaffold</a></span> <span class='rank-4'><a href='/tag/resources'>resources</a></span> <span class='rank-1'><a href='/tag/rails'>rails</a></span> <span class='rank-5'><a href='/tag/Javascript'>Javascript</a></span> <span class='rank-5'><a href='/tag/restful'>restful</a></span> <span class='rank-5'><a href='/tag/sqlite'>sqlite</a></span> <span class='rank-3'><a href='/tag/tips'>tips</a></span> <span class='rank-5'><a href='/tag/password-protected'>password protected</a></span> <span class='rank-5'><a href='/tag/rails4'>rails4</a></span> <span class='rank-5'><a href='/tag/factory-girl'>factory_girl</a></span> <span class='rank-4'><a href='/tag/hosting'>hosting</a></span> <span class='rank-4'><a href='/tag/devise'>devise</a></span> <span class='rank-5'><a href='/tag/rest'>rest</a></span> <span class='rank-5'><a href='/tag/paperclip'>paperclip</a></span> <span class='rank-5'><a href='/tag/carrierwave'>carrierwave</a></span> <span class='rank-5'><a href='/tag/rspec'>rspec</a></span> <span class='rank-3'><a href='/tag/howto'>howto</a></span> <span class='rank-5'><a href='/tag/codeigniter'>codeigniter</a></span> <span class='rank-2'><a href='/tag/ruby'>ruby</a></span> <span class='rank-5'><a href='/tag/admin'>admin</a></span> <span class='rank-4'><a href='/tag/ubuntu'>ubuntu</a></span> <span class='rank-4'><a href='/tag/tutorial'>tutorial</a></span> <span class='rank-4'><a href='/tag/linux'>linux</a></span> <span class='rank-4'><a href='/tag/heroku'>heroku</a></span> <span class='rank-5'><a href='/tag/cloud-computing'>cloud computing</a></span> <span class='rank-5'><a href='/tag/vagrant'>vagrant</a></span> <span class='rank-5'><a href='/tag/amazon-s3'>amazon s3</a></span> <span class='rank-5'><a href='/tag/postgres'>postgres</a></span> <span class='rank-5'><a href='/tag/css'>css</a></span> <span class='rank-5'><a href='/tag/virtualbox'>virtualbox</a></span> <span class='rank-5'><a href='/tag/mac'>mac</a></span> <span class='rank-5'><a href='/tag/PHP'>PHP</a></span> <span class='rank-4'><a href='/tag/links'>links</a></span> <span class='rank-4'><a href='/tag/mysql'>mysql</a></span> <span class='rank-5'><a href='/tag/edge'>edge</a></span> <span class='rank-4'><a href='/tag/weekly'>weekly</a></span> <span class='rank-5'><a href='/tag/factorygirl'>factorygirl</a></span> <span class='rank-5'><a href='/tag/tdd'>tdd</a></span> <span class='rank-4'><a href='/tag/rails3'>rails3</a></span> 
   </div>
 </section>
 
