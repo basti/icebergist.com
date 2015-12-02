@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Headless firefox in ubuntu on virtual box for cucumber testing"
+title: "Headless Firefox in Ubuntu on VirtualBox for Cucumber testing"
 date: 2015-10-17 14:12:56 +0200
 comments: true
 author: Ivica Lakatoš
@@ -11,18 +11,18 @@ tags:
   - ruby
   - rails
   - vagrant
-  - virtual box
+  - virtualbox
   - ubuntu
   - cucumber
   - selenium-webdriver
 published: true
 ---
 
-If you use [Vagrant](http://www.vagrantup.com/downloads.html) and [VirtualBox](https://www.virtualbox.org/) (e.g. some Ubuntu package) to build your Rails app and you want to test it with cucumber scenarios, this is right post for you. 
+If you use [Vagrant](http://www.vagrantup.com/downloads.html), [VirtualBox](https://www.virtualbox.org/) and Ubuntu to build your Rails apps and you want to test it with Cucumber scenarios, this is right post for you. By default Vagrant and VirtualBox use Ubuntu without an X server and GUI.
 
-Everything goes well until you do not need `@javascript` flag for your cucumber scenario. `@javascript` uses a javascript-aware system to process web requests (e.g., Selenium) instead of the default (non-javascript-aware) webrat browser.
+Everything goes well until you need `@javascript` flag for your cucumber scenario. `@javascript` uses a javascript-aware system to process web requests (e.g. Selenium) instead of the default (non-javascript-aware) webrat browser.
 
-### You will need mozilla firefox
+### Install Mozilla Firefox
 
 Selenium WebDriver is flexible and let you run selenium headless in servers with no display. But in order to run, Selenium needs to launch a browser. If there are no display to the machine, the browsers are not launched. So in order to use selenium, you need to fake a display and let selenium and the browser thinks they are running in a machine with a display.
 
@@ -30,10 +30,12 @@ Install latest version of Mozilla Firefox:
 
 `sudo apt-get install firefox`
 
-### Also you need to run X server
+Since Ubuntu is running without a X server Selenium cannot start Firefox because it requires an X server.
 
-X server is required to make browsers run normally by making them believe there is a display available, although it doesn't create any visible windows. 
+### Setting up virtual X server
 
+Virtual X server is required to make browsers run normally by making them believe there is a display available, although it doesn't create any visible windows. 
+<!--more-->
 Xvfb (X Virtual FrameBuffer) works fine for this. Xvfb lets you run X-Server in machines with no display devices. 
 
 Install xvfb on ubuntu:
@@ -46,7 +48,7 @@ Lets run the Xvfb service in a display number which is less likely to clash even
 
 The parameter -ac makes xvfb run with access control off. The server should be running now.
 
-### Start firefox headlessly in Ubuntu
+### Headless Firefox
 
 Before you can run a browser, you need to set the environment variable DISPLAY with the display number at which xvfb is running.
 
@@ -60,7 +62,7 @@ and start mozilla firefox:
 
 Now you run firefox headlessly in Ubuntu, and you can run your cucumber scenarios with `@javascript` flag.
 
-### Or use init script to start X server automatically
+### Start virtual X server automatically
 
 To run your X server automatically, after installing Xvfb, you will need to:
 
