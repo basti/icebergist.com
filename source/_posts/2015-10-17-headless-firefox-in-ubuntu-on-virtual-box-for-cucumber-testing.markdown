@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Headless Firefox in Ubuntu on VirtualBox for Cucumber testing"
-date: 2015-10-17 14:12:56 +0200
+date: 2015-12-03 11:12:56 +0200
 comments: true
 author: Ivica Lakatoš
 categories:
