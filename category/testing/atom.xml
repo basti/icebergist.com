@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Testing | Icebergist]]></title>
   <link href="http://icebergist.com/category/testing/atom.xml" rel="self"/>
   <link href="http://icebergist.com/"/>
-  <updated>2015-12-03T11:42:00+01:00</updated>
+  <updated>2015-12-03T12:04:56+01:00</updated>
   <id>http://icebergist.com/</id>
   <author>
     <name><![CDATA[Orange Iceberg]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Headless Firefox in Ubuntu on VirtualBox for Cucumber testing]]></title>
     <link href="http://icebergist.com/posts/headless-firefox-in-ubuntu-on-virtual-box-for-cucumber-testing/"/>
-    <updated>2015-10-17T14:12:56+02:00</updated>
+    <updated>2015-12-03T10:12:56+01:00</updated>
     <id>http://icebergist.com/posts/headless-firefox-in-ubuntu-on-virtual-box-for-cucumber-testing</id>
     <content type="html"><![CDATA[<p>If you use <a href="http://www.vagrantup.com/downloads.html">Vagrant</a>, <a href="https://www.virtualbox.org/">VirtualBox</a> and Ubuntu to build your Rails apps and you want to test it with Cucumber scenarios, this is the right post for you. By default Vagrant and VirtualBox use Ubuntu without an X server and GUI.</p>
 

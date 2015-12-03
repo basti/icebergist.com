@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby and Rails | Icebergist]]></title>
   <link href="http://icebergist.com/category/ruby-and-rails/atom.xml" rel="self"/>
   <link href="http://icebergist.com/"/>
-  <updated>2015-12-03T11:42:00+01:00</updated>
+  <updated>2015-12-03T12:04:56+01:00</updated>
   <id>http://icebergist.com/</id>
   <author>
     <name><![CDATA[Orange Iceberg]]></name>
@@ -16,7 +16,7 @@
   <entry>
     <title type="html"><![CDATA[Headless Firefox in Ubuntu on VirtualBox for Cucumber testing]]></title>
     <link href="http://icebergist.com/posts/headless-firefox-in-ubuntu-on-virtual-box-for-cucumber-testing/"/>
-    <updated>2015-10-17T14:12:56+02:00</updated>
+    <updated>2015-12-03T10:12:56+01:00</updated>
     <id>http://icebergist.com/posts/headless-firefox-in-ubuntu-on-virtual-box-for-cucumber-testing</id>
     <content type="html"><![CDATA[<p>If you use <a href="http://www.vagrantup.com/downloads.html">Vagrant</a>, <a href="https://www.virtualbox.org/">VirtualBox</a> and Ubuntu to build your Rails apps and you want to test it with Cucumber scenarios, this is the right post for you. By default Vagrant and VirtualBox use Ubuntu without an X server and GUI.</p>
 
@@ -170,7 +170,7 @@ require &lsquo;slug_converter/version&rsquo;</p>
   spec.name         = &ldquo;slug_converter&rdquo;
   spec.version      = SlugConverter::VERSION
   spec.authors      = [&ldquo;Your Name&rdquo;]
-  spec.email        = [&ldquo;<a href="&#x6d;&#97;&#x69;&#x6c;&#116;&#111;&#58;&#121;&#111;&#x75;&#114;&#101;&#x6d;&#x61;&#105;&#108;&#x40;&#101;&#x78;&#x61;&#109;&#x70;&#x6c;&#x65;&#x2e;&#x63;&#x6f;&#109;">&#121;&#111;&#x75;&#x72;&#101;&#x6d;&#x61;&#105;&#x6c;&#x40;&#x65;&#x78;&#97;&#x6d;&#x70;&#108;&#101;&#x2e;&#99;&#x6f;&#x6d;</a>&rdquo;]</p>
+  spec.email        = [&ldquo;<a href="&#x6d;&#97;&#x69;&#108;&#116;&#x6f;&#58;&#x79;&#111;&#x75;&#114;&#x65;&#109;&#x61;&#105;&#x6c;&#x40;&#101;&#x78;&#x61;&#x6d;&#112;&#x6c;&#x65;&#x2e;&#x63;&#111;&#109;">&#x79;&#111;&#x75;&#x72;&#101;&#109;&#x61;&#105;&#x6c;&#64;&#x65;&#x78;&#x61;&#109;&#x70;&#x6c;&#x65;&#x2e;&#99;&#x6f;&#x6d;</a>&rdquo;]</p>
 
 <p>  # if spec.respond_to?(:metadata)
   #   spec.metadata[&lsquo;allowed_push_host&rsquo;] = &ldquo;TODO: Set to &lsquo;<a href="http://mygemserver.com">http://mygemserver.com</a>&rsquo; to prevent pushes to rubygems.org, or delete to allow pushes to any server.&rdquo;
