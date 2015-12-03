@@ -302,6 +302,81 @@
 
 
 
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2015-10-17T14:12:56+02:00" pubdate data-updated="true">Oct 17<span>th</span>, 2015</time>
+        | 
+  
+
+
+  <span class="glyphicon glyphicon-user"></span>
+  <span class="byline author vcard">Posted by
+    <span class="fn">
+      
+        <a href="http://orangeiceberg.com/about/">Ivica Lakatoš</a>
+      
+    </span>
+  </span>
+
+
+        
+           | <a href="/posts/headless-firefox-in-ubuntu-on-virtual-box-for-cucumber-testing/#disqus_thread"
+             data-disqus-identifier="http://icebergist.com/posts/headless-firefox-in-ubuntu-on-virtual-box-for-cucumber-testing/">Comments</a>
+        
+      </p>
+    
+    
+      <h1 class="entry-title"><a href="/posts/headless-firefox-in-ubuntu-on-virtual-box-for-cucumber-testing/">Headless Firefox in Ubuntu on VirtualBox for Cucumber Testing</a></h1>
+    
+  </header>
+
+
+  <div class="entry-content clearfix"><p>If you use <a href="http://www.vagrantup.com/downloads.html">Vagrant</a>, <a href="https://www.virtualbox.org/">VirtualBox</a> and Ubuntu to build your Rails apps and you want to test it with Cucumber scenarios, this is the right post for you. By default Vagrant and VirtualBox use Ubuntu without an X server and GUI.</p>
+
+<p>Everything goes well until you need <code>@javascript</code> flag for your cucumber scenario. <code>@javascript</code> uses a javascript-aware system to process web requests (e.g. Selenium) instead of the default (non-javascript-aware) webrat browser.</p>
+
+<h3>Install Mozilla Firefox</h3>
+
+<p>Selenium WebDriver is flexible and lets you run selenium headless in servers with no display. But in order to run, Selenium needs to launch a browser. If there is no display to the machine, the browsers are not launched. So in order to use selenium, you need to fake a display and let selenium and the browser think they are running in a machine with a display.</p>
+
+<p>Install latest version of Mozilla Firefox:</p>
+
+<p><code>sudo apt-get install firefox</code></p>
+
+<p>Since Ubuntu is running without a X server Selenium cannot start Firefox because it requires an X server.</p>
+
+<h3>Setting up virtual X server</h3>
+
+<p>Virtual X server is required to make browsers run normally by making them believe there is a display available, although it doesn&rsquo;t create any visible windows.</p>
+
+</div>
+  
+  
+    <footer>
+      <a class="btn btn-default" rel="full-article" href="/posts/headless-firefox-in-ubuntu-on-virtual-box-for-cucumber-testing/">Read on &rarr;</a>
+    </footer>
+  
+
+
+        </article>
+      
+      
+        <article class="post">
+          
+  <header class="page-header">
+    
+      <p class="meta text-muted">
+        
+
+
+
+
+
+
+
+
+
+
+
+
 <span class="glyphicon glyphicon-calendar"></span> <time datetime="2015-06-08T09:12:04+02:00" pubdate data-updated="true">Jun 8<span>th</span>, 2015</time>
         | 
   
@@ -779,140 +854,6 @@ is a very useful site when upgrading Rails versions (for example, from Rails 3.2
 
         </article>
       
-      
-        <article class="post">
-          
-  <header class="page-header">
-    
-      <p class="meta text-muted">
-        
-
-
-
-
-
-
-
-
-
-
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2013-09-07T10:00:00+02:00" pubdate data-updated="true">Sep 7<span>th</span>, 2013</time>
-        | 
-  
-
-
-  <span class="glyphicon glyphicon-user"></span>
-  <span class="byline author vcard">Posted by
-    <span class="fn">
-      
-        <a href="https://plus.google.com/113548610124685160907?rel=author">Slobodan Kovačević</a>
-      
-    </span>
-  </span>
-
-
-        
-           | <a href="/posts/rspec-and-factorygirl-setup-for-testing-carrierwave-uploaders#disqus_thread"
-             data-disqus-identifier="http://icebergist.com/posts/rspec-and-factorygirl-setup-for-testing-carrierwave-uploaders">Comments</a>
-        
-      </p>
-    
-    
-      <h1 class="entry-title"><a href="/posts/rspec-and-factorygirl-setup-for-testing-carrierwave-uploaders">RSpec and FactoryGirl Setup for Testing Carrierwave Uploaders</a></h1>
-    
-  </header>
-
-
-  <div class="entry-content clearfix"><p>Assume that you have the usual setup with model (MyFile) using simple Carrierwave uploader (MyFileUploader):</p>
-
-<pre># app/models/my_file.rb
-class MyFile &lt; ActiveRecord::Base
-  mount_uploader :file, MyFileUploader
-end</pre>
-
-
-<p>To be able to test Carrierwave uploaders with RSpec using FactoryGirl factories you need:</p>
-
-<ul>
-<li><span style="line-height: 13px;">define factory with uploaded file</span></li>
-<li>modify test environment storage so test file uploads are separated from other uploads</li>
-<li>turn off image processing to speed up tests</li>
-<li>perform cleanup after each test</li>
-</ul>
-
-
-<h2>Define factory</h2>
-
-<pre># spec/factories/my_files.rb
-FactoryGirl.define do
- factory :my_file do
-   photo Rack::Test::UploadedFile.new(File.open(File.join(Rails.root, '/spec/fixtures/myfiles/myfile.jpg')))
- end
-end</pre>
-
-
-<h2>Setup Carrierwave</h2>
-
-<p>First we need to make sure Carrierwave is using local file system for storage and to disable file processing for testing environments. Disabling file processing will speed up tests considerably. We can do that by adding following to Carrierwave initializer:</p>
-
-<pre>if Rails.env.test? || Rails.env.cucumber?
-  CarrierWave.configure do |config|
-    config.storage = :file
-    config.enable_processing = false
-  end
-end</pre>
-
-
-<p>Next we should separate test uploads from any other uploads. We can do that by modifying cache_dir and store_dir methods for all Carrierwave models (i.e. all models that are descendants of CarrierWave::Uploader::Base). So the whole Carrierwave initializer looks something like:</p>
-
-<pre># config/initializers/carrierwave.rb
-if Rails.env.test? || Rails.env.cucumber?
-  CarrierWave.configure do |config|
-    config.storage = :file
-    config.enable_processing = false
-  end
-
-  # make sure our uploader is auto-loaded
-  MyFileUploader
-
-  # use different dirs when testing
-  CarrierWave::Uploader::Base.descendants.each do |klass|
-    next if klass.anonymous?
-    klass.class_eval do
-      def cache_dir
-        "#{Rails.root}/spec/support/uploads/tmp"
-      end
-
-      def store_dir
-        "#{Rails.root}/spec/support/uploads/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}"
-      end
-    end
-  end
-end</pre>
-
-
-<h2>Clean up uploaded files</h2>
-
-<p>Using factory defined above will create uploaded files in cache_dir and store_dir. These are just temporary files and should be removed after each test, so each of them has a clean slate. By adding after :each hook in RSpec configuration block we can remove these files simply by deleting spec/support/uploads dir.</p>
-
-<pre># spec_helper.rb
-RSpec.configure do |config|
-  config.after(:each) do
-    if Rails.env.test? || Rails.env.cucumber?
-      FileUtils.rm_rf(Dir["#{Rails.root}/spec/support/uploads"])
-    end 
-  end
-end</pre>
-
-</div>
-  
-  
-
-
-        </article>
-      
     </div>
 
     <ul class="pager">
@@ -963,11 +904,11 @@ end</pre>
     
     <a class="list-group-item " href="/posts/create-and-extract-archives-using-tar-and-gzip/">Create and Extract Archives Using Tar and Gzip</a>
     
+    <a class="list-group-item " href="/posts/headless-firefox-in-ubuntu-on-virtual-box-for-cucumber-testing/">Headless Firefox in Ubuntu on VirtualBox for Cucumber Testing</a>
+    
     <a class="list-group-item " href="/posts/creating-and-publishing-a-ruby-gem/">Creating and Publishing a Ruby Gem</a>
     
     <a class="list-group-item " href="/posts/changing-database-starting-id/">Changing Database Starting Id</a>
-    
-    <a class="list-group-item " href="/posts/customize-devise-permitted-parameters/">Customize Devise Permitted Parameters</a>
     
   </div>
   <div class="panel-heading">
@@ -994,7 +935,7 @@ end</pre>
     
     
     <a class="list-group-item " href="/category/ruby-and-rails/index.html">
-        <span class="badge">15</span>
+        <span class="badge">16</span>
         Ruby and Rails
       </a>
     
@@ -1012,7 +953,7 @@ end</pre>
     
     
     <a class="list-group-item " href="/category/testing/index.html">
-        <span class="badge">1</span>
+        <span class="badge">2</span>
         Testing
       </a>
     
@@ -1023,7 +964,7 @@ end</pre>
     <h3 class="panel-title">Tags</h3>
   </div>
   <div class="tag-cloud">
-    <span class='rank-5'><a href='/tag/erkanaauth'>erkanaauth</a></span> <span class='rank-5'><a href='/tag/scaffold'>scaffold</a></span> <span class='rank-4'><a href='/tag/resources'>resources</a></span> <span class='rank-1'><a href='/tag/rails'>rails</a></span> <span class='rank-5'><a href='/tag/Javascript'>Javascript</a></span> <span class='rank-5'><a href='/tag/restful'>restful</a></span> <span class='rank-5'><a href='/tag/sqlite'>sqlite</a></span> <span class='rank-3'><a href='/tag/tips'>tips</a></span> <span class='rank-5'><a href='/tag/password-protected'>password protected</a></span> <span class='rank-5'><a href='/tag/rails4'>rails4</a></span> <span class='rank-5'><a href='/tag/factory-girl'>factory_girl</a></span> <span class='rank-4'><a href='/tag/hosting'>hosting</a></span> <span class='rank-4'><a href='/tag/devise'>devise</a></span> <span class='rank-5'><a href='/tag/rest'>rest</a></span> <span class='rank-5'><a href='/tag/paperclip'>paperclip</a></span> <span class='rank-5'><a href='/tag/carrierwave'>carrierwave</a></span> <span class='rank-5'><a href='/tag/rspec'>rspec</a></span> <span class='rank-3'><a href='/tag/howto'>howto</a></span> <span class='rank-5'><a href='/tag/codeigniter'>codeigniter</a></span> <span class='rank-2'><a href='/tag/ruby'>ruby</a></span> <span class='rank-5'><a href='/tag/admin'>admin</a></span> <span class='rank-4'><a href='/tag/ubuntu'>ubuntu</a></span> <span class='rank-4'><a href='/tag/tutorial'>tutorial</a></span> <span class='rank-4'><a href='/tag/linux'>linux</a></span> <span class='rank-4'><a href='/tag/heroku'>heroku</a></span> <span class='rank-5'><a href='/tag/cloud-computing'>cloud computing</a></span> <span class='rank-5'><a href='/tag/vagrant'>vagrant</a></span> <span class='rank-5'><a href='/tag/amazon-s3'>amazon s3</a></span> <span class='rank-5'><a href='/tag/postgres'>postgres</a></span> <span class='rank-5'><a href='/tag/css'>css</a></span> <span class='rank-5'><a href='/tag/virtualbox'>virtualbox</a></span> <span class='rank-5'><a href='/tag/mac'>mac</a></span> <span class='rank-5'><a href='/tag/PHP'>PHP</a></span> <span class='rank-4'><a href='/tag/links'>links</a></span> <span class='rank-4'><a href='/tag/mysql'>mysql</a></span> <span class='rank-5'><a href='/tag/edge'>edge</a></span> <span class='rank-4'><a href='/tag/weekly'>weekly</a></span> <span class='rank-5'><a href='/tag/factorygirl'>factorygirl</a></span> <span class='rank-5'><a href='/tag/tdd'>tdd</a></span> <span class='rank-4'><a href='/tag/rails3'>rails3</a></span> 
+    <span class='rank-5'><a href='/tag/factorygirl'>factorygirl</a></span> <span class='rank-5'><a href='/tag/carrierwave'>carrierwave</a></span> <span class='rank-5'><a href='/tag/Javascript'>Javascript</a></span> <span class='rank-5'><a href='/tag/selenium-webdriver'>selenium-webdriver</a></span> <span class='rank-5'><a href='/tag/restful'>restful</a></span> <span class='rank-5'><a href='/tag/tdd'>tdd</a></span> <span class='rank-4'><a href='/tag/hosting'>hosting</a></span> <span class='rank-5'><a href='/tag/edge'>edge</a></span> <span class='rank-4'><a href='/tag/vagrant'>vagrant</a></span> <span class='rank-4'><a href='/tag/resources'>resources</a></span> <span class='rank-5'><a href='/tag/amazon-s3'>amazon s3</a></span> <span class='rank-4'><a href='/tag/tutorial'>tutorial</a></span> <span class='rank-4'><a href='/tag/mysql'>mysql</a></span> <span class='rank-1'><a href='/tag/rails'>rails</a></span> <span class='rank-5'><a href='/tag/cloud-computing'>cloud computing</a></span> <span class='rank-5'><a href='/tag/rest'>rest</a></span> <span class='rank-5'><a href='/tag/admin'>admin</a></span> <span class='rank-5'><a href='/tag/factory-girl'>factory_girl</a></span> <span class='rank-5'><a href='/tag/PHP'>PHP</a></span> <span class='rank-4'><a href='/tag/links'>links</a></span> <span class='rank-3'><a href='/tag/tips'>tips</a></span> <span class='rank-4'><a href='/tag/devise'>devise</a></span> <span class='rank-5'><a href='/tag/postgres'>postgres</a></span> <span class='rank-5'><a href='/tag/sqlite'>sqlite</a></span> <span class='rank-4'><a href='/tag/linux'>linux</a></span> <span class='rank-5'><a href='/tag/mac'>mac</a></span> <span class='rank-3'><a href='/tag/howto'>howto</a></span> <span class='rank-5'><a href='/tag/erkanaauth'>erkanaauth</a></span> <span class='rank-5'><a href='/tag/codeigniter'>codeigniter</a></span> <span class='rank-4'><a href='/tag/weekly'>weekly</a></span> <span class='rank-5'><a href='/tag/password-protected'>password protected</a></span> <span class='rank-4'><a href='/tag/heroku'>heroku</a></span> <span class='rank-4'><a href='/tag/rails3'>rails3</a></span> <span class='rank-5'><a href='/tag/scaffold'>scaffold</a></span> <span class='rank-5'><a href='/tag/cucumber'>cucumber</a></span> <span class='rank-4'><a href='/tag/virtualbox'>virtualbox</a></span> <span class='rank-5'><a href='/tag/css'>css</a></span> <span class='rank-2'><a href='/tag/ruby'>ruby</a></span> <span class='rank-5'><a href='/tag/rails4'>rails4</a></span> <span class='rank-5'><a href='/tag/rspec'>rspec</a></span> <span class='rank-5'><a href='/tag/paperclip'>paperclip</a></span> <span class='rank-4'><a href='/tag/ubuntu'>ubuntu</a></span> 
   </div>
 </section>
 
