@@ -14,7 +14,7 @@ tags:
 published: true
 ---
 
-Sooner or later every new ruby developer need to understand  differences between this two common rake task. Basically, simple definition tell us everything we need to know:
+Sooner or later every new Ruby developer needs to understand  differences between this two common rake tasks. Basically, a simple definition tells us everything we need to know:
 
 + `rake db:migrate` runs migrations that have not run yet
 + `rake db:schema:load` loads the schema.db file into database.
