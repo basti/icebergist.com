@@ -99,7 +99,7 @@ Here it is! If you decide to delete your database and create it again you need t
 
 Because, if you try to use `rake db:migrate` instead of `rake db:schema:load` you will get **BIG ERROR!**, because for your first migration "create_posts" it is necessary that you have defined translatable attributes :title and :text in Post model, but you removed :title from Post model translations.
 
-So just switch above and [advice](#advice). Good luck!
+So just fallow [advice](#advice) above, and good luck.
 
 
 
