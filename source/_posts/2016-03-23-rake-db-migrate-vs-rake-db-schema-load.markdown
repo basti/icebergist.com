@@ -14,14 +14,14 @@ tags:
 published: true
 ---
 
-Sooner or later every new Ruby developer needs to understand  differences between this two common rake tasks. Basically, a simple definition tells us everything we need to know:
+Sooner or later every new Ruby developer needs to understand  differences between this two common rake tasks. Basically, these simple definition tells us everything we need to know:
 
 + `rake db:migrate` runs migrations that have not run yet
 + `rake db:schema:load` loads the schema.db file into database.
 
 but the right question is when to use one or the other.
 
-**Advice:** <a id="advice"></a> when you adding new migration to a existing app then you need to run `rake db:migrate`, but when you join to existing application (_especially some old application_), or when you drop your applications database and you need to create it again, always run `rake db:schema:load` to load schema.
+**Advice:** <a id="advice"></a> when you are adding a new migration to an existing app then you need to run `rake db:migrate`, but when you join to existing application (_especially some old application_), or when you drop your applications database and you need to create it again, always run `rake db:schema:load` to load schema.
 
 ### Example
 
@@ -56,7 +56,7 @@ end
 
 + and run `rake db:migrate` .
 
-Problem come when you change your mine and deside to leave title to be untranslatable. 
+Problem comes when you change your mind and decide to leave title to be untranslatable. 
 
 + remove title from post translations table
 
@@ -99,7 +99,7 @@ Here it is! If you decide to delete your database and create it again you need t
 
 Because, if you try to use `rake db:migrate` instead of `rake db:schema:load` you will get **BIG ERROR!**, because for your first migration "create_posts" it is necessary that you have defined translatable attributes :title and :text in Post model, but you removed :title from Post model translations.
 
-So just fallow above [advice](#advice), and good luck.
+So just switch above and [advice](#advice). Good luck!
 
 
 
