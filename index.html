@@ -128,6 +128,93 @@
 
 
 
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2016-03-24T08:09:25+01:00" pubdate data-updated="true">Mar 24<span>th</span>, 2016</time>
+        | 
+  
+
+
+  <span class="glyphicon glyphicon-user"></span>
+  <span class="byline author vcard">Posted by
+    <span class="fn">
+      
+        <a href="http://orangeiceberg.com/about/">Ivica Lakatoš</a>
+      
+    </span>
+  </span>
+
+
+        
+           | <a href="/posts/rake-db-migrate-vs-rake-db-schema-load/#disqus_thread"
+             data-disqus-identifier="http://icebergist.com/posts/rake-db-migrate-vs-rake-db-schema-load/">Comments</a>
+        
+      </p>
+    
+    
+      <h1 class="entry-title"><a href="/posts/rake-db-migrate-vs-rake-db-schema-load/">Rake Db:schema:load vs Rake Db:migrate</a></h1>
+    
+  </header>
+
+
+  <div class="entry-content clearfix"><p>Sooner or later every new Ruby developer needs to understand  differences between this two common rake tasks. Basically, these simple definition tells us everything we need to know:</p>
+
+<ul>
+<li><code>rake db:migrate</code> runs migrations that have not run yet</li>
+<li><code>rake db:schema:load</code> loads the schema.db file into database.</li>
+</ul>
+
+
+<p>but the real question is when to use one or the other.</p>
+
+<p><strong>Advice:</strong> <a id="advice"></a> when you are adding a new migration to an existing app then you need to run <code>rake db:migrate</code>, but when you join to existing application (<em>especially some old application</em>), or when you drop your applications database and you need to create it again, always run <code>rake db:schema:load</code> to load schema.</p>
+
+<h3>Example</h3>
+
+<p>I am working on application which use <a href="https://github.com/globalize/globalize">globalize gem</a> for ActiveRecord model/data translations. Globalize work this way:</p>
+
+<ul>
+<li>first specify attributes which need to be translatable</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Post</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span>
+</span><span class='line'>  <span class="n">translates</span> <span class="ss">:title</span><span class="p">,</span> <span class="ss">:text</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+</div>
+  
+  
+    <footer>
+      <a class="btn btn-default" rel="full-article" href="/posts/rake-db-migrate-vs-rake-db-schema-load/">Read on &rarr;</a>
+    </footer>
+  
+
+
+        </article>
+      
+      
+        <article class="post">
+          
+  <header class="page-header">
+    
+      <p class="meta text-muted">
+        
+
+
+
+
+
+
+
+
+
+
+
+
 <span class="glyphicon glyphicon-calendar"></span> <time datetime="2015-12-03T10:12:56+01:00" pubdate data-updated="true">Dec 3<span>rd</span>, 2015</time>
         | 
   
@@ -799,61 +886,6 @@
 
         </article>
       
-      
-        <article class="post">
-          
-  <header class="page-header">
-    
-      <p class="meta text-muted">
-        
-
-
-
-
-
-
-
-
-
-
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2013-09-10T10:00:00+02:00" pubdate data-updated="true">Sep 10<span>th</span>, 2013</time>
-        | 
-  
-
-
-  <span class="glyphicon glyphicon-user"></span>
-  <span class="byline author vcard">Posted by
-    <span class="fn">
-      
-        <a href="https://plus.google.com/113548610124685160907?rel=author">Slobodan Kovačević</a>
-      
-    </span>
-  </span>
-
-
-        
-           | <a href="/posts/railsdiff#disqus_thread"
-             data-disqus-identifier="http://icebergist.com/posts/railsdiff">Comments</a>
-        
-      </p>
-    
-    
-      <h1 class="entry-title"><a href="/posts/railsdiff">RailsDiff</a></h1>
-    
-  </header>
-
-
-  <div class="entry-content clearfix"><p><a title="RailsDiff - compare Rails default app" href="http://railsdiff.org/" target="_blank">RailsDiff</a>
-is a very useful site when upgrading Rails versions (for example, from Rails 3.2 to Rails 4). It will generate default Rails app using two different Rails versions and it will compare them. The result is that you can see all the configuration changes (like in application.rb) and all other changes &#8211; which is really useful when upgrading to new Rails version.</p>
-</div>
-  
-  
-
-
-        </article>
-      
     </div>
 
     <ul class="pager">
@@ -900,6 +932,8 @@ is a very useful site when upgrading Rails versions (for example, from Rails 3.2
   
   <div id="recent_posts" class="list-group">
     
+    <a class="list-group-item " href="/posts/rake-db-migrate-vs-rake-db-schema-load/">Rake Db:schema:load vs Rake Db:migrate</a>
+    
     <a class="list-group-item " href="/posts/headless-firefox-in-ubuntu-on-virtual-box-for-cucumber-testing/">Headless Firefox in Ubuntu on VirtualBox for Cucumber Testing</a>
     
     <a class="list-group-item " href="/posts/import-and-export-mysql-dump/">Import and Export MySQL Dump</a>
@@ -907,8 +941,6 @@ is a very useful site when upgrading Rails versions (for example, from Rails 3.2
     <a class="list-group-item " href="/posts/create-and-extract-archives-using-tar-and-gzip/">Create and Extract Archives Using Tar and Gzip</a>
     
     <a class="list-group-item " href="/posts/creating-and-publishing-a-ruby-gem/">Creating and Publishing a Ruby Gem</a>
-    
-    <a class="list-group-item " href="/posts/changing-database-starting-id/">Changing Database Starting Id</a>
     
   </div>
   <div class="panel-heading">
@@ -935,7 +967,7 @@ is a very useful site when upgrading Rails versions (for example, from Rails 3.2
     
     
     <a class="list-group-item " href="/category/ruby-and-rails/index.html">
-        <span class="badge">16</span>
+        <span class="badge">17</span>
         Ruby and Rails
       </a>
     
@@ -964,7 +996,7 @@ is a very useful site when upgrading Rails versions (for example, from Rails 3.2
     <h3 class="panel-title">Tags</h3>
   </div>
   <div class="tag-cloud">
-    <span class='rank-5'><a href='/tag/scaffold'>scaffold</a></span> <span class='rank-5'><a href='/tag/postgres'>postgres</a></span> <span class='rank-4'><a href='/tag/hosting'>hosting</a></span> <span class='rank-5'><a href='/tag/carrierwave'>carrierwave</a></span> <span class='rank-3'><a href='/tag/tips'>tips</a></span> <span class='rank-5'><a href='/tag/rails4'>rails4</a></span> <span class='rank-5'><a href='/tag/codeigniter'>codeigniter</a></span> <span class='rank-5'><a href='/tag/PHP'>PHP</a></span> <span class='rank-5'><a href='/tag/amazon-s3'>amazon s3</a></span> <span class='rank-5'><a href='/tag/factorygirl'>factorygirl</a></span> <span class='rank-3'><a href='/tag/howto'>howto</a></span> <span class='rank-5'><a href='/tag/css'>css</a></span> <span class='rank-5'><a href='/tag/password-protected'>password protected</a></span> <span class='rank-4'><a href='/tag/ubuntu'>ubuntu</a></span> <span class='rank-5'><a href='/tag/tdd'>tdd</a></span> <span class='rank-5'><a href='/tag/rest'>rest</a></span> <span class='rank-5'><a href='/tag/cloud-computing'>cloud computing</a></span> <span class='rank-4'><a href='/tag/devise'>devise</a></span> <span class='rank-4'><a href='/tag/weekly'>weekly</a></span> <span class='rank-4'><a href='/tag/tutorial'>tutorial</a></span> <span class='rank-2'><a href='/tag/ruby'>ruby</a></span> <span class='rank-5'><a href='/tag/rspec'>rspec</a></span> <span class='rank-4'><a href='/tag/vagrant'>vagrant</a></span> <span class='rank-4'><a href='/tag/mysql'>mysql</a></span> <span class='rank-5'><a href='/tag/Javascript'>Javascript</a></span> <span class='rank-5'><a href='/tag/mac'>mac</a></span> <span class='rank-4'><a href='/tag/linux'>linux</a></span> <span class='rank-4'><a href='/tag/heroku'>heroku</a></span> <span class='rank-5'><a href='/tag/edge'>edge</a></span> <span class='rank-4'><a href='/tag/rails3'>rails3</a></span> <span class='rank-5'><a href='/tag/restful'>restful</a></span> <span class='rank-5'><a href='/tag/erkanaauth'>erkanaauth</a></span> <span class='rank-5'><a href='/tag/paperclip'>paperclip</a></span> <span class='rank-5'><a href='/tag/admin'>admin</a></span> <span class='rank-4'><a href='/tag/links'>links</a></span> <span class='rank-5'><a href='/tag/factory-girl'>factory_girl</a></span> <span class='rank-5'><a href='/tag/sqlite'>sqlite</a></span> <span class='rank-4'><a href='/tag/resources'>resources</a></span> <span class='rank-5'><a href='/tag/selenium-webdriver'>selenium-webdriver</a></span> <span class='rank-1'><a href='/tag/rails'>rails</a></span> <span class='rank-4'><a href='/tag/virtualbox'>virtualbox</a></span> <span class='rank-5'><a href='/tag/cucumber'>cucumber</a></span> 
+    <span class='rank-5'><a href='/tag/codeigniter'>codeigniter</a></span> <span class='rank-5'><a href='/tag/cloud-computing'>cloud computing</a></span> <span class='rank-4'><a href='/tag/mysql'>mysql</a></span> <span class='rank-5'><a href='/tag/password-protected'>password protected</a></span> <span class='rank-5'><a href='/tag/rails4'>rails4</a></span> <span class='rank-5'><a href='/tag/postgres'>postgres</a></span> <span class='rank-5'><a href='/tag/amazon-s3'>amazon s3</a></span> <span class='rank-4'><a href='/tag/heroku'>heroku</a></span> <span class='rank-5'><a href='/tag/factorygirl'>factorygirl</a></span> <span class='rank-5'><a href='/tag/scaffold'>scaffold</a></span> <span class='rank-2'><a href='/tag/ruby'>ruby</a></span> <span class='rank-5'><a href='/tag/globalize'>globalize</a></span> <span class='rank-5'><a href='/tag/css'>css</a></span> <span class='rank-4'><a href='/tag/linux'>linux</a></span> <span class='rank-5'><a href='/tag/cucumber'>cucumber</a></span> <span class='rank-5'><a href='/tag/erkanaauth'>erkanaauth</a></span> <span class='rank-5'><a href='/tag/paperclip'>paperclip</a></span> <span class='rank-4'><a href='/tag/links'>links</a></span> <span class='rank-4'><a href='/tag/rails3'>rails3</a></span> <span class='rank-5'><a href='/tag/rake-task'>rake task</a></span> <span class='rank-4'><a href='/tag/vagrant'>vagrant</a></span> <span class='rank-2'><a href='/tag/rails'>rails</a></span> <span class='rank-5'><a href='/tag/carrierwave'>carrierwave</a></span> <span class='rank-5'><a href='/tag/mac'>mac</a></span> <span class='rank-5'><a href='/tag/selenium-webdriver'>selenium-webdriver</a></span> <span class='rank-5'><a href='/tag/PHP'>PHP</a></span> <span class='rank-5'><a href='/tag/rest'>rest</a></span> <span class='rank-5'><a href='/tag/Javascript'>Javascript</a></span> <span class='rank-3'><a href='/tag/howto'>howto</a></span> <span class='rank-4'><a href='/tag/ubuntu'>ubuntu</a></span> <span class='rank-4'><a href='/tag/weekly'>weekly</a></span> <span class='rank-5'><a href='/tag/admin'>admin</a></span> <span class='rank-5'><a href='/tag/rspec'>rspec</a></span> <span class='rank-5'><a href='/tag/tdd'>tdd</a></span> <span class='rank-5'><a href='/tag/edge'>edge</a></span> <span class='rank-4'><a href='/tag/resources'>resources</a></span> <span class='rank-4'><a href='/tag/tutorial'>tutorial</a></span> <span class='rank-5'><a href='/tag/factory-girl'>factory_girl</a></span> <span class='rank-4'><a href='/tag/devise'>devise</a></span> <span class='rank-4'><a href='/tag/hosting'>hosting</a></span> <span class='rank-5'><a href='/tag/restful'>restful</a></span> <span class='rank-5'><a href='/tag/sqlite'>sqlite</a></span> <span class='rank-3'><a href='/tag/tips'>tips</a></span> <span class='rank-4'><a href='/tag/virtualbox'>virtualbox</a></span> 
   </div>
 </section>
 
@@ -984,7 +1016,7 @@ is a very useful site when upgrading Rails versions (for example, from Rails 3.2
   </a>
   <span xmlns:dc="http://purl.org/dc/elements/1.1/">icebergist.com</span> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-Share Alike 3.0 Unported License</a>.
 
-  <!-- Copyright &copy; 2015 - Orange Iceberg<br> -->
+  <!-- Copyright &copy; 2016 - Orange Iceberg<br> -->
   <br />
   <small>
       <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>,

@@ -4,7 +4,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Quick VirtualBox/Vagrant setup with Heroku-like box - Icebergist</title>
+  <title>rake db:schema:load vs rake db:migrate - Icebergist</title>
   <meta name="author" content="Orange Iceberg">
 
   
@@ -16,7 +16,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://icebergist.com/posts/quick-virtualboxvagrant-setup-with-heroku-like-box">
+  <link rel="canonical" href="http://icebergist.com/posts/rake-db-migrate-vs-rake-db-schema-load">
   <link href="http://feeds.feedburner.com/icebergist" rel="alternate" title="Icebergist" type="application/atom+xml">
 
   <link rel="apple-touch-icon" sizes="57x57" href="/assets/favicons/apple-icon-57x57.png">
@@ -124,7 +124,7 @@
 
 
 
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2013-09-16T10:00:00+02:00" pubdate data-updated="true">Sep 16<span>th</span>, 2013</time>
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2016-03-24T08:09:25+01:00" pubdate data-updated="true">Mar 24<span>th</span>, 2016</time>
         | 
   
 
@@ -133,7 +133,7 @@
   <span class="byline author vcard">Posted by
     <span class="fn">
       
-        <a href="https://plus.google.com/113548610124685160907?rel=author">Slobodan Kovačević</a>
+        <a href="http://orangeiceberg.com/about/">Ivica Lakatoš</a>
       
     </span>
   </span>
@@ -147,20 +147,49 @@
     
     
     <h1 class="entry-title">
-        Quick VirtualBox/Vagrant Setup With Heroku-like Box
+        Rake Db:schema:load vs Rake Db:migrate
         
     </h1>
     
   </header>
 
 
-<div class="entry-content clearfix"><p>Here is a quick way to setup VirtualBox using Vagrant with Heroku-like box on Mac.</p>
+<div class="entry-content clearfix"><p>Sooner or later every new Ruby developer needs to understand  differences between this two common rake tasks. Basically, these simple definition tells us everything we need to know:</p>
 
-<ol>
-<li><p>Install VirtualBox from <a href="https://www.virtualbox.org/wiki/Downloads" target="_blank"><a href="https://www.virtualbox.org/wiki/Downloads">https://www.virtualbox.org/wiki/Downloads</a></a></p></li>
-<li><p>Install Vagrant from <a href="http://downloads.vagrantup.com/" target="_blank"><a href="http://downloads.vagrantup.com/">http://downloads.vagrantup.com/</a></a></p></li>
-<li><p>Create Vagrantfile for Heroku-like box (based on <a href="https://github.com/ejholmes/vagrant-heroku" target="_blank"><a href="https://github.com/ejholmes/vagrant-heroku">https://github.com/ejholmes/vagrant-heroku</a></a>) that looks something like:</p></li>
-</ol>
+<ul>
+<li><code>rake db:migrate</code> runs migrations that have not run yet</li>
+<li><code>rake db:schema:load</code> loads the schema.db file into database.</li>
+</ul>
+
+
+<p>but the real question is when to use one or the other.</p>
+
+<p><strong>Advice:</strong> <a id="advice"></a> when you are adding a new migration to an existing app then you need to run <code>rake db:migrate</code>, but when you join to existing application (<em>especially some old application</em>), or when you drop your applications database and you need to create it again, always run <code>rake db:schema:load</code> to load schema.</p>
+
+<h3>Example</h3>
+
+<p>I am working on application which use <a href="https://github.com/globalize/globalize">globalize gem</a> for ActiveRecord model/data translations. Globalize work this way:</p>
+
+<ul>
+<li>first specify attributes which need to be translatable</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Post</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span>
+</span><span class='line'>  <span class="n">translates</span> <span class="ss">:title</span><span class="p">,</span> <span class="ss">:text</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<!--more-->
+
+
+<ul>
+<li>then create translation tables</li>
+</ul>
 
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -169,44 +198,113 @@
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'>    <span class="no">Vagrant</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="s2">&quot;2&quot;</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
-</span><span class='line'>        <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">box</span> <span class="o">=</span> <span class="s2">&quot;heroku&quot;</span>
-</span><span class='line'>        <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">box_url</span> <span class="o">=</span> <span class="s2">&quot;https://dl.dropboxusercontent.com/s/rnc0p8zl91borei/heroku.box&quot;</span>
-</span><span class='line'>      <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">synced_folder</span> <span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="s2">&quot;/vagrant&quot;</span><span class="p">,</span> <span class="ss">:nfs</span> <span class="o">=&gt;</span> <span class="kp">true</span>
-</span><span class='line'>        <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">network</span> <span class="ss">:private_network</span><span class="p">,</span> <span class="ss">ip</span><span class="p">:</span> <span class="s2">&quot;192.168.1.42&quot;</span>  <span class="c1"># required for NFS</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">CreatePosts</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Migration</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">up</span>
+</span><span class='line'>    <span class="n">create_table</span> <span class="ss">:posts</span> <span class="k">do</span> <span class="o">|</span><span class="n">t</span><span class="o">|</span>
+</span><span class='line'>      <span class="n">t</span><span class="o">.</span><span class="n">timestamps</span>
 </span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>    <span class="no">Post</span><span class="o">.</span><span class="n">create_translation_table!</span> <span class="ss">title</span><span class="p">:</span> <span class="ss">:string</span><span class="p">,</span> <span class="ss">text</span><span class="p">:</span> <span class="ss">:text</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">down</span>
+</span><span class='line'>    <span class="n">drop_table</span> <span class="ss">:posts</span>
+</span><span class='line'>    <span class="no">Post</span><span class="o">.</span><span class="n">drop_translation_table!</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>Beside telling Vagrant to use Heroku-like box from <a href="https://github.com/ejholmes/vagrant-heroku" target="_blank"><a href="https://github.com/ejholmes/vagrant-heroku">https://github.com/ejholmes/vagrant-heroku</a></a> it also sets up shared dir between host and VM machine. It will mount Vagrantfile dir (.) to /vagrant in VM.</p>
-
-<p><code>vagrant up</code> will setup the VM and start it up.</p>
-
-<p>Now you can use <code>vagrant ssh</code> to login to VM.</p>
-
-<p>Vagrant Heroku-like box comes with Postgresql, but if you want you can easily setup sqlite:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>sudo apt-get install libsqlite3-dev
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><strong>Bonus tip</strong>: when you are working on multiple projects sometimes you can forget which VMs are running. You can list all running VMs using:</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>VBoxManage list runningvms
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Further reading:</p>
+<p><strong>Note</strong> <em>that the ActiveRecord model Post must already exist and have listed attributes for translations</em>.</p>
 
 <ul>
-<li><a href="http://docs.vagrantup.com/v2/" target="_blank">Vagrant docs</a></li>
-<li><a href="https://github.com/ejholmes/vagrant-heroku" target="_blank">Vagrant Heroku-like box</a> which can be easily customized.</li>
-<li><a href="http://loudcoding.com/posts/how-to-use-vagrant-to-run-celadon-cedar-stack-on-heroku/" target="_blank">Another Vagrant setup tutorial</a></li>
-<li><a href="https://www.stackmachine.com/blog/web-development-on-a-vm-is-it-slower" target="_blank">VM speed benchmarks</a> in case you doubt in VM speed.</li>
+<li>and run <code>rake db:migrate</code> .</li>
 </ul>
 
+
+<p>Problem comes when you change your mind and decide to leave title to be untranslatable.</p>
+
+<ul>
+<li>remove title from post translations table</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">RemoveTitleFromPostTranslations</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Migration</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">up</span>
+</span><span class='line'>    <span class="n">remove_column</span> <span class="ss">:post_translations</span><span class="p">,</span> <span class="ss">:title</span><span class="p">,</span> <span class="ss">:string</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">down</span>
+</span><span class='line'>    <span class="no">Entry</span><span class="o">.</span><span class="n">add_translation_fields!</span> <span class="ss">title</span><span class="p">:</span> <span class="ss">:string</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>add title to posts table</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">AddTitleToPosts</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Migration</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">change</span>
+</span><span class='line'>    <span class="n">add_column</span> <span class="ss">:posts</span><span class="p">,</span> <span class="ss">:title</span><span class="p">,</span> <span class="ss">:string</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>remove title attribute from model translations</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Post</span> <span class="o">&lt;</span> <span class="ss">ActiveRecord</span><span class="p">:</span><span class="ss">:Base</span>
+</span><span class='line'>  <span class="n">translates</span> <span class="ss">:text</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>and run <code>rake db:migrate</code>.</li>
+</ul>
+
+
+<p>Everything looking good, so where is the problem?</p>
+
+<p>Here it is! If you decide to delete your database and create it again you need to use:</p>
+
+<ul>
+<li><code>rake db:drop</code></li>
+<li><code>rake db:create</code></li>
+<li><code>rake db:schema:load</code></li>
+</ul>
+
+
+<p>Because, if you try to use <code>rake db:migrate</code> instead of <code>rake db:schema:load</code> you will get <strong>BIG ERROR!</strong>, because for your first migration &ldquo;create_posts&rdquo; it is necessary that you have defined translatable attributes :title and :text in Post model, but you removed :title from Post model translations.</p>
+
+<p>So just follow <a href="#advice">advice</a> above, and good luck.</p>
 </div>
 
 
@@ -220,7 +318,7 @@
   <span class="byline author vcard">Posted by
     <span class="fn">
       
-        <a href="https://plus.google.com/113548610124685160907?rel=author">Slobodan Kovačević</a>
+        <a href="http://orangeiceberg.com/about/">Ivica Lakatoš</a>
       
     </span>
   </span>
@@ -239,13 +337,13 @@
 
 
 
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2013-09-16T10:00:00+02:00" pubdate data-updated="true">Sep 16<span>th</span>, 2013</time>
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2016-03-24T08:09:25+01:00" pubdate data-updated="true">Mar 24<span>th</span>, 2016</time>
           
 
 <span class="glyphicon glyphicon-tags"></span>&nbsp;
 <span class="categories">
   
-    <a class='category' href='/category/misc/'>Misc</a>, <a class='category' href='/category/ruby-and-rails/'>Ruby and Rails</a>
+    <a class='category' href='/category/ruby-and-rails/'>Ruby and Rails</a>
   
 </span>
 
@@ -257,7 +355,7 @@
     Tags:
   
   
-    <a class='tag' href='/tag/heroku/'>heroku</a>, <a class='tag' href='/tag/howto/'>howto</a>, <a class='tag' href='/tag/tutorial/'>tutorial</a>, <a class='tag' href='/tag/vagrant/'>vagrant</a>, <a class='tag' href='/tag/virtualbox/'>virtualbox</a>
+    <a class='tag' href='/tag/globalize/'>globalize</a>, <a class='tag' href='/tag/rails/'>rails</a>, <a class='tag' href='/tag/rake-task/'>rake task</a>, <a class='tag' href='/tag/ruby/'>ruby</a>
   
 </span>
 
@@ -266,7 +364,7 @@
         
           <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://icebergist.com/posts/quick-virtualboxvagrant-setup-with-heroku-like-box" data-via="icebergist" data-counturl="http://icebergist.com/posts/quick-virtualboxvagrant-setup-with-heroku-like-box" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://icebergist.com/posts/rake-db-migrate-vs-rake-db-schema-load/" data-via="icebergist" data-counturl="http://icebergist.com/posts/rake-db-migrate-vs-rake-db-schema-load/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
@@ -280,10 +378,8 @@
         
           <ul class="meta text-muted pager">
             
-            <li class="previous"><a href="/posts/railsdiff" title="Previous Post: RailsDiff">&laquo; RailsDiff</a></li>
+            <li class="previous"><a href="/posts/headless-firefox-in-ubuntu-on-virtual-box-for-cucumber-testing/" title="Previous Post: Headless Firefox in Ubuntu on VirtualBox for Cucumber testing">&laquo; Headless Firefox in Ubuntu on VirtualBox for Cucumber testing</a></li>
             
-            
-            <li class="next"><a href="/posts/upgrade-ubuntu-8-dot-04-lts-server/" title="Next Post: Upgrade Ubuntu 8.04 LTS server">Upgrade Ubuntu 8.04 LTS server &raquo;</a></li>
             
           </ul>
         
@@ -331,7 +427,7 @@
   
   <div id="recent_posts" class="list-group">
     
-    <a class="list-group-item " href="/posts/rake-db-migrate-vs-rake-db-schema-load/">Rake Db:schema:load vs Rake Db:migrate</a>
+    <a class="list-group-item active" href="/posts/rake-db-migrate-vs-rake-db-schema-load/">Rake Db:schema:load vs Rake Db:migrate</a>
     
     <a class="list-group-item " href="/posts/headless-firefox-in-ubuntu-on-virtual-box-for-cucumber-testing/">Headless Firefox in Ubuntu on VirtualBox for Cucumber Testing</a>
     
@@ -395,7 +491,7 @@
     <h3 class="panel-title">Tags</h3>
   </div>
   <div class="tag-cloud">
-    <span class='rank-4'><a href='/tag/weekly'>weekly</a></span> <span class='rank-5'><a href='/tag/paperclip'>paperclip</a></span> <span class='rank-5'><a href='/tag/tdd'>tdd</a></span> <span class='rank-4'><a href='/tag/hosting'>hosting</a></span> <span class='rank-3'><a href='/tag/tips'>tips</a></span> <span class='rank-5'><a href='/tag/rspec'>rspec</a></span> <span class='rank-4'><a href='/tag/ubuntu'>ubuntu</a></span> <span class='rank-4'><a href='/tag/linux'>linux</a></span> <span class='rank-5'><a href='/tag/restful'>restful</a></span> <span class='rank-5'><a href='/tag/Javascript'>Javascript</a></span> <span class='rank-5'><a href='/tag/PHP'>PHP</a></span> <span class='rank-2'><a href='/tag/rails'>rails</a></span> <span class='rank-5'><a href='/tag/globalize'>globalize</a></span> <span class='rank-5'><a href='/tag/codeigniter'>codeigniter</a></span> <span class='rank-5'><a href='/tag/postgres'>postgres</a></span> <span class='rank-4'><a href='/tag/vagrant'>vagrant</a></span> <span class='rank-3'><a href='/tag/howto'>howto</a></span> <span class='rank-5'><a href='/tag/rake-task'>rake task</a></span> <span class='rank-4'><a href='/tag/tutorial'>tutorial</a></span> <span class='rank-5'><a href='/tag/sqlite'>sqlite</a></span> <span class='rank-5'><a href='/tag/admin'>admin</a></span> <span class='rank-4'><a href='/tag/heroku'>heroku</a></span> <span class='rank-5'><a href='/tag/cloud-computing'>cloud computing</a></span> <span class='rank-2'><a href='/tag/ruby'>ruby</a></span> <span class='rank-5'><a href='/tag/mac'>mac</a></span> <span class='rank-4'><a href='/tag/rails3'>rails3</a></span> <span class='rank-5'><a href='/tag/factorygirl'>factorygirl</a></span> <span class='rank-4'><a href='/tag/virtualbox'>virtualbox</a></span> <span class='rank-4'><a href='/tag/resources'>resources</a></span> <span class='rank-5'><a href='/tag/factory-girl'>factory_girl</a></span> <span class='rank-5'><a href='/tag/cucumber'>cucumber</a></span> <span class='rank-4'><a href='/tag/devise'>devise</a></span> <span class='rank-5'><a href='/tag/carrierwave'>carrierwave</a></span> <span class='rank-5'><a href='/tag/erkanaauth'>erkanaauth</a></span> <span class='rank-5'><a href='/tag/amazon-s3'>amazon s3</a></span> <span class='rank-4'><a href='/tag/mysql'>mysql</a></span> <span class='rank-5'><a href='/tag/edge'>edge</a></span> <span class='rank-5'><a href='/tag/selenium-webdriver'>selenium-webdriver</a></span> <span class='rank-5'><a href='/tag/scaffold'>scaffold</a></span> <span class='rank-4'><a href='/tag/links'>links</a></span> <span class='rank-5'><a href='/tag/css'>css</a></span> <span class='rank-5'><a href='/tag/rest'>rest</a></span> <span class='rank-5'><a href='/tag/password-protected'>password protected</a></span> <span class='rank-5'><a href='/tag/rails4'>rails4</a></span> 
+    <span class='rank-5'><a href='/tag/tdd'>tdd</a></span> <span class='rank-5'><a href='/tag/globalize'>globalize</a></span> <span class='rank-5'><a href='/tag/rspec'>rspec</a></span> <span class='rank-4'><a href='/tag/linux'>linux</a></span> <span class='rank-5'><a href='/tag/erkanaauth'>erkanaauth</a></span> <span class='rank-5'><a href='/tag/factorygirl'>factorygirl</a></span> <span class='rank-5'><a href='/tag/rails4'>rails4</a></span> <span class='rank-4'><a href='/tag/tutorial'>tutorial</a></span> <span class='rank-4'><a href='/tag/virtualbox'>virtualbox</a></span> <span class='rank-2'><a href='/tag/rails'>rails</a></span> <span class='rank-5'><a href='/tag/sqlite'>sqlite</a></span> <span class='rank-5'><a href='/tag/paperclip'>paperclip</a></span> <span class='rank-5'><a href='/tag/edge'>edge</a></span> <span class='rank-4'><a href='/tag/weekly'>weekly</a></span> <span class='rank-4'><a href='/tag/heroku'>heroku</a></span> <span class='rank-5'><a href='/tag/PHP'>PHP</a></span> <span class='rank-5'><a href='/tag/scaffold'>scaffold</a></span> <span class='rank-4'><a href='/tag/mysql'>mysql</a></span> <span class='rank-5'><a href='/tag/cucumber'>cucumber</a></span> <span class='rank-5'><a href='/tag/postgres'>postgres</a></span> <span class='rank-5'><a href='/tag/codeigniter'>codeigniter</a></span> <span class='rank-4'><a href='/tag/resources'>resources</a></span> <span class='rank-5'><a href='/tag/rest'>rest</a></span> <span class='rank-4'><a href='/tag/devise'>devise</a></span> <span class='rank-5'><a href='/tag/mac'>mac</a></span> <span class='rank-4'><a href='/tag/rails3'>rails3</a></span> <span class='rank-4'><a href='/tag/hosting'>hosting</a></span> <span class='rank-4'><a href='/tag/links'>links</a></span> <span class='rank-5'><a href='/tag/selenium-webdriver'>selenium-webdriver</a></span> <span class='rank-5'><a href='/tag/restful'>restful</a></span> <span class='rank-5'><a href='/tag/factory-girl'>factory_girl</a></span> <span class='rank-3'><a href='/tag/tips'>tips</a></span> <span class='rank-5'><a href='/tag/password-protected'>password protected</a></span> <span class='rank-5'><a href='/tag/Javascript'>Javascript</a></span> <span class='rank-5'><a href='/tag/css'>css</a></span> <span class='rank-2'><a href='/tag/ruby'>ruby</a></span> <span class='rank-5'><a href='/tag/rake-task'>rake task</a></span> <span class='rank-3'><a href='/tag/howto'>howto</a></span> <span class='rank-4'><a href='/tag/ubuntu'>ubuntu</a></span> <span class='rank-5'><a href='/tag/admin'>admin</a></span> <span class='rank-5'><a href='/tag/carrierwave'>carrierwave</a></span> <span class='rank-4'><a href='/tag/vagrant'>vagrant</a></span> <span class='rank-5'><a href='/tag/amazon-s3'>amazon s3</a></span> <span class='rank-5'><a href='/tag/cloud-computing'>cloud computing</a></span> 
   </div>
 </section>
 
@@ -434,8 +530,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://icebergist.com/posts/quick-virtualboxvagrant-setup-with-heroku-like-box';
-        var disqus_url = 'http://icebergist.com/posts/quick-virtualboxvagrant-setup-with-heroku-like-box';
+        var disqus_identifier = 'http://icebergist.com/posts/rake-db-migrate-vs-rake-db-schema-load/';
+        var disqus_url = 'http://icebergist.com/posts/rake-db-migrate-vs-rake-db-schema-load/';
         var disqus_script = 'embed.js';
       
     (function () {

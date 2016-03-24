@@ -128,6 +128,75 @@
 
 
 
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2008-07-24T10:00:00+02:00" pubdate data-updated="true">Jul 24<span>th</span>, 2008</time>
+        | 
+  
+
+
+  <span class="glyphicon glyphicon-user"></span>
+  <span class="byline author vcard">Posted by
+    <span class="fn">
+      
+        <a href="https://plus.google.com/113548610124685160907?rel=author">Slobodan Kovačević</a>
+      
+    </span>
+  </span>
+
+
+        
+           | <a href="/posts/innodb-per-table-tablespaces-split-ibdata1-to-smaller-chunks#disqus_thread"
+             data-disqus-identifier="http://icebergist.com/posts/innodb-per-table-tablespaces-split-ibdata1-to-smaller-chunks">Comments</a>
+        
+      </p>
+    
+    
+      <h1 class="entry-title"><a href="/posts/innodb-per-table-tablespaces-split-ibdata1-to-smaller-chunks">InnoDB Per-table Tablespaces &#8211; Split Ibdata1 to Smaller Chunks</a></h1>
+    
+  </header>
+
+
+  <div class="entry-content clearfix"><p>Today I had to import 3GB of InnoDB tables in MySQL. Unfortunately, while importing the server run out of disk space &#8211; which caused whole server to grind to a halt. Naively I tried to delete imported data to free up space&#8230; I was in for an unpleasant surprise.</p>
+
+<p>By default when MySQL uses InnoDB engine it stores most of the information in single file called ibdata1. One downside is that once ibdata1 file grows it cannot shrink &#8211; even if you delete all InnoDB tables. For some reason MySQL is set to use single file instead of per-table tablespaces similar to MyISAM.</p>
+
+<p>Enabling per-table tablespaces is easy just add <a href="http://dev.mysql.com/doc/refman/5.0/en/multiple-tablespaces.html" title="InnoDB Per-table tablespaces">innodb_file_per_table</a> to my.cnf file. Problem is that <strong>all newly created tables</strong>, only new tables, will be in separate files. It seems that there&#8217;s no easy way to convert old tables and reclaim the space taken by ibdata1.</p>
+
+<p>There are 3 ways and two are basically export-drop-delete-import type of solutions:</p>
+
+<ol>
+<li>Convert all InnoDB tables to MyISAM</li>
+<li>Export only InnoDB tables, drop them, delete ibdata1 and import InnoDB tables.</li>
+<li>Export all databases, delete ibdata1 and import everything back.</li>
+</ol>
+
+
+<p>I choose option 2 because I luckily had only 40 InnoDB tables and much more using MyISAM. For details on how to apply each solution and down/up sides of each read <a href="http://vdachev.net/blog/2007/02/22/mysql-reducing-ibdata1/en/" title="MySQL Reducing ibdata1">MySQL: Reducing ibdata1</a>.</p>
+</div>
+  
+  
+
+
+        </article>
+      
+      
+        <article class="post">
+          
+  <header class="page-header">
+    
+      <p class="meta text-muted">
+        
+
+
+
+
+
+
+
+
+
+
+
+
 <span class="glyphicon glyphicon-calendar"></span> <time datetime="2008-07-13T10:00:00+02:00" pubdate data-updated="true">Jul 13<span>th</span>, 2008</time>
         | 
   
@@ -534,6 +603,8 @@ Another great thing about SproutCore is that it can be hooked up with any backen
   
   <div id="recent_posts" class="list-group">
     
+    <a class="list-group-item " href="/posts/rake-db-migrate-vs-rake-db-schema-load/">Rake Db:schema:load vs Rake Db:migrate</a>
+    
     <a class="list-group-item " href="/posts/headless-firefox-in-ubuntu-on-virtual-box-for-cucumber-testing/">Headless Firefox in Ubuntu on VirtualBox for Cucumber Testing</a>
     
     <a class="list-group-item " href="/posts/import-and-export-mysql-dump/">Import and Export MySQL Dump</a>
@@ -541,8 +612,6 @@ Another great thing about SproutCore is that it can be hooked up with any backen
     <a class="list-group-item " href="/posts/create-and-extract-archives-using-tar-and-gzip/">Create and Extract Archives Using Tar and Gzip</a>
     
     <a class="list-group-item " href="/posts/creating-and-publishing-a-ruby-gem/">Creating and Publishing a Ruby Gem</a>
-    
-    <a class="list-group-item " href="/posts/changing-database-starting-id/">Changing Database Starting Id</a>
     
   </div>
   <div class="panel-heading">
@@ -569,7 +638,7 @@ Another great thing about SproutCore is that it can be hooked up with any backen
     
     
     <a class="list-group-item " href="/category/ruby-and-rails/index.html">
-        <span class="badge">16</span>
+        <span class="badge">17</span>
         Ruby and Rails
       </a>
     
@@ -598,7 +667,7 @@ Another great thing about SproutCore is that it can be hooked up with any backen
     <h3 class="panel-title">Tags</h3>
   </div>
   <div class="tag-cloud">
-    <span class='rank-5'><a href='/tag/scaffold'>scaffold</a></span> <span class='rank-2'><a href='/tag/ruby'>ruby</a></span> <span class='rank-4'><a href='/tag/ubuntu'>ubuntu</a></span> <span class='rank-5'><a href='/tag/rest'>rest</a></span> <span class='rank-4'><a href='/tag/rails3'>rails3</a></span> <span class='rank-4'><a href='/tag/links'>links</a></span> <span class='rank-5'><a href='/tag/cucumber'>cucumber</a></span> <span class='rank-5'><a href='/tag/paperclip'>paperclip</a></span> <span class='rank-5'><a href='/tag/codeigniter'>codeigniter</a></span> <span class='rank-4'><a href='/tag/weekly'>weekly</a></span> <span class='rank-5'><a href='/tag/admin'>admin</a></span> <span class='rank-1'><a href='/tag/rails'>rails</a></span> <span class='rank-5'><a href='/tag/restful'>restful</a></span> <span class='rank-4'><a href='/tag/devise'>devise</a></span> <span class='rank-5'><a href='/tag/amazon-s3'>amazon s3</a></span> <span class='rank-5'><a href='/tag/sqlite'>sqlite</a></span> <span class='rank-4'><a href='/tag/hosting'>hosting</a></span> <span class='rank-5'><a href='/tag/carrierwave'>carrierwave</a></span> <span class='rank-5'><a href='/tag/css'>css</a></span> <span class='rank-5'><a href='/tag/erkanaauth'>erkanaauth</a></span> <span class='rank-5'><a href='/tag/selenium-webdriver'>selenium-webdriver</a></span> <span class='rank-5'><a href='/tag/edge'>edge</a></span> <span class='rank-5'><a href='/tag/cloud-computing'>cloud computing</a></span> <span class='rank-5'><a href='/tag/rails4'>rails4</a></span> <span class='rank-4'><a href='/tag/linux'>linux</a></span> <span class='rank-5'><a href='/tag/PHP'>PHP</a></span> <span class='rank-3'><a href='/tag/howto'>howto</a></span> <span class='rank-4'><a href='/tag/heroku'>heroku</a></span> <span class='rank-4'><a href='/tag/virtualbox'>virtualbox</a></span> <span class='rank-5'><a href='/tag/password-protected'>password protected</a></span> <span class='rank-5'><a href='/tag/factory-girl'>factory_girl</a></span> <span class='rank-5'><a href='/tag/mac'>mac</a></span> <span class='rank-4'><a href='/tag/tutorial'>tutorial</a></span> <span class='rank-5'><a href='/tag/Javascript'>Javascript</a></span> <span class='rank-5'><a href='/tag/factorygirl'>factorygirl</a></span> <span class='rank-3'><a href='/tag/tips'>tips</a></span> <span class='rank-5'><a href='/tag/rspec'>rspec</a></span> <span class='rank-4'><a href='/tag/mysql'>mysql</a></span> <span class='rank-4'><a href='/tag/vagrant'>vagrant</a></span> <span class='rank-5'><a href='/tag/postgres'>postgres</a></span> <span class='rank-4'><a href='/tag/resources'>resources</a></span> <span class='rank-5'><a href='/tag/tdd'>tdd</a></span> 
+    <span class='rank-5'><a href='/tag/edge'>edge</a></span> <span class='rank-5'><a href='/tag/postgres'>postgres</a></span> <span class='rank-5'><a href='/tag/password-protected'>password protected</a></span> <span class='rank-3'><a href='/tag/tips'>tips</a></span> <span class='rank-5'><a href='/tag/css'>css</a></span> <span class='rank-5'><a href='/tag/carrierwave'>carrierwave</a></span> <span class='rank-5'><a href='/tag/sqlite'>sqlite</a></span> <span class='rank-5'><a href='/tag/rails4'>rails4</a></span> <span class='rank-4'><a href='/tag/virtualbox'>virtualbox</a></span> <span class='rank-5'><a href='/tag/cucumber'>cucumber</a></span> <span class='rank-5'><a href='/tag/PHP'>PHP</a></span> <span class='rank-5'><a href='/tag/codeigniter'>codeigniter</a></span> <span class='rank-4'><a href='/tag/hosting'>hosting</a></span> <span class='rank-5'><a href='/tag/selenium-webdriver'>selenium-webdriver</a></span> <span class='rank-5'><a href='/tag/mac'>mac</a></span> <span class='rank-3'><a href='/tag/howto'>howto</a></span> <span class='rank-5'><a href='/tag/cloud-computing'>cloud computing</a></span> <span class='rank-5'><a href='/tag/rest'>rest</a></span> <span class='rank-5'><a href='/tag/factory-girl'>factory_girl</a></span> <span class='rank-5'><a href='/tag/paperclip'>paperclip</a></span> <span class='rank-4'><a href='/tag/heroku'>heroku</a></span> <span class='rank-5'><a href='/tag/erkanaauth'>erkanaauth</a></span> <span class='rank-4'><a href='/tag/links'>links</a></span> <span class='rank-5'><a href='/tag/amazon-s3'>amazon s3</a></span> <span class='rank-5'><a href='/tag/factorygirl'>factorygirl</a></span> <span class='rank-5'><a href='/tag/globalize'>globalize</a></span> <span class='rank-4'><a href='/tag/weekly'>weekly</a></span> <span class='rank-5'><a href='/tag/scaffold'>scaffold</a></span> <span class='rank-4'><a href='/tag/vagrant'>vagrant</a></span> <span class='rank-2'><a href='/tag/rails'>rails</a></span> <span class='rank-4'><a href='/tag/mysql'>mysql</a></span> <span class='rank-4'><a href='/tag/devise'>devise</a></span> <span class='rank-5'><a href='/tag/Javascript'>Javascript</a></span> <span class='rank-5'><a href='/tag/tdd'>tdd</a></span> <span class='rank-4'><a href='/tag/linux'>linux</a></span> <span class='rank-4'><a href='/tag/tutorial'>tutorial</a></span> <span class='rank-5'><a href='/tag/restful'>restful</a></span> <span class='rank-2'><a href='/tag/ruby'>ruby</a></span> <span class='rank-5'><a href='/tag/rake-task'>rake task</a></span> <span class='rank-4'><a href='/tag/rails3'>rails3</a></span> <span class='rank-4'><a href='/tag/resources'>resources</a></span> <span class='rank-5'><a href='/tag/admin'>admin</a></span> <span class='rank-5'><a href='/tag/rspec'>rspec</a></span> <span class='rank-4'><a href='/tag/ubuntu'>ubuntu</a></span> 
   </div>
 </section>
 
@@ -618,7 +687,7 @@ Another great thing about SproutCore is that it can be hooked up with any backen
   </a>
   <span xmlns:dc="http://purl.org/dc/elements/1.1/">icebergist.com</span> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-Share Alike 3.0 Unported License</a>.
 
-  <!-- Copyright &copy; 2015 - Orange Iceberg<br> -->
+  <!-- Copyright &copy; 2016 - Orange Iceberg<br> -->
   <br />
   <small>
       <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>,

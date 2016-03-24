@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby and Rails | Icebergist]]></title>
   <link href="http://icebergist.com/category/ruby-and-rails/atom.xml" rel="self"/>
   <link href="http://icebergist.com/"/>
-  <updated>2015-12-03T12:04:56+01:00</updated>
+  <updated>2016-03-24T13:23:19+01:00</updated>
   <id>http://icebergist.com/</id>
   <author>
     <name><![CDATA[Orange Iceberg]]></name>
@@ -12,6 +12,135 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[rake db:schema:load vs rake db:migrate]]></title>
+    <link href="http://icebergist.com/posts/rake-db-migrate-vs-rake-db-schema-load/"/>
+    <updated>2016-03-24T08:09:25+01:00</updated>
+    <id>http://icebergist.com/posts/rake-db-migrate-vs-rake-db-schema-load</id>
+    <content type="html"><![CDATA[<p>Sooner or later every new Ruby developer needs to understand  differences between this two common rake tasks. Basically, these simple definition tells us everything we need to know:</p>
+
+<ul>
+<li><code>rake db:migrate</code> runs migrations that have not run yet</li>
+<li><code>rake db:schema:load</code> loads the schema.db file into database.</li>
+</ul>
+
+
+<p>but the real question is when to use one or the other.</p>
+
+<p><strong>Advice:</strong> <a id="advice"></a> when you are adding a new migration to an existing app then you need to run <code>rake db:migrate</code>, but when you join to existing application (<em>especially some old application</em>), or when you drop your applications database and you need to create it again, always run <code>rake db:schema:load</code> to load schema.</p>
+
+<h3>Example</h3>
+
+<p>I am working on application which use <a href="https://github.com/globalize/globalize">globalize gem</a> for ActiveRecord model/data translations. Globalize work this way:</p>
+
+<ul>
+<li>first specify attributes which need to be translatable</li>
+</ul>
+
+
+<p><code>ruby
+class Post &lt; ActiveRecord::Base
+  translates :title, :text
+end
+</code></p>
+
+<!--more-->
+
+
+<ul>
+<li>then create translation tables</li>
+</ul>
+
+
+<p>```
+class CreatePosts &lt; ActiveRecord::Migration
+  def up</p>
+
+<pre><code>create_table :posts do |t|
+  t.timestamps
+end
+Post.create_translation_table! title: :string, text: :text
+</code></pre>
+
+<p>  end
+  def down</p>
+
+<pre><code>drop_table :posts
+Post.drop_translation_table!
+</code></pre>
+
+<p>  end
+end
+```
+<strong>Note</strong> <em>that the ActiveRecord model Post must already exist and have listed attributes for translations</em>.</p>
+
+<ul>
+<li>and run <code>rake db:migrate</code> .</li>
+</ul>
+
+
+<p>Problem comes when you change your mind and decide to leave title to be untranslatable.</p>
+
+<ul>
+<li>remove title from post translations table</li>
+</ul>
+
+
+<p>```
+class RemoveTitleFromPostTranslations &lt; ActiveRecord::Migration
+  def up</p>
+
+<pre><code>remove_column :post_translations, :title, :string
+</code></pre>
+
+<p>  end</p>
+
+<p>  def down</p>
+
+<pre><code>Entry.add_translation_fields! title: :string
+</code></pre>
+
+<p>  end
+end
+```
++ add title to posts table</p>
+
+<p>```
+class AddTitleToPosts &lt; ActiveRecord::Migration
+  def change</p>
+
+<pre><code>add_column :posts, :title, :string
+</code></pre>
+
+<p>  end
+end
+```
++ remove title attribute from model translations</p>
+
+<p><code>
+class Post &lt; ActiveRecord::Base
+  translates :text
+end
+</code>
++ and run <code>rake db:migrate</code>.</p>
+
+<p>Everything looking good, so where is the problem?</p>
+
+<p>Here it is! If you decide to delete your database and create it again you need to use:</p>
+
+<ul>
+<li><code>rake db:drop</code></li>
+<li><code>rake db:create</code></li>
+<li><code>rake db:schema:load</code></li>
+</ul>
+
+
+<p>Because, if you try to use <code>rake db:migrate</code> instead of <code>rake db:schema:load</code> you will get <strong>BIG ERROR!</strong>, because for your first migration &ldquo;create_posts&rdquo; it is necessary that you have defined translatable attributes :title and :text in Post model, but you removed :title from Post model translations.</p>
+
+<p>So just follow <a href="#advice">advice</a> above, and good luck.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Headless Firefox in Ubuntu on VirtualBox for Cucumber testing]]></title>
@@ -170,7 +299,7 @@ require &lsquo;slug_converter/version&rsquo;</p>
   spec.name         = &ldquo;slug_converter&rdquo;
   spec.version      = SlugConverter::VERSION
   spec.authors      = [&ldquo;Your Name&rdquo;]
-  spec.email        = [&ldquo;<a href="&#x6d;&#97;&#x69;&#108;&#116;&#x6f;&#58;&#x79;&#111;&#x75;&#114;&#x65;&#109;&#x61;&#105;&#x6c;&#x40;&#101;&#x78;&#x61;&#x6d;&#112;&#x6c;&#x65;&#x2e;&#x63;&#111;&#109;">&#x79;&#111;&#x75;&#x72;&#101;&#109;&#x61;&#105;&#x6c;&#64;&#x65;&#x78;&#x61;&#109;&#x70;&#x6c;&#x65;&#x2e;&#99;&#x6f;&#x6d;</a>&rdquo;]</p>
+  spec.email        = [&ldquo;<a href="&#109;&#x61;&#x69;&#108;&#116;&#111;&#58;&#x79;&#x6f;&#x75;&#114;&#x65;&#x6d;&#x61;&#105;&#x6c;&#x40;&#101;&#x78;&#x61;&#x6d;&#112;&#108;&#x65;&#x2e;&#x63;&#x6f;&#x6d;">&#121;&#111;&#x75;&#114;&#x65;&#x6d;&#x61;&#105;&#x6c;&#x40;&#x65;&#x78;&#97;&#x6d;&#112;&#x6c;&#101;&#46;&#99;&#x6f;&#109;</a>&rdquo;]</p>
 
 <p>  # if spec.respond_to?(:metadata)
   #   spec.metadata[&lsquo;allowed_push_host&rsquo;] = &ldquo;TODO: Set to &lsquo;<a href="http://mygemserver.com">http://mygemserver.com</a>&rsquo; to prevent pushes to rubygems.org, or delete to allow pushes to any server.&rdquo;
@@ -609,31 +738,6 @@ end
 </code></p>
 
 <p>It is the same principle for the :sign_in and :edit_account. You can see what are <a href="https://github.com/plataformatec/devise/blob/master/lib/devise/parameter_sanitizer.rb#L83">default permitted parameters here</a>.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[How to skip Devise trackable updates]]></title>
-    <link href="http://icebergist.com/posts/how-to-skip-devise-trackable-updates/"/>
-    <updated>2014-05-12T19:10:06+02:00</updated>
-    <id>http://icebergist.com/posts/how-to-skip-devise-trackable-updates</id>
-    <content type="html"><![CDATA[<p>Devise has a very useful Trackable module used to track user&rsquo;s sign in count, timestamps and IP address. There are some occasions when you need to disable tracking. For example for API requests where user signs in on every request; for instances where admin might sign in as an user; and similar.</p>
-
-<p>To disable Devise Trackable module you need to set <code>request.env["devise.skip_trackable"] = true</code>. You have to do that before trying to authenticate user, so you&rsquo;ll want to put it in a before_filter, or even better prepend_before_filter to make sure it&rsquo;s before authentication.</p>
-
-<p>Add this to your controller in which you want to disable tracking:</p>
-
-<p>```
-prepend_before_filter :disable_devise_trackable</p>
-
-<p>protected
-  def disable_devise_trackable</p>
-
-<pre><code>request.env["devise.skip_trackable"] = true
-</code></pre>
-
-<p>  end
-```</p>
 ]]></content>
   </entry>
   

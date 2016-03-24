@@ -115,6 +115,10 @@
         <lastmod>2015-12-03T12:04:41+01:00</lastmod>
     </url>
     <url>
+        <loc>http://icebergist.com/posts/rake-db-migrate-vs-rake-db-schema-load/</loc>
+        <lastmod>2016-03-24T13:18:04+01:00</lastmod>
+    </url>
+    <url>
         <loc>http://icebergist.com/404.html</loc>
         <lastmod>2015-12-03T11:56:22+01:00</lastmod>
     </url>
@@ -140,7 +144,7 @@
     </url>
     <url>
         <loc>http://icebergist.com/assets/bootstrap/</loc>
-        <lastmod>2015-12-03T12:04:41+01:00</lastmod>
+        <lastmod>2016-03-24T13:18:04+01:00</lastmod>
     </url>
     <url>
         <loc>http://icebergist.com/assets/bootstrap/javascript.html</loc>
@@ -148,11 +152,11 @@
     </url>
     <url>
         <loc>http://icebergist.com/blog/archives/</loc>
-        <lastmod>2015-12-03T12:04:41+01:00</lastmod>
+        <lastmod>2016-03-24T13:18:04+01:00</lastmod>
     </url>
     <url>
         <loc>http://icebergist.com/</loc>
-        <lastmod>2015-12-03T12:04:41+01:00</lastmod>
+        <lastmod>2016-03-24T13:18:04+01:00</lastmod>
     </url>
     <url>
         <loc>http://icebergist.com/robots.txt</loc>
