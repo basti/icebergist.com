@@ -19,7 +19,7 @@ Sooner or later every new Ruby developer needs to understand  differences betwee
 + `rake db:migrate` runs migrations that have not run yet
 + `rake db:schema:load` loads the schema.db file into database.
 
-but the right question is when to use one or the other.
+but the real question is when to use one or the other.
 
 **Advice:** <a id="advice"></a> when you are adding a new migration to an existing app then you need to run `rake db:migrate`, but when you join to existing application (_especially some old application_), or when you drop your applications database and you need to create it again, always run `rake db:schema:load` to load schema.
 
@@ -99,8 +99,4 @@ Here it is! If you decide to delete your database and create it again you need t
 
 Because, if you try to use `rake db:migrate` instead of `rake db:schema:load` you will get **BIG ERROR!**, because for your first migration "create_posts" it is necessary that you have defined translatable attributes :title and :text in Post model, but you removed :title from Post model translations.
 
-So just fallow [advice](#advice) above, and good luck.
-
-
-
-
+So just follow [advice](#advice) above, and good luck.
