@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "rake db:schema:load vs rake db:migrate"
-date: 2016-03-23 08:09:25 +0100
+date: 2016-03-24 08:09:25 +0100
 comments: true
 author: Ivica Lakatoš
 categories:
