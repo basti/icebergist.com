@@ -16,13 +16,13 @@ tags:
 published: true
 ---
 
-In the lifetime of every application the time comes to be presented    to everyone. That's why we have to put our application on a special server which is designed for this purpose. In one word, we need to **deploy** our application. In this post you will see how to deploy app with [Capistrano 3](http://www.capistranorb.com/).  
+In the lifetime of every application the time comes for it to be presented to everyone. That's why we have to put our application on a special server which is designed for this purpose. In one word, we need to **deploy** our application. In this post you will see how to deploy app with [Capistrano 3](http://www.capistranorb.com/).  
 
 Capistrano is a great developers tool that is used to automatically deploy projects to remote server.
 
 ### Add Capistrano to Rails app
 
-I will assume you already have server set up and an application ready to be deployed remotely.
+I will assume you already have a server set up and an application ready to be deployed remotely.
 
 We will use gem ['capistrano-rails'](https://github.com/capistrano/rails), so we need to add this gems to Gemfile:
 
@@ -70,7 +70,7 @@ Dir.glob('lib/capistrano/tasks/*.rake').each { |r| import r }
 
 The [capistrano-rbenv](https://github.com/capistrano/rbenv) gem provides rbenv support for Capistrano 3.
 
-Add this line to gem file:
+Add this line to the Gemfile:
 
 ```
 group :development do
@@ -185,11 +185,8 @@ or
 ```
 bundle exec cap production deploy
 ```
-and that is it, your app is alive and you can visit it on server's name url, in our example case _your.staging.server.com_.
+and that is it, your app is live and you can visit it on server's name url, in our example case _your.staging.server.com_.
 
 Note: you can find complete documentation on [Capistrano site](http://capistranorb.com/).
 
 Have a nice day!
-
-
-
