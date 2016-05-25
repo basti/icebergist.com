@@ -1,7 +1,7 @@
 ---
 layout: post
-title: "Deploying with capistrano 3"
-date: 2016-05-20 08:42:17 +0200
+title: "Deploying Rails app with Capistrano 3"
+date: 2016-05-25 10:42:17 +0200
 comments: true
 author: Ivica Lakatoš
 categories:
