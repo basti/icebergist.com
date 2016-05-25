@@ -4,7 +4,7 @@
   <title><![CDATA[Icebergist]]></title>
   <link href="http://icebergist.com/atom.xml" rel="self"/>
   <link href="http://icebergist.com/"/>
-  <updated>2016-03-24T13:23:19+01:00</updated>
+  <updated>2016-05-25T10:17:28+02:00</updated>
   <id>http://icebergist.com/</id>
   <author>
     <name><![CDATA[Orange Iceberg]]></name>
@@ -12,6 +12,266 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Deploying Rails app with Capistrano 3]]></title>
+    <link href="http://icebergist.com/posts/deploying-with-capistrano-3/"/>
+    <updated>2016-05-25T10:42:17+02:00</updated>
+    <id>http://icebergist.com/posts/deploying-with-capistrano-3</id>
+    <content type="html"><![CDATA[<p>In the lifetime of every application the time comes for it to be presented to everyone. That&rsquo;s why we have to put our application on a special server which is designed for this purpose. In one word, we need to <strong>deploy</strong> our application. In this post you will see how to deploy app with <a href="http://www.capistranorb.com/">Capistrano 3</a>.</p>
+
+<p>Capistrano is a great developers tool that is used to automatically deploy projects to remote server.</p>
+
+<h3>Add Capistrano to Rails app</h3>
+
+<p>I will assume you already have a server set up and an application ready to be deployed remotely.</p>
+
+<p>We will use gem <a href="https://github.com/capistrano/rails">&lsquo;capistrano-rails&rsquo;</a>, so we need to add this gems to Gemfile:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">group</span> <span class="ss">:development</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;capistrano&#39;</span><span class="p">,</span> <span class="s1">&#39;~&gt; 3.5&#39;</span>
+</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;capistrano-rails&#39;</span><span class="p">,</span> <span class="s1">&#39;~&gt; 1.1.6&#39;</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>and install gems with <code>$ bundle install</code>.</p>
+
+<h3>Initialize Capistrano</h3>
+
+<p>Then run the following command to create configuration files:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="err">$</span> <span class="n">bundle</span> <span class="nb">exec</span> <span class="n">cap</span> <span class="n">install</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This command  creates all the necessary configuration files and directory structure with two stages, staging and production:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">Capfile</span>
+</span><span class='line'><span class="n">config</span><span class="o">/</span><span class="n">deploy</span><span class="o">.</span><span class="n">rb</span>
+</span><span class='line'><span class="n">config</span><span class="o">/</span><span class="n">deploy</span><span class="o">/</span><span class="n">production</span><span class="o">.</span><span class="n">rb</span>
+</span><span class='line'><span class="n">config</span><span class="o">/</span><span class="n">deploy</span><span class="o">/</span><span class="n">staging</span><span class="o">.</span><span class="n">rb</span>
+</span><span class='line'><span class="n">lib</span><span class="o">/</span><span class="n">capistrano</span><span class="o">/</span><span class="n">tasks</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<!--more-->
+
+
+<h3>Require needed gems in Capfile</h3>
+
+<p>Open the <code>Capfile</code> and add or uncomment this lines:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">require</span> <span class="s1">&#39;capistrano/setup&#39;</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;capistrano/deploy&#39;</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;capistrano/bundler&#39;</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;capistrano/rails/assets&#39;</span>
+</span><span class='line'><span class="nb">require</span> <span class="s1">&#39;capistrano/rails/migrations&#39;</span>
+</span><span class='line'><span class="no">Dir</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s1">&#39;lib/capistrano/tasks/*.rake&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">each</span> <span class="p">{</span> <span class="o">|</span><span class="n">r</span><span class="o">|</span> <span class="n">import</span> <span class="n">r</span> <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>Add capistrano-rbenv gem</h4>
+
+<p>The <a href="https://github.com/capistrano/rbenv">capistrano-rbenv</a> gem provides rbenv support for Capistrano 3.</p>
+
+<p>Add this line to the Gemfile:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">group</span> <span class="ss">:development</span> <span class="k">do</span>
+</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;capistrano&#39;</span><span class="p">,</span> <span class="s1">&#39;~&gt; 3.5&#39;</span>
+</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;capistrano-rails&#39;</span><span class="p">,</span> <span class="s1">&#39;~&gt; 1.1.6&#39;</span>
+</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;capistrano-rbenv&#39;</span><span class="p">,</span> <span class="s1">&#39;~&gt; 2.0&#39;</span><span class="p">,</span> <span class="nb">require</span><span class="p">:</span> <span class="kp">false</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And require this gem in Capfile <code>require 'capistrano/rbenv'</code>.</p>
+
+<h4>Add capistrano-passenger gem</h4>
+
+<p>The <a href="https://github.com/capistrano/passenger">capistrano-passenger</a> gem adds a task to restart your application after deployment via Capistrano.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">group</span> <span class="ss">:development</span> <span class="k">do</span>
+</span><span class='line'>  <span class="o">.</span><span class="n">.</span><span class="o">.</span>
+</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;capistrano-rbenv&#39;</span><span class="p">,</span> <span class="s1">&#39;~&gt; 2.0&#39;</span><span class="p">,</span> <span class="nb">require</span><span class="p">:</span> <span class="kp">false</span>
+</span><span class='line'>  <span class="n">gem</span> <span class="s1">&#39;capistrano-passenger&#39;</span><span class="p">,</span> <span class="s1">&#39;~&gt; 0.2.0&#39;</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And require this gem in Capfile <code>require 'capistrano/passenger'</code>.</p>
+
+<h3>Configure deploy.rb file</h3>
+
+<p>Open <code>config/deploy.rb</code> and add options for deployment:</p>
+
+<ul>
+<li>set all needed variables, this is the variant with two servers (<em>staging and production</em>) and with user created on server (<em>server setup is theme for different post</em>)</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">set</span> <span class="ss">:application</span><span class="p">,</span> <span class="s1">&#39;app-name&#39;</span>   <span class="c1"># application name</span>
+</span><span class='line'><span class="n">set</span> <span class="ss">:deploy_user</span><span class="p">,</span> <span class="s1">&#39;user-name&#39;</span>   <span class="c1"># name of user who is set on server</span>
+</span><span class='line'><span class="n">set</span> <span class="ss">:repo_url</span><span class="p">,</span> <span class="s1">&#39;git@github.com:nickname/repo_name.git&#39;</span>   <span class="c1"># your repository url from github </span>
+</span><span class='line'><span class="n">set</span> <span class="ss">:branch</span><span class="p">,</span> <span class="no">ENV</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s1">&#39;BRANCH&#39;</span><span class="p">,</span> <span class="s1">&#39;master&#39;</span><span class="p">)</span>   <span class="c1"># branch which you want to deploy from</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>set the path where you want to find your app on server, starting from server&rsquo;s root</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">set</span> <span class="ss">:deploy_to</span><span class="p">,</span> <span class="o">-&gt;</span> <span class="p">{</span> <span class="s2">&quot;/path/to/app/</span><span class="si">#{</span><span class="n">fetch</span><span class="p">(</span><span class="ss">:rails_env</span><span class="p">)</span><span class="si">}</span><span class="s2">-</span><span class="si">#{</span><span class="n">fetch</span><span class="p">(</span><span class="ss">:application</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span> <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>set config files, Capistrano uses a folder called shared to manage files and directories that should persist across releases</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">set</span> <span class="ss">:linked_files</span><span class="p">,</span> <span class="n">fetch</span><span class="p">(</span><span class="ss">:linked_files</span><span class="p">,</span> <span class="o">[]</span><span class="p">)</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="s1">&#39;config/database.yml&#39;</span><span class="p">,</span> <span class="s1">&#39;config/secrets.yml&#39;</span><span class="p">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">set</span> <span class="ss">:linked_dirs</span><span class="p">,</span> <span class="n">fetch</span><span class="p">(</span><span class="ss">:linked_dirs</span><span class="p">,</span> <span class="o">[]</span><span class="p">)</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="s1">&#39;log&#39;</span><span class="p">,</span> <span class="s1">&#39;tmp/pids&#39;</span><span class="p">,</span> <span class="s1">&#39;tmp/cache&#39;</span><span class="p">,</span> <span class="s1">&#39;tmp/sockets&#39;</span><span class="p">,</span> <span class="s1">&#39;vendor/bundle&#39;</span><span class="p">,</span> <span class="s1">&#39;public/system&#39;</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>set ruby version, we use <code>gem 'capistrano-rbenv'</code> for this setup</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">set</span> <span class="ss">:rbenv_type</span><span class="p">,</span> <span class="ss">:user</span>
+</span><span class='line'><span class="n">set</span> <span class="ss">:rbenv_ruby</span><span class="p">,</span> <span class="s1">&#39;2.2.2&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>set option for restarting your application after deployment with <code>gem 'capistrano-passenger'</code></li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">set</span> <span class="ss">:passenger_restart_with_touch</span><span class="p">,</span> <span class="kp">true</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>here you can put all kinds of rake tasks for different needs that you can run every time when you deploy your application.</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">namespace</span> <span class="ss">:deploy</span> <span class="k">do</span>
+</span><span class='line'>    <span class="n">desc</span> <span class="s2">&quot;Description of task&quot;</span>
+</span><span class='line'>    <span class="n">task</span> <span class="ss">:name_of_task</span> <span class="k">do</span>
+</span><span class='line'>        <span class="c1"># do something</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Capistrano&rsquo;s server settings</h3>
+
+<p>You need to tell Capistrano where to find your server.
+This is an example of server&rsquo;s settings for application where everything is on same machine (application, server, database).</p>
+
+<ul>
+<li>In <code>config/deploy/staging</code> set:</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">server</span> <span class="s1">&#39;your.staging.server.com&#39;</span><span class="p">,</span> <span class="ss">user</span><span class="p">:</span> <span class="n">fetch</span><span class="p">(</span><span class="ss">:deploy_user</span><span class="p">),</span> <span class="ss">roles</span><span class="p">:</span> <span class="sx">%w{app db web}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>and set rails environment</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">set</span> <span class="ss">:rails_env</span><span class="p">,</span> <span class="s1">&#39;staging&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Also set the same configuration for production server.</p>
+
+<p>In <code>config/deploy/production</code> add:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">server</span> <span class="s1">&#39;your.production.server.com&#39;</span><span class="p">,</span> <span class="ss">user</span><span class="p">:</span> <span class="n">fetch</span><span class="p">(</span><span class="ss">:deploy_user</span><span class="p">),</span> <span class="ss">roles</span><span class="p">:</span> <span class="sx">%w{app db web}</span>
+</span><span class='line'><span class="n">set</span> <span class="ss">:rails_env</span><span class="p">,</span> <span class="s1">&#39;production&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>Deploy your application</h3>
+
+<p>Just run <code>deploy</code> task:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">bundle</span> <span class="nb">exec</span> <span class="n">cap</span> <span class="n">staging</span> <span class="n">deploy</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>or</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">bundle</span> <span class="nb">exec</span> <span class="n">cap</span> <span class="n">production</span> <span class="n">deploy</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>and that is it, your app is live and you can visit it on server&rsquo;s name url, in our example case <em>your.staging.server.com</em>.</p>
+
+<p>Note: you can find complete documentation on <a href="http://capistranorb.com/">Capistrano site</a>.</p>
+
+<p>Have a nice day!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[rake db:schema:load vs rake db:migrate]]></title>
@@ -1593,24 +1853,6 @@ end</code></li>
 <p>That&#8217;s it. Now you&#8217;ll have /admin/categories for all administrative tasks and you have a free controller for front-end actions.</p>
 
 <p>You might wonder why not just generate scaffold for admin/categories&#8230; The reason is that you&#8217;ll also get a model that is namespaced in admin (i.e. model would be Admin::Category). Scaffolded views also wouldn&#8217;t work as it seems that generator doesn&#8217;t take into account the fact that you are using a namespace.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Mosso hosting cloud]]></title>
-    <link href="http://icebergist.com/posts/mosso-hosting-cloud"/>
-    <updated>2008-09-17T10:00:00+02:00</updated>
-    <id>http://icebergist.com/posts/mosso-hosting-cloud</id>
-    <content type="html"><![CDATA[<p><a class="external" href="http://www.mosso.com/">Mosso&#8217;s hosting cloud</a>
-at $100 / month seems like a good solution to get a scalable server. However one thing bugs me, actually two things&#8230;</p>
-
-<p>First one: they offer <strong>FTP only access</strong>. Meaning you cannot deploy sites directly from code repositories (i.e. git or svn). That sucks.</p>
-
-<p>Second thing that bugs me: for $100 you get quite a lot of computing power which can be used to run multiple sites &#8211; but <strong>you are only allowed to have one Rails app running</strong>. Only one. If you want additional Rails apps (for example to have a test server) you need to pay an extra fee.</p>
-
-<p>I know it&#8217;s cloud computing and that you have to be able to run it with any additional configuration (that&#8217;s why I think it&#8217;s ok that you have to freeze your gems in Rails apps, because you cannot install any gems yourself)&#8230; but not being able to checkout my code from repository and having to upload the whole app each time you make changes <strong>is really annoying</strong>.</p>
-
-<p>In their defense, the support guy said that they are working on it, but he could give me an ETA when they&#8217;ll allow something like that.</p>
 ]]></content>
   </entry>
   

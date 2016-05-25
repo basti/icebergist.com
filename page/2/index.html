@@ -128,6 +128,112 @@
 
 
 
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2013-09-16T10:00:00+02:00" pubdate data-updated="true">Sep 16<span>th</span>, 2013</time>
+        | 
+  
+
+
+  <span class="glyphicon glyphicon-user"></span>
+  <span class="byline author vcard">Posted by
+    <span class="fn">
+      
+        <a href="https://plus.google.com/113548610124685160907?rel=author">Slobodan Kovačević</a>
+      
+    </span>
+  </span>
+
+
+        
+           | <a href="/posts/quick-virtualboxvagrant-setup-with-heroku-like-box#disqus_thread"
+             data-disqus-identifier="http://icebergist.com/posts/quick-virtualboxvagrant-setup-with-heroku-like-box">Comments</a>
+        
+      </p>
+    
+    
+      <h1 class="entry-title"><a href="/posts/quick-virtualboxvagrant-setup-with-heroku-like-box">Quick VirtualBox/Vagrant Setup With Heroku-like Box</a></h1>
+    
+  </header>
+
+
+  <div class="entry-content clearfix"><p>Here is a quick way to setup VirtualBox using Vagrant with Heroku-like box on Mac.</p>
+
+<ol>
+<li><p>Install VirtualBox from <a href="https://www.virtualbox.org/wiki/Downloads" target="_blank"><a href="https://www.virtualbox.org/wiki/Downloads">https://www.virtualbox.org/wiki/Downloads</a></a></p></li>
+<li><p>Install Vagrant from <a href="http://downloads.vagrantup.com/" target="_blank"><a href="http://downloads.vagrantup.com/">http://downloads.vagrantup.com/</a></a></p></li>
+<li><p>Create Vagrantfile for Heroku-like box (based on <a href="https://github.com/ejholmes/vagrant-heroku" target="_blank"><a href="https://github.com/ejholmes/vagrant-heroku">https://github.com/ejholmes/vagrant-heroku</a></a>) that looks something like:</p></li>
+</ol>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'>    <span class="no">Vagrant</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="s2">&quot;2&quot;</span><span class="p">)</span> <span class="k">do</span> <span class="o">|</span><span class="n">config</span><span class="o">|</span>
+</span><span class='line'>        <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">box</span> <span class="o">=</span> <span class="s2">&quot;heroku&quot;</span>
+</span><span class='line'>        <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">box_url</span> <span class="o">=</span> <span class="s2">&quot;https://dl.dropboxusercontent.com/s/rnc0p8zl91borei/heroku.box&quot;</span>
+</span><span class='line'>      <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">synced_folder</span> <span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="s2">&quot;/vagrant&quot;</span><span class="p">,</span> <span class="ss">:nfs</span> <span class="o">=&gt;</span> <span class="kp">true</span>
+</span><span class='line'>        <span class="n">config</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">network</span> <span class="ss">:private_network</span><span class="p">,</span> <span class="ss">ip</span><span class="p">:</span> <span class="s2">&quot;192.168.1.42&quot;</span>  <span class="c1"># required for NFS</span>
+</span><span class='line'>    <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Beside telling Vagrant to use Heroku-like box from <a href="https://github.com/ejholmes/vagrant-heroku" target="_blank"><a href="https://github.com/ejholmes/vagrant-heroku">https://github.com/ejholmes/vagrant-heroku</a></a> it also sets up shared dir between host and VM machine. It will mount Vagrantfile dir (.) to /vagrant in VM.</p>
+
+<p><code>vagrant up</code> will setup the VM and start it up.</p>
+
+<p>Now you can use <code>vagrant ssh</code> to login to VM.</p>
+
+<p>Vagrant Heroku-like box comes with Postgresql, but if you want you can easily setup sqlite:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>sudo apt-get install libsqlite3-dev
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><strong>Bonus tip</strong>: when you are working on multiple projects sometimes you can forget which VMs are running. You can list all running VMs using:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>VBoxManage list runningvms
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Further reading:</p>
+
+<ul>
+<li><a href="http://docs.vagrantup.com/v2/" target="_blank">Vagrant docs</a></li>
+<li><a href="https://github.com/ejholmes/vagrant-heroku" target="_blank">Vagrant Heroku-like box</a> which can be easily customized.</li>
+<li><a href="http://loudcoding.com/posts/how-to-use-vagrant-to-run-celadon-cedar-stack-on-heroku/" target="_blank">Another Vagrant setup tutorial</a></li>
+<li><a href="https://www.stackmachine.com/blog/web-development-on-a-vm-is-it-slower" target="_blank">VM speed benchmarks</a> in case you doubt in VM speed.</li>
+</ul>
+
+</div>
+  
+  
+
+
+        </article>
+      
+      
+        <article class="post">
+          
+  <header class="page-header">
+    
+      <p class="meta text-muted">
+        
+
+
+
+
+
+
+
+
+
+
+
+
 <span class="glyphicon glyphicon-calendar"></span> <time datetime="2013-09-10T10:00:00+02:00" pubdate data-updated="true">Sep 10<span>th</span>, 2013</time>
         | 
   
@@ -898,69 +1004,6 @@ end</code></li>
 
         </article>
       
-      
-        <article class="post">
-          
-  <header class="page-header">
-    
-      <p class="meta text-muted">
-        
-
-
-
-
-
-
-
-
-
-
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2008-09-17T10:00:00+02:00" pubdate data-updated="true">Sep 17<span>th</span>, 2008</time>
-        | 
-  
-
-
-  <span class="glyphicon glyphicon-user"></span>
-  <span class="byline author vcard">Posted by
-    <span class="fn">
-      
-        <a href="https://plus.google.com/113548610124685160907?rel=author">Slobodan Kovačević</a>
-      
-    </span>
-  </span>
-
-
-        
-           | <a href="/posts/mosso-hosting-cloud#disqus_thread"
-             data-disqus-identifier="http://icebergist.com/posts/mosso-hosting-cloud">Comments</a>
-        
-      </p>
-    
-    
-      <h1 class="entry-title"><a href="/posts/mosso-hosting-cloud">Mosso Hosting Cloud</a></h1>
-    
-  </header>
-
-
-  <div class="entry-content clearfix"><p><a class="external" href="http://www.mosso.com/">Mosso&#8217;s hosting cloud</a>
-at $100 / month seems like a good solution to get a scalable server. However one thing bugs me, actually two things&#8230;</p>
-
-<p>First one: they offer <strong>FTP only access</strong>. Meaning you cannot deploy sites directly from code repositories (i.e. git or svn). That sucks.</p>
-
-<p>Second thing that bugs me: for $100 you get quite a lot of computing power which can be used to run multiple sites &#8211; but <strong>you are only allowed to have one Rails app running</strong>. Only one. If you want additional Rails apps (for example to have a test server) you need to pay an extra fee.</p>
-
-<p>I know it&#8217;s cloud computing and that you have to be able to run it with any additional configuration (that&#8217;s why I think it&#8217;s ok that you have to freeze your gems in Rails apps, because you cannot install any gems yourself)&#8230; but not being able to checkout my code from repository and having to upload the whole app each time you make changes <strong>is really annoying</strong>.</p>
-
-<p>In their defense, the support guy said that they are working on it, but he could give me an ETA when they&#8217;ll allow something like that.</p>
-</div>
-  
-  
-
-
-        </article>
-      
     </div>
 
     <ul class="pager">
@@ -1007,6 +1050,8 @@ at $100 / month seems like a good solution to get a scalable server. However one
   
   <div id="recent_posts" class="list-group">
     
+    <a class="list-group-item " href="/posts/deploying-with-capistrano-3/">Deploying Rails App With Capistrano 3</a>
+    
     <a class="list-group-item " href="/posts/rake-db-migrate-vs-rake-db-schema-load/">Rake Db:schema:load vs Rake Db:migrate</a>
     
     <a class="list-group-item " href="/posts/headless-firefox-in-ubuntu-on-virtual-box-for-cucumber-testing/">Headless Firefox in Ubuntu on VirtualBox for Cucumber Testing</a>
@@ -1014,8 +1059,6 @@ at $100 / month seems like a good solution to get a scalable server. However one
     <a class="list-group-item " href="/posts/import-and-export-mysql-dump/">Import and Export MySQL Dump</a>
     
     <a class="list-group-item " href="/posts/create-and-extract-archives-using-tar-and-gzip/">Create and Extract Archives Using Tar and Gzip</a>
-    
-    <a class="list-group-item " href="/posts/creating-and-publishing-a-ruby-gem/">Creating and Publishing a Ruby Gem</a>
     
   </div>
   <div class="panel-heading">
@@ -1042,7 +1085,7 @@ at $100 / month seems like a good solution to get a scalable server. However one
     
     
     <a class="list-group-item " href="/category/ruby-and-rails/index.html">
-        <span class="badge">17</span>
+        <span class="badge">18</span>
         Ruby and Rails
       </a>
     
@@ -1071,7 +1114,7 @@ at $100 / month seems like a good solution to get a scalable server. However one
     <h3 class="panel-title">Tags</h3>
   </div>
   <div class="tag-cloud">
-    <span class='rank-5'><a href='/tag/Javascript'>Javascript</a></span> <span class='rank-5'><a href='/tag/admin'>admin</a></span> <span class='rank-4'><a href='/tag/virtualbox'>virtualbox</a></span> <span class='rank-4'><a href='/tag/linux'>linux</a></span> <span class='rank-4'><a href='/tag/resources'>resources</a></span> <span class='rank-5'><a href='/tag/css'>css</a></span> <span class='rank-2'><a href='/tag/rails'>rails</a></span> <span class='rank-4'><a href='/tag/heroku'>heroku</a></span> <span class='rank-4'><a href='/tag/links'>links</a></span> <span class='rank-5'><a href='/tag/postgres'>postgres</a></span> <span class='rank-4'><a href='/tag/devise'>devise</a></span> <span class='rank-5'><a href='/tag/sqlite'>sqlite</a></span> <span class='rank-4'><a href='/tag/rails3'>rails3</a></span> <span class='rank-3'><a href='/tag/howto'>howto</a></span> <span class='rank-5'><a href='/tag/PHP'>PHP</a></span> <span class='rank-4'><a href='/tag/tutorial'>tutorial</a></span> <span class='rank-5'><a href='/tag/restful'>restful</a></span> <span class='rank-2'><a href='/tag/ruby'>ruby</a></span> <span class='rank-3'><a href='/tag/tips'>tips</a></span> <span class='rank-5'><a href='/tag/paperclip'>paperclip</a></span> <span class='rank-5'><a href='/tag/scaffold'>scaffold</a></span> <span class='rank-4'><a href='/tag/mysql'>mysql</a></span> <span class='rank-5'><a href='/tag/erkanaauth'>erkanaauth</a></span> <span class='rank-4'><a href='/tag/ubuntu'>ubuntu</a></span> <span class='rank-5'><a href='/tag/tdd'>tdd</a></span> <span class='rank-5'><a href='/tag/amazon-s3'>amazon s3</a></span> <span class='rank-5'><a href='/tag/factory-girl'>factory_girl</a></span> <span class='rank-5'><a href='/tag/carrierwave'>carrierwave</a></span> <span class='rank-5'><a href='/tag/rest'>rest</a></span> <span class='rank-5'><a href='/tag/cloud-computing'>cloud computing</a></span> <span class='rank-5'><a href='/tag/cucumber'>cucumber</a></span> <span class='rank-5'><a href='/tag/edge'>edge</a></span> <span class='rank-5'><a href='/tag/factorygirl'>factorygirl</a></span> <span class='rank-5'><a href='/tag/globalize'>globalize</a></span> <span class='rank-4'><a href='/tag/hosting'>hosting</a></span> <span class='rank-5'><a href='/tag/password-protected'>password protected</a></span> <span class='rank-5'><a href='/tag/rake-task'>rake task</a></span> <span class='rank-5'><a href='/tag/selenium-webdriver'>selenium-webdriver</a></span> <span class='rank-5'><a href='/tag/mac'>mac</a></span> <span class='rank-5'><a href='/tag/codeigniter'>codeigniter</a></span> <span class='rank-5'><a href='/tag/rails4'>rails4</a></span> <span class='rank-4'><a href='/tag/vagrant'>vagrant</a></span> <span class='rank-4'><a href='/tag/weekly'>weekly</a></span> <span class='rank-5'><a href='/tag/rspec'>rspec</a></span> 
+    <span class='rank-2'><a href='/tag/ruby'>ruby</a></span> <span class='rank-5'><a href='/tag/scaffold'>scaffold</a></span> <span class='rank-5'><a href='/tag/rails4'>rails4</a></span> <span class='rank-4'><a href='/tag/devise'>devise</a></span> <span class='rank-5'><a href='/tag/cloud-computing'>cloud computing</a></span> <span class='rank-4'><a href='/tag/links'>links</a></span> <span class='rank-5'><a href='/tag/edge'>edge</a></span> <span class='rank-4'><a href='/tag/weekly'>weekly</a></span> <span class='rank-5'><a href='/tag/codeigniter'>codeigniter</a></span> <span class='rank-4'><a href='/tag/vagrant'>vagrant</a></span> <span class='rank-5'><a href='/tag/erkanaauth'>erkanaauth</a></span> <span class='rank-5'><a href='/tag/globalize'>globalize</a></span> <span class='rank-5'><a href='/tag/deployment'>deployment</a></span> <span class='rank-5'><a href='/tag/mac'>mac</a></span> <span class='rank-5'><a href='/tag/paperclip'>paperclip</a></span> <span class='rank-5'><a href='/tag/postgres'>postgres</a></span> <span class='rank-3'><a href='/tag/howto'>howto</a></span> <span class='rank-1'><a href='/tag/rails'>rails</a></span> <span class='rank-5'><a href='/tag/capistrano-rbenv'>capistrano-rbenv</a></span> <span class='rank-5'><a href='/tag/capistrano-rails'>capistrano-rails</a></span> <span class='rank-5'><a href='/tag/amazon-s3'>amazon s3</a></span> <span class='rank-5'><a href='/tag/selenium-webdriver'>selenium-webdriver</a></span> <span class='rank-5'><a href='/tag/PHP'>PHP</a></span> <span class='rank-4'><a href='/tag/hosting'>hosting</a></span> <span class='rank-5'><a href='/tag/rspec'>rspec</a></span> <span class='rank-5'><a href='/tag/factorygirl'>factorygirl</a></span> <span class='rank-4'><a href='/tag/heroku'>heroku</a></span> <span class='rank-4'><a href='/tag/rails3'>rails3</a></span> <span class='rank-4'><a href='/tag/mysql'>mysql</a></span> <span class='rank-4'><a href='/tag/linux'>linux</a></span> <span class='rank-5'><a href='/tag/password-protected'>password protected</a></span> <span class='rank-5'><a href='/tag/css'>css</a></span> <span class='rank-5'><a href='/tag/factory-girl'>factory_girl</a></span> <span class='rank-5'><a href='/tag/sqlite'>sqlite</a></span> <span class='rank-5'><a href='/tag/capistrano-3'>capistrano 3</a></span> <span class='rank-5'><a href='/tag/restful'>restful</a></span> <span class='rank-5'><a href='/tag/tdd'>tdd</a></span> <span class='rank-5'><a href='/tag/rake-task'>rake task</a></span> <span class='rank-5'><a href='/tag/Javascript'>Javascript</a></span> <span class='rank-5'><a href='/tag/cucumber'>cucumber</a></span> <span class='rank-4'><a href='/tag/ubuntu'>ubuntu</a></span> <span class='rank-5'><a href='/tag/rest'>rest</a></span> <span class='rank-3'><a href='/tag/tips'>tips</a></span> <span class='rank-4'><a href='/tag/resources'>resources</a></span> <span class='rank-4'><a href='/tag/virtualbox'>virtualbox</a></span> <span class='rank-4'><a href='/tag/tutorial'>tutorial</a></span> <span class='rank-5'><a href='/tag/admin'>admin</a></span> <span class='rank-5'><a href='/tag/carrierwave'>carrierwave</a></span> 
   </div>
 </section>
 

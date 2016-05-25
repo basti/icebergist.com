@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ruby and Rails | Icebergist]]></title>
   <link href="http://icebergist.com/category/ruby-and-rails/atom.xml" rel="self"/>
   <link href="http://icebergist.com/"/>
-  <updated>2016-03-24T13:23:19+01:00</updated>
+  <updated>2016-05-25T10:17:28+02:00</updated>
   <id>http://icebergist.com/</id>
   <author>
     <name><![CDATA[Orange Iceberg]]></name>
@@ -12,6 +12,214 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Deploying Rails app with Capistrano 3]]></title>
+    <link href="http://icebergist.com/posts/deploying-with-capistrano-3/"/>
+    <updated>2016-05-25T10:42:17+02:00</updated>
+    <id>http://icebergist.com/posts/deploying-with-capistrano-3</id>
+    <content type="html"><![CDATA[<p>In the lifetime of every application the time comes for it to be presented to everyone. That&rsquo;s why we have to put our application on a special server which is designed for this purpose. In one word, we need to <strong>deploy</strong> our application. In this post you will see how to deploy app with <a href="http://www.capistranorb.com/">Capistrano 3</a>.</p>
+
+<p>Capistrano is a great developers tool that is used to automatically deploy projects to remote server.</p>
+
+<h3>Add Capistrano to Rails app</h3>
+
+<p>I will assume you already have a server set up and an application ready to be deployed remotely.</p>
+
+<p>We will use gem <a href="https://github.com/capistrano/rails">&lsquo;capistrano-rails&rsquo;</a>, so we need to add this gems to Gemfile:</p>
+
+<p><code>ruby
+group :development do
+  gem 'capistrano', '~&gt; 3.5'  
+  gem 'capistrano-rails', '~&gt; 1.1.6'
+end
+</code>
+and install gems with <code>$ bundle install</code>.</p>
+
+<h3>Initialize Capistrano</h3>
+
+<p>Then run the following command to create configuration files:</p>
+
+<p><code>
+$ bundle exec cap install
+</code></p>
+
+<p>This command  creates all the necessary configuration files and directory structure with two stages, staging and production:</p>
+
+<p><code>
+Capfile
+config/deploy.rb
+config/deploy/production.rb
+config/deploy/staging.rb
+lib/capistrano/tasks
+</code></p>
+
+<!--more-->
+
+
+<h3>Require needed gems in Capfile</h3>
+
+<p>Open the <code>Capfile</code> and add or uncomment this lines:</p>
+
+<p><code>
+require 'capistrano/setup'
+require 'capistrano/deploy'
+require 'capistrano/bundler'
+require 'capistrano/rails/assets'
+require 'capistrano/rails/migrations'
+Dir.glob('lib/capistrano/tasks/*.rake').each { |r| import r }
+</code></p>
+
+<h4>Add capistrano-rbenv gem</h4>
+
+<p>The <a href="https://github.com/capistrano/rbenv">capistrano-rbenv</a> gem provides rbenv support for Capistrano 3.</p>
+
+<p>Add this line to the Gemfile:</p>
+
+<p><code>
+group :development do
+  gem 'capistrano', '~&gt; 3.5'
+  gem 'capistrano-rails', '~&gt; 1.1.6'
+  gem 'capistrano-rbenv', '~&gt; 2.0', require: false
+end
+</code></p>
+
+<p>And require this gem in Capfile <code>require 'capistrano/rbenv'</code>.</p>
+
+<h4>Add capistrano-passenger gem</h4>
+
+<p>The <a href="https://github.com/capistrano/passenger">capistrano-passenger</a> gem adds a task to restart your application after deployment via Capistrano.</p>
+
+<p><code>
+group :development do
+  ...
+  gem 'capistrano-rbenv', '~&gt; 2.0', require: false
+  gem 'capistrano-passenger', '~&gt; 0.2.0'
+end
+</code>
+And require this gem in Capfile <code>require 'capistrano/passenger'</code>.</p>
+
+<h3>Configure deploy.rb file</h3>
+
+<p>Open <code>config/deploy.rb</code> and add options for deployment:</p>
+
+<ul>
+<li>set all needed variables, this is the variant with two servers (<em>staging and production</em>) and with user created on server (<em>server setup is theme for different post</em>)</li>
+</ul>
+
+
+<p><code>
+set :application, 'app-name'   # application name
+set :deploy_user, 'user-name'   # name of user who is set on server
+set :repo_url, 'git@github.com:nickname/repo_name.git'   # your repository url from github
+set :branch, ENV.fetch('BRANCH', 'master')   # branch which you want to deploy from
+</code>
++ set the path where you want to find your app on server, starting from server&rsquo;s root</p>
+
+<p><code>
+set :deploy_to, -&gt; { "/path/to/app/#{fetch(:rails_env)}-#{fetch(:application)}" }
+</code></p>
+
+<ul>
+<li>set config files, Capistrano uses a folder called shared to manage files and directories that should persist across releases</li>
+</ul>
+
+
+<p>```
+set :linked_files, fetch(:linked_files, []).push(&lsquo;config/database.yml&rsquo;, &lsquo;config/secrets.yml&rsquo;)</p>
+
+<p>set :linked_dirs, fetch(:linked_dirs, []).push(&lsquo;log&rsquo;, &lsquo;tmp/pids&rsquo;, &lsquo;tmp/cache&rsquo;, &lsquo;tmp/sockets&rsquo;, &lsquo;vendor/bundle&rsquo;, &lsquo;public/system&rsquo;)</p>
+
+<p>```</p>
+
+<ul>
+<li>set ruby version, we use <code>gem 'capistrano-rbenv'</code> for this setup</li>
+</ul>
+
+
+<p><code>
+set :rbenv_type, :user
+set :rbenv_ruby, '2.2.2'
+</code></p>
+
+<ul>
+<li>set option for restarting your application after deployment with <code>gem 'capistrano-passenger'</code></li>
+</ul>
+
+
+<p><code>
+set :passenger_restart_with_touch, true
+</code></p>
+
+<ul>
+<li>here you can put all kinds of rake tasks for different needs that you can run every time when you deploy your application.</li>
+</ul>
+
+
+<p>```
+namespace :deploy do</p>
+
+<pre><code>desc "Description of task"
+task :name_of_task do
+    # do something
+end
+</code></pre>
+
+<p>end
+```</p>
+
+<h3>Capistrano&rsquo;s server settings</h3>
+
+<p>You need to tell Capistrano where to find your server.
+This is an example of server&rsquo;s settings for application where everything is on same machine (application, server, database).</p>
+
+<ul>
+<li>In <code>config/deploy/staging</code> set:</li>
+</ul>
+
+
+<p><code>
+server 'your.staging.server.com', user: fetch(:deploy_user), roles: %w{app db web}
+</code></p>
+
+<ul>
+<li>and set rails environment</li>
+</ul>
+
+
+<p><code>
+set :rails_env, 'staging'
+</code></p>
+
+<p>Also set the same configuration for production server.</p>
+
+<p>In <code>config/deploy/production</code> add:</p>
+
+<p><code>
+server 'your.production.server.com', user: fetch(:deploy_user), roles: %w{app db web}
+set :rails_env, 'production'
+</code></p>
+
+<h3>Deploy your application</h3>
+
+<p>Just run <code>deploy</code> task:</p>
+
+<p><code>
+bundle exec cap staging deploy
+</code></p>
+
+<p>or</p>
+
+<p><code>
+bundle exec cap production deploy
+</code>
+and that is it, your app is live and you can visit it on server&rsquo;s name url, in our example case <em>your.staging.server.com</em>.</p>
+
+<p>Note: you can find complete documentation on <a href="http://capistranorb.com/">Capistrano site</a>.</p>
+
+<p>Have a nice day!</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[rake db:schema:load vs rake db:migrate]]></title>
@@ -299,7 +507,7 @@ require &lsquo;slug_converter/version&rsquo;</p>
   spec.name         = &ldquo;slug_converter&rdquo;
   spec.version      = SlugConverter::VERSION
   spec.authors      = [&ldquo;Your Name&rdquo;]
-  spec.email        = [&ldquo;<a href="&#109;&#x61;&#x69;&#108;&#116;&#111;&#58;&#x79;&#x6f;&#x75;&#114;&#x65;&#x6d;&#x61;&#105;&#x6c;&#x40;&#101;&#x78;&#x61;&#x6d;&#112;&#108;&#x65;&#x2e;&#x63;&#x6f;&#x6d;">&#121;&#111;&#x75;&#114;&#x65;&#x6d;&#x61;&#105;&#x6c;&#x40;&#x65;&#x78;&#97;&#x6d;&#112;&#x6c;&#101;&#46;&#99;&#x6f;&#109;</a>&rdquo;]</p>
+  spec.email        = [&ldquo;<a href="&#109;&#97;&#x69;&#x6c;&#116;&#111;&#58;&#x79;&#111;&#x75;&#114;&#101;&#x6d;&#97;&#105;&#x6c;&#64;&#101;&#x78;&#97;&#x6d;&#112;&#x6c;&#101;&#46;&#x63;&#111;&#x6d;">&#x79;&#x6f;&#x75;&#x72;&#101;&#109;&#97;&#105;&#108;&#x40;&#x65;&#120;&#97;&#x6d;&#112;&#x6c;&#101;&#x2e;&#99;&#111;&#x6d;</a>&rdquo;]</p>
 
 <p>  # if spec.respond_to?(:metadata)
   #   spec.metadata[&lsquo;allowed_push_host&rsquo;] = &ldquo;TODO: Set to &lsquo;<a href="http://mygemserver.com">http://mygemserver.com</a>&rsquo; to prevent pushes to rubygems.org, or delete to allow pushes to any server.&rdquo;
@@ -721,23 +929,6 @@ We need to change the starting id of our database to 1000 so we check that we do
 <p>For SQlite we altered sqlite_sequence table, which is an internal table used to implement AUTOINCREMENT. It is created automatically whenever any ordinary table with an AUTOINCREMENT integer primary key is created.</p>
 
 <p>You can check <a href="http://stackoverflow.com/questions/2075331/change-starting-id-number">this Stack Overflow discussion</a> that was very helpful to me.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Customize Devise permitted parameters]]></title>
-    <link href="http://icebergist.com/posts/customize-devise-permitted-parameters/"/>
-    <updated>2015-05-04T16:07:22+02:00</updated>
-    <id>http://icebergist.com/posts/customize-devise-permitted-parameters</id>
-    <content type="html"><![CDATA[<p>If you are using Devise gem for authentication and you have been adding custom fields to your model you’ll get in trouble when you try to create a new instance or update an existing one. All your added fields will be treated as unpermitted. The solution for this problem is to customise Devise’s configure_permited_parameters action. All you need to do is to add this action to your Application controller and push parameters that need to be permitted to devise_paremeter_sanitizer array. So let’s say you have a User Model and you have added company_name and website fields to your user’s table, to permit this parameters on sign_up you need to add this to your Application controller:</p>
-
-<p><code>
-def configure_permitted_parameters
-  devise_parameter_sanitizer.for(:sign_up).push(:company_name, :website)
-end
-</code></p>
-
-<p>It is the same principle for the :sign_in and :edit_account. You can see what are <a href="https://github.com/plataformatec/devise/blob/master/lib/devise/parameter_sanitizer.rb#L83">default permitted parameters here</a>.</p>
 ]]></content>
   </entry>
   
