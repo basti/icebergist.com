@@ -1,12 +1,12 @@
 ---
 layout: post
-title: "Show part of a Rails template in other language"
+title: "Show part of a Rails template in other locale"
 date: 2016-05-30 10:06:00 +0200
 comments: true
 author: Ivica Lakatoš
-categories: 
+categories:
   - Ruby and Rails
-tags: 
+tags:
   - ruby
   - rails
   - I18n.locale
@@ -27,7 +27,7 @@ I recently worked on a Rails project, which had parts of pages in different lang
 
 Suppose, there is a template with only header and two paragraphs.
 
-``` 
+```
 <h1><%= t('my_great_header') %></h1>
 
 <p><%= t('first_paragraph') %></p>
@@ -42,7 +42,7 @@ en:
   my_great_header: "My English great header"
   first_paragraph: "First English paragraph"
   second_paragraph: "Second English paragraph"
-  
+
 # in config/locales/fr.yml
 fr:
   my_great_header: "My French great header"
@@ -74,4 +74,4 @@ First English paragraph
 Second French paragraph
 ```
 
-I hope that this helps. Have a nice day. 
+I hope that this helps. Have a nice day.
