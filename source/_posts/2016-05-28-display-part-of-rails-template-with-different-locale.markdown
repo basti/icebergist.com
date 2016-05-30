@@ -1,7 +1,7 @@
 ---
 layout: post
-title: "Display part of Rails template with different locale"
-date: 2016-05-28 10:06:00 +0200
+title: "Show part of a Rails template in other language"
+date: 2016-05-30 10:06:00 +0200
 comments: true
 author: Ivica Lakatoš
 categories: 
