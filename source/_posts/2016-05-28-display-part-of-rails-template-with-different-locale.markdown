@@ -13,7 +13,7 @@ tags:
 published: true
 ---
 
-I recently worked on a Rails project, which had parts of pages in different languages. That may be a problem if you have already translated their entire text to all required languages. You can even be tempted to hardcode parts of the text into other languages. Fortunately, there is an elegant way to solve that problem, just wrap parts of template or partials into blocks with different locale, like this:
+I recently worked on a Rails project, which had parts of pages in different languages. That may be a problem if you have already translated their entire text to all required languages. You can even be tempted to hardcode parts of the text into other languages. Fortunately, there is an elegant way to solve that problem, just wrap parts of template or partials into blocks with desired locale, like this:
 
 ``` ruby
 <% I18n.with_locale('en') do %>
@@ -34,7 +34,7 @@ Suppose, there is a template with only header and two paragraphs.
 
 <p><%= t('second_paragraph') %></p>
 ```
-And locale on English and French for that template.
+And locale in English and French for that template.
 
 ```
 # in config/locales/en.yml
@@ -52,7 +52,7 @@ fr:
 
 <!--more-->
 
-And client want first paragraph to be always on English.
+And client wants first paragraph to always be in English.
 
 Just wrap first paragraph in block with locale `'en`, like this:
 
