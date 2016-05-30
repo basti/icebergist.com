@@ -128,6 +128,81 @@
 
 
 
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-01-06T11:36:43+01:00" pubdate data-updated="true">Jan 6<span>th</span>, 2014</time>
+        | 
+  
+
+
+  <span class="glyphicon glyphicon-user"></span>
+  <span class="byline author vcard">Posted by
+    <span class="fn">
+      
+        <a href="https://plus.google.com/113548610124685160907?rel=author">Slobodan Kovačević</a>
+      
+    </span>
+  </span>
+
+
+        
+           | <a href="/posts/upgrade-ubuntu-8-dot-04-lts-server/#disqus_thread"
+             data-disqus-identifier="http://icebergist.com/posts/upgrade-ubuntu-8-dot-04-lts-server/">Comments</a>
+        
+      </p>
+    
+    
+      <h1 class="entry-title"><a href="/posts/upgrade-ubuntu-8-dot-04-lts-server/">Upgrade Ubuntu 8.04 LTS Server</a></h1>
+    
+  </header>
+
+
+  <div class="entry-content clearfix"><p>Note to self: here is how to upgrade Ubuntu 8.04 LTS (or any other release that is no longer supported) to newer Ubuntu release.</p>
+
+<p>When you are upgrading unsupported release of Ubuntu if you try to do the usual <code>sudo apt-get update</code> it will most likely fail because&hellip; well, it&rsquo;s unsupported. The simple fix for this is to change your <code>/etc/apt/sources.list</code> and replace repository URLs from something like <code>us.archive.ubuntu.com</code> to <code>old-releases.ubuntu.com</code>.</p>
+
+<p>After that you should be able follow normal upgrade procedure (use sudo if you are not root):</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>apt-get update
+</span><span class='line'>apt-get install update-manager-core
+</span><span class='line'><span class="k">do</span>-release-upgrade
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>References:</p>
+
+<ul>
+<li><a href="http://rimuhosting.com/knowledgebase/linux/distros/ubuntu" title="Rimuhosting's page on upgrading Ubuntu">Rimuhosting&rsquo;s page on upgrading Ubuntu</a></li>
+<li><a href="http://askubuntu.com/questions/91815/how-to-install-software-or-upgrade-from-old-unsupported-release" title="Discussion on upgrading unsupported Ubuntu release">Discussion on upgrading unsupported Ubuntu release</a></li>
+</ul>
+
+</div>
+  
+  
+
+
+        </article>
+      
+      
+        <article class="post">
+          
+  <header class="page-header">
+    
+      <p class="meta text-muted">
+        
+
+
+
+
+
+
+
+
+
+
+
+
 <span class="glyphicon glyphicon-calendar"></span> <time datetime="2013-09-16T10:00:00+02:00" pubdate data-updated="true">Sep 16<span>th</span>, 2013</time>
         | 
   
@@ -915,95 +990,6 @@ class Admin extends Controller {
 
         </article>
       
-      
-        <article class="post">
-          
-  <header class="page-header">
-    
-      <p class="meta text-muted">
-        
-
-
-
-
-
-
-
-
-
-
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2008-09-17T10:00:00+02:00" pubdate data-updated="true">Sep 17<span>th</span>, 2008</time>
-        | 
-  
-
-
-  <span class="glyphicon glyphicon-user"></span>
-  <span class="byline author vcard">Posted by
-    <span class="fn">
-      
-        <a href="https://plus.google.com/113548610124685160907?rel=author">Slobodan Kovačević</a>
-      
-    </span>
-  </span>
-
-
-        
-           | <a href="/posts/restful-admin-namespaced-controller-using-scaffolding#disqus_thread"
-             data-disqus-identifier="http://icebergist.com/posts/restful-admin-namespaced-controller-using-scaffolding">Comments</a>
-        
-      </p>
-    
-    
-      <h1 class="entry-title"><a href="/posts/restful-admin-namespaced-controller-using-scaffolding">RESTful Admin Namespaced Controller Using Scaffolding</a></h1>
-    
-  </header>
-
-
-  <div class="entry-content clearfix"><p>Most of my clients prefer to have a separate admin section. In turn, I like to have separate controllers for admin section and front-end in my Rails app. This is not as straightforward as it might seem, especially if you like to use scaffolding for admin controller.</p>
-
-<p>The goal is to get 2 separate RESTful controllers, admin &amp; front-end controller, one model and for admin pages to have scaffolding.</p>
-
-<p>Here is the easiest way I found so far to accomplish this. This example generates categories model and controllers for it.</p>
-
-<p><code>./script/generate controller admin/categories&lt;br /&gt;
-./script/generate scaffold category name:string</code></p>
-
-<p>This will generate an empty controller in admin namespace and a scaffolded resource for front-end controller.</p>
-
-<p>Now we have everything generated we just need to make it work with admin controller and not with front-end.</p>
-
-<ul>
-<li>move all templates from app/views/categories to app/views/<strong>admin</strong>/categories</li>
-<li>copy all functions from categories_controller.rb to admin/categories_controller.rb</li>
-<li>add namespace for admin controller in routes.rb:<code>map.namespace :admin do |admin|&lt;br /&gt;
-admin.resources :categories&lt;br /&gt;
-end</code></li>
-<li>in admin/categories_controller.rb replace in 3 places redirect_to calls to work with admin namespace. It will have something like redirect_to(@category), but to work with namespace it needs to have redirect_to([:admin, @category])</li>
-<li>make similar changes in all templates, i.e. make it work within an admin namespace. You need to make following changes:
-
-<ul>
-<li>form_for(@category) => <strong>form_for([:admin, @category])</strong></li>
-<li>&lt;%= link_to &#8216;Show&#8217;, @category %> => <strong>&lt;%= link_to &#8216;Show&#8217;, [:admin, @category] %></strong></li>
-<li>categories_path => <strong>admin_categories_path</strong></li>
-<li>edit_category_path(@category) => <strong>edit_admin_category_path(@category)</strong></li>
-<li>new_category_path => <strong>new_admin_category_path</strong></li>
-</ul>
-</li>
-</ul>
-
-
-<p>That&#8217;s it. Now you&#8217;ll have /admin/categories for all administrative tasks and you have a free controller for front-end actions.</p>
-
-<p>You might wonder why not just generate scaffold for admin/categories&#8230; The reason is that you&#8217;ll also get a model that is namespaced in admin (i.e. model would be Admin::Category). Scaffolded views also wouldn&#8217;t work as it seems that generator doesn&#8217;t take into account the fact that you are using a namespace.</p>
-</div>
-  
-  
-
-
-        </article>
-      
     </div>
 
     <ul class="pager">
@@ -1050,6 +1036,8 @@ end</code></li>
   
   <div id="recent_posts" class="list-group">
     
+    <a class="list-group-item " href="/posts/display-part-of-rails-template-with-different-locale/">Show Part of a Rails Template in Other Language</a>
+    
     <a class="list-group-item " href="/posts/deploying-with-capistrano-3/">Deploying Rails App With Capistrano 3</a>
     
     <a class="list-group-item " href="/posts/rake-db-migrate-vs-rake-db-schema-load/">Rake Db:schema:load vs Rake Db:migrate</a>
@@ -1057,8 +1045,6 @@ end</code></li>
     <a class="list-group-item " href="/posts/headless-firefox-in-ubuntu-on-virtual-box-for-cucumber-testing/">Headless Firefox in Ubuntu on VirtualBox for Cucumber Testing</a>
     
     <a class="list-group-item " href="/posts/import-and-export-mysql-dump/">Import and Export MySQL Dump</a>
-    
-    <a class="list-group-item " href="/posts/create-and-extract-archives-using-tar-and-gzip/">Create and Extract Archives Using Tar and Gzip</a>
     
   </div>
   <div class="panel-heading">
@@ -1085,7 +1071,7 @@ end</code></li>
     
     
     <a class="list-group-item " href="/category/ruby-and-rails/index.html">
-        <span class="badge">18</span>
+        <span class="badge">19</span>
         Ruby and Rails
       </a>
     
@@ -1114,7 +1100,7 @@ end</code></li>
     <h3 class="panel-title">Tags</h3>
   </div>
   <div class="tag-cloud">
-    <span class='rank-2'><a href='/tag/ruby'>ruby</a></span> <span class='rank-5'><a href='/tag/scaffold'>scaffold</a></span> <span class='rank-5'><a href='/tag/rails4'>rails4</a></span> <span class='rank-4'><a href='/tag/devise'>devise</a></span> <span class='rank-5'><a href='/tag/cloud-computing'>cloud computing</a></span> <span class='rank-4'><a href='/tag/links'>links</a></span> <span class='rank-5'><a href='/tag/edge'>edge</a></span> <span class='rank-4'><a href='/tag/weekly'>weekly</a></span> <span class='rank-5'><a href='/tag/codeigniter'>codeigniter</a></span> <span class='rank-4'><a href='/tag/vagrant'>vagrant</a></span> <span class='rank-5'><a href='/tag/erkanaauth'>erkanaauth</a></span> <span class='rank-5'><a href='/tag/globalize'>globalize</a></span> <span class='rank-5'><a href='/tag/deployment'>deployment</a></span> <span class='rank-5'><a href='/tag/mac'>mac</a></span> <span class='rank-5'><a href='/tag/paperclip'>paperclip</a></span> <span class='rank-5'><a href='/tag/postgres'>postgres</a></span> <span class='rank-3'><a href='/tag/howto'>howto</a></span> <span class='rank-1'><a href='/tag/rails'>rails</a></span> <span class='rank-5'><a href='/tag/capistrano-rbenv'>capistrano-rbenv</a></span> <span class='rank-5'><a href='/tag/capistrano-rails'>capistrano-rails</a></span> <span class='rank-5'><a href='/tag/amazon-s3'>amazon s3</a></span> <span class='rank-5'><a href='/tag/selenium-webdriver'>selenium-webdriver</a></span> <span class='rank-5'><a href='/tag/PHP'>PHP</a></span> <span class='rank-4'><a href='/tag/hosting'>hosting</a></span> <span class='rank-5'><a href='/tag/rspec'>rspec</a></span> <span class='rank-5'><a href='/tag/factorygirl'>factorygirl</a></span> <span class='rank-4'><a href='/tag/heroku'>heroku</a></span> <span class='rank-4'><a href='/tag/rails3'>rails3</a></span> <span class='rank-4'><a href='/tag/mysql'>mysql</a></span> <span class='rank-4'><a href='/tag/linux'>linux</a></span> <span class='rank-5'><a href='/tag/password-protected'>password protected</a></span> <span class='rank-5'><a href='/tag/css'>css</a></span> <span class='rank-5'><a href='/tag/factory-girl'>factory_girl</a></span> <span class='rank-5'><a href='/tag/sqlite'>sqlite</a></span> <span class='rank-5'><a href='/tag/capistrano-3'>capistrano 3</a></span> <span class='rank-5'><a href='/tag/restful'>restful</a></span> <span class='rank-5'><a href='/tag/tdd'>tdd</a></span> <span class='rank-5'><a href='/tag/rake-task'>rake task</a></span> <span class='rank-5'><a href='/tag/Javascript'>Javascript</a></span> <span class='rank-5'><a href='/tag/cucumber'>cucumber</a></span> <span class='rank-4'><a href='/tag/ubuntu'>ubuntu</a></span> <span class='rank-5'><a href='/tag/rest'>rest</a></span> <span class='rank-3'><a href='/tag/tips'>tips</a></span> <span class='rank-4'><a href='/tag/resources'>resources</a></span> <span class='rank-4'><a href='/tag/virtualbox'>virtualbox</a></span> <span class='rank-4'><a href='/tag/tutorial'>tutorial</a></span> <span class='rank-5'><a href='/tag/admin'>admin</a></span> <span class='rank-5'><a href='/tag/carrierwave'>carrierwave</a></span> 
+    <span class='rank-4'><a href='/tag/ubuntu'>ubuntu</a></span> <span class='rank-5'><a href='/tag/rspec'>rspec</a></span> <span class='rank-5'><a href='/tag/rake-task'>rake task</a></span> <span class='rank-5'><a href='/tag/tdd'>tdd</a></span> <span class='rank-5'><a href='/tag/factory-girl'>factory_girl</a></span> <span class='rank-5'><a href='/tag/codeigniter'>codeigniter</a></span> <span class='rank-5'><a href='/tag/vagrant'>vagrant</a></span> <span class='rank-5'><a href='/tag/virtualbox'>virtualbox</a></span> <span class='rank-5'><a href='/tag/mac'>mac</a></span> <span class='rank-5'><a href='/tag/erkanaauth'>erkanaauth</a></span> <span class='rank-4'><a href='/tag/linux'>linux</a></span> <span class='rank-3'><a href='/tag/tips'>tips</a></span> <span class='rank-5'><a href='/tag/hosting'>hosting</a></span> <span class='rank-5'><a href='/tag/restful'>restful</a></span> <span class='rank-5'><a href='/tag/css'>css</a></span> <span class='rank-5'><a href='/tag/amazon-s3'>amazon s3</a></span> <span class='rank-5'><a href='/tag/mysql'>mysql</a></span> <span class='rank-5'><a href='/tag/capistrano-rbenv'>capistrano-rbenv</a></span> <span class='rank-5'><a href='/tag/resources'>resources</a></span> <span class='rank-5'><a href='/tag/cucumber'>cucumber</a></span> <span class='rank-5'><a href='/tag/I18n-locale'>I18n.locale</a></span> <span class='rank-5'><a href='/tag/scaffold'>scaffold</a></span> <span class='rank-5'><a href='/tag/globalize'>globalize</a></span> <span class='rank-5'><a href='/tag/devise'>devise</a></span> <span class='rank-5'><a href='/tag/admin'>admin</a></span> <span class='rank-5'><a href='/tag/PHP'>PHP</a></span> <span class='rank-5'><a href='/tag/sqlite'>sqlite</a></span> <span class='rank-5'><a href='/tag/rest'>rest</a></span> <span class='rank-5'><a href='/tag/password-protected'>password protected</a></span> <span class='rank-5'><a href='/tag/carrierwave'>carrierwave</a></span> <span class='rank-5'><a href='/tag/edge'>edge</a></span> <span class='rank-5'><a href='/tag/cloud-computing'>cloud computing</a></span> <span class='rank-2'><a href='/tag/ruby'>ruby</a></span> <span class='rank-5'><a href='/tag/weekly'>weekly</a></span> <span class='rank-1'><a href='/tag/rails'>rails</a></span> <span class='rank-5'><a href='/tag/rails4'>rails4</a></span> <span class='rank-5'><a href='/tag/tutorial'>tutorial</a></span> <span class='rank-5'><a href='/tag/capistrano-rails'>capistrano-rails</a></span> <span class='rank-5'><a href='/tag/heroku'>heroku</a></span> <span class='rank-3'><a href='/tag/howto'>howto</a></span> <span class='rank-5'><a href='/tag/factorygirl'>factorygirl</a></span> <span class='rank-5'><a href='/tag/capistrano-3'>capistrano 3</a></span> <span class='rank-5'><a href='/tag/paperclip'>paperclip</a></span> <span class='rank-5'><a href='/tag/Javascript'>Javascript</a></span> <span class='rank-5'><a href='/tag/deployment'>deployment</a></span> <span class='rank-5'><a href='/tag/postgres'>postgres</a></span> <span class='rank-4'><a href='/tag/links'>links</a></span> <span class='rank-5'><a href='/tag/selenium-webdriver'>selenium-webdriver</a></span> <span class='rank-5'><a href='/tag/rails3'>rails3</a></span> 
   </div>
 </section>
 

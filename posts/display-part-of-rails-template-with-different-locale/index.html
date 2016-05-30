@@ -4,7 +4,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Random Rails tips - Icebergist</title>
+  <title>Show part of a Rails template in other language - Icebergist</title>
   <meta name="author" content="Orange Iceberg">
 
   
@@ -16,7 +16,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://icebergist.com/posts/random-rails-tips">
+  <link rel="canonical" href="http://icebergist.com/posts/display-part-of-rails-template-with-different-locale">
   <link href="http://feeds.feedburner.com/icebergist" rel="alternate" title="Icebergist" type="application/atom+xml">
 
   <link rel="apple-touch-icon" sizes="57x57" href="/assets/favicons/apple-icon-57x57.png">
@@ -124,7 +124,7 @@
 
 
 
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2013-03-09T09:00:00+01:00" pubdate data-updated="true">Mar 9<span>th</span>, 2013</time>
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2016-05-30T10:06:00+02:00" pubdate data-updated="true">May 30<span>th</span>, 2016</time>
         | 
   
 
@@ -133,7 +133,7 @@
   <span class="byline author vcard">Posted by
     <span class="fn">
       
-        <a href="https://plus.google.com/113548610124685160907?rel=author">Slobodan Kovačević</a>
+        <a href="http://orangeiceberg.com/about/">Ivica Lakatoš</a>
       
     </span>
   </span>
@@ -147,21 +147,112 @@
     
     
     <h1 class="entry-title">
-        Random Rails Tips
+        Show Part of a Rails Template in Other Language
         
     </h1>
     
   </header>
 
 
-<div class="entry-content clearfix"><p>Here are some random Rails tips I&#8217;ve found useful:</p>
+<div class="entry-content clearfix"><p>I recently worked on a Rails project, which had parts of pages in different languages. That may be a problem if you have already translated their entire text to all required languages. You can even be tempted to hardcode parts of the text into other languages. Fortunately, there is an elegant way to solve that problem, just wrap parts of template or partials into blocks with desired locale, like this:</p>
 
-<ul>
-<li><strong>rails console sandbox</strong> &#8211; if you open console like this it will rollback all database changes once you exit. Pretty useful for playing around without making any changes to database.</li>
-<li><strong>rake db:migrate:status</strong> &#8211; useful when you want to see the status of current database. It will show the status of all migrations.</li>
-<li><strong>User.pluck(:email)</strong> &#8211; since Rails 3.2.1 you can use <a href="http://apidock.com/rails/ActiveRecord/Calculations/pluck">pluck</a> method to get an array of values in one particular column. It&#8217;s the equvivalent of doing User.select(:email).map(&amp;:email)</li>
-</ul>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">&lt;</span><span class="sx">% I18n.with_locale(&#39;en&#39;) </span><span class="k">do</span> <span class="sx">%&gt;</span>
+</span><span class='line'><span class="sx">  ...part of your template</span>
+</span><span class='line'><span class="sx">  or</span>
+</span><span class='line'><span class="sx">  &lt;%= render partial: &#39;some/partial&#39; %&gt;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="sx">% end </span><span class="o">%&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
 
+
+<h3>Example</h3>
+
+<p>Suppose, there is a template with only header and two paragraphs.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;&lt;</span><span class="sx">%= t(&#39;my_great_header&#39;) %&gt;&lt;/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sx">&lt;p&gt;&lt;%=</span> <span class="n">t</span><span class="p">(</span><span class="s1">&#39;first_paragraph&#39;</span><span class="p">)</span> <span class="sx">%&gt;&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;&lt;%=</span> <span class="n">t</span><span class="p">(</span><span class="s1">&#39;second_paragraph&#39;</span><span class="p">)</span> <span class="sx">%&gt;&lt;/p&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And locale in English and French for that template.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># in config/locales/en.yml</span>
+</span><span class='line'><span class="ss">en</span><span class="p">:</span>
+</span><span class='line'>  <span class="n">my_great_header</span><span class="p">:</span> <span class="s2">&quot;My English great header&quot;</span>
+</span><span class='line'>  <span class="n">first_paragraph</span><span class="p">:</span> <span class="s2">&quot;First English paragraph&quot;</span>
+</span><span class='line'>  <span class="n">second_paragraph</span><span class="p">:</span> <span class="s2">&quot;Second English paragraph&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1"># in config/locales/fr.yml</span>
+</span><span class='line'><span class="ss">fr</span><span class="p">:</span>
+</span><span class='line'>  <span class="n">my_great_header</span><span class="p">:</span> <span class="s2">&quot;My French great header&quot;</span>
+</span><span class='line'>  <span class="n">first_paragraph</span><span class="p">:</span> <span class="s2">&quot;First French paragraph&quot;</span>
+</span><span class='line'>  <span class="n">second_paragraph</span><span class="p">:</span> <span class="s2">&quot;Second French paragraph&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<!--more-->
+
+
+<p>And client wants first paragraph to always be in English.</p>
+
+<p>Just wrap first paragraph in block with locale <code>'en</code>, like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;&lt;</span><span class="sx">%= t(&#39;my_great_header&#39;) %&gt;&lt;/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sx">&lt;% I18n.with_locale(&#39;en&#39;) do %&gt;</span>
+</span><span class='line'><span class="sx">  &lt;p&gt;&lt;%=</span> <span class="n">t</span><span class="p">(</span><span class="s1">&#39;first_paragraph&#39;</span><span class="p">)</span> <span class="sx">%&gt;&lt;/p&gt;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="sx">% end %&gt;</span>
+</span><span class='line'><span class="sx">&lt;p&gt;</span><span class="o">&lt;%=</span> <span class="n">t</span><span class="p">(</span><span class="s1">&#39;second_paragraph&#39;</span><span class="p">)</span> <span class="sx">%&gt;&lt;/p&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>and when you switch language to Franch result will be:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='text'><span class='line'>My French great header
+</span><span class='line'>
+</span><span class='line'>First English paragraph
+</span><span class='line'>
+</span><span class='line'>Second French paragraph
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>I hope that this helps. Have a nice day.</p>
 </div>
 
 
@@ -175,7 +266,7 @@
   <span class="byline author vcard">Posted by
     <span class="fn">
       
-        <a href="https://plus.google.com/113548610124685160907?rel=author">Slobodan Kovačević</a>
+        <a href="http://orangeiceberg.com/about/">Ivica Lakatoš</a>
       
     </span>
   </span>
@@ -194,7 +285,7 @@
 
 
 
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2013-03-09T09:00:00+01:00" pubdate data-updated="true">Mar 9<span>th</span>, 2013</time>
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2016-05-30T10:06:00+02:00" pubdate data-updated="true">May 30<span>th</span>, 2016</time>
           
 
 <span class="glyphicon glyphicon-tags"></span>&nbsp;
@@ -207,12 +298,21 @@
 
           
 
+<span class="tags">
+  
+    Tags:
+  
+  
+    <a class='tag' href='/tag/I18n-locale/'>I18n.locale</a>, <a class='tag' href='/tag/rails/'>rails</a>, <a class='tag' href='/tag/ruby/'>ruby</a>
+  
+</span>
+
 
         </p>
         
           <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://icebergist.com/posts/random-rails-tips" data-via="icebergist" data-counturl="http://icebergist.com/posts/random-rails-tips" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://icebergist.com/posts/display-part-of-rails-template-with-different-locale/" data-via="icebergist" data-counturl="http://icebergist.com/posts/display-part-of-rails-template-with-different-locale/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
@@ -226,10 +326,8 @@
         
           <ul class="meta text-muted pager">
             
-            <li class="previous"><a href="/posts/paperclip-heroku-and-amazon-s3-credentials" title="Previous Post: Paperclip, Heroku and Amazon S3 credentials">&laquo; Paperclip, Heroku and Amazon S3 credentials</a></li>
+            <li class="previous"><a href="/posts/deploying-with-capistrano-3/" title="Previous Post: Deploying Rails app with Capistrano 3">&laquo; Deploying Rails app with Capistrano 3</a></li>
             
-            
-            <li class="next"><a href="/posts/rspec-and-factorygirl-setup-for-testing-carrierwave-uploaders" title="Next Post: RSpec and FactoryGirl setup for testing Carrierwave uploaders">RSpec and FactoryGirl setup for testing Carrierwave uploaders &raquo;</a></li>
             
           </ul>
         
@@ -277,7 +375,7 @@
   
   <div id="recent_posts" class="list-group">
     
-    <a class="list-group-item " href="/posts/display-part-of-rails-template-with-different-locale/">Show Part of a Rails Template in Other Language</a>
+    <a class="list-group-item active" href="/posts/display-part-of-rails-template-with-different-locale/">Show Part of a Rails Template in Other Language</a>
     
     <a class="list-group-item " href="/posts/deploying-with-capistrano-3/">Deploying Rails App With Capistrano 3</a>
     
@@ -341,7 +439,7 @@
     <h3 class="panel-title">Tags</h3>
   </div>
   <div class="tag-cloud">
-    <span class='rank-3'><a href='/tag/tips'>tips</a></span> <span class='rank-5'><a href='/tag/heroku'>heroku</a></span> <span class='rank-5'><a href='/tag/PHP'>PHP</a></span> <span class='rank-5'><a href='/tag/mac'>mac</a></span> <span class='rank-5'><a href='/tag/capistrano-3'>capistrano 3</a></span> <span class='rank-5'><a href='/tag/weekly'>weekly</a></span> <span class='rank-5'><a href='/tag/capistrano-rbenv'>capistrano-rbenv</a></span> <span class='rank-5'><a href='/tag/rails4'>rails4</a></span> <span class='rank-1'><a href='/tag/rails'>rails</a></span> <span class='rank-5'><a href='/tag/mysql'>mysql</a></span> <span class='rank-5'><a href='/tag/cucumber'>cucumber</a></span> <span class='rank-5'><a href='/tag/carrierwave'>carrierwave</a></span> <span class='rank-5'><a href='/tag/css'>css</a></span> <span class='rank-5'><a href='/tag/rake-task'>rake task</a></span> <span class='rank-5'><a href='/tag/scaffold'>scaffold</a></span> <span class='rank-5'><a href='/tag/paperclip'>paperclip</a></span> <span class='rank-4'><a href='/tag/linux'>linux</a></span> <span class='rank-5'><a href='/tag/vagrant'>vagrant</a></span> <span class='rank-5'><a href='/tag/devise'>devise</a></span> <span class='rank-5'><a href='/tag/factorygirl'>factorygirl</a></span> <span class='rank-5'><a href='/tag/rails3'>rails3</a></span> <span class='rank-5'><a href='/tag/resources'>resources</a></span> <span class='rank-5'><a href='/tag/rest'>rest</a></span> <span class='rank-5'><a href='/tag/globalize'>globalize</a></span> <span class='rank-5'><a href='/tag/codeigniter'>codeigniter</a></span> <span class='rank-5'><a href='/tag/admin'>admin</a></span> <span class='rank-5'><a href='/tag/amazon-s3'>amazon s3</a></span> <span class='rank-5'><a href='/tag/restful'>restful</a></span> <span class='rank-5'><a href='/tag/erkanaauth'>erkanaauth</a></span> <span class='rank-2'><a href='/tag/ruby'>ruby</a></span> <span class='rank-5'><a href='/tag/sqlite'>sqlite</a></span> <span class='rank-5'><a href='/tag/Javascript'>Javascript</a></span> <span class='rank-5'><a href='/tag/postgres'>postgres</a></span> <span class='rank-5'><a href='/tag/rspec'>rspec</a></span> <span class='rank-4'><a href='/tag/ubuntu'>ubuntu</a></span> <span class='rank-4'><a href='/tag/links'>links</a></span> <span class='rank-3'><a href='/tag/howto'>howto</a></span> <span class='rank-5'><a href='/tag/password-protected'>password protected</a></span> <span class='rank-5'><a href='/tag/hosting'>hosting</a></span> <span class='rank-5'><a href='/tag/tdd'>tdd</a></span> <span class='rank-5'><a href='/tag/capistrano-rails'>capistrano-rails</a></span> <span class='rank-5'><a href='/tag/cloud-computing'>cloud computing</a></span> <span class='rank-5'><a href='/tag/tutorial'>tutorial</a></span> <span class='rank-5'><a href='/tag/I18n-locale'>I18n.locale</a></span> <span class='rank-5'><a href='/tag/factory-girl'>factory_girl</a></span> <span class='rank-5'><a href='/tag/selenium-webdriver'>selenium-webdriver</a></span> <span class='rank-5'><a href='/tag/edge'>edge</a></span> <span class='rank-5'><a href='/tag/deployment'>deployment</a></span> <span class='rank-5'><a href='/tag/virtualbox'>virtualbox</a></span> 
+    <span class='rank-5'><a href='/tag/vagrant'>vagrant</a></span> <span class='rank-5'><a href='/tag/codeigniter'>codeigniter</a></span> <span class='rank-5'><a href='/tag/deployment'>deployment</a></span> <span class='rank-5'><a href='/tag/admin'>admin</a></span> <span class='rank-5'><a href='/tag/password-protected'>password protected</a></span> <span class='rank-5'><a href='/tag/Javascript'>Javascript</a></span> <span class='rank-5'><a href='/tag/erkanaauth'>erkanaauth</a></span> <span class='rank-5'><a href='/tag/cucumber'>cucumber</a></span> <span class='rank-5'><a href='/tag/heroku'>heroku</a></span> <span class='rank-5'><a href='/tag/devise'>devise</a></span> <span class='rank-5'><a href='/tag/css'>css</a></span> <span class='rank-5'><a href='/tag/sqlite'>sqlite</a></span> <span class='rank-5'><a href='/tag/capistrano-rbenv'>capistrano-rbenv</a></span> <span class='rank-5'><a href='/tag/mysql'>mysql</a></span> <span class='rank-4'><a href='/tag/linux'>linux</a></span> <span class='rank-5'><a href='/tag/mac'>mac</a></span> <span class='rank-5'><a href='/tag/hosting'>hosting</a></span> <span class='rank-5'><a href='/tag/rake-task'>rake task</a></span> <span class='rank-5'><a href='/tag/capistrano-3'>capistrano 3</a></span> <span class='rank-5'><a href='/tag/carrierwave'>carrierwave</a></span> <span class='rank-5'><a href='/tag/rails3'>rails3</a></span> <span class='rank-5'><a href='/tag/I18n-locale'>I18n.locale</a></span> <span class='rank-3'><a href='/tag/howto'>howto</a></span> <span class='rank-5'><a href='/tag/PHP'>PHP</a></span> <span class='rank-5'><a href='/tag/selenium-webdriver'>selenium-webdriver</a></span> <span class='rank-4'><a href='/tag/ubuntu'>ubuntu</a></span> <span class='rank-5'><a href='/tag/scaffold'>scaffold</a></span> <span class='rank-5'><a href='/tag/tutorial'>tutorial</a></span> <span class='rank-5'><a href='/tag/amazon-s3'>amazon s3</a></span> <span class='rank-5'><a href='/tag/rails4'>rails4</a></span> <span class='rank-5'><a href='/tag/tdd'>tdd</a></span> <span class='rank-5'><a href='/tag/cloud-computing'>cloud computing</a></span> <span class='rank-2'><a href='/tag/ruby'>ruby</a></span> <span class='rank-5'><a href='/tag/rest'>rest</a></span> <span class='rank-5'><a href='/tag/virtualbox'>virtualbox</a></span> <span class='rank-5'><a href='/tag/globalize'>globalize</a></span> <span class='rank-3'><a href='/tag/tips'>tips</a></span> <span class='rank-5'><a href='/tag/factorygirl'>factorygirl</a></span> <span class='rank-5'><a href='/tag/edge'>edge</a></span> <span class='rank-5'><a href='/tag/factory-girl'>factory_girl</a></span> <span class='rank-5'><a href='/tag/rspec'>rspec</a></span> <span class='rank-5'><a href='/tag/capistrano-rails'>capistrano-rails</a></span> <span class='rank-5'><a href='/tag/restful'>restful</a></span> <span class='rank-4'><a href='/tag/links'>links</a></span> <span class='rank-5'><a href='/tag/postgres'>postgres</a></span> <span class='rank-5'><a href='/tag/paperclip'>paperclip</a></span> <span class='rank-1'><a href='/tag/rails'>rails</a></span> <span class='rank-5'><a href='/tag/weekly'>weekly</a></span> <span class='rank-5'><a href='/tag/resources'>resources</a></span> 
   </div>
 </section>
 
@@ -380,8 +478,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://icebergist.com/posts/random-rails-tips';
-        var disqus_url = 'http://icebergist.com/posts/random-rails-tips';
+        var disqus_identifier = 'http://icebergist.com/posts/display-part-of-rails-template-with-different-locale/';
+        var disqus_url = 'http://icebergist.com/posts/display-part-of-rails-template-with-different-locale/';
         var disqus_script = 'embed.js';
       
     (function () {
