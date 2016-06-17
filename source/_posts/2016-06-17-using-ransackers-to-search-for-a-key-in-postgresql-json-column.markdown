@@ -21,7 +21,7 @@ Starting with v9.2, PostgreSQL added native JSON support witch enabled us to tak
 
 While working on a Ruby on Rails application that used PostgreSQL database to store data, we came a across an issue where we needed to implement a search by key within a JSON column.
 
-We ware alredy using [Ransack](https://github.com/activerecord-hackery/ransack) for building search forms within the application, so we needed a way of telling Ransack to perform a search by given key in our JSON column. 
+We were alredy using [Ransack](https://github.com/activerecord-hackery/ransack) for building search forms within the application, so we needed a way of telling Ransack to perform a search by given key in our JSON column. 
 
 This is where [Ransackers](https://github.com/activerecord-hackery/ransack/wiki/using-ransackers) come in. 
 >The premise behind Ransack is to provide access to Arel predicate methods.
