@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Using Ransackers to search for a key in PostgreSQL JSON column"
-date: 2016-06-17 12:39:42 +0200
+date: 2016-06-20 12:39:42 +0200
 comments: true
 author: Jovana Dačić
 categories: 
@@ -37,7 +37,7 @@ end
 ```
 Now with our search set on `link_type_cont` (cont being just one of Ransack available search predicates), if the user entered for example  `123` in the search filed, it would generate a query like this:
 
-```SQL
+```
 SELECT  "transactions".* FROM "transactions"  WHERE ("transactions"."payload" ->> 'invoice_number' ILIKE '%123%')
 ```
 
