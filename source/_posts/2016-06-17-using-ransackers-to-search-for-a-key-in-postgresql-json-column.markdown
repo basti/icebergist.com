@@ -38,4 +38,4 @@ Now with our search set on `link_type_cont` (cont being just one of Ransack avai
 SELECT  "transactions".* FROM "transactions"  WHERE ("transactions"."payload" ->> 'invoice_number' ILIKE '%123%')
 ```
 
-basically performing a search for records in `transactions` table that have a key called `invoice_number` within a JSON column `payload` with value containing a string `123`.
+basically performing a search for records in `transactions` table that have a key called `invoice_number` with value containing a string `123`, within a JSON column `payload`.
