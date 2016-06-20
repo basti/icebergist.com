@@ -4,10 +4,10 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Tag: howto - Icebergist</title>
+  <title>Using Ransackers to search for a key in PostgreSQL JSON column - Icebergist</title>
   <meta name="author" content="Orange Iceberg">
 
-  <meta name="description" content="Tag: howto">
+  
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -16,7 +16,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://icebergist.comtag/howto">
+  <link rel="canonical" href="http://icebergist.com/posts/using-ransackers-to-search-for-a-key-in-postgresql-json-column">
   <link href="http://feeds.feedburner.com/icebergist" rel="alternate" title="Icebergist" type="application/atom+xml">
 
   <link rel="apple-touch-icon" sizes="57x57" href="/assets/favicons/apple-icon-57x57.png">
@@ -106,104 +106,105 @@
         <div id="content">
           <div class="row">
   <div class="page-content col-md-9">
-    <article role="article">
+    <article class="hentry" role="article">
       
-        <header class="page-header">
-          
-          
-            <h1 class="entry-title">
-              Tag: Howto
-              
-            </h1>
-          
-        </header>
+  <header class="page-header">
+    
+      <p class="meta text-muted">
+        
+
+
+
+
+
+
+
+
+
+
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2016-06-20T12:39:42+02:00" pubdate data-updated="true">Jun 20<span>th</span>, 2016</time>
+        | 
+  
+
+
+  <span class="glyphicon glyphicon-user"></span>
+  <span class="byline author vcard">Posted by
+    <span class="fn">
       
-      <div class="entry-content">
-        <div id="blog-archives" class="tag">
+        <a href="http://orangeiceberg.com/about/">Jovana Dačić</a>
+      
+    </span>
+  </span>
 
 
-
-  
-  <h2>2015</h2>
-
-<article>
-  
-<h1><a href="/posts/import-and-export-mysql-dump/">Import and export MySQL dump</a></h1>
-<p class="meta text-muted">
-  
-
-
-
-
-
-
+        
+           | <a href="#disqus_thread"
+             data-disqus-identifier="http://icebergist.com">Comments</a>
+        
+      </p>
+    
+    
+    <h1 class="entry-title">
+        Using Ransackers to Search for a Key in PostgreSQL JSON Column
+        
+    </h1>
+    
+  </header>
 
 
+<div class="entry-content clearfix"><p>Starting with v9.2, PostgreSQL added native JSON support which enabled us to take advantage of some benefits that come with NoSQL database within a traditional relational database such as PostgreSQL.</p>
+
+<p>While working on a Ruby on Rails application that used PostgreSQL database to store data, we came a across an issue where we needed to implement a search by key within a JSON column.</p>
+
+<p>We were alredy using <a href="https://github.com/activerecord-hackery/ransack">Ransack</a> for building search forms within the application, so we needed a way of telling Ransack to perform a search by given key in our JSON column.</p>
+
+<p>This is where <a href="https://github.com/activerecord-hackery/ransack/wiki/using-ransackers">Ransackers</a> come in.</p>
+
+<blockquote><p>The premise behind Ransack is to provide access to Arel predicate methods.</p></blockquote>
+
+<p>You can find more information on Arel <a href="https://github.com/rails/arel">here</a>.</p>
+
+<p>In our case we needed to perform a search within <code>transactions</code> table and <code>payload</code> JSON column, looking for records containing a key called <code>invoice_number</code>. To achieve this we added the following ransacker to our <code>Transaction</code> model</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">ransacker</span> <span class="ss">:invoice_number</span> <span class="k">do</span> <span class="o">|</span><span class="n">parent</span><span class="o">|</span>
+</span><span class='line'>   <span class="ss">Arel</span><span class="p">:</span><span class="ss">:Nodes</span><span class="o">::</span><span class="no">InfixOperation</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s1">&#39;-&gt;&gt;&#39;</span><span class="p">,</span> <span class="n">parent</span><span class="o">.</span><span class="n">table</span><span class="o">[</span><span class="ss">:payload</span><span class="o">]</span><span class="p">,</span> <span class="s1">&#39;invoice_number&#39;</span><span class="p">)</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
+<p>Now with our search set on <code>link_type_cont</code> (cont being just one of Ransack available search predicates), if the user entered for example  <code>123</code> in the search filed, it would generate a query like this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">SELECT</span>  <span class="s2">&quot;transactions&quot;</span><span class="o">.</span><span class="n">*</span> <span class="no">FROM</span> <span class="s2">&quot;transactions&quot;</span>  <span class="no">WHERE</span> <span class="p">(</span><span class="s2">&quot;transactions&quot;</span><span class="o">.</span><span class="s2">&quot;payload&quot;</span> <span class="o">-&gt;&gt;</span> <span class="s1">&#39;invoice_number&#39;</span> <span class="no">ILIKE</span> <span class="s1">&#39;%123%&#39;</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2015-12-02T10:44:23+01:00" pubdate data-updated="true">Dec 2<span>nd</span>, 2015</time>
-  
-
-<span class="glyphicon glyphicon-tags"></span>&nbsp;
-<span class="categories">
-  
-    <a class='category' href='/category/misc/'>Misc</a>
-  
-</span>
+<p>basically performing a search for records in <code>transactions</code> table that have a key called <code>invoice_number</code> with value containing a string <code>123</code>, within a JSON column <code>payload</code>.</p>
+</div>
 
 
-</p>
-
-</article>
-
-
-
-<article>
-  
-<h1><a href="/posts/create-and-extract-archives-using-tar-and-gzip/">Create and extract archives using tar and gzip</a></h1>
-<p class="meta text-muted">
-  
-
-
-
-
-
-
-
-
-
-
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2015-11-13T13:28:36+01:00" pubdate data-updated="true">Nov 13<span>th</span>, 2015</time>
-  
-
-<span class="glyphicon glyphicon-tags"></span>&nbsp;
-<span class="categories">
-  
-    <a class='category' href='/category/misc/'>Misc</a>
-  
-</span>
-
-
-</p>
-
-</article>
-
-
-
-  
-  <h2>2014</h2>
-
-<article>
-  
-<h1><a href="/posts/how-to-skip-devise-trackable-updates/">How to skip Devise trackable updates</a></h1>
-<p class="meta text-muted">
+      <footer>
+        <p class="meta text-muted">
+          
   
 
 
+  <span class="glyphicon glyphicon-user"></span>
+  <span class="byline author vcard">Posted by
+    <span class="fn">
+      
+        <a href="http://orangeiceberg.com/about/">Jovana Dačić</a>
+      
+    </span>
+  </span>
+
+
+          
 
 
 
@@ -214,8 +215,10 @@
 
 
 
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-05-12T19:10:06+02:00" pubdate data-updated="true">May 12<span>th</span>, 2014</time>
-  
+
+
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2016-06-20T12:39:42+02:00" pubdate data-updated="true">Jun 20<span>th</span>, 2016</time>
+          
 
 <span class="glyphicon glyphicon-tags"></span>&nbsp;
 <span class="categories">
@@ -225,130 +228,56 @@
 </span>
 
 
-</p>
+          
 
-</article>
-
-
-
-<article>
+<span class="tags">
   
-<h1><a href="/posts/upgrade-ubuntu-8-dot-04-lts-server/">Upgrade Ubuntu 8.04 LTS server</a></h1>
-<p class="meta text-muted">
+    Tags:
   
-
-
-
-
-
-
-
-
-
-
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2014-01-06T11:36:43+01:00" pubdate data-updated="true">Jan 6<span>th</span>, 2014</time>
   
-
-<span class="glyphicon glyphicon-tags"></span>&nbsp;
-<span class="categories">
-  
-    <a class='category' href='/category/misc/'>Misc</a>
+    <a class='tag' href='/tag/postgreSQL/'>postgreSQL</a>, <a class='tag' href='/tag/rails/'>rails</a>, <a class='tag' href='/tag/ransack/'>ransack</a>, <a class='tag' href='/tag/ruby/'>ruby</a>
   
 </span>
 
 
-</p>
-
-</article>
-
-
-
+        </p>
+        
+          <div class="sharing">
   
-  <h2>2013</h2>
-
-<article>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://icebergist.com/posts/using-ransackers-to-search-for-a-key-in-postgresql-json-column/" data-via="icebergist" data-counturl="http://icebergist.com/posts/using-ransackers-to-search-for-a-key-in-postgresql-json-column/" >Tweet</a>
   
-<h1><a href="/posts/quick-virtualboxvagrant-setup-with-heroku-like-box">Quick VirtualBox/Vagrant setup with Heroku-like box</a></h1>
-<p class="meta text-muted">
   
-
-
-
-
-
-
-
-
-
-
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2013-09-16T10:00:00+02:00" pubdate data-updated="true">Sep 16<span>th</span>, 2013</time>
+  <div class="g-plusone" data-size="medium"></div>
   
-
-<span class="glyphicon glyphicon-tags"></span>&nbsp;
-<span class="categories">
   
-    <a class='category' href='/category/misc/'>Misc</a>, <a class='category' href='/category/ruby-and-rails/'>Ruby and Rails</a>
+    <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
   
-</span>
-
-
-</p>
-
-</article>
-
-
-
-  
-  <h2>2009</h2>
-
-<article>
-  
-<h1><a href="/posts/simple-password-protected-administration-with-codeigniter">Simple password protected administration with CodeIgniter</a></h1>
-<p class="meta text-muted">
-  
-
-
-
-
-
-
-
-
-
-
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2009-03-08T09:00:00+01:00" pubdate data-updated="true">Mar 8<span>th</span>, 2009</time>
-  
-
-<span class="glyphicon glyphicon-tags"></span>&nbsp;
-<span class="categories">
-  
-    <a class='category' href='/category/php/'>PHP</a>
-  
-</span>
-
-
-</p>
-
-</article>
-
 </div>
 
-      </div>
-      
+        
+        
+          <ul class="meta text-muted pager">
+            
+            <li class="previous"><a href="/posts/display-part-of-rails-template-with-different-locale/" title="Previous Post: Show part of a Rails template in other locale">&laquo; Show part of a Rails template in other locale</a></li>
+            
+            
+          </ul>
+        
+      </footer>
     </article>
+    
+      <section>
+        <h1>Comments</h1>
+        <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+      </section>
     
   </div>
 
   
-    <aside class="sidebar col-md-3">
-      
-        <section>
+  <aside class="sidebar col-md-3">
+    
+      <section>
   <h2>About us</h2>
   <div>
     <a href="http://orangeiceberg.com">
@@ -378,7 +307,7 @@
   
   <div id="recent_posts" class="list-group">
     
-    <a class="list-group-item " href="/posts/using-ransackers-to-search-for-a-key-in-postgresql-json-column/">Using Ransackers to Search for a Key in PostgreSQL JSON Column</a>
+    <a class="list-group-item active" href="/posts/using-ransackers-to-search-for-a-key-in-postgresql-json-column/">Using Ransackers to Search for a Key in PostgreSQL JSON Column</a>
     
     <a class="list-group-item " href="/posts/display-part-of-rails-template-with-different-locale/">Show Part of a Rails Template in Other Locale</a>
     
@@ -442,13 +371,13 @@
     <h3 class="panel-title">Tags</h3>
   </div>
   <div class="tag-cloud">
-    <span class='rank-5'><a href='/tag/postgres'>postgres</a></span> <span class='rank-4'><a href='/tag/links'>links</a></span> <span class='rank-5'><a href='/tag/erkanaauth'>erkanaauth</a></span> <span class='rank-5'><a href='/tag/password-protected'>password protected</a></span> <span class='rank-5'><a href='/tag/hosting'>hosting</a></span> <span class='rank-5'><a href='/tag/vagrant'>vagrant</a></span> <span class='rank-5'><a href='/tag/rest'>rest</a></span> <span class='rank-5'><a href='/tag/resources'>resources</a></span> <span class='rank-5'><a href='/tag/heroku'>heroku</a></span> <span class='rank-5'><a href='/tag/paperclip'>paperclip</a></span> <span class='rank-5'><a href='/tag/edge'>edge</a></span> <span class='rank-5'><a href='/tag/cucumber'>cucumber</a></span> <span class='rank-5'><a href='/tag/Javascript'>Javascript</a></span> <span class='rank-5'><a href='/tag/carrierwave'>carrierwave</a></span> <span class='rank-1'><a href='/tag/rails'>rails</a></span> <span class='rank-5'><a href='/tag/PHP'>PHP</a></span> <span class='rank-3'><a href='/tag/tips'>tips</a></span> <span class='rank-5'><a href='/tag/capistrano-rails'>capistrano-rails</a></span> <span class='rank-5'><a href='/tag/tdd'>tdd</a></span> <span class='rank-5'><a href='/tag/codeigniter'>codeigniter</a></span> <span class='rank-5'><a href='/tag/postgreSQL'>postgreSQL</a></span> <span class='rank-5'><a href='/tag/mac'>mac</a></span> <span class='rank-5'><a href='/tag/capistrano-rbenv'>capistrano-rbenv</a></span> <span class='rank-5'><a href='/tag/rake-task'>rake task</a></span> <span class='rank-5'><a href='/tag/I18n-locale'>I18n.locale</a></span> <span class='rank-5'><a href='/tag/restful'>restful</a></span> <span class='rank-5'><a href='/tag/css'>css</a></span> <span class='rank-5'><a href='/tag/selenium-webdriver'>selenium-webdriver</a></span> <span class='rank-5'><a href='/tag/sqlite'>sqlite</a></span> <span class='rank-5'><a href='/tag/globalize'>globalize</a></span> <span class='rank-5'><a href='/tag/mysql'>mysql</a></span> <span class='rank-2'><a href='/tag/ruby'>ruby</a></span> <span class='rank-5'><a href='/tag/capistrano-3'>capistrano 3</a></span> <span class='rank-5'><a href='/tag/ransack'>ransack</a></span> <span class='rank-5'><a href='/tag/devise'>devise</a></span> <span class='rank-5'><a href='/tag/amazon-s3'>amazon s3</a></span> <span class='rank-5'><a href='/tag/scaffold'>scaffold</a></span> <span class='rank-4'><a href='/tag/ubuntu'>ubuntu</a></span> <span class='rank-5'><a href='/tag/virtualbox'>virtualbox</a></span> <span class='rank-5'><a href='/tag/cloud-computing'>cloud computing</a></span> <span class='rank-5'><a href='/tag/weekly'>weekly</a></span> <span class='rank-5'><a href='/tag/admin'>admin</a></span> <span class='rank-3'><a href='/tag/howto'>howto</a></span> <span class='rank-5'><a href='/tag/deployment'>deployment</a></span> <span class='rank-5'><a href='/tag/rails4'>rails4</a></span> <span class='rank-5'><a href='/tag/factory-girl'>factory_girl</a></span> <span class='rank-5'><a href='/tag/rspec'>rspec</a></span> <span class='rank-5'><a href='/tag/rails3'>rails3</a></span> <span class='rank-5'><a href='/tag/tutorial'>tutorial</a></span> <span class='rank-4'><a href='/tag/linux'>linux</a></span> <span class='rank-5'><a href='/tag/factorygirl'>factorygirl</a></span> 
+    <span class='rank-4'><a href='/tag/linux'>linux</a></span> <span class='rank-5'><a href='/tag/Javascript'>Javascript</a></span> <span class='rank-5'><a href='/tag/edge'>edge</a></span> <span class='rank-5'><a href='/tag/capistrano-3'>capistrano 3</a></span> <span class='rank-5'><a href='/tag/paperclip'>paperclip</a></span> <span class='rank-5'><a href='/tag/mysql'>mysql</a></span> <span class='rank-5'><a href='/tag/admin'>admin</a></span> <span class='rank-3'><a href='/tag/tips'>tips</a></span> <span class='rank-2'><a href='/tag/ruby'>ruby</a></span> <span class='rank-5'><a href='/tag/virtualbox'>virtualbox</a></span> <span class='rank-5'><a href='/tag/selenium-webdriver'>selenium-webdriver</a></span> <span class='rank-5'><a href='/tag/heroku'>heroku</a></span> <span class='rank-5'><a href='/tag/rake-task'>rake task</a></span> <span class='rank-5'><a href='/tag/rspec'>rspec</a></span> <span class='rank-5'><a href='/tag/ransack'>ransack</a></span> <span class='rank-5'><a href='/tag/css'>css</a></span> <span class='rank-5'><a href='/tag/vagrant'>vagrant</a></span> <span class='rank-5'><a href='/tag/globalize'>globalize</a></span> <span class='rank-1'><a href='/tag/rails'>rails</a></span> <span class='rank-5'><a href='/tag/rails4'>rails4</a></span> <span class='rank-5'><a href='/tag/postgres'>postgres</a></span> <span class='rank-5'><a href='/tag/devise'>devise</a></span> <span class='rank-5'><a href='/tag/resources'>resources</a></span> <span class='rank-5'><a href='/tag/rest'>rest</a></span> <span class='rank-4'><a href='/tag/links'>links</a></span> <span class='rank-5'><a href='/tag/scaffold'>scaffold</a></span> <span class='rank-5'><a href='/tag/tdd'>tdd</a></span> <span class='rank-5'><a href='/tag/postgreSQL'>postgreSQL</a></span> <span class='rank-5'><a href='/tag/factorygirl'>factorygirl</a></span> <span class='rank-5'><a href='/tag/rails3'>rails3</a></span> <span class='rank-5'><a href='/tag/restful'>restful</a></span> <span class='rank-5'><a href='/tag/password-protected'>password protected</a></span> <span class='rank-5'><a href='/tag/carrierwave'>carrierwave</a></span> <span class='rank-5'><a href='/tag/PHP'>PHP</a></span> <span class='rank-4'><a href='/tag/ubuntu'>ubuntu</a></span> <span class='rank-5'><a href='/tag/capistrano-rails'>capistrano-rails</a></span> <span class='rank-3'><a href='/tag/howto'>howto</a></span> <span class='rank-5'><a href='/tag/I18n-locale'>I18n.locale</a></span> <span class='rank-5'><a href='/tag/amazon-s3'>amazon s3</a></span> <span class='rank-5'><a href='/tag/tutorial'>tutorial</a></span> <span class='rank-5'><a href='/tag/weekly'>weekly</a></span> <span class='rank-5'><a href='/tag/cloud-computing'>cloud computing</a></span> <span class='rank-5'><a href='/tag/mac'>mac</a></span> <span class='rank-5'><a href='/tag/factory-girl'>factory_girl</a></span> <span class='rank-5'><a href='/tag/sqlite'>sqlite</a></span> <span class='rank-5'><a href='/tag/cucumber'>cucumber</a></span> <span class='rank-5'><a href='/tag/deployment'>deployment</a></span> <span class='rank-5'><a href='/tag/hosting'>hosting</a></span> <span class='rank-5'><a href='/tag/capistrano-rbenv'>capistrano-rbenv</a></span> <span class='rank-5'><a href='/tag/codeigniter'>codeigniter</a></span> <span class='rank-5'><a href='/tag/erkanaauth'>erkanaauth</a></span> 
   </div>
 </section>
 
 
-      
-    </aside>
+    
+  </aside>
   
 </div>
 
@@ -480,7 +409,10 @@
       var disqus_shortname = 'icebergist';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://icebergist.com/posts/using-ransackers-to-search-for-a-key-in-postgresql-json-column/';
+        var disqus_url = 'http://icebergist.com/posts/using-ransackers-to-search-for-a-key-in-postgresql-json-column/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
