@@ -30,7 +30,6 @@ Here we used the following options:
 * `-U` to specify which user will connect to the PostgreSQL database server.
 *  `-W` or `--password` will force pg_dump to prompt for a password before connecting to the server.
 *  `-F` is used to specify the format of the output file, which can be one of the following:
-*
 	* `p` - plain-text SQL script
 	* `c` - custom-format archive
 	* `d` - directory-format archive
@@ -63,13 +62,11 @@ where `db_user` is the database user, `db_name` is the database name, and `dump_
 
 ###2. Restoring a a database with pg_restore
 
-If you choose custom, directory, or archive format when creating a backup file, then you will need to use pg_restore in order to restore your database.
-
-To restore your database from a backup file you will need to run the following command:
+If you choose custom, directory, or archive format when creating a backup file, then you will need to use pg_restore in order to restore your database:
 
 `pg_restore -d db_name /path/to/your/file/dump_name.tar -c -U db_user`
 
-If you use this option to restore your database you have various options available, for example:
+If you use pg_restore you have various options available, for example:
 
 - `-c` to drop database objects before recreating them,
 - `-C` to create a database before restoring into it,
