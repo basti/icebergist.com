@@ -1,19 +1,16 @@
 ---
 layout: post
 title: "Backup and Restore a PostgreSQL Database"
-date: 2016-10-14 14:05:38 +0200
+date: 2016-10-18 07:05:38 +0200
 comments: true
 author: Jovana Dačić
 categories: 
   - Misc
 tags: 
-  - ruby
-  - rails
-  - PostgreSQL
+  - postgreSQL
+  - postgres
 published: true
 ---
-
-#Backup and Restore a PostgreSQL Database
 
 While working on different projects and in different environments, we often need to export a dump from one database and then import it into another. A while ago [Slobodan](http://http://orangeiceberg.com/about/ "About Slobodan") wrote how to [export and import a mySQL dump](http://icebergist.com/posts/import-and-export-mysql-dump/ "Import and Export mySQL dump"), and here is a guide how do it for PostgreSQL.
 
@@ -51,7 +48,7 @@ There are two ways to restore a PostgreSQL database:
 1. `psql` for restoring from a plain SQL script file created with `pg_dump`, 
 2. `pg_restore` for restoring from a .tar file, directory, or custom format created with `pg_dump`. 
 
-###1. Restore a a database with psql
+###1. Restore a database with psql
 
 If your backup is a plain-text file containing SQL script, then you can restore your database by using [PostgreSQL interactive terminal](https://www.postgresql.org/docs/current/static/app-psql.html), and running the following command:
 
@@ -60,7 +57,7 @@ psql -U db_user db_name < dump_name.sql
 ```
 where `db_user` is the database user, `db_name` is the database name, and `dump_name.sql` is the name of your backup file.
 
-###2. Restore a a database with pg_restore
+###2. Restore a database with pg_restore
 
 If you choose custom, directory, or archive format when creating a backup file, then you will need to use pg_restore in order to restore your database:
 
