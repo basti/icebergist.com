@@ -4,7 +4,7 @@
   <title><![CDATA[Icebergist]]></title>
   <link href="http://icebergist.com/atom.xml" rel="self"/>
   <link href="http://icebergist.com/"/>
-  <updated>2016-06-20T10:43:48+02:00</updated>
+  <updated>2016-10-18T09:15:00+02:00</updated>
   <id>http://icebergist.com/</id>
   <author>
     <name><![CDATA[Orange Iceberg]]></name>
@@ -12,6 +12,89 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Backup and Restore a PostgreSQL Database]]></title>
+    <link href="http://icebergist.com/posts/backup-and-restore-a-postresql-database/"/>
+    <updated>2016-10-18T07:05:38+02:00</updated>
+    <id>http://icebergist.com/posts/backup-and-restore-a-postresql-database</id>
+    <content type="html"><![CDATA[<p>While working on different projects and in different environments, we often need to export a dump from one database and then import it into another. A while ago <a href="http://http://orangeiceberg.com/about/" title="About Slobodan">Slobodan</a> wrote how to <a href="http://icebergist.com/posts/import-and-export-mysql-dump/" title="Import and Export mySQL dump">export and import a mySQL dump</a>, and here is a guide how do it for PostgreSQL.</p>
+
+<h2>Export a PostgreSQL database dump</h2>
+
+<p>To export PostgreSQL database we will need to use the <a href="https://www.postgresql.org/docs/current/static/backup-dump.html" title="PostgreSQL">pg_dump</a> tool, which will dump all the contents of a selected database into a single file.
+We need to run <code>pg_dump</code> in the command line on the computer where the database is stored. So, if the database is stored on a remote server, you will need to SSH to that server in order to run the following command:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>pg_dump -U db_user -W -F t db_name &gt; /path/to/your/file/dump_name.tar</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Here we used the following options:</p>
+
+<ul>
+<li><code>-U</code> to specify which user will connect to the PostgreSQL database server.</li>
+<li><code>-W</code> or <code>--password</code> will force pg_dump to prompt for a password before connecting to the server.</li>
+<li><code>-F</code> is used to specify the format of the output file, which can be one of the following:
+
+<ul>
+<li><code>p</code> &ndash; plain-text SQL script</li>
+<li><code>c</code> &ndash; custom-format archive</li>
+<li><code>d</code> &ndash; directory-format archive</li>
+<li><code>t</code> &ndash; tar-format archive</li>
+</ul>
+</li>
+</ul>
+
+
+<p><sup><em>custom</em>, <em>directory</em> and <em>tar</em> formats are suitable for input into pg_restore.</sup></p>
+
+<p>To see a list of all the available options use <code>pg_dump -?</code>.</p>
+
+<p>With given options <code>pg_dump</code> will first prompt for a password for the database user <code>db_user</code> and then connect as that user to the database named <code>db_name</code>. After it successfully connects, <code>&gt;</code> will write the output produced by pg_dump to a file with a given name, in this case <code>dump_name.tar</code>.</p>
+
+<p>File created in the described process contains all the SQL queries that are required in order to replicate your database.</p>
+
+<h2>Import a PostgreSQL database dump</h2>
+
+<p>There are two ways to restore a PostgreSQL database:</p>
+
+<ol>
+<li><code>psql</code> for restoring from a plain SQL script file created with <code>pg_dump</code>,</li>
+<li><code>pg_restore</code> for restoring from a .tar file, directory, or custom format created with <code>pg_dump</code>.</li>
+</ol>
+
+
+<h3>1. Restore a database with psql</h3>
+
+<p>If your backup is a plain-text file containing SQL script, then you can restore your database by using <a href="https://www.postgresql.org/docs/current/static/app-psql.html">PostgreSQL interactive terminal</a>, and running the following command:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>psql -U db_user db_name &lt; dump_name.sql</span></code></pre></td></tr></table></div></figure>
+
+
+<p>where <code>db_user</code> is the database user, <code>db_name</code> is the database name, and <code>dump_name.sql</code> is the name of your backup file.</p>
+
+<h3>2. Restore a database with pg_restore</h3>
+
+<p>If you choose custom, directory, or archive format when creating a backup file, then you will need to use pg_restore in order to restore your database:</p>
+
+<p><code>pg_restore -d db_name /path/to/your/file/dump_name.tar -c -U db_user</code></p>
+
+<p>If you use pg_restore you have various options available, for example:</p>
+
+<ul>
+<li><code>-c</code> to drop database objects before recreating them,</li>
+<li><code>-C</code> to create a database before restoring into it,</li>
+<li><code>-e</code> exit if an error has encountered,</li>
+<li><code>-F format</code> to specify the format of the archive.</li>
+</ul>
+
+
+<p>Use <code>pg_restore -?</code> to get the full list of available options.</p>
+
+<p>You can find more info on using mentioned tools by running <code>man pg_dump</code>, <code>man psql</code> and <code>man pg_restore</code>.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Using Ransackers to search for a key in PostgreSQL JSON column]]></title>
@@ -1826,107 +1909,6 @@ has_attached_file :photo, :storage => :s3, :s3_credentials => S3_CREDENTIALS
 <p>I&#8217;ve just spent an hour trying to figure out why this keeps happening and I found that there&#8217;s a lot of people with similar problem.</p>
 
 <p>It seems that the problem appears when Rails tries to autoload files. In my case there was a simple solution &#8211; I just added require &#8216;serbian_simple.rb&#8217; in environment.rb to manually load the file.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Simple password protected administration with CodeIgniter]]></title>
-    <link href="http://icebergist.com/posts/simple-password-protected-administration-with-codeigniter"/>
-    <updated>2009-03-08T09:00:00+01:00</updated>
-    <id>http://icebergist.com/posts/simple-password-protected-administration-with-codeigniter</id>
-    <content type="html"><![CDATA[<p>Last week I&#8217;ve taken a break from Ruby/Rails development and I&#8217;ve worked on a site that uses PHP with <a href="http://codeigniter.com/">CodeIgniter</a> framework.</p>
-
-<p>Despite the fact that CodeIgniter has a very nice documentation I found it very difficult to find a way to do some simple things, that are more or less obvious, but which can be a problem for someone who hasn&#8217;t worked with CodeIgniter before. (for example, I found myself more than once looking at CI code to figure out how it works, so I can use it)</p>
-
-<p>I had to make a simple password protected administration section. One admin user, one password, no user registrations, no roles &#8211; simple as possible. As I was using CI framework I decided to find a plugin/library that does this. Unfortunately most CI authorization plugins/libraries are very bloated and too complicated for this simple task. I tried to find some examples how to handle this simple use case, but nothing came up.</p>
-
-<p>Finally I&#8217;ve found a small authorization plugin: <a href="http://codeigniter.com/wiki/Erkana/">Erkanaauth</a>.</p>
-
-<p>First you need a user table (must be named &#8216;users&#8217;) which only needs to have an id field and all other fields are optional because you will manually specify what other columns will be used. I opted for simple id, username, password:</p>
-
-<pre>CREATE TABLE IF NOT EXISTS `users` (
-  `id` int(11) NOT NULL auto_increment,
-  `username` varchar(255) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  PRIMARY KEY  (`id`)
-);</pre>
-
-
-<p>We will need to &#8220;install&#8221; ErkanaAuth library. You should <a href="http://codeigniter.com/wiki/File:erkanaauth.zip/">download it</a> and unzip it.</p>
-
-<p>Next we should create an Admin controller which will handle all administration tasks (remember I&#8217;m making simple admin here, so I don&#8217;t need to protect multiple controllers).</p>
-
-<pre>&lt;?php
-class Admin extends Controller {
-  function Admin()
-  {
-    parent::Controller();   
-    $this->load->database();
-    $this->load->helper(array('url', 'form', 'date'));
-    $this->load->library(array('form_validation', 'upload', 'Erkanaauth', 'session'));
-  }
-}
-?&gt;</pre>
-
-
-<p>Constructor just connects to database and loads some standard helpers and libraries (including Erkanaauth) that are usually used.</p>
-
-<p>Next step is to add a function which we can call to verify if user is logged in:</p>
-
-<pre>private
-  function authorize()
-  {
-      if($this->erkanaauth->try_session_login())
-          return true;
-  
-      redirect('admin/login');
-  }
-</pre>
-
-
-<p>Function uses Erkanaauth&#8217;s try_session_login which checks if user is already logged in (checks session for user id). If user isn&#8217;t logged in we&#8217;ll redirect him to our login page:</p>
-
-<pre>function login()
-  {
-    $username = $this->input->post('username', true);
-    $password = $this->input->post('password', true);
-    if($username || $password)
-    {
-      if($this->erkanaauth->try_login(array('username' => $username, 'password' => $password)))
-        redirect('admin');
-    }
-    
-    $this->load->view('admin_login');
-  }
-
-  function logout()
-  {
-    $this->erkanaauth->logout();
-    redirect('admin');
-  }
-</pre>
-
-
-<p>Key command here is try_login in login function which tries to find an entry in users table that fulfills given conditions. If you have different users table than the one I made this is the place where you should enter your column names.</p>
-
-<p>Logout function is has just a simple call to Erkana&#8217;s logout function. Nothing special there.</p>
-
-<p>Of course we also need a login page template which should contain a simple user/pass form. It&#8217;s pretty basic and you can see it if you get the complete code (see at the end).</p>
-
-<p>Finally we have everything needed to protect any page in Admin controller. In order to protect a page all you need to do is to add a call to authorize function to any function you want to protect. Like this:</p>
-
-<pre>function index()
-  {
-    $this->authorize();
-    echo "Do something useful... For now just display logout link: ";
-    echo anchor('admin/logout', "Logout");
-  }
-</pre>
-
-
-<p>That&#8217;s it. Now you have fully functional administration section which requires username and password authorization.</p>
-
-<p>You can get the complete sample application from <a href="http://github.com/basti/ci-admin-section/tree/master">Github repository</a>. Feel free to expand on it or use it any way you like.</p>
 ]]></content>
   </entry>
   

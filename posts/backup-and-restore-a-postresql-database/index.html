@@ -4,7 +4,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>This should be interesting weekly &#8211; week 27 - Icebergist</title>
+  <title>Backup and Restore a PostgreSQL Database - Icebergist</title>
   <meta name="author" content="Orange Iceberg">
 
   
@@ -16,7 +16,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://icebergist.com/posts/this-should-be-interesting-weekly-week-27">
+  <link rel="canonical" href="http://icebergist.com/posts/backup-and-restore-a-postresql-database">
   <link href="http://feeds.feedburner.com/icebergist" rel="alternate" title="Icebergist" type="application/atom+xml">
 
   <link rel="apple-touch-icon" sizes="57x57" href="/assets/favicons/apple-icon-57x57.png">
@@ -124,7 +124,7 @@
 
 
 
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2008-07-06T10:00:00+02:00" pubdate data-updated="true">Jul 6<span>th</span>, 2008</time>
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2016-10-18T07:05:38+02:00" pubdate data-updated="true">Oct 18<span>th</span>, 2016</time>
         | 
   
 
@@ -133,7 +133,7 @@
   <span class="byline author vcard">Posted by
     <span class="fn">
       
-        <a href="https://plus.google.com/113548610124685160907?rel=author">Slobodan Kovačević</a>
+        <a href="http://orangeiceberg.com/about/">Jovana Dačić</a>
       
     </span>
   </span>
@@ -147,22 +147,88 @@
     
     
     <h1 class="entry-title">
-        This Should Be Interesting Weekly &#8211; Week 27
+        Backup and Restore a PostgreSQL Database
         
     </h1>
     
   </header>
 
 
-<div class="entry-content clearfix"><p>This is the first weekly condensed edition of my <a href="http://tumblelog.slobodankovacevic.com/" title="Tumblelog by Slobodan Kovacevic">&#8220;This should be interesting&#8221; tumblelog</a>. Every Sunday I will re-post most interesting posts here on the Icebergist.</p>
+<div class="entry-content clearfix"><p>While working on different projects and in different environments, we often need to export a dump from one database and then import it into another. A while ago <a href="http://http://orangeiceberg.com/about/" title="About Slobodan">Slobodan</a> wrote how to <a href="http://icebergist.com/posts/import-and-export-mysql-dump/" title="Import and Export mySQL dump">export and import a mySQL dump</a>, and here is a guide how do it for PostgreSQL.</p>
+
+<h2>Export a PostgreSQL database dump</h2>
+
+<p>To export PostgreSQL database we will need to use the <a href="https://www.postgresql.org/docs/current/static/backup-dump.html" title="PostgreSQL">pg_dump</a> tool, which will dump all the contents of a selected database into a single file.
+We need to run <code>pg_dump</code> in the command line on the computer where the database is stored. So, if the database is stored on a remote server, you will need to SSH to that server in order to run the following command:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>pg_dump -U db_user -W -F t db_name &gt; /path/to/your/file/dump_name.tar</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Here we used the following options:</p>
 
 <ul>
-<li><a href="http://tumblelog.slobodankovacevic.com/post/40966961/new-free-book-ruby-on-rails-2-1-whats-new" title="Free Book: &quot;Ruby on Rails 2.1 - What’s new&quot;">Free Book: &#8220;Ruby on Rails 2.1 &#8211; What’s new&#8221;</a></li>
-<li><a href="http://tumblelog.slobodankovacevic.com/post/40888615/better-blockquotes-blockquotes-examples" title="Better Blockquotes - Blockquotes examples">Better Blockquotes</a> &#8211; blockquotes CSS styling examples</li>
-<li><a href="http://tumblelog.slobodankovacevic.com/post/39785793/slife-free-automatic-time-tracking-for-mac" title="Slife - free automatic time tracking for Mac">Slife</a> &#8211; free automatic time tracking for Mac</li>
-<li><a href="http://tumblelog.slobodankovacevic.com/post/39263529/unfocus-history-keeper-back-button-enabling-deep" title="unfocus-history-keeper">unfocus-history-keeper</a> &#8211; back button enabling, deep linking, event driven Javascrpt/DHTML/Ajax Library (works for Flash too)</li>
+<li><code>-U</code> to specify which user will connect to the PostgreSQL database server.</li>
+<li><code>-W</code> or <code>--password</code> will force pg_dump to prompt for a password before connecting to the server.</li>
+<li><code>-F</code> is used to specify the format of the output file, which can be one of the following:
+
+<ul>
+<li><code>p</code> &ndash; plain-text SQL script</li>
+<li><code>c</code> &ndash; custom-format archive</li>
+<li><code>d</code> &ndash; directory-format archive</li>
+<li><code>t</code> &ndash; tar-format archive</li>
+</ul>
+</li>
 </ul>
 
+
+<p><sup><em>custom</em>, <em>directory</em> and <em>tar</em> formats are suitable for input into pg_restore.</sup></p>
+
+<p>To see a list of all the available options use <code>pg_dump -?</code>.</p>
+
+<p>With given options <code>pg_dump</code> will first prompt for a password for the database user <code>db_user</code> and then connect as that user to the database named <code>db_name</code>. After it successfully connects, <code>&gt;</code> will write the output produced by pg_dump to a file with a given name, in this case <code>dump_name.tar</code>.</p>
+
+<p>File created in the described process contains all the SQL queries that are required in order to replicate your database.</p>
+
+<h2>Import a PostgreSQL database dump</h2>
+
+<p>There are two ways to restore a PostgreSQL database:</p>
+
+<ol>
+<li><code>psql</code> for restoring from a plain SQL script file created with <code>pg_dump</code>,</li>
+<li><code>pg_restore</code> for restoring from a .tar file, directory, or custom format created with <code>pg_dump</code>.</li>
+</ol>
+
+
+<h3>1. Restore a database with psql</h3>
+
+<p>If your backup is a plain-text file containing SQL script, then you can restore your database by using <a href="https://www.postgresql.org/docs/current/static/app-psql.html">PostgreSQL interactive terminal</a>, and running the following command:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>psql -U db_user db_name &lt; dump_name.sql</span></code></pre></td></tr></table></div></figure>
+
+
+<p>where <code>db_user</code> is the database user, <code>db_name</code> is the database name, and <code>dump_name.sql</code> is the name of your backup file.</p>
+
+<h3>2. Restore a database with pg_restore</h3>
+
+<p>If you choose custom, directory, or archive format when creating a backup file, then you will need to use pg_restore in order to restore your database:</p>
+
+<p><code>pg_restore -d db_name /path/to/your/file/dump_name.tar -c -U db_user</code></p>
+
+<p>If you use pg_restore you have various options available, for example:</p>
+
+<ul>
+<li><code>-c</code> to drop database objects before recreating them,</li>
+<li><code>-C</code> to create a database before restoring into it,</li>
+<li><code>-e</code> exit if an error has encountered,</li>
+<li><code>-F format</code> to specify the format of the archive.</li>
+</ul>
+
+
+<p>Use <code>pg_restore -?</code> to get the full list of available options.</p>
+
+<p>You can find more info on using mentioned tools by running <code>man pg_dump</code>, <code>man psql</code> and <code>man pg_restore</code>.</p>
 </div>
 
 
@@ -176,7 +242,7 @@
   <span class="byline author vcard">Posted by
     <span class="fn">
       
-        <a href="https://plus.google.com/113548610124685160907?rel=author">Slobodan Kovačević</a>
+        <a href="http://orangeiceberg.com/about/">Jovana Dačić</a>
       
     </span>
   </span>
@@ -195,13 +261,13 @@
 
 
 
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2008-07-06T10:00:00+02:00" pubdate data-updated="true">Jul 6<span>th</span>, 2008</time>
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2016-10-18T07:05:38+02:00" pubdate data-updated="true">Oct 18<span>th</span>, 2016</time>
           
 
 <span class="glyphicon glyphicon-tags"></span>&nbsp;
 <span class="categories">
   
-    <a class='category' href='/category/misc/'>Misc</a>, <a class='category' href='/category/this-should-be-interesting-weekly/'>This should be interesting - weekly</a>
+    <a class='category' href='/category/misc/'>Misc</a>
   
 </span>
 
@@ -213,7 +279,7 @@
     Tags:
   
   
-    <a class='tag' href='/tag/links/'>links</a>, <a class='tag' href='/tag/weekly/'>weekly</a>
+    <a class='tag' href='/tag/postgreSQL/'>postgreSQL</a>, <a class='tag' href='/tag/postgres/'>postgres</a>
   
 </span>
 
@@ -222,7 +288,7 @@
         
           <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://icebergist.com/posts/this-should-be-interesting-weekly-week-27" data-via="orangeicbrg" data-counturl="http://icebergist.com/posts/this-should-be-interesting-weekly-week-27" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://icebergist.com/posts/backup-and-restore-a-postresql-database/" data-via="orangeicbrg" data-counturl="http://icebergist.com/posts/backup-and-restore-a-postresql-database/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
@@ -236,10 +302,8 @@
         
           <ul class="meta text-muted pager">
             
-            <li class="previous"><a href="/posts/mac-os-x-problems-upgrading-from-1053-to-1054" title="Previous Post: Mac OS X problems upgrading from 10.5.3 to 10.5.4">&laquo; Mac OS X problems upgrading from 10.5.3 to 10.5.4</a></li>
+            <li class="previous"><a href="/posts/using-ransackers-to-search-for-a-key-in-postgresql-json-column/" title="Previous Post: Using Ransackers to search for a key in PostgreSQL JSON column">&laquo; Using Ransackers to search for a key in PostgreSQL JSON column</a></li>
             
-            
-            <li class="next"><a href="/posts/collection-partial-variable-naming" title="Next Post: Collection partial variable naming &#8211; new in edge rails">Collection partial variable naming &#8211; new in edge rails &raquo;</a></li>
             
           </ul>
         
@@ -287,7 +351,7 @@
   
   <div id="recent_posts" class="list-group">
     
-    <a class="list-group-item " href="/posts/backup-and-restore-a-postresql-database/">Backup and Restore a PostgreSQL Database</a>
+    <a class="list-group-item active" href="/posts/backup-and-restore-a-postresql-database/">Backup and Restore a PostgreSQL Database</a>
     
     <a class="list-group-item " href="/posts/using-ransackers-to-search-for-a-key-in-postgresql-json-column/">Using Ransackers to Search for a Key in PostgreSQL JSON Column</a>
     
@@ -351,7 +415,7 @@
     <h3 class="panel-title">Tags</h3>
   </div>
   <div class="tag-cloud">
-    <span class='rank-5'><a href='/tag/tdd'>tdd</a></span> <span class='rank-5'><a href='/tag/rails3'>rails3</a></span> <span class='rank-5'><a href='/tag/codeigniter'>codeigniter</a></span> <span class='rank-5'><a href='/tag/capistrano-3'>capistrano 3</a></span> <span class='rank-5'><a href='/tag/cloud-computing'>cloud computing</a></span> <span class='rank-4'><a href='/tag/ubuntu'>ubuntu</a></span> <span class='rank-5'><a href='/tag/heroku'>heroku</a></span> <span class='rank-5'><a href='/tag/rake-task'>rake task</a></span> <span class='rank-5'><a href='/tag/capistrano-rbenv'>capistrano-rbenv</a></span> <span class='rank-5'><a href='/tag/erkanaauth'>erkanaauth</a></span> <span class='rank-5'><a href='/tag/capistrano-rails'>capistrano-rails</a></span> <span class='rank-5'><a href='/tag/selenium-webdriver'>selenium-webdriver</a></span> <span class='rank-5'><a href='/tag/resources'>resources</a></span> <span class='rank-5'><a href='/tag/amazon-s3'>amazon s3</a></span> <span class='rank-5'><a href='/tag/vagrant'>vagrant</a></span> <span class='rank-5'><a href='/tag/mysql'>mysql</a></span> <span class='rank-5'><a href='/tag/postgres'>postgres</a></span> <span class='rank-5'><a href='/tag/virtualbox'>virtualbox</a></span> <span class='rank-5'><a href='/tag/factory-girl'>factory_girl</a></span> <span class='rank-5'><a href='/tag/tutorial'>tutorial</a></span> <span class='rank-5'><a href='/tag/scaffold'>scaffold</a></span> <span class='rank-5'><a href='/tag/rest'>rest</a></span> <span class='rank-3'><a href='/tag/howto'>howto</a></span> <span class='rank-5'><a href='/tag/css'>css</a></span> <span class='rank-5'><a href='/tag/Javascript'>Javascript</a></span> <span class='rank-5'><a href='/tag/deployment'>deployment</a></span> <span class='rank-5'><a href='/tag/hosting'>hosting</a></span> <span class='rank-5'><a href='/tag/restful'>restful</a></span> <span class='rank-5'><a href='/tag/mac'>mac</a></span> <span class='rank-5'><a href='/tag/ransack'>ransack</a></span> <span class='rank-5'><a href='/tag/postgreSQL'>postgreSQL</a></span> <span class='rank-5'><a href='/tag/paperclip'>paperclip</a></span> <span class='rank-5'><a href='/tag/PHP'>PHP</a></span> <span class='rank-5'><a href='/tag/devise'>devise</a></span> <span class='rank-2'><a href='/tag/ruby'>ruby</a></span> <span class='rank-5'><a href='/tag/rspec'>rspec</a></span> <span class='rank-5'><a href='/tag/globalize'>globalize</a></span> <span class='rank-5'><a href='/tag/factorygirl'>factorygirl</a></span> <span class='rank-5'><a href='/tag/weekly'>weekly</a></span> <span class='rank-5'><a href='/tag/I18n-locale'>I18n.locale</a></span> <span class='rank-1'><a href='/tag/rails'>rails</a></span> <span class='rank-4'><a href='/tag/links'>links</a></span> <span class='rank-4'><a href='/tag/linux'>linux</a></span> <span class='rank-5'><a href='/tag/sqlite'>sqlite</a></span> <span class='rank-5'><a href='/tag/cucumber'>cucumber</a></span> <span class='rank-5'><a href='/tag/carrierwave'>carrierwave</a></span> <span class='rank-3'><a href='/tag/tips'>tips</a></span> <span class='rank-5'><a href='/tag/admin'>admin</a></span> <span class='rank-5'><a href='/tag/password-protected'>password protected</a></span> <span class='rank-5'><a href='/tag/rails4'>rails4</a></span> <span class='rank-5'><a href='/tag/edge'>edge</a></span> 
+    <span class='rank-5'><a href='/tag/rails3'>rails3</a></span> <span class='rank-5'><a href='/tag/amazon-s3'>amazon s3</a></span> <span class='rank-5'><a href='/tag/tdd'>tdd</a></span> <span class='rank-5'><a href='/tag/Javascript'>Javascript</a></span> <span class='rank-5'><a href='/tag/factorygirl'>factorygirl</a></span> <span class='rank-5'><a href='/tag/capistrano-rails'>capistrano-rails</a></span> <span class='rank-5'><a href='/tag/capistrano-rbenv'>capistrano-rbenv</a></span> <span class='rank-2'><a href='/tag/ruby'>ruby</a></span> <span class='rank-3'><a href='/tag/tips'>tips</a></span> <span class='rank-5'><a href='/tag/I18n-locale'>I18n.locale</a></span> <span class='rank-5'><a href='/tag/password-protected'>password protected</a></span> <span class='rank-5'><a href='/tag/mac'>mac</a></span> <span class='rank-5'><a href='/tag/admin'>admin</a></span> <span class='rank-5'><a href='/tag/heroku'>heroku</a></span> <span class='rank-5'><a href='/tag/hosting'>hosting</a></span> <span class='rank-5'><a href='/tag/ransack'>ransack</a></span> <span class='rank-5'><a href='/tag/virtualbox'>virtualbox</a></span> <span class='rank-4'><a href='/tag/links'>links</a></span> <span class='rank-5'><a href='/tag/codeigniter'>codeigniter</a></span> <span class='rank-5'><a href='/tag/factory-girl'>factory_girl</a></span> <span class='rank-5'><a href='/tag/postgres'>postgres</a></span> <span class='rank-5'><a href='/tag/globalize'>globalize</a></span> <span class='rank-5'><a href='/tag/cucumber'>cucumber</a></span> <span class='rank-5'><a href='/tag/rest'>rest</a></span> <span class='rank-5'><a href='/tag/restful'>restful</a></span> <span class='rank-5'><a href='/tag/scaffold'>scaffold</a></span> <span class='rank-5'><a href='/tag/rails4'>rails4</a></span> <span class='rank-5'><a href='/tag/vagrant'>vagrant</a></span> <span class='rank-5'><a href='/tag/rake-task'>rake task</a></span> <span class='rank-5'><a href='/tag/cloud-computing'>cloud computing</a></span> <span class='rank-5'><a href='/tag/sqlite'>sqlite</a></span> <span class='rank-5'><a href='/tag/tutorial'>tutorial</a></span> <span class='rank-4'><a href='/tag/linux'>linux</a></span> <span class='rank-5'><a href='/tag/carrierwave'>carrierwave</a></span> <span class='rank-3'><a href='/tag/howto'>howto</a></span> <span class='rank-5'><a href='/tag/PHP'>PHP</a></span> <span class='rank-5'><a href='/tag/erkanaauth'>erkanaauth</a></span> <span class='rank-5'><a href='/tag/postgreSQL'>postgreSQL</a></span> <span class='rank-5'><a href='/tag/devise'>devise</a></span> <span class='rank-5'><a href='/tag/edge'>edge</a></span> <span class='rank-5'><a href='/tag/weekly'>weekly</a></span> <span class='rank-5'><a href='/tag/paperclip'>paperclip</a></span> <span class='rank-5'><a href='/tag/css'>css</a></span> <span class='rank-5'><a href='/tag/selenium-webdriver'>selenium-webdriver</a></span> <span class='rank-5'><a href='/tag/resources'>resources</a></span> <span class='rank-5'><a href='/tag/deployment'>deployment</a></span> <span class='rank-4'><a href='/tag/ubuntu'>ubuntu</a></span> <span class='rank-5'><a href='/tag/capistrano-3'>capistrano 3</a></span> <span class='rank-1'><a href='/tag/rails'>rails</a></span> <span class='rank-5'><a href='/tag/mysql'>mysql</a></span> <span class='rank-5'><a href='/tag/rspec'>rspec</a></span> 
   </div>
 </section>
 
@@ -390,8 +454,8 @@
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://icebergist.com/posts/this-should-be-interesting-weekly-week-27';
-        var disqus_url = 'http://icebergist.com/posts/this-should-be-interesting-weekly-week-27';
+        var disqus_identifier = 'http://icebergist.com/posts/backup-and-restore-a-postresql-database/';
+        var disqus_url = 'http://icebergist.com/posts/backup-and-restore-a-postresql-database/';
         var disqus_script = 'embed.js';
       
     (function () {

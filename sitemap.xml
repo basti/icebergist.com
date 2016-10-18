@@ -135,6 +135,10 @@
         <lastmod>2016-06-20T10:20:28+02:00</lastmod>
     </url>
     <url>
+        <loc>http://icebergist.com/posts/backup-and-restore-a-postresql-database/</loc>
+        <lastmod>2016-10-18T09:14:01+02:00</lastmod>
+    </url>
+    <url>
         <loc>http://icebergist.com/404.html</loc>
         <lastmod>2015-05-04T16:37:51+02:00</lastmod>
     </url>
@@ -160,7 +164,7 @@
     </url>
     <url>
         <loc>http://icebergist.com/assets/bootstrap/</loc>
-        <lastmod>2016-06-20T10:20:28+02:00</lastmod>
+        <lastmod>2016-10-18T09:14:01+02:00</lastmod>
     </url>
     <url>
         <loc>http://icebergist.com/assets/bootstrap/javascript.html</loc>
@@ -168,11 +172,11 @@
     </url>
     <url>
         <loc>http://icebergist.com/blog/archives/</loc>
-        <lastmod>2016-06-20T10:20:28+02:00</lastmod>
+        <lastmod>2016-10-18T09:14:01+02:00</lastmod>
     </url>
     <url>
         <loc>http://icebergist.com/</loc>
-        <lastmod>2016-06-20T10:20:28+02:00</lastmod>
+        <lastmod>2016-10-18T09:14:01+02:00</lastmod>
     </url>
     <url>
         <loc>http://icebergist.com/robots.txt</loc>
