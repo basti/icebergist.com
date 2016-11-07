@@ -1,14 +1,16 @@
 ---
 layout: post
 title: "Copy and sync files from/to remote server"
-date: 2016-10-17 12:55:52 +0200
+date: 2016-11-07 16:55:52 +0200
 comments: true
 author: Slobodan Kovačević
 categories: 
-  - Ruby and Rails
+  - Misc
 tags: 
-  - ruby
-  - rails
+  - tips
+  - linux
+  - ubuntu
+  - apprenticeship
 published: true
 ---
 
