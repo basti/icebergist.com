@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Misc | Icebergist]]></title>
   <link href="http://icebergist.com/category/misc/atom.xml" rel="self"/>
   <link href="http://icebergist.com/"/>
-  <updated>2016-10-18T09:15:00+02:00</updated>
+  <updated>2016-11-07T17:00:33+01:00</updated>
   <id>http://icebergist.com/</id>
   <author>
     <name><![CDATA[Orange Iceberg]]></name>
@@ -12,6 +12,95 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Copy and sync files from/to remote server]]></title>
+    <link href="http://icebergist.com/posts/copy-sync-files-from-to-remote-server/"/>
+    <updated>2016-11-07T15:55:52+01:00</updated>
+    <id>http://icebergist.com/posts/copy-sync-files-from-to-remote-server</id>
+    <content type="html"><![CDATA[<p>Most modern web app deployments have automated scripts that perform all tasks needed to deploy the app. They handle all the dirty details, while the developer just needs to do something simple like <code>cap deploy</code>. In other words, usually you don&rsquo;t need to access the remote servers directly.</p>
+
+<p>However, sometimes you run into one-time tasks (or less frequent tasks) that might not have been automated. For example, dumping production data and importing on local machine, syncing uploaded files between production and staging environments, etc.</p>
+
+<p>These often involve transferring files between your local machine and remote server (or two remote servers). There are few ways you can handle this depending on what you need to transfer between servers. We are going to cover methods using <code>wget</code>, <code>scp</code>, and <code>rsync</code>.</p>
+
+<!--more-->
+
+
+<h2>wget</h2>
+
+<p>Simplest option is to install <code>wget</code> on destination machine. <code>wget</code> is the non-interactive network downloader and you just give it the URL of the file you want to download.</p>
+
+<p><code>wget http://example.com/some/archive.tar.gz</code></p>
+
+<p>That would download the file to current directory.</p>
+
+<p>The downside is that you have to put the file somewhere accessible via web, like <code>public</code> dir in Rails apps and also you should remember to remove it once you are done with it.</p>
+
+<p>Also this only works if you have a single file, or you are able to create a single file (most likely by <a href="/posts/create-and-extract-archives-using-tar-and-gzip/">creating an archive using tar and gzip</a>).</p>
+
+<h2>scp</h2>
+
+<p><code>scp</code> is a remote file copy program and the name is short for <strong>s</strong>ecure <strong>c</strong>o<strong>p</strong>y. It&rsquo;s very similar to usual <code>cp</code> command with the difference that it&rsquo;s able to copy files across different computers using SSH.</p>
+
+<p>Simplest forms of <code>scp</code> have source and destination, both of which can be either a local file or a remote file.</p>
+
+<p>```sh</p>
+
+<h1>copy file from server to current dir on local machine</h1>
+
+<p>scp myuser@example.com:/home/myuser/databasedump.sql ./</p>
+
+<h1>copy file to remote server</h1>
+
+<p>scp ./some/localfile.txt myuser@example.com:/home/myuser/
+```</p>
+
+<p>In a sense it works exactly like <code>cp</code>. Difference is that when specifying a remote file the format looks like you concatenated SSH user@server string and normal file path (you are saying &ldquo;as user at server get this file&rdquo;).</p>
+
+<p>There are some additional nice things about <code>scp</code>:</p>
+
+<ul>
+<li>you can use <code>-r</code> option which will recursively copy entire directories.</li>
+<li>you can specify two remote files and it will copy them between remote servers.</li>
+</ul>
+
+
+<h2>rsync</h2>
+
+<p><code>scp</code> is secure version of <code>rcp</code> (remote copy) program. <code>rsync</code> is faster, flexible replacement for <code>rcp</code>. It copies files either to or from a remote host, or locally on the current host (it does not support copying files between two remote hosts).</p>
+
+<p>There are many ways you can use <code>rsync</code>. The most usual variants are:</p>
+
+<p>```sh</p>
+
+<h1>copy all files recursively from one local dir to another</h1>
+
+<p>rsync ./source_dir ./destination_dir</p>
+
+<h1>copy a file from local dir to remote server</h1>
+
+<p>rsync -Pavz ./archive.tar.gz myuser@example.com:/home/myuser/somedata/</p>
+
+<h1>copy all files recursively from remote server to local dir</h1>
+
+<p>rsync -Pavz myuser@example.com:/home/myuser/somedata ./data</p>
+
+<p>```</p>
+
+<p>Options that were used are not strictly necessary for doing stated tasks, but they help. They are as follows:</p>
+
+<ul>
+<li><code>P</code> &ndash; same as &mdash;partial &mdash;progress. It means it will show transfer progress and if transfer breaks keep a partial copy to possibly continue on retry. Very useful for large files.</li>
+<li><code>a</code> &ndash; it is a quick way of saying you want recursion and want to preserve almost everything. This is equivalent to -rlptgoD.</li>
+<li><code>v</code> &ndash; be verbose.</li>
+<li><code>z</code> &ndash; compress file data during the transfer.</li>
+</ul>
+
+
+<p>I suggest that you consult <code>man rsync</code> for more details.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Backup and Restore a PostgreSQL Database]]></title>
@@ -193,62 +282,6 @@ do-release-upgrade
 <ul>
 <li><a href="http://rimuhosting.com/knowledgebase/linux/distros/ubuntu" title="Rimuhosting's page on upgrading Ubuntu">Rimuhosting&rsquo;s page on upgrading Ubuntu</a></li>
 <li><a href="http://askubuntu.com/questions/91815/how-to-install-software-or-upgrade-from-old-unsupported-release" title="Discussion on upgrading unsupported Ubuntu release">Discussion on upgrading unsupported Ubuntu release</a></li>
-</ul>
-
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Quick VirtualBox/Vagrant setup with Heroku-like box]]></title>
-    <link href="http://icebergist.com/posts/quick-virtualboxvagrant-setup-with-heroku-like-box"/>
-    <updated>2013-09-16T10:00:00+02:00</updated>
-    <id>http://icebergist.com/posts/quick-virtualboxvagrant-setup-with-heroku-like-box</id>
-    <content type="html"><![CDATA[<p>Here is a quick way to setup VirtualBox using Vagrant with Heroku-like box on Mac.</p>
-
-<ol>
-<li><p>Install VirtualBox from <a href="https://www.virtualbox.org/wiki/Downloads" target="_blank"><a href="https://www.virtualbox.org/wiki/Downloads">https://www.virtualbox.org/wiki/Downloads</a></a></p></li>
-<li><p>Install Vagrant from <a href="http://downloads.vagrantup.com/" target="_blank"><a href="http://downloads.vagrantup.com/">http://downloads.vagrantup.com/</a></a></p></li>
-<li><p>Create Vagrantfile for Heroku-like box (based on <a href="https://github.com/ejholmes/vagrant-heroku" target="_blank"><a href="https://github.com/ejholmes/vagrant-heroku">https://github.com/ejholmes/vagrant-heroku</a></a>) that looks something like:</p></li>
-</ol>
-
-
-<p>``` ruby</p>
-
-<pre><code>    Vagrant.configure("2") do |config|        
-        config.vm.box = "heroku"
-        config.vm.box_url = "https://dl.dropboxusercontent.com/s/rnc0p8zl91borei/heroku.box"
-      config.vm.synced_folder ".", "/vagrant", :nfs =&gt; true
-        config.vm.network :private_network, ip: "192.168.1.42"  # required for NFS
-    end
-</code></pre>
-
-<p>```</p>
-
-<p>Beside telling Vagrant to use Heroku-like box from <a href="https://github.com/ejholmes/vagrant-heroku" target="_blank"><a href="https://github.com/ejholmes/vagrant-heroku">https://github.com/ejholmes/vagrant-heroku</a></a> it also sets up shared dir between host and VM machine. It will mount Vagrantfile dir (.) to /vagrant in VM.</p>
-
-<p><code>vagrant up</code> will setup the VM and start it up.</p>
-
-<p>Now you can use <code>vagrant ssh</code> to login to VM.</p>
-
-<p>Vagrant Heroku-like box comes with Postgresql, but if you want you can easily setup sqlite:</p>
-
-<p><code>sh
-sudo apt-get install libsqlite3-dev
-</code></p>
-
-<p><strong>Bonus tip</strong>: when you are working on multiple projects sometimes you can forget which VMs are running. You can list all running VMs using:</p>
-
-<p><code>sh
-VBoxManage list runningvms
-</code></p>
-
-<p>Further reading:</p>
-
-<ul>
-<li><a href="http://docs.vagrantup.com/v2/" target="_blank">Vagrant docs</a></li>
-<li><a href="https://github.com/ejholmes/vagrant-heroku" target="_blank">Vagrant Heroku-like box</a> which can be easily customized.</li>
-<li><a href="http://loudcoding.com/posts/how-to-use-vagrant-to-run-celadon-cedar-stack-on-heroku/" target="_blank">Another Vagrant setup tutorial</a></li>
-<li><a href="https://www.stackmachine.com/blog/web-development-on-a-vm-is-it-slower" target="_blank">VM speed benchmarks</a> in case you doubt in VM speed.</li>
 </ul>
 
 ]]></content>

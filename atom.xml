@@ -4,7 +4,7 @@
   <title><![CDATA[Icebergist]]></title>
   <link href="http://icebergist.com/atom.xml" rel="self"/>
   <link href="http://icebergist.com/"/>
-  <updated>2016-10-18T09:15:00+02:00</updated>
+  <updated>2016-11-07T17:00:33+01:00</updated>
   <id>http://icebergist.com/</id>
   <author>
     <name><![CDATA[Orange Iceberg]]></name>
@@ -12,6 +12,102 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Copy and sync files from/to remote server]]></title>
+    <link href="http://icebergist.com/posts/copy-sync-files-from-to-remote-server/"/>
+    <updated>2016-11-07T15:55:52+01:00</updated>
+    <id>http://icebergist.com/posts/copy-sync-files-from-to-remote-server</id>
+    <content type="html"><![CDATA[<p>Most modern web app deployments have automated scripts that perform all tasks needed to deploy the app. They handle all the dirty details, while the developer just needs to do something simple like <code>cap deploy</code>. In other words, usually you don&rsquo;t need to access the remote servers directly.</p>
+
+<p>However, sometimes you run into one-time tasks (or less frequent tasks) that might not have been automated. For example, dumping production data and importing on local machine, syncing uploaded files between production and staging environments, etc.</p>
+
+<p>These often involve transferring files between your local machine and remote server (or two remote servers). There are few ways you can handle this depending on what you need to transfer between servers. We are going to cover methods using <code>wget</code>, <code>scp</code>, and <code>rsync</code>.</p>
+
+<!--more-->
+
+
+<h2>wget</h2>
+
+<p>Simplest option is to install <code>wget</code> on destination machine. <code>wget</code> is the non-interactive network downloader and you just give it the URL of the file you want to download.</p>
+
+<p><code>wget http://example.com/some/archive.tar.gz</code></p>
+
+<p>That would download the file to current directory.</p>
+
+<p>The downside is that you have to put the file somewhere accessible via web, like <code>public</code> dir in Rails apps and also you should remember to remove it once you are done with it.</p>
+
+<p>Also this only works if you have a single file, or you are able to create a single file (most likely by <a href="http://icebergist.com/posts/create-and-extract-archives-using-tar-and-gzip/">creating an archive using tar and gzip</a>).</p>
+
+<h2>scp</h2>
+
+<p><code>scp</code> is a remote file copy program and the name is short for <strong>s</strong>ecure <strong>c</strong>o<strong>p</strong>y. It&rsquo;s very similar to usual <code>cp</code> command with the difference that it&rsquo;s able to copy files across different computers using SSH.</p>
+
+<p>Simplest forms of <code>scp</code> have source and destination, both of which can be either a local file or a remote file.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="c"># copy file from server to current dir on local machine</span>
+</span><span class='line'>scp myuser@example.com:/home/myuser/databasedump.sql ./
+</span><span class='line'>
+</span><span class='line'><span class="c"># copy file to remote server</span>
+</span><span class='line'>scp ./some/localfile.txt myuser@example.com:/home/myuser/
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In a sense it works exactly like <code>cp</code>. Difference is that when specifying a remote file the format looks like you concatenated SSH user@server string and normal file path (you are saying &ldquo;as user at server get this file&rdquo;).</p>
+
+<p>There are some additional nice things about <code>scp</code>:</p>
+
+<ul>
+<li>you can use <code>-r</code> option which will recursively copy entire directories.</li>
+<li>you can specify two remote files and it will copy them between remote servers.</li>
+</ul>
+
+
+<h2>rsync</h2>
+
+<p><code>scp</code> is secure version of <code>rcp</code> (remote copy) program. <code>rsync</code> is faster, flexible replacement for <code>rcp</code>. It copies files either to or from a remote host, or locally on the current host (it does not support copying files between two remote hosts).</p>
+
+<p>There are many ways you can use <code>rsync</code>. The most usual variants are:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="c"># copy all files recursively from one local dir to another</span>
+</span><span class='line'>rsync ./source_dir ./destination_dir
+</span><span class='line'>
+</span><span class='line'><span class="c"># copy a file from local dir to remote server</span>
+</span><span class='line'>rsync -Pavz ./archive.tar.gz myuser@example.com:/home/myuser/somedata/
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="c"># copy all files recursively from remote server to local dir</span>
+</span><span class='line'>rsync -Pavz myuser@example.com:/home/myuser/somedata ./data
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Options that were used are not strictly necessary for doing stated tasks, but they help. They are as follows:</p>
+
+<ul>
+<li><code>P</code> &ndash; same as &mdash;partial &mdash;progress. It means it will show transfer progress and if transfer breaks keep a partial copy to possibly continue on retry. Very useful for large files.</li>
+<li><code>a</code> &ndash; it is a quick way of saying you want recursion and want to preserve almost everything. This is equivalent to -rlptgoD.</li>
+<li><code>v</code> &ndash; be verbose.</li>
+<li><code>z</code> &ndash; compress file data during the transfer.</li>
+</ul>
+
+
+<p>I suggest that you consult <code>man rsync</code> for more details.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Backup and Restore a PostgreSQL Database]]></title>
@@ -1894,21 +1990,6 @@ has_attached_file :photo, :storage => :s3, :s3_credentials => S3_CREDENTIALS
 <li><a href="http://www.rubyinside.com/rails-3-0-beta-links-2966.html">Rails 3.0 Beta: 36 Links and Resources To Get You Going</a></li>
 </ul>
 
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Expected x.rb to define X (LoadError)]]></title>
-    <link href="http://icebergist.com/posts/expected-xrb-to-define-x-loaderror"/>
-    <updated>2009-04-15T10:00:00+02:00</updated>
-    <id>http://icebergist.com/posts/expected-xrb-to-define-x-loaderror</id>
-    <content type="html"><![CDATA[<p>I have been working on extending Rails&#8217; I18n Simple backend to make it work with Serbian grammar (post on that will follow soon), but I kept getting an error:</p>
-
-<p><code>Expected ./lib/serbian_simple.rb to define SerbianSimple (LoadError)</code></p>
-
-<p>I&#8217;ve just spent an hour trying to figure out why this keeps happening and I found that there&#8217;s a lot of people with similar problem.</p>
-
-<p>It seems that the problem appears when Rails tries to autoload files. In my case there was a simple solution &#8211; I just added require &#8216;serbian_simple.rb&#8217; in environment.rb to manually load the file.</p>
 ]]></content>
   </entry>
   

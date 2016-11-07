@@ -128,6 +128,67 @@
 
 
 
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2015-06-01T11:03:47+02:00" pubdate data-updated="true">Jun 1<span>st</span>, 2015</time>
+        | 
+  
+
+
+  <span class="glyphicon glyphicon-user"></span>
+  <span class="byline author vcard">Posted by
+    <span class="fn">
+      
+        <a href="http://orangeiceberg.com/about/">Jovica Šuša</a>
+      
+    </span>
+  </span>
+
+
+        
+           | <a href="/posts/changing-database-starting-id/#disqus_thread"
+             data-disqus-identifier="http://icebergist.com/posts/changing-database-starting-id/">Comments</a>
+        
+      </p>
+    
+    
+      <h1 class="entry-title"><a href="/posts/changing-database-starting-id/">Changing Database Starting Id</a></h1>
+    
+  </header>
+
+
+  <div class="entry-content clearfix"><p>For our new project it was necessary to modify the starting id of our database. This can be handled through migration for creating table but we decided to create a rake task that handled this for us.</p>
+
+<p>The rake task that we created detects what database is being used and executes appropriate changes according to that.</p>
+
+</div>
+  
+  
+    <footer>
+      <a class="btn btn-default" rel="full-article" href="/posts/changing-database-starting-id/">Read on &rarr;</a>
+    </footer>
+  
+
+
+        </article>
+      
+      
+        <article class="post">
+          
+  <header class="page-header">
+    
+      <p class="meta text-muted">
+        
+
+
+
+
+
+
+
+
+
+
+
+
 <span class="glyphicon glyphicon-calendar"></span> <time datetime="2015-05-04T16:07:22+02:00" pubdate data-updated="true">May 4<span>th</span>, 2015</time>
         | 
   
@@ -847,66 +908,6 @@ has_attached_file :photo, :storage => :s3, :s3_credentials => S3_CREDENTIALS
 
         </article>
       
-      
-        <article class="post">
-          
-  <header class="page-header">
-    
-      <p class="meta text-muted">
-        
-
-
-
-
-
-
-
-
-
-
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2009-04-15T10:00:00+02:00" pubdate data-updated="true">Apr 15<span>th</span>, 2009</time>
-        | 
-  
-
-
-  <span class="glyphicon glyphicon-user"></span>
-  <span class="byline author vcard">Posted by
-    <span class="fn">
-      
-        <a href="https://plus.google.com/113548610124685160907?rel=author">Slobodan Kovačević</a>
-      
-    </span>
-  </span>
-
-
-        
-           | <a href="/posts/expected-xrb-to-define-x-loaderror#disqus_thread"
-             data-disqus-identifier="http://icebergist.com/posts/expected-xrb-to-define-x-loaderror">Comments</a>
-        
-      </p>
-    
-    
-      <h1 class="entry-title"><a href="/posts/expected-xrb-to-define-x-loaderror">Expected x.rb to Define X (LoadError)</a></h1>
-    
-  </header>
-
-
-  <div class="entry-content clearfix"><p>I have been working on extending Rails&#8217; I18n Simple backend to make it work with Serbian grammar (post on that will follow soon), but I kept getting an error:</p>
-
-<p><code>Expected ./lib/serbian_simple.rb to define SerbianSimple (LoadError)</code></p>
-
-<p>I&#8217;ve just spent an hour trying to figure out why this keeps happening and I found that there&#8217;s a lot of people with similar problem.</p>
-
-<p>It seems that the problem appears when Rails tries to autoload files. In my case there was a simple solution &#8211; I just added require &#8216;serbian_simple.rb&#8217; in environment.rb to manually load the file.</p>
-</div>
-  
-  
-
-
-        </article>
-      
     </div>
 
     <ul class="pager">
@@ -953,6 +954,8 @@ has_attached_file :photo, :storage => :s3, :s3_credentials => S3_CREDENTIALS
   
   <div id="recent_posts" class="list-group">
     
+    <a class="list-group-item " href="/posts/copy-sync-files-from-to-remote-server/">Copy and Sync Files From/to Remote Server</a>
+    
     <a class="list-group-item " href="/posts/backup-and-restore-a-postresql-database/">Backup and Restore a PostgreSQL Database</a>
     
     <a class="list-group-item " href="/posts/using-ransackers-to-search-for-a-key-in-postgresql-json-column/">Using Ransackers to Search for a Key in PostgreSQL JSON Column</a>
@@ -960,8 +963,6 @@ has_attached_file :photo, :storage => :s3, :s3_credentials => S3_CREDENTIALS
     <a class="list-group-item " href="/posts/display-part-of-rails-template-with-different-locale/">Show Part of a Rails Template in Other Locale</a>
     
     <a class="list-group-item " href="/posts/deploying-with-capistrano-3/">Deploying Rails App With Capistrano 3</a>
-    
-    <a class="list-group-item " href="/posts/rake-db-migrate-vs-rake-db-schema-load/">Rake Db:schema:load vs Rake Db:migrate</a>
     
   </div>
   <div class="panel-heading">
@@ -976,7 +977,7 @@ has_attached_file :photo, :storage => :s3, :s3_credentials => S3_CREDENTIALS
     
     
     <a class="list-group-item " href="/category/misc/index.html">
-        <span class="badge">12</span>
+        <span class="badge">13</span>
         Misc
       </a>
     
@@ -1017,7 +1018,7 @@ has_attached_file :photo, :storage => :s3, :s3_credentials => S3_CREDENTIALS
     <h3 class="panel-title">Tags</h3>
   </div>
   <div class="tag-cloud">
-    <span class='rank-5'><a href='/tag/cucumber'>cucumber</a></span> <span class='rank-4'><a href='/tag/ubuntu'>ubuntu</a></span> <span class='rank-5'><a href='/tag/rspec'>rspec</a></span> <span class='rank-5'><a href='/tag/rails3'>rails3</a></span> <span class='rank-5'><a href='/tag/I18n-locale'>I18n.locale</a></span> <span class='rank-5'><a href='/tag/Javascript'>Javascript</a></span> <span class='rank-5'><a href='/tag/capistrano-3'>capistrano 3</a></span> <span class='rank-4'><a href='/tag/links'>links</a></span> <span class='rank-5'><a href='/tag/tdd'>tdd</a></span> <span class='rank-5'><a href='/tag/globalize'>globalize</a></span> <span class='rank-5'><a href='/tag/factorygirl'>factorygirl</a></span> <span class='rank-5'><a href='/tag/weekly'>weekly</a></span> <span class='rank-5'><a href='/tag/edge'>edge</a></span> <span class='rank-5'><a href='/tag/PHP'>PHP</a></span> <span class='rank-5'><a href='/tag/resources'>resources</a></span> <span class='rank-5'><a href='/tag/scaffold'>scaffold</a></span> <span class='rank-5'><a href='/tag/rails4'>rails4</a></span> <span class='rank-5'><a href='/tag/mac'>mac</a></span> <span class='rank-5'><a href='/tag/rest'>rest</a></span> <span class='rank-5'><a href='/tag/rake-task'>rake task</a></span> <span class='rank-5'><a href='/tag/password-protected'>password protected</a></span> <span class='rank-5'><a href='/tag/codeigniter'>codeigniter</a></span> <span class='rank-5'><a href='/tag/virtualbox'>virtualbox</a></span> <span class='rank-5'><a href='/tag/ransack'>ransack</a></span> <span class='rank-5'><a href='/tag/erkanaauth'>erkanaauth</a></span> <span class='rank-5'><a href='/tag/selenium-webdriver'>selenium-webdriver</a></span> <span class='rank-5'><a href='/tag/factory-girl'>factory_girl</a></span> <span class='rank-5'><a href='/tag/css'>css</a></span> <span class='rank-5'><a href='/tag/sqlite'>sqlite</a></span> <span class='rank-5'><a href='/tag/tutorial'>tutorial</a></span> <span class='rank-5'><a href='/tag/restful'>restful</a></span> <span class='rank-3'><a href='/tag/tips'>tips</a></span> <span class='rank-5'><a href='/tag/paperclip'>paperclip</a></span> <span class='rank-5'><a href='/tag/heroku'>heroku</a></span> <span class='rank-4'><a href='/tag/linux'>linux</a></span> <span class='rank-5'><a href='/tag/capistrano-rails'>capistrano-rails</a></span> <span class='rank-2'><a href='/tag/ruby'>ruby</a></span> <span class='rank-3'><a href='/tag/howto'>howto</a></span> <span class='rank-5'><a href='/tag/carrierwave'>carrierwave</a></span> <span class='rank-5'><a href='/tag/cloud-computing'>cloud computing</a></span> <span class='rank-5'><a href='/tag/postgres'>postgres</a></span> <span class='rank-5'><a href='/tag/hosting'>hosting</a></span> <span class='rank-5'><a href='/tag/postgreSQL'>postgreSQL</a></span> <span class='rank-5'><a href='/tag/capistrano-rbenv'>capistrano-rbenv</a></span> <span class='rank-5'><a href='/tag/admin'>admin</a></span> <span class='rank-5'><a href='/tag/vagrant'>vagrant</a></span> <span class='rank-1'><a href='/tag/rails'>rails</a></span> <span class='rank-5'><a href='/tag/deployment'>deployment</a></span> <span class='rank-5'><a href='/tag/amazon-s3'>amazon s3</a></span> <span class='rank-5'><a href='/tag/mysql'>mysql</a></span> <span class='rank-5'><a href='/tag/devise'>devise</a></span> 
+    <span class='rank-5'><a href='/tag/codeigniter'>codeigniter</a></span> <span class='rank-5'><a href='/tag/apprenticeship'>apprenticeship</a></span> <span class='rank-5'><a href='/tag/rails4'>rails4</a></span> <span class='rank-5'><a href='/tag/rails3'>rails3</a></span> <span class='rank-5'><a href='/tag/rake-task'>rake task</a></span> <span class='rank-4'><a href='/tag/links'>links</a></span> <span class='rank-1'><a href='/tag/rails'>rails</a></span> <span class='rank-5'><a href='/tag/password-protected'>password protected</a></span> <span class='rank-3'><a href='/tag/howto'>howto</a></span> <span class='rank-5'><a href='/tag/PHP'>PHP</a></span> <span class='rank-5'><a href='/tag/admin'>admin</a></span> <span class='rank-5'><a href='/tag/cloud-computing'>cloud computing</a></span> <span class='rank-5'><a href='/tag/rest'>rest</a></span> <span class='rank-5'><a href='/tag/mac'>mac</a></span> <span class='rank-5'><a href='/tag/I18n-locale'>I18n.locale</a></span> <span class='rank-5'><a href='/tag/scaffold'>scaffold</a></span> <span class='rank-5'><a href='/tag/restful'>restful</a></span> <span class='rank-5'><a href='/tag/mysql'>mysql</a></span> <span class='rank-5'><a href='/tag/Javascript'>Javascript</a></span> <span class='rank-5'><a href='/tag/tdd'>tdd</a></span> <span class='rank-5'><a href='/tag/factory-girl'>factory_girl</a></span> <span class='rank-5'><a href='/tag/edge'>edge</a></span> <span class='rank-5'><a href='/tag/carrierwave'>carrierwave</a></span> <span class='rank-5'><a href='/tag/selenium-webdriver'>selenium-webdriver</a></span> <span class='rank-5'><a href='/tag/postgreSQL'>postgreSQL</a></span> <span class='rank-5'><a href='/tag/capistrano-rbenv'>capistrano-rbenv</a></span> <span class='rank-5'><a href='/tag/paperclip'>paperclip</a></span> <span class='rank-5'><a href='/tag/factorygirl'>factorygirl</a></span> <span class='rank-5'><a href='/tag/rspec'>rspec</a></span> <span class='rank-5'><a href='/tag/heroku'>heroku</a></span> <span class='rank-5'><a href='/tag/globalize'>globalize</a></span> <span class='rank-2'><a href='/tag/ruby'>ruby</a></span> <span class='rank-3'><a href='/tag/tips'>tips</a></span> <span class='rank-5'><a href='/tag/weekly'>weekly</a></span> <span class='rank-5'><a href='/tag/css'>css</a></span> <span class='rank-5'><a href='/tag/sqlite'>sqlite</a></span> <span class='rank-5'><a href='/tag/hosting'>hosting</a></span> <span class='rank-5'><a href='/tag/erkanaauth'>erkanaauth</a></span> <span class='rank-5'><a href='/tag/postgres'>postgres</a></span> <span class='rank-4'><a href='/tag/linux'>linux</a></span> <span class='rank-4'><a href='/tag/ubuntu'>ubuntu</a></span> <span class='rank-5'><a href='/tag/vagrant'>vagrant</a></span> <span class='rank-5'><a href='/tag/amazon-s3'>amazon s3</a></span> <span class='rank-5'><a href='/tag/deployment'>deployment</a></span> <span class='rank-5'><a href='/tag/resources'>resources</a></span> <span class='rank-5'><a href='/tag/devise'>devise</a></span> <span class='rank-5'><a href='/tag/capistrano-3'>capistrano 3</a></span> <span class='rank-5'><a href='/tag/tutorial'>tutorial</a></span> <span class='rank-5'><a href='/tag/virtualbox'>virtualbox</a></span> <span class='rank-5'><a href='/tag/capistrano-rails'>capistrano-rails</a></span> <span class='rank-5'><a href='/tag/ransack'>ransack</a></span> <span class='rank-5'><a href='/tag/cucumber'>cucumber</a></span> 
   </div>
 </section>
 
