@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Ember | Icebergist]]></title>
   <link href="http://icebergist.com/category/ember/atom.xml" rel="self"/>
   <link href="http://icebergist.com/"/>
-  <updated>2017-02-03T14:50:44+01:00</updated>
+  <updated>2017-02-03T15:07:45+01:00</updated>
   <id>http://icebergist.com/</id>
   <author>
     <name><![CDATA[Orange Iceberg]]></name>
@@ -16,11 +16,11 @@
   <entry>
     <title type="html"><![CDATA[Introduction to Ember Closure Actions]]></title>
     <link href="http://icebergist.com/posts/introduction-to-ember-closure-actions/"/>
-    <updated>2017-01-20T15:07:40+01:00</updated>
+    <updated>2017-02-03T15:07:40+01:00</updated>
     <id>http://icebergist.com/posts/introduction-to-ember-closure-actions</id>
     <content type="html"><![CDATA[<p>Closure actions were introduced in Ember v.1.13.0 and they brought a lot of improvements over old action handling mechanism in Ember. These improvements enabled Ember to adopt new data flow model called &ndash; Data Down Actions Up (DDAU) that simplified communication between parent and child components.</p>
 
-<h2>What are closure acitons?</h2>
+<h2>What are closure actions?</h2>
 
 <p>Closure actions are based on JavaScript closures which are basically functions that remember environment in which they were created. So closure actions are just functions that remember context in which they were defined. Since they are just functions we can pass them as a value and call them directly as a callback. This enables us to pass them to inner components and call them directly from components.
 With the old approach we had to use <code>sendAction()</code> from component and call action on controller or route.</p>
