@@ -4,7 +4,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>RESTful admin namespaced controller using scaffolding - Icebergist</title>
+  <title>Introduction to Ember Closure Actions - Icebergist</title>
   <meta name="author" content="Orange Iceberg">
 
   
@@ -16,7 +16,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://icebergist.com/posts/restful-admin-namespaced-controller-using-scaffolding">
+  <link rel="canonical" href="http://icebergist.com/posts/introduction-to-ember-closure-actions">
   <link href="http://feeds.feedburner.com/icebergist" rel="alternate" title="Icebergist" type="application/atom+xml">
 
   <link rel="apple-touch-icon" sizes="57x57" href="/assets/favicons/apple-icon-57x57.png">
@@ -124,7 +124,7 @@
 
 
 
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2008-09-17T10:00:00+02:00" pubdate data-updated="true">Sep 17<span>th</span>, 2008</time>
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2017-01-20T15:07:40+01:00" pubdate data-updated="true">Jan 20<span>th</span>, 2017</time>
         | 
   
 
@@ -133,7 +133,7 @@
   <span class="byline author vcard">Posted by
     <span class="fn">
       
-        <a href="https://plus.google.com/113548610124685160907?rel=author">Slobodan Kovačević</a>
+        <a href="http://orangeiceberg.com/about/">Jovica Susa</a>
       
     </span>
   </span>
@@ -147,49 +147,120 @@
     
     
     <h1 class="entry-title">
-        RESTful Admin Namespaced Controller Using Scaffolding
+        Introduction to Ember Closure Actions
         
     </h1>
     
   </header>
 
 
-<div class="entry-content clearfix"><p>Most of my clients prefer to have a separate admin section. In turn, I like to have separate controllers for admin section and front-end in my Rails app. This is not as straightforward as it might seem, especially if you like to use scaffolding for admin controller.</p>
+<div class="entry-content clearfix"><p>Closure actions were introduced in Ember v.1.13.0 and they brought a lot of improvements over old action handling mechanism in Ember. These improvements enabled Ember to adopt new data flow model called &ndash; Data Down Actions Up (DDAU) that simplified communication between parent and child components.</p>
 
-<p>The goal is to get 2 separate RESTful controllers, admin &amp; front-end controller, one model and for admin pages to have scaffolding.</p>
+<h2>What are closure acitons?</h2>
 
-<p>Here is the easiest way I found so far to accomplish this. This example generates categories model and controllers for it.</p>
+<p>Closure actions are based on JavaScript closures which are basically functions that remember environment in which they were created. So closure actions are just functions that remember context in which they were defined. Since they are just functions we can pass them as a value and call them directly as a callback. This enables us to pass them to inner components and call them directly from components.
+With the old approach we had to use <code>sendAction()</code> from component and call action on controller or route.</p>
 
-<p><code>./script/generate controller admin/categories&lt;br /&gt;
-./script/generate scaffold category name:string</code></p>
+<h2>How to create closure actions?</h2>
 
-<p>This will generate an empty controller in admin namespace and a scaffolded resource for front-end controller.</p>
+<p>Every action defined in controller can become a closure action. It’s important to note that it’s possible to make actions defined in routes closure actions but you need to use <a href="https://github.com/DockYard/ember-route-action-helper">ember-route-action-helper</a> addon for that. Closure actions are created in template using <code>action</code> helper which wrapps the action in the current context and returns it as a closure function.</p>
 
-<p>Now we have everything generated we just need to make it work with admin controller and not with front-end.</p>
+<h2>Example</h2>
 
-<ul>
-<li>move all templates from app/views/categories to app/views/<strong>admin</strong>/categories</li>
-<li>copy all functions from categories_controller.rb to admin/categories_controller.rb</li>
-<li>add namespace for admin controller in routes.rb:<code>map.namespace :admin do |admin|&lt;br /&gt;
-admin.resources :categories&lt;br /&gt;
-end</code></li>
-<li>in admin/categories_controller.rb replace in 3 places redirect_to calls to work with admin namespace. It will have something like redirect_to(@category), but to work with namespace it needs to have redirect_to([:admin, @category])</li>
-<li>make similar changes in all templates, i.e. make it work within an admin namespace. You need to make following changes:
+<p>Let’s define action inside our application controller.</p>
 
-<ul>
-<li>form_for(@category) => <strong>form_for([:admin, @category])</strong></li>
-<li>&lt;%= link_to &#8216;Show&#8217;, @category %> => <strong>&lt;%= link_to &#8216;Show&#8217;, [:admin, @category] %></strong></li>
-<li>categories_path => <strong>admin_categories_path</strong></li>
-<li>edit_category_path(@category) => <strong>edit_admin_category_path(@category)</strong></li>
-<li>new_category_path => <strong>new_admin_category_path</strong></li>
-</ul>
-</li>
-</ul>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>//controllers/application.js
+</span><span class='line'>export default Ember.Controller.extend({
+</span><span class='line'>  actions: {
+</span><span class='line'>    submit() {
+</span><span class='line'>      //some logic
+</span><span class='line'>    }
+</span><span class='line'>  }
+</span><span class='line'>});</span></code></pre></td></tr></table></div></figure>
 
 
-<p>That&#8217;s it. Now you&#8217;ll have /admin/categories for all administrative tasks and you have a free controller for front-end actions.</p>
+<p>In application.hbs we create closure action using <code>action</code> helper and we assign it to example-comp&rsquo;s save attribute.</p>
 
-<p>You might wonder why not just generate scaffold for admin/categories&#8230; The reason is that you&#8217;ll also get a model that is namespaced in admin (i.e. model would be Admin::Category). Scaffolded views also wouldn&#8217;t work as it seems that generator doesn&#8217;t take into account the fact that you are using a namespace.</p>
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>
+</span><span class='line'>{{example-comp save=(action 'submit')}}
+</span><span class='line'></span></code></pre></td></tr></table></div></figure>
+
+
+<p>Submit action is now assigned to save attribute of example-comp component so we can call it directly inside component.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;!-- example-comp.hbs --&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;button onclick={{action 'saveItem'}}&gt;Save&lt;/button&gt;
+</span><span class='line'></span></code></pre></td></tr></table></div></figure>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>//example-comp.js
+</span><span class='line'>export default Ember.Component.extend({
+</span><span class='line'>  actions: {
+</span><span class='line'>    saveItem() {
+</span><span class='line'>      this.save();
+</span><span class='line'>      // Calling save directly
+</span><span class='line'>    }
+</span><span class='line'>  }
+</span><span class='line'>});</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Passing closure action through multiple levels of components is easy.
+Let&rsquo;s say we want to call submit action in example-comp-child component. Since we have save attribute inside example-comp with submit action assigned to it we just need to pass it one level down.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>
+</span><span class='line'>{{example-comp-child save=(action save)}}
+</span><span class='line'></span></code></pre></td></tr></table></div></figure>
+
+
+<p>Calling action from example-comp-child is the same as for example-comp component.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>//example-comp-child.js
+</span><span class='line'>export default Ember.Component.extend({
+</span><span class='line'>  actions: {
+</span><span class='line'>    saveItem() {
+</span><span class='line'>      this.save();
+</span><span class='line'>    }
+</span><span class='line'>  }
+</span><span class='line'>});</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Closure actions simplify action passing mechanism in Ember but they can also return values, enable currying and much more. It definitely worth spending your time learning all closure actions features and I hope this introduction can help with that.</p>
 </div>
 
 
@@ -203,7 +274,7 @@ end</code></li>
   <span class="byline author vcard">Posted by
     <span class="fn">
       
-        <a href="https://plus.google.com/113548610124685160907?rel=author">Slobodan Kovačević</a>
+        <a href="http://orangeiceberg.com/about/">Jovica Susa</a>
       
     </span>
   </span>
@@ -222,13 +293,13 @@ end</code></li>
 
 
 
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2008-09-17T10:00:00+02:00" pubdate data-updated="true">Sep 17<span>th</span>, 2008</time>
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2017-01-20T15:07:40+01:00" pubdate data-updated="true">Jan 20<span>th</span>, 2017</time>
           
 
 <span class="glyphicon glyphicon-tags"></span>&nbsp;
 <span class="categories">
   
-    <a class='category' href='/category/ruby-and-rails/'>Ruby and Rails</a>
+    <a class='category' href='/category/ember/'>Ember</a>
   
 </span>
 
@@ -240,7 +311,7 @@ end</code></li>
     Tags:
   
   
-    <a class='tag' href='/tag/rails/'>rails</a>, <a class='tag' href='/tag/resources/'>resources</a>, <a class='tag' href='/tag/rest/'>rest</a>, <a class='tag' href='/tag/restful/'>restful</a>, <a class='tag' href='/tag/ruby/'>ruby</a>, <a class='tag' href='/tag/scaffold/'>scaffold</a>
+    <a class='tag' href='/tag/ember/'>ember</a>, <a class='tag' href='/tag/javascript/'>javascript</a>
   
 </span>
 
@@ -249,7 +320,7 @@ end</code></li>
         
           <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://icebergist.com/posts/restful-admin-namespaced-controller-using-scaffolding" data-via="orangeicbrg" data-counturl="http://icebergist.com/posts/restful-admin-namespaced-controller-using-scaffolding" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://icebergist.com/posts/introduction-to-ember-closure-actions/" data-via="orangeicbrg" data-counturl="http://icebergist.com/posts/introduction-to-ember-closure-actions/" >Tweet</a>
   
   
   <div class="g-plusone" data-size="medium"></div>
@@ -263,10 +334,8 @@ end</code></li>
         
           <ul class="meta text-muted pager">
             
-            <li class="previous"><a href="/posts/mosso-hosting-cloud" title="Previous Post: Mosso hosting cloud">&laquo; Mosso hosting cloud</a></li>
+            <li class="previous"><a href="/posts/copy-sync-files-from-to-remote-server/" title="Previous Post: Copy and sync files from/to remote server">&laquo; Copy and sync files from/to remote server</a></li>
             
-            
-            <li class="next"><a href="/posts/restoring-superblock-on-ubutnu" title="Next Post: Restoring superblock on Ubutnu">Restoring superblock on Ubutnu &raquo;</a></li>
             
           </ul>
         
@@ -314,7 +383,7 @@ end</code></li>
   
   <div id="recent_posts" class="list-group">
     
-    <a class="list-group-item " href="/posts/introduction-to-ember-closure-actions/">Introduction to Ember Closure Actions</a>
+    <a class="list-group-item active" href="/posts/introduction-to-ember-closure-actions/">Introduction to Ember Closure Actions</a>
     
     <a class="list-group-item " href="/posts/copy-sync-files-from-to-remote-server/">Copy and Sync Files From/to Remote Server</a>
     
@@ -384,7 +453,7 @@ end</code></li>
     <h3 class="panel-title">Tags</h3>
   </div>
   <div class="tag-cloud">
-    <span class='rank-5'><a href='/tag/rails4'>rails4</a></span> <span class='rank-5'><a href='/tag/resources'>resources</a></span> <span class='rank-3'><a href='/tag/howto'>howto</a></span> <span class='rank-5'><a href='/tag/scaffold'>scaffold</a></span> <span class='rank-5'><a href='/tag/paperclip'>paperclip</a></span> <span class='rank-4'><a href='/tag/ubuntu'>ubuntu</a></span> <span class='rank-5'><a href='/tag/erkanaauth'>erkanaauth</a></span> <span class='rank-5'><a href='/tag/factory-girl'>factory_girl</a></span> <span class='rank-5'><a href='/tag/heroku'>heroku</a></span> <span class='rank-5'><a href='/tag/tdd'>tdd</a></span> <span class='rank-5'><a href='/tag/vagrant'>vagrant</a></span> <span class='rank-5'><a href='/tag/virtualbox'>virtualbox</a></span> <span class='rank-5'><a href='/tag/Javascript'>Javascript</a></span> <span class='rank-5'><a href='/tag/css'>css</a></span> <span class='rank-5'><a href='/tag/hosting'>hosting</a></span> <span class='rank-5'><a href='/tag/admin'>admin</a></span> <span class='rank-5'><a href='/tag/rspec'>rspec</a></span> <span class='rank-4'><a href='/tag/links'>links</a></span> <span class='rank-5'><a href='/tag/apprenticeship'>apprenticeship</a></span> <span class='rank-5'><a href='/tag/postgreSQL'>postgreSQL</a></span> <span class='rank-5'><a href='/tag/I18n-locale'>I18n.locale</a></span> <span class='rank-5'><a href='/tag/deployment'>deployment</a></span> <span class='rank-5'><a href='/tag/amazon-s3'>amazon s3</a></span> <span class='rank-5'><a href='/tag/capistrano-rbenv'>capistrano-rbenv</a></span> <span class='rank-5'><a href='/tag/carrierwave'>carrierwave</a></span> <span class='rank-5'><a href='/tag/factorygirl'>factorygirl</a></span> <span class='rank-5'><a href='/tag/devise'>devise</a></span> <span class='rank-5'><a href='/tag/mysql'>mysql</a></span> <span class='rank-5'><a href='/tag/mac'>mac</a></span> <span class='rank-5'><a href='/tag/ember'>ember</a></span> <span class='rank-5'><a href='/tag/edge'>edge</a></span> <span class='rank-5'><a href='/tag/password-protected'>password protected</a></span> <span class='rank-5'><a href='/tag/tutorial'>tutorial</a></span> <span class='rank-5'><a href='/tag/postgres'>postgres</a></span> <span class='rank-4'><a href='/tag/linux'>linux</a></span> <span class='rank-5'><a href='/tag/codeigniter'>codeigniter</a></span> <span class='rank-5'><a href='/tag/cloud-computing'>cloud computing</a></span> <span class='rank-5'><a href='/tag/selenium-webdriver'>selenium-webdriver</a></span> <span class='rank-1'><a href='/tag/rails'>rails</a></span> <span class='rank-5'><a href='/tag/capistrano-3'>capistrano 3</a></span> <span class='rank-5'><a href='/tag/rest'>rest</a></span> <span class='rank-5'><a href='/tag/ransack'>ransack</a></span> <span class='rank-5'><a href='/tag/rails3'>rails3</a></span> <span class='rank-5'><a href='/tag/globalize'>globalize</a></span> <span class='rank-5'><a href='/tag/rake-task'>rake task</a></span> <span class='rank-5'><a href='/tag/cucumber'>cucumber</a></span> <span class='rank-5'><a href='/tag/capistrano-rails'>capistrano-rails</a></span> <span class='rank-5'><a href='/tag/sqlite'>sqlite</a></span> <span class='rank-5'><a href='/tag/PHP'>PHP</a></span> <span class='rank-3'><a href='/tag/tips'>tips</a></span> <span class='rank-5'><a href='/tag/restful'>restful</a></span> <span class='rank-2'><a href='/tag/ruby'>ruby</a></span> <span class='rank-5'><a href='/tag/weekly'>weekly</a></span> <span class='rank-5'><a href='/tag/javascript'>javascript</a></span> 
+    <span class='rank-5'><a href='/tag/globalize'>globalize</a></span> <span class='rank-5'><a href='/tag/hosting'>hosting</a></span> <span class='rank-5'><a href='/tag/restful'>restful</a></span> <span class='rank-5'><a href='/tag/tdd'>tdd</a></span> <span class='rank-5'><a href='/tag/I18n-locale'>I18n.locale</a></span> <span class='rank-5'><a href='/tag/virtualbox'>virtualbox</a></span> <span class='rank-5'><a href='/tag/codeigniter'>codeigniter</a></span> <span class='rank-5'><a href='/tag/rspec'>rspec</a></span> <span class='rank-5'><a href='/tag/carrierwave'>carrierwave</a></span> <span class='rank-5'><a href='/tag/javascript'>javascript</a></span> <span class='rank-5'><a href='/tag/selenium-webdriver'>selenium-webdriver</a></span> <span class='rank-5'><a href='/tag/rails3'>rails3</a></span> <span class='rank-5'><a href='/tag/scaffold'>scaffold</a></span> <span class='rank-5'><a href='/tag/postgreSQL'>postgreSQL</a></span> <span class='rank-5'><a href='/tag/rake-task'>rake task</a></span> <span class='rank-5'><a href='/tag/apprenticeship'>apprenticeship</a></span> <span class='rank-5'><a href='/tag/mac'>mac</a></span> <span class='rank-5'><a href='/tag/resources'>resources</a></span> <span class='rank-2'><a href='/tag/ruby'>ruby</a></span> <span class='rank-5'><a href='/tag/devise'>devise</a></span> <span class='rank-5'><a href='/tag/Javascript'>Javascript</a></span> <span class='rank-5'><a href='/tag/PHP'>PHP</a></span> <span class='rank-5'><a href='/tag/amazon-s3'>amazon s3</a></span> <span class='rank-5'><a href='/tag/paperclip'>paperclip</a></span> <span class='rank-5'><a href='/tag/mysql'>mysql</a></span> <span class='rank-5'><a href='/tag/cloud-computing'>cloud computing</a></span> <span class='rank-3'><a href='/tag/tips'>tips</a></span> <span class='rank-5'><a href='/tag/weekly'>weekly</a></span> <span class='rank-4'><a href='/tag/links'>links</a></span> <span class='rank-5'><a href='/tag/postgres'>postgres</a></span> <span class='rank-5'><a href='/tag/factory-girl'>factory_girl</a></span> <span class='rank-5'><a href='/tag/rails4'>rails4</a></span> <span class='rank-5'><a href='/tag/erkanaauth'>erkanaauth</a></span> <span class='rank-5'><a href='/tag/capistrano-rbenv'>capistrano-rbenv</a></span> <span class='rank-5'><a href='/tag/cucumber'>cucumber</a></span> <span class='rank-5'><a href='/tag/heroku'>heroku</a></span> <span class='rank-5'><a href='/tag/sqlite'>sqlite</a></span> <span class='rank-3'><a href='/tag/howto'>howto</a></span> <span class='rank-5'><a href='/tag/admin'>admin</a></span> <span class='rank-5'><a href='/tag/edge'>edge</a></span> <span class='rank-5'><a href='/tag/tutorial'>tutorial</a></span> <span class='rank-5'><a href='/tag/ember'>ember</a></span> <span class='rank-5'><a href='/tag/css'>css</a></span> <span class='rank-5'><a href='/tag/rest'>rest</a></span> <span class='rank-5'><a href='/tag/password-protected'>password protected</a></span> <span class='rank-5'><a href='/tag/capistrano-rails'>capistrano-rails</a></span> <span class='rank-4'><a href='/tag/ubuntu'>ubuntu</a></span> <span class='rank-4'><a href='/tag/linux'>linux</a></span> <span class='rank-1'><a href='/tag/rails'>rails</a></span> <span class='rank-5'><a href='/tag/deployment'>deployment</a></span> <span class='rank-5'><a href='/tag/capistrano-3'>capistrano 3</a></span> <span class='rank-5'><a href='/tag/ransack'>ransack</a></span> <span class='rank-5'><a href='/tag/factorygirl'>factorygirl</a></span> <span class='rank-5'><a href='/tag/vagrant'>vagrant</a></span> 
   </div>
 </section>
 
@@ -423,8 +492,8 @@ end</code></li>
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://icebergist.com/posts/restful-admin-namespaced-controller-using-scaffolding';
-        var disqus_url = 'http://icebergist.com/posts/restful-admin-namespaced-controller-using-scaffolding';
+        var disqus_identifier = 'http://icebergist.com/posts/introduction-to-ember-closure-actions/';
+        var disqus_url = 'http://icebergist.com/posts/introduction-to-ember-closure-actions/';
         var disqus_script = 'embed.js';
       
     (function () {

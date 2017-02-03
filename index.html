@@ -128,6 +128,166 @@
 
 
 
+<span class="glyphicon glyphicon-calendar"></span> <time datetime="2017-01-20T15:07:40+01:00" pubdate data-updated="true">Jan 20<span>th</span>, 2017</time>
+        | 
+  
+
+
+  <span class="glyphicon glyphicon-user"></span>
+  <span class="byline author vcard">Posted by
+    <span class="fn">
+      
+        <a href="http://orangeiceberg.com/about/">Jovica Susa</a>
+      
+    </span>
+  </span>
+
+
+        
+           | <a href="/posts/introduction-to-ember-closure-actions/#disqus_thread"
+             data-disqus-identifier="http://icebergist.com/posts/introduction-to-ember-closure-actions/">Comments</a>
+        
+      </p>
+    
+    
+      <h1 class="entry-title"><a href="/posts/introduction-to-ember-closure-actions/">Introduction to Ember Closure Actions</a></h1>
+    
+  </header>
+
+
+  <div class="entry-content clearfix"><p>Closure actions were introduced in Ember v.1.13.0 and they brought a lot of improvements over old action handling mechanism in Ember. These improvements enabled Ember to adopt new data flow model called &ndash; Data Down Actions Up (DDAU) that simplified communication between parent and child components.</p>
+
+<h2>What are closure acitons?</h2>
+
+<p>Closure actions are based on JavaScript closures which are basically functions that remember environment in which they were created. So closure actions are just functions that remember context in which they were defined. Since they are just functions we can pass them as a value and call them directly as a callback. This enables us to pass them to inner components and call them directly from components.
+With the old approach we had to use <code>sendAction()</code> from component and call action on controller or route.</p>
+
+<h2>How to create closure actions?</h2>
+
+<p>Every action defined in controller can become a closure action. It’s important to note that it’s possible to make actions defined in routes closure actions but you need to use <a href="https://github.com/DockYard/ember-route-action-helper">ember-route-action-helper</a> addon for that. Closure actions are created in template using <code>action</code> helper which wrapps the action in the current context and returns it as a closure function.</p>
+
+<h2>Example</h2>
+
+<p>Let’s define action inside our application controller.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>//controllers/application.js
+</span><span class='line'>export default Ember.Controller.extend({
+</span><span class='line'>  actions: {
+</span><span class='line'>    submit() {
+</span><span class='line'>      //some logic
+</span><span class='line'>    }
+</span><span class='line'>  }
+</span><span class='line'>});</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In application.hbs we create closure action using <code>action</code> helper and we assign it to example-comp&rsquo;s save attribute.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>
+</span><span class='line'>{{example-comp save=(action 'submit')}}
+</span><span class='line'></span></code></pre></td></tr></table></div></figure>
+
+
+<p>Submit action is now assigned to save attribute of example-comp component so we can call it directly inside component.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;!-- example-comp.hbs --&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;button onclick={{action 'saveItem'}}&gt;Save&lt;/button&gt;
+</span><span class='line'></span></code></pre></td></tr></table></div></figure>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>//example-comp.js
+</span><span class='line'>export default Ember.Component.extend({
+</span><span class='line'>  actions: {
+</span><span class='line'>    saveItem() {
+</span><span class='line'>      this.save();
+</span><span class='line'>      // Calling save directly
+</span><span class='line'>    }
+</span><span class='line'>  }
+</span><span class='line'>});</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Passing closure action through multiple levels of components is easy.
+Let&rsquo;s say we want to call submit action in example-comp-child component. Since we have save attribute inside example-comp with submit action assigned to it we just need to pass it one level down.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>
+</span><span class='line'>{{example-comp-child save=(action save)}}
+</span><span class='line'></span></code></pre></td></tr></table></div></figure>
+
+
+<p>Calling action from example-comp-child is the same as for example-comp component.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>//example-comp-child.js
+</span><span class='line'>export default Ember.Component.extend({
+</span><span class='line'>  actions: {
+</span><span class='line'>    saveItem() {
+</span><span class='line'>      this.save();
+</span><span class='line'>    }
+</span><span class='line'>  }
+</span><span class='line'>});</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Closure actions simplify action passing mechanism in Ember but they can also return values, enable currying and much more. It definitely worth spending your time learning all closure actions features and I hope this introduction can help with that.</p>
+</div>
+  
+  
+
+
+        </article>
+      
+      
+        <article class="post">
+          
+  <header class="page-header">
+    
+      <p class="meta text-muted">
+        
+
+
+
+
+
+
+
+
+
+
+
+
 <span class="glyphicon glyphicon-calendar"></span> <time datetime="2016-11-07T15:55:52+01:00" pubdate data-updated="true">Nov 7<span>th</span>, 2016</time>
         | 
   
@@ -942,69 +1102,6 @@ We need to run <code>pg_dump</code> in the command line on the computer where th
 
         </article>
       
-      
-        <article class="post">
-          
-  <header class="page-header">
-    
-      <p class="meta text-muted">
-        
-
-
-
-
-
-
-
-
-
-
-
-
-<span class="glyphicon glyphicon-calendar"></span> <time datetime="2015-06-08T09:12:04+02:00" pubdate data-updated="true">Jun 8<span>th</span>, 2015</time>
-        | 
-  
-
-
-  <span class="glyphicon glyphicon-user"></span>
-  <span class="byline author vcard">Posted by
-    <span class="fn">
-      
-        <a href="http://orangeiceberg.com/about/">Jovana Dačić</a>
-      
-    </span>
-  </span>
-
-
-        
-           | <a href="/posts/creating-and-publishing-a-ruby-gem/#disqus_thread"
-             data-disqus-identifier="http://icebergist.com/posts/creating-and-publishing-a-ruby-gem/">Comments</a>
-        
-      </p>
-    
-    
-      <h1 class="entry-title"><a href="/posts/creating-and-publishing-a-ruby-gem/">Creating and Publishing a Ruby Gem</a></h1>
-    
-  </header>
-
-
-  <div class="entry-content clearfix"><p>A gem is a simple way to distribute functionality, it can be a small plugin, a Ruby library or sometimes a whole program. Thanks to RubyGems, a gem hosting service, developers have a wide range of gems at their disposal allowing them to easily add functionality to their applications.</p>
-
-<p>But what if there is no gem available that will suit the functionality you need, and you find yourself writing the same code over and over again for different projects? Well, in that case you should consider making your own gem.</p>
-
-<p>It&rsquo;s considered a good practice to extract a gem out of an existing application, since that way you will have a better understanding of all the requirements as well as how the gem will be used. This blog post will illustrate just that on a real life example, and will take you through the process of creating a slug_converter gem.</p>
-
-</div>
-  
-  
-    <footer>
-      <a class="btn btn-default" rel="full-article" href="/posts/creating-and-publishing-a-ruby-gem/">Read on &rarr;</a>
-    </footer>
-  
-
-
-        </article>
-      
     </div>
 
     <ul class="pager">
@@ -1051,6 +1148,8 @@ We need to run <code>pg_dump</code> in the command line on the computer where th
   
   <div id="recent_posts" class="list-group">
     
+    <a class="list-group-item " href="/posts/introduction-to-ember-closure-actions/">Introduction to Ember Closure Actions</a>
+    
     <a class="list-group-item " href="/posts/copy-sync-files-from-to-remote-server/">Copy and Sync Files From/to Remote Server</a>
     
     <a class="list-group-item " href="/posts/backup-and-restore-a-postresql-database/">Backup and Restore a PostgreSQL Database</a>
@@ -1058,8 +1157,6 @@ We need to run <code>pg_dump</code> in the command line on the computer where th
     <a class="list-group-item " href="/posts/using-ransackers-to-search-for-a-key-in-postgresql-json-column/">Using Ransackers to Search for a Key in PostgreSQL JSON Column</a>
     
     <a class="list-group-item " href="/posts/display-part-of-rails-template-with-different-locale/">Show Part of a Rails Template in Other Locale</a>
-    
-    <a class="list-group-item " href="/posts/deploying-with-capistrano-3/">Deploying Rails App With Capistrano 3</a>
     
   </div>
   <div class="panel-heading">
@@ -1108,6 +1205,12 @@ We need to run <code>pg_dump</code> in the command line on the computer where th
         Testing
       </a>
     
+    
+    <a class="list-group-item " href="/category/ember/index.html">
+        <span class="badge">1</span>
+        Ember
+      </a>
+    
   </div>
 </section>
 <section class="panel panel-default">
@@ -1115,7 +1218,7 @@ We need to run <code>pg_dump</code> in the command line on the computer where th
     <h3 class="panel-title">Tags</h3>
   </div>
   <div class="tag-cloud">
-    <span class='rank-5'><a href='/tag/globalize'>globalize</a></span> <span class='rank-5'><a href='/tag/virtualbox'>virtualbox</a></span> <span class='rank-5'><a href='/tag/weekly'>weekly</a></span> <span class='rank-5'><a href='/tag/capistrano-3'>capistrano 3</a></span> <span class='rank-5'><a href='/tag/password-protected'>password protected</a></span> <span class='rank-5'><a href='/tag/rails4'>rails4</a></span> <span class='rank-5'><a href='/tag/PHP'>PHP</a></span> <span class='rank-5'><a href='/tag/factory-girl'>factory_girl</a></span> <span class='rank-5'><a href='/tag/capistrano-rails'>capistrano-rails</a></span> <span class='rank-5'><a href='/tag/heroku'>heroku</a></span> <span class='rank-1'><a href='/tag/rails'>rails</a></span> <span class='rank-5'><a href='/tag/cloud-computing'>cloud computing</a></span> <span class='rank-5'><a href='/tag/paperclip'>paperclip</a></span> <span class='rank-5'><a href='/tag/ransack'>ransack</a></span> <span class='rank-5'><a href='/tag/rspec'>rspec</a></span> <span class='rank-5'><a href='/tag/mysql'>mysql</a></span> <span class='rank-5'><a href='/tag/sqlite'>sqlite</a></span> <span class='rank-5'><a href='/tag/deployment'>deployment</a></span> <span class='rank-5'><a href='/tag/resources'>resources</a></span> <span class='rank-5'><a href='/tag/scaffold'>scaffold</a></span> <span class='rank-4'><a href='/tag/links'>links</a></span> <span class='rank-4'><a href='/tag/linux'>linux</a></span> <span class='rank-5'><a href='/tag/tutorial'>tutorial</a></span> <span class='rank-5'><a href='/tag/factorygirl'>factorygirl</a></span> <span class='rank-5'><a href='/tag/rails3'>rails3</a></span> <span class='rank-5'><a href='/tag/hosting'>hosting</a></span> <span class='rank-5'><a href='/tag/capistrano-rbenv'>capistrano-rbenv</a></span> <span class='rank-2'><a href='/tag/ruby'>ruby</a></span> <span class='rank-5'><a href='/tag/cucumber'>cucumber</a></span> <span class='rank-5'><a href='/tag/carrierwave'>carrierwave</a></span> <span class='rank-5'><a href='/tag/I18n-locale'>I18n.locale</a></span> <span class='rank-5'><a href='/tag/tdd'>tdd</a></span> <span class='rank-5'><a href='/tag/vagrant'>vagrant</a></span> <span class='rank-5'><a href='/tag/css'>css</a></span> <span class='rank-5'><a href='/tag/apprenticeship'>apprenticeship</a></span> <span class='rank-5'><a href='/tag/restful'>restful</a></span> <span class='rank-4'><a href='/tag/ubuntu'>ubuntu</a></span> <span class='rank-5'><a href='/tag/postgres'>postgres</a></span> <span class='rank-5'><a href='/tag/edge'>edge</a></span> <span class='rank-5'><a href='/tag/admin'>admin</a></span> <span class='rank-5'><a href='/tag/rake-task'>rake task</a></span> <span class='rank-3'><a href='/tag/howto'>howto</a></span> <span class='rank-5'><a href='/tag/erkanaauth'>erkanaauth</a></span> <span class='rank-5'><a href='/tag/postgreSQL'>postgreSQL</a></span> <span class='rank-5'><a href='/tag/amazon-s3'>amazon s3</a></span> <span class='rank-5'><a href='/tag/selenium-webdriver'>selenium-webdriver</a></span> <span class='rank-5'><a href='/tag/rest'>rest</a></span> <span class='rank-3'><a href='/tag/tips'>tips</a></span> <span class='rank-5'><a href='/tag/codeigniter'>codeigniter</a></span> <span class='rank-5'><a href='/tag/Javascript'>Javascript</a></span> <span class='rank-5'><a href='/tag/mac'>mac</a></span> <span class='rank-5'><a href='/tag/devise'>devise</a></span> 
+    <span class='rank-5'><a href='/tag/javascript'>javascript</a></span> <span class='rank-5'><a href='/tag/weekly'>weekly</a></span> <span class='rank-2'><a href='/tag/ruby'>ruby</a></span> <span class='rank-4'><a href='/tag/links'>links</a></span> <span class='rank-5'><a href='/tag/hosting'>hosting</a></span> <span class='rank-5'><a href='/tag/rspec'>rspec</a></span> <span class='rank-5'><a href='/tag/rest'>rest</a></span> <span class='rank-5'><a href='/tag/amazon-s3'>amazon s3</a></span> <span class='rank-5'><a href='/tag/carrierwave'>carrierwave</a></span> <span class='rank-5'><a href='/tag/selenium-webdriver'>selenium-webdriver</a></span> <span class='rank-5'><a href='/tag/tutorial'>tutorial</a></span> <span class='rank-5'><a href='/tag/erkanaauth'>erkanaauth</a></span> <span class='rank-5'><a href='/tag/capistrano-rbenv'>capistrano-rbenv</a></span> <span class='rank-5'><a href='/tag/tdd'>tdd</a></span> <span class='rank-5'><a href='/tag/css'>css</a></span> <span class='rank-5'><a href='/tag/mysql'>mysql</a></span> <span class='rank-5'><a href='/tag/admin'>admin</a></span> <span class='rank-5'><a href='/tag/deployment'>deployment</a></span> <span class='rank-5'><a href='/tag/codeigniter'>codeigniter</a></span> <span class='rank-4'><a href='/tag/linux'>linux</a></span> <span class='rank-5'><a href='/tag/paperclip'>paperclip</a></span> <span class='rank-5'><a href='/tag/postgres'>postgres</a></span> <span class='rank-5'><a href='/tag/virtualbox'>virtualbox</a></span> <span class='rank-5'><a href='/tag/mac'>mac</a></span> <span class='rank-5'><a href='/tag/PHP'>PHP</a></span> <span class='rank-3'><a href='/tag/tips'>tips</a></span> <span class='rank-1'><a href='/tag/rails'>rails</a></span> <span class='rank-5'><a href='/tag/devise'>devise</a></span> <span class='rank-5'><a href='/tag/rails3'>rails3</a></span> <span class='rank-5'><a href='/tag/resources'>resources</a></span> <span class='rank-5'><a href='/tag/heroku'>heroku</a></span> <span class='rank-5'><a href='/tag/postgreSQL'>postgreSQL</a></span> <span class='rank-5'><a href='/tag/ransack'>ransack</a></span> <span class='rank-5'><a href='/tag/I18n-locale'>I18n.locale</a></span> <span class='rank-5'><a href='/tag/factorygirl'>factorygirl</a></span> <span class='rank-5'><a href='/tag/capistrano-rails'>capistrano-rails</a></span> <span class='rank-5'><a href='/tag/Javascript'>Javascript</a></span> <span class='rank-5'><a href='/tag/factory-girl'>factory_girl</a></span> <span class='rank-5'><a href='/tag/cucumber'>cucumber</a></span> <span class='rank-5'><a href='/tag/vagrant'>vagrant</a></span> <span class='rank-5'><a href='/tag/rake-task'>rake task</a></span> <span class='rank-5'><a href='/tag/globalize'>globalize</a></span> <span class='rank-5'><a href='/tag/ember'>ember</a></span> <span class='rank-5'><a href='/tag/apprenticeship'>apprenticeship</a></span> <span class='rank-5'><a href='/tag/scaffold'>scaffold</a></span> <span class='rank-5'><a href='/tag/cloud-computing'>cloud computing</a></span> <span class='rank-3'><a href='/tag/howto'>howto</a></span> <span class='rank-5'><a href='/tag/rails4'>rails4</a></span> <span class='rank-5'><a href='/tag/capistrano-3'>capistrano 3</a></span> <span class='rank-5'><a href='/tag/sqlite'>sqlite</a></span> <span class='rank-5'><a href='/tag/restful'>restful</a></span> <span class='rank-4'><a href='/tag/ubuntu'>ubuntu</a></span> <span class='rank-5'><a href='/tag/password-protected'>password protected</a></span> <span class='rank-5'><a href='/tag/edge'>edge</a></span> 
   </div>
 </section>
 
@@ -1135,7 +1238,7 @@ We need to run <code>pg_dump</code> in the command line on the computer where th
   </a>
   <span xmlns:dc="http://purl.org/dc/elements/1.1/">icebergist.com</span> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-Share Alike 3.0 Unported License</a>.
 
-  <!-- Copyright &copy; 2016 - Orange Iceberg<br> -->
+  <!-- Copyright &copy; 2017 - Orange Iceberg<br> -->
   <br />
   <small>
       <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>,

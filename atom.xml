@@ -4,7 +4,7 @@
   <title><![CDATA[Icebergist]]></title>
   <link href="http://icebergist.com/atom.xml" rel="self"/>
   <link href="http://icebergist.com/"/>
-  <updated>2016-11-07T17:00:33+01:00</updated>
+  <updated>2017-02-03T14:50:44+01:00</updated>
   <id>http://icebergist.com/</id>
   <author>
     <name><![CDATA[Orange Iceberg]]></name>
@@ -12,6 +12,121 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Introduction to Ember Closure Actions]]></title>
+    <link href="http://icebergist.com/posts/introduction-to-ember-closure-actions/"/>
+    <updated>2017-01-20T15:07:40+01:00</updated>
+    <id>http://icebergist.com/posts/introduction-to-ember-closure-actions</id>
+    <content type="html"><![CDATA[<p>Closure actions were introduced in Ember v.1.13.0 and they brought a lot of improvements over old action handling mechanism in Ember. These improvements enabled Ember to adopt new data flow model called &ndash; Data Down Actions Up (DDAU) that simplified communication between parent and child components.</p>
+
+<h2>What are closure acitons?</h2>
+
+<p>Closure actions are based on JavaScript closures which are basically functions that remember environment in which they were created. So closure actions are just functions that remember context in which they were defined. Since they are just functions we can pass them as a value and call them directly as a callback. This enables us to pass them to inner components and call them directly from components.
+With the old approach we had to use <code>sendAction()</code> from component and call action on controller or route.</p>
+
+<h2>How to create closure actions?</h2>
+
+<p>Every action defined in controller can become a closure action. It’s important to note that it’s possible to make actions defined in routes closure actions but you need to use <a href="https://github.com/DockYard/ember-route-action-helper">ember-route-action-helper</a> addon for that. Closure actions are created in template using <code>action</code> helper which wrapps the action in the current context and returns it as a closure function.</p>
+
+<h2>Example</h2>
+
+<p>Let’s define action inside our application controller.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>//controllers/application.js
+</span><span class='line'>export default Ember.Controller.extend({
+</span><span class='line'>  actions: {
+</span><span class='line'>    submit() {
+</span><span class='line'>      //some logic
+</span><span class='line'>    }
+</span><span class='line'>  }
+</span><span class='line'>});</span></code></pre></td></tr></table></div></figure>
+
+
+<p>In application.hbs we create closure action using <code>action</code> helper and we assign it to example-comp&rsquo;s save attribute.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>
+</span><span class='line'>{{example-comp save=(action 'submit')}}
+</span><span class='line'></span></code></pre></td></tr></table></div></figure>
+
+
+<p>Submit action is now assigned to save attribute of example-comp component so we can call it directly inside component.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;!-- example-comp.hbs --&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;button onclick={{action 'saveItem'}}&gt;Save&lt;/button&gt;
+</span><span class='line'></span></code></pre></td></tr></table></div></figure>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>//example-comp.js
+</span><span class='line'>export default Ember.Component.extend({
+</span><span class='line'>  actions: {
+</span><span class='line'>    saveItem() {
+</span><span class='line'>      this.save();
+</span><span class='line'>      // Calling save directly
+</span><span class='line'>    }
+</span><span class='line'>  }
+</span><span class='line'>});</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Passing closure action through multiple levels of components is easy.
+Let&rsquo;s say we want to call submit action in example-comp-child component. Since we have save attribute inside example-comp with submit action assigned to it we just need to pass it one level down.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>
+</span><span class='line'>{{example-comp-child save=(action save)}}
+</span><span class='line'></span></code></pre></td></tr></table></div></figure>
+
+
+<p>Calling action from example-comp-child is the same as for example-comp component.</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>//example-comp-child.js
+</span><span class='line'>export default Ember.Component.extend({
+</span><span class='line'>  actions: {
+</span><span class='line'>    saveItem() {
+</span><span class='line'>      this.save();
+</span><span class='line'>    }
+</span><span class='line'>  }
+</span><span class='line'>});</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Closure actions simplify action passing mechanism in Ember but they can also return values, enable currying and much more. It definitely worth spending your time learning all closure actions features and I hope this introduction can help with that.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Copy and sync files from/to remote server]]></title>
@@ -1962,34 +2077,6 @@ has_attached_file :photo, :storage => :s3, :s3_credentials => S3_CREDENTIALS
 
 
 <p>(<a href="http://docs.heroku.com/config-vars#quick-example">according to Heroku docs</a>)</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Rails 3 reading list]]></title>
-    <link href="http://icebergist.com/posts/rails-3-reading-list"/>
-    <updated>2010-03-29T10:00:00+02:00</updated>
-    <id>http://icebergist.com/posts/rails-3-reading-list</id>
-    <content type="html"><![CDATA[<p>I&#8217;ve been planning to catchup with all the new Rails 3 stuff. To get me started I&#8217;ve compiled a small Rails 3 related reading list.</p>
-
-<ol>
-<li><a href="http://guides.rails.info/3_0_release_notes.html">Ruby on Rails 3.0 Release Notes</a></li>
-<li><a href="http://m.onkey.org/2010/1/22/active-record-query-interface">Active Record Query Interface 3.0</a></li>
-<li><a href="http://edgerails.info/articles/what-s-new-in-edge-rails/2010/02/23/the-skinny-on-scopes-formerly-named-scope/">The Skinny on Scopes (Formerly named_scope)</a></li>
-<li><a href="http://blog.envylabs.com/2010/02/rails-3-beautiful-code/">Rails 3 Beautiful Code</a></li>
-<li><a href="http://railscasts.com/tags/27">Railscasts &#8211; rails-3.0 episodes</a></li>
-<li><a href="http://joshhuckabee.com/jquery-rails-3">jQuery with Rails 3</a></li>
-<li><a href="http://litanyagainstfear.com/blog/2010/02/03/the-rails-module/">The Rails Module (in Rails 3)</a></li>
-</ol>
-
-
-<p>Once I&#8217;m done with it I plan to get even more from:</p>
-
-<ul>
-<li><a href="http://edgerails.info/articles/what-s-new-in-edge-rails/2010/02/10/rails-3-resources/">Rails 3 Resources</a></li>
-<li><a href="http://www.rubyinside.com/rails-3-0-beta-links-2966.html">Rails 3.0 Beta: 36 Links and Resources To Get You Going</a></li>
-</ul>
-
 ]]></content>
   </entry>
   
