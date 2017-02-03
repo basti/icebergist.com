@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Introduction to Ember Closure Actions"
-date: 2017-01-20 15:07:40 +0100
+date: 2017-02-03 15:07:40 +0100
 comments: true
 author: Jovica Susa
 categories:
@@ -14,7 +14,7 @@ published: true
 
 Closure actions were introduced in Ember v.1.13.0 and they brought a lot of improvements over old action handling mechanism in Ember. These improvements enabled Ember to adopt new data flow model called - Data Down Actions Up (DDAU) that simplified communication between parent and child components.
 
-## What are closure acitons?
+## What are closure actions?
 
 Closure actions are based on JavaScript closures which are basically functions that remember environment in which they were created. So closure actions are just functions that remember context in which they were defined. Since they are just functions we can pass them as a value and call them directly as a callback. This enables us to pass them to inner components and call them directly from components.
 With the old approach we had to use `sendAction()` from component and call action on controller or route.
