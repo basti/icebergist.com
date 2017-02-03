@@ -25,61 +25,63 @@ Every action defined in controller can become a closure action. It’s important
 ## Example
 
 Let’s define action inside our application controller.
-
-		//controllers/application.js
-		export default Ember.Controller.extend({
-			actions: {
-				submit() {
-					//some logic
-				}
-			}
-		});
-
+```
+//controllers/application.js
+export default Ember.Controller.extend({
+  actions: {
+    submit() {
+      //some logic
+    }
+  }
+});
+```
 In application.hbs we create closure action using `action` helper and we assign it to example-comp's save attribute.
 
-    {% raw %}
-		{{example-comp save=(action 'submit')}}
-    {% endraw %}
-
+```
+{% raw %}
+{{example-comp save=(action 'submit')}}
+{% endraw %}
+```
 
 Submit action is now assigned to save attribute of example-comp component so we can call it directly inside component.
 
-
-		<!-- example-comp.hbs -->
-    {% raw %}
-		<button onclick={{action 'saveItem'}}>Save</button>
-    {% endraw %}
-
-		//example-comp.js
-		export default Ember.Component.extend({
-			actions: {
-				saveItem() {
-					this.save();
-					// Calling save directly
-				}
-			}
-		});
-
+```
+	<!-- example-comp.hbs -->
+{% raw %}
+<button onclick={{action 'saveItem'}}>Save</button>
+{% endraw %}
+```
+```
+//example-comp.js
+export default Ember.Component.extend({
+  actions: {
+    saveItem() {
+      this.save();
+      // Calling save directly
+    }
+  }
+});
+```
 
 Passing closure action through multiple levels of components is easy.
 Let's say we want to call submit action in example-comp-child component. Since we have save attribute inside example-comp with submit action assigned to it we just need to pass it one level down.
-
-    {% raw %}
-		{{example-comp-child save=(action save)}}
-    {% endraw %}
-
+```
+{% raw %}
+{{example-comp-child save=(action save)}}
+{% endraw %}
+```
 
 Calling action from example-comp-child is the same as for example-comp component.
 
-
-		//example-comp-child.js
-		export default Ember.Component.extend({
-			actions: {
-				saveItem() {
-					this.save();
-				}
-			}
-		});
-
+```
+//example-comp-child.js
+export default Ember.Component.extend({
+  actions: {
+    saveItem() {
+      this.save();
+    }
+  }
+});
+```
 
 Closure actions simplify action passing mechanism in Ember but they can also return values, enable currying and much more. It definitely worth spending your time learning all closure actions features and I hope this introduction can help with that.
