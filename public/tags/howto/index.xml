@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Howto on Icebergist</title>
+    <link>http://blog.orangeiceberg.com/tags/howto/</link>
+    <description>Recent content in Howto on Icebergist</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 02 Dec 2015 10:44:23 +0100</lastBuildDate>
+    <atom:link href="http://blog.orangeiceberg.com/tags/howto/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Import and export MySQL dump</title>
+      <link>http://blog.orangeiceberg.com/posts/import-and-export-mysql-dump</link>
+      <pubDate>Wed, 02 Dec 2015 10:44:23 +0100</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/import-and-export-mysql-dump</guid>
+      <description>&lt;p&gt;Another simple task that&amp;rsquo;s often hard for beginners is importing and exporting MySQL dumps. Here is quick rundown on how to do it.&lt;/p&gt;
+
+&lt;p&gt;To export data you need to use &lt;code&gt;mysqldump&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;mysqldump -u db_user -p db_name &amp;gt; dump_name.sql
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Options given to &lt;code&gt;mysqldump&lt;/code&gt; are:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;-u db_user&lt;/code&gt; - connect as user &lt;code&gt;db_user&lt;/code&gt; to database&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-p&lt;/code&gt; - use password, it will ask you to enter your password&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;db_name&lt;/code&gt; is the name of MySQL database you want to dump&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;&amp;gt; dump_name.sql&lt;/code&gt; - by default &lt;code&gt;mysqldump&lt;/code&gt; will print out the dump to terminal, but simple output redirect with &lt;code&gt;&amp;gt;&lt;/code&gt; will instead write it to given filename, in this case &lt;code&gt;dump_name.sql&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Now that you have &lt;code&gt;dump_name.sql&lt;/code&gt; file with all SQL queries needed to replicate your database you can import it using general-purpose &lt;code&gt;mysql&lt;/code&gt; client:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;mysql -u db_user -p db_name &amp;lt; dump_name.sql
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;User, password, and database name options are the same as for &lt;code&gt;mysqldump&lt;/code&gt;. Since &lt;code&gt;mysql&lt;/code&gt; reads input from terminal this time we can use &lt;code&gt;&amp;lt;&lt;/code&gt; to read input from given file instead.&lt;/p&gt;
+
+&lt;p&gt;As always for more information you can consult manual using &lt;code&gt;man mysqldump&lt;/code&gt; and &lt;code&gt;man mysql&lt;/code&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Create and extract archives using tar and gzip</title>
+      <link>http://blog.orangeiceberg.com/posts/create-and-extract-archives-using-tar-and-gzip</link>
+      <pubDate>Fri, 13 Nov 2015 13:28:36 +0100</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/create-and-extract-archives-using-tar-and-gzip</guid>
+      <description>&lt;p&gt;One of the simplest tasks is creating and extracting files using &lt;code&gt;tar&lt;/code&gt; and &lt;code&gt;gzip&lt;/code&gt;. Yet for most new developers this is a daunting task. These days &lt;code&gt;tar&lt;/code&gt; is mostly used to simply combine a few files into a single file and then &lt;code&gt;gzip&lt;/code&gt; is used to compress that file.&lt;/p&gt;
+
+&lt;p&gt;Here is a quick overview how to use &lt;code&gt;tar&lt;/code&gt; and &lt;code&gt;gzip&lt;/code&gt; to create and compress an archive:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;# archive individual files
+tar -cvzf myarchive.tar.gz /path/to/file1 /path/to/file2
+
+# archive whole directory
+tar -cvzf myarchive.tar.gz /path/to/dir
+
+# archive whole directory but don&#39;t store full path
+tar -cvzf myarchive.tar.gz -C /path/to/dir ./
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Options give to tar are: &lt;code&gt;c&lt;/code&gt; to create new archive, &lt;code&gt;v&lt;/code&gt; to be verbose, &lt;code&gt;z&lt;/code&gt; to compress resulting archive with &lt;code&gt;gzip&lt;/code&gt;, and &lt;code&gt;f&lt;/code&gt; to write the archive to specified file. After options you can list files and dirs you want to archive.&lt;/p&gt;
+
+&lt;p&gt;In all examples we provide a full path to a file or dir we want to archive. In this case &lt;code&gt;tar&lt;/code&gt; will store files in the archive using the full path. This means once you extract the files you&amp;rsquo;ll have a complete directory structure from root dir onwards.&lt;/p&gt;
+
+&lt;p&gt;The way to avoid this is either to manually &lt;code&gt;cd&lt;/code&gt; to dir in which files are stored, or to tell &lt;code&gt;tar&lt;/code&gt; using &lt;code&gt;C&lt;/code&gt; option to change dir before archiving files.&lt;/p&gt;
+
+&lt;p&gt;Finally to extract an archive:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;tar -xvzf myarchive.tar.gz
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The &lt;code&gt;x&lt;/code&gt; option tells &lt;code&gt;tar&lt;/code&gt; to extract the archive into current directory.&lt;/p&gt;
+
+&lt;p&gt;For more information you can consult manual using &lt;code&gt;man tar&lt;/code&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>How to skip Devise trackable updates</title>
+      <link>http://blog.orangeiceberg.com/posts/how-to-skip-devise-trackable-updates</link>
+      <pubDate>Mon, 12 May 2014 19:10:06 +0200</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/how-to-skip-devise-trackable-updates</guid>
+      <description>&lt;p&gt;Devise has a very useful Trackable module used to track user&amp;rsquo;s sign in count, timestamps and IP address. There are some occasions when you need to disable tracking. For example for API requests where user signs in on every request; for instances where admin might sign in as an user; and similar.&lt;/p&gt;
+
+&lt;p&gt;To disable Devise Trackable module you need to set &lt;code&gt;request.env[&amp;quot;devise.skip_trackable&amp;quot;] = true&lt;/code&gt;. You have to do that before trying to authenticate user, so you&amp;rsquo;ll want to put it in a before_filter, or even better prepend_before_filter to make sure it&amp;rsquo;s before authentication.&lt;/p&gt;
+
+&lt;p&gt;Add this to your controller in which you want to disable tracking:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;prepend_before_filter :disable_devise_trackable
+
+protected
+  def disable_devise_trackable
+    request.env[&amp;quot;devise.skip_trackable&amp;quot;] = true
+  end
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Upgrade Ubuntu 8.04 LTS server</title>
+      <link>http://blog.orangeiceberg.com/posts/upgrade-ubuntu-8.04-lts-server</link>
+      <pubDate>Mon, 06 Jan 2014 11:36:43 +0100</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/upgrade-ubuntu-8.04-lts-server</guid>
+      <description>&lt;p&gt;Note to self: here is how to upgrade Ubuntu 8.04 LTS (or any other release that is no longer supported) to newer Ubuntu release.&lt;/p&gt;
+
+&lt;p&gt;When you are upgrading unsupported release of Ubuntu if you try to do the usual &lt;code&gt;sudo apt-get update&lt;/code&gt; it will most likely fail because&amp;hellip; well, it&amp;rsquo;s unsupported. The simple fix for this is to change your &lt;code&gt;/etc/apt/sources.list&lt;/code&gt; and replace repository URLs from something like &lt;code&gt;us.archive.ubuntu.com&lt;/code&gt; to &lt;code&gt;old-releases.ubuntu.com&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;After that you should be able follow normal upgrade procedure (use sudo if you are not root):&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;apt-get update
+apt-get install update-manager-core
+do-release-upgrade
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;References:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://rimuhosting.com/knowledgebase/linux/distros/ubuntu&#34; title=&#34;Rimuhosting&#39;s page on upgrading Ubuntu&#34;&gt;Rimuhosting&amp;rsquo;s page on upgrading Ubuntu&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://askubuntu.com/questions/91815/how-to-install-software-or-upgrade-from-old-unsupported-release&#34; title=&#34;Discussion on upgrading unsupported Ubuntu release&#34;&gt;Discussion on upgrading unsupported Ubuntu release&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Quick VirtualBox/Vagrant setup with Heroku-like box</title>
+      <link>http://blog.orangeiceberg.com/posts/quick-virtualbox/vagrant-setup-with-heroku-like-box</link>
+      <pubDate>Mon, 16 Sep 2013 09:00:00 +0100</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/quick-virtualbox/vagrant-setup-with-heroku-like-box</guid>
+      <description>&lt;p&gt;Here is a quick way to setup VirtualBox using Vagrant with Heroku-like box on Mac.&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;Install VirtualBox from &lt;a href=&#34;https://www.virtualbox.org/wiki/Downloads&#34; target=&#34;_blank&#34;&gt;&lt;a href=&#34;https://www.virtualbox.org/wiki/Downloads&#34;&gt;https://www.virtualbox.org/wiki/Downloads&lt;/a&gt;&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Install Vagrant from &lt;a href=&#34;http://downloads.vagrantup.com/&#34; target=&#34;_blank&#34;&gt;&lt;a href=&#34;http://downloads.vagrantup.com/&#34;&gt;http://downloads.vagrantup.com/&lt;/a&gt;&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Create Vagrantfile for Heroku-like box (based on &lt;a href=&#34;https://github.com/ejholmes/vagrant-heroku&#34; target=&#34;_blank&#34;&gt;&lt;a href=&#34;https://github.com/ejholmes/vagrant-heroku&#34;&gt;https://github.com/ejholmes/vagrant-heroku&lt;/a&gt;&lt;/a&gt;) that looks something like:&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;        Vagrant.configure(&amp;quot;2&amp;quot;) do |config|        
+	        config.vm.box = &amp;quot;heroku&amp;quot;
+	        config.vm.box_url = &amp;quot;https://dl.dropboxusercontent.com/s/rnc0p8zl91borei/heroku.box&amp;quot;
+          config.vm.synced_folder &amp;quot;.&amp;quot;, &amp;quot;/vagrant&amp;quot;, :nfs =&amp;gt; true
+	        config.vm.network :private_network, ip: &amp;quot;192.168.1.42&amp;quot;  # required for NFS
+        end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Beside telling Vagrant to use Heroku-like box from &lt;a href=&#34;https://github.com/ejholmes/vagrant-heroku&#34; target=&#34;_blank&#34;&gt;&lt;a href=&#34;https://github.com/ejholmes/vagrant-heroku&#34;&gt;https://github.com/ejholmes/vagrant-heroku&lt;/a&gt;&lt;/a&gt; it also sets up shared dir between host and VM machine. It will mount Vagrantfile dir (.) to /vagrant in VM.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;vagrant up&lt;/code&gt; will setup the VM and start it up.&lt;/p&gt;
+
+&lt;p&gt;Now you can use &lt;code&gt;vagrant ssh&lt;/code&gt; to login to VM.&lt;/p&gt;
+
+&lt;p&gt;Vagrant Heroku-like box comes with Postgresql, but if you want you can easily setup sqlite:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;sudo apt-get install libsqlite3-dev
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Bonus tip&lt;/strong&gt;: when you are working on multiple projects sometimes you can forget which VMs are running. You can list all running VMs using:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;VBoxManage list runningvms
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Further reading:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://docs.vagrantup.com/v2/&#34; target=&#34;_blank&#34;&gt;Vagrant docs&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/ejholmes/vagrant-heroku&#34; target=&#34;_blank&#34;&gt;Vagrant Heroku-like box&lt;/a&gt; which can be easily customized.&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://loudcoding.com/posts/how-to-use-vagrant-to-run-celadon-cedar-stack-on-heroku/&#34; target=&#34;_blank&#34;&gt;Another Vagrant setup tutorial&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.stackmachine.com/blog/web-development-on-a-vm-is-it-slower&#34; target=&#34;_blank&#34;&gt;VM speed benchmarks&lt;/a&gt; in case you doubt in VM speed.&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Simple password protected administration with CodeIgniter</title>
+      <link>http://blog.orangeiceberg.com/posts/simple-password-protected-administration-with-codeigniter</link>
+      <pubDate>Sun, 08 Mar 2009 09:00:00 +0100</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/simple-password-protected-administration-with-codeigniter</guid>
+      <description>&lt;p&gt;Last week I&amp;#8217;ve taken a break from Ruby/Rails development and I&amp;#8217;ve worked on a site that uses PHP with &lt;a href=&#34;http://codeigniter.com/&#34;&gt;CodeIgniter&lt;/a&gt; framework.&lt;/p&gt;
+
+&lt;p&gt;Despite the fact that CodeIgniter has a very nice documentation I found it very difficult to find a way to do some simple things, that are more or less obvious, but which can be a problem for someone who hasn&amp;#8217;t worked with CodeIgniter before. (for example, I found myself more than once looking at CI code to figure out how it works, so I can use it)&lt;/p&gt;
+
+&lt;p&gt;I had to make a simple password protected administration section. One admin user, one password, no user registrations, no roles &amp;#8211; simple as possible. As I was using CI framework I decided to find a plugin/library that does this. Unfortunately most CI authorization plugins/libraries are very bloated and too complicated for this simple task. I tried to find some examples how to handle this simple use case, but nothing came up.&lt;/p&gt;
+
+&lt;p&gt;Finally I&amp;#8217;ve found a small authorization plugin: &lt;a href=&#34;http://codeigniter.com/wiki/Erkana/&#34;&gt;Erkanaauth&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;First you need a user table (must be named &amp;#8216;users&amp;#8217;) which only needs to have an id field and all other fields are optional because you will manually specify what other columns will be used. I opted for simple id, username, password:&lt;/p&gt;
+
+&lt;pre&gt;CREATE TABLE IF NOT EXISTS `users` (
+  `id` int(11) NOT NULL auto_increment,
+  `username` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  PRIMARY KEY  (`id`)
+);&lt;/pre&gt;
+
+&lt;p&gt;We will need to &amp;#8220;install&amp;#8221; ErkanaAuth library. You should &lt;a href=&#34;http://codeigniter.com/wiki/File:erkanaauth.zip/&#34;&gt;download it&lt;/a&gt; and unzip it.&lt;/p&gt;
+
+&lt;p&gt;Next we should create an Admin controller which will handle all administration tasks (remember I&amp;#8217;m making simple admin here, so I don&amp;#8217;t need to protect multiple controllers).&lt;/p&gt;
+
+&lt;pre&gt;&amp;lt;?php
+class Admin extends Controller {
+  function Admin()
+  {
+    parent::Controller();   
+    $this-&gt;load-&gt;database();
+    $this-&gt;load-&gt;helper(array(&#39;url&#39;, &#39;form&#39;, &#39;date&#39;));
+    $this-&gt;load-&gt;library(array(&#39;form_validation&#39;, &#39;upload&#39;, &#39;Erkanaauth&#39;, &#39;session&#39;));
+  }
+}
+?&amp;gt;&lt;/pre&gt;
+
+&lt;p&gt;Constructor just connects to database and loads some standard helpers and libraries (including Erkanaauth) that are usually used.&lt;/p&gt;
+
+&lt;p&gt;Next step is to add a function which we can call to verify if user is logged in:&lt;/p&gt;
+
+&lt;pre&gt;private
+  function authorize()
+  {
+      if($this-&gt;erkanaauth-&gt;try_session_login())
+          return true;
+  
+      redirect(&#39;admin/login&#39;);
+  }
+&lt;/pre&gt;
+
+&lt;p&gt;Function uses Erkanaauth&amp;#8217;s try_session_login which checks if user is already logged in (checks session for user id). If user isn&amp;#8217;t logged in we&amp;#8217;ll redirect him to our login page:&lt;/p&gt;
+
+&lt;pre&gt;function login()
+  {
+    $username = $this-&gt;input-&gt;post(&#39;username&#39;, true);
+    $password = $this-&gt;input-&gt;post(&#39;password&#39;, true);
+    if($username || $password)
+    {
+      if($this-&gt;erkanaauth-&gt;try_login(array(&#39;username&#39; =&gt; $username, &#39;password&#39; =&gt; $password)))
+        redirect(&#39;admin&#39;);
+    }
+    
+    $this-&gt;load-&gt;view(&#39;admin_login&#39;);
+  }
+
+  function logout()
+  {
+    $this-&gt;erkanaauth-&gt;logout();
+    redirect(&#39;admin&#39;);
+  }
+&lt;/pre&gt;
+
+&lt;p&gt;Key command here is try_login in login function which tries to find an entry in users table that fulfills given conditions. If you have different users table than the one I made this is the place where you should enter your column names.&lt;/p&gt;
+
+&lt;p&gt;Logout function is has just a simple call to Erkana&amp;#8217;s logout function. Nothing special there.&lt;/p&gt;
+
+&lt;p&gt;Of course we also need a login page template which should contain a simple user/pass form. It&amp;#8217;s pretty basic and you can see it if you get the complete code (see at the end).&lt;/p&gt;
+
+&lt;p&gt;Finally we have everything needed to protect any page in Admin controller. In order to protect a page all you need to do is to add a call to authorize function to any function you want to protect. Like this:&lt;/p&gt;
+
+&lt;pre&gt;function index()
+  {
+    $this-&gt;authorize();
+    echo &#34;Do something useful... For now just display logout link: &#34;;
+    echo anchor(&#39;admin/logout&#39;, &#34;Logout&#34;);
+  }
+&lt;/pre&gt;
+
+&lt;p&gt;That&amp;#8217;s it. Now you have fully functional administration section which requires username and password authorization.&lt;/p&gt;
+
+&lt;p&gt;You can get the complete sample application from &lt;a href=&#34;http://github.com/basti/ci-admin-section/tree/master&#34;&gt;Github repository&lt;/a&gt;. Feel free to expand on it or use it any way you like.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Hosting on Icebergist</title>
+    <link>http://blog.orangeiceberg.com/tags/hosting/</link>
+    <description>Recent content in Hosting on Icebergist</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 06 Jan 2014 11:36:43 +0100</lastBuildDate>
+    <atom:link href="http://blog.orangeiceberg.com/tags/hosting/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Upgrade Ubuntu 8.04 LTS server</title>
+      <link>http://blog.orangeiceberg.com/posts/upgrade-ubuntu-8.04-lts-server</link>
+      <pubDate>Mon, 06 Jan 2014 11:36:43 +0100</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/upgrade-ubuntu-8.04-lts-server</guid>
+      <description>&lt;p&gt;Note to self: here is how to upgrade Ubuntu 8.04 LTS (or any other release that is no longer supported) to newer Ubuntu release.&lt;/p&gt;
+
+&lt;p&gt;When you are upgrading unsupported release of Ubuntu if you try to do the usual &lt;code&gt;sudo apt-get update&lt;/code&gt; it will most likely fail because&amp;hellip; well, it&amp;rsquo;s unsupported. The simple fix for this is to change your &lt;code&gt;/etc/apt/sources.list&lt;/code&gt; and replace repository URLs from something like &lt;code&gt;us.archive.ubuntu.com&lt;/code&gt; to &lt;code&gt;old-releases.ubuntu.com&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;After that you should be able follow normal upgrade procedure (use sudo if you are not root):&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;apt-get update
+apt-get install update-manager-core
+do-release-upgrade
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;References:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://rimuhosting.com/knowledgebase/linux/distros/ubuntu&#34; title=&#34;Rimuhosting&#39;s page on upgrading Ubuntu&#34;&gt;Rimuhosting&amp;rsquo;s page on upgrading Ubuntu&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://askubuntu.com/questions/91815/how-to-install-software-or-upgrade-from-old-unsupported-release&#34; title=&#34;Discussion on upgrading unsupported Ubuntu release&#34;&gt;Discussion on upgrading unsupported Ubuntu release&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Mosso hosting cloud</title>
+      <link>http://blog.orangeiceberg.com/posts/mosso-hosting-cloud</link>
+      <pubDate>Wed, 17 Sep 2008 09:00:00 +0100</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/mosso-hosting-cloud</guid>
+      <description>&lt;p&gt;&lt;a class=&#34;external&#34; href=&#34;http://www.mosso.com/&#34;&gt;Mosso&amp;#8217;s hosting cloud&lt;/a&gt;
+at $100 / month seems like a good solution to get a scalable server. However one thing bugs me, actually two things&amp;#8230;&lt;/p&gt;
+
+&lt;p&gt;First one: they offer &lt;strong&gt;FTP only access&lt;/strong&gt;. Meaning you cannot deploy sites directly from code repositories (i.e. git or svn). That sucks.&lt;/p&gt;
+
+&lt;p&gt;Second thing that bugs me: for $100 you get quite a lot of computing power which can be used to run multiple sites &amp;#8211; but &lt;strong&gt;you are only allowed to have one Rails app running&lt;/strong&gt;. Only one. If you want additional Rails apps (for example to have a test server) you need to pay an extra fee.&lt;/p&gt;
+
+&lt;p&gt;I know it&amp;#8217;s cloud computing and that you have to be able to run it with any additional configuration (that&amp;#8217;s why I think it&amp;#8217;s ok that you have to freeze your gems in Rails apps, because you cannot install any gems yourself)&amp;#8230; but not being able to checkout my code from repository and having to upload the whole app each time you make changes &lt;strong&gt;is really annoying&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;In their defense, the support guy said that they are working on it, but he could give me an ETA when they&amp;#8217;ll allow something like that.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

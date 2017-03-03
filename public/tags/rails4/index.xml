@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Rails4 on Icebergist</title>
+    <link>http://blog.orangeiceberg.com/tags/rails4/</link>
+    <description>Recent content in Rails4 on Icebergist</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 10 Sep 2013 09:00:00 +0100</lastBuildDate>
+    <atom:link href="http://blog.orangeiceberg.com/tags/rails4/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>RailsDiff</title>
+      <link>http://blog.orangeiceberg.com/posts/railsdiff</link>
+      <pubDate>Tue, 10 Sep 2013 09:00:00 +0100</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/railsdiff</guid>
+      <description>&lt;p&gt;&lt;a title=&#34;RailsDiff - compare Rails default app&#34; href=&#34;http://railsdiff.org/&#34; target=&#34;_blank&#34;&gt;RailsDiff&lt;/a&gt;
+is a very useful site when upgrading Rails versions (for example, from Rails 3.2 to Rails 4). It will generate default Rails app using two different Rails versions and it will compare them. The result is that you can see all the configuration changes (like in application.rb) and all other changes &amp;#8211; which is really useful when upgrading to new Rails version.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

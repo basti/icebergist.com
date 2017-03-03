@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Virtualbox on Icebergist</title>
+    <link>http://blog.orangeiceberg.com/tags/virtualbox/</link>
+    <description>Recent content in Virtualbox on Icebergist</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 03 Dec 2015 11:12:56 +0200</lastBuildDate>
+    <atom:link href="http://blog.orangeiceberg.com/tags/virtualbox/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Headless Firefox in Ubuntu on VirtualBox for Cucumber testing</title>
+      <link>http://blog.orangeiceberg.com/posts/headless-firefox-in-ubuntu-on-virtualbox-for-cucumber-testing</link>
+      <pubDate>Thu, 03 Dec 2015 11:12:56 +0200</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/headless-firefox-in-ubuntu-on-virtualbox-for-cucumber-testing</guid>
+      <description>
+
+&lt;p&gt;If you use &lt;a href=&#34;http://www.vagrantup.com/downloads.html&#34;&gt;Vagrant&lt;/a&gt;, &lt;a href=&#34;https://www.virtualbox.org/&#34;&gt;VirtualBox&lt;/a&gt; and Ubuntu to build your Rails apps and you want to test it with Cucumber scenarios, this is the right post for you. By default Vagrant and VirtualBox use Ubuntu without an X server and GUI.&lt;/p&gt;
+
+&lt;p&gt;Everything goes well until you need &lt;code&gt;@javascript&lt;/code&gt; flag for your cucumber scenario. &lt;code&gt;@javascript&lt;/code&gt; uses a javascript-aware system to process web requests (e.g. Selenium) instead of the default (non-javascript-aware) webrat browser.&lt;/p&gt;
+
+&lt;h3 id=&#34;install-mozilla-firefox:e440c2a4f60085f5f973ab25c52a888b&#34;&gt;Install Mozilla Firefox&lt;/h3&gt;
+
+&lt;p&gt;Selenium WebDriver is flexible and lets you run selenium headless in servers with no display. But in order to run, Selenium needs to launch a browser. If there is no display to the machine, the browsers are not launched. So in order to use selenium, you need to fake a display and let selenium and the browser think they are running in a machine with a display.&lt;/p&gt;
+
+&lt;p&gt;Install latest version of Mozilla Firefox:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;sudo apt-get install firefox&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Since Ubuntu is running without a X server Selenium cannot start Firefox because it requires an X server.&lt;/p&gt;
+
+&lt;h3 id=&#34;setting-up-virtual-x-server:e440c2a4f60085f5f973ab25c52a888b&#34;&gt;Setting up virtual X server&lt;/h3&gt;
+
+&lt;p&gt;Virtual X server is required to make browsers run normally by making them believe there is a display available, although it doesn&amp;rsquo;t create any visible windows.&lt;/p&gt;
+
+&lt;p&gt;Xvfb (X Virtual FrameBuffer) works fine for this. Xvfb lets you run X-Server in machines with no display devices.&lt;/p&gt;
+
+&lt;p&gt;Install xvfb on ubuntu:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;sudo apt-get install xvfb&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Lets run the Xvfb service in a display number which is less likely to clash even if you add a display at a later stage. Display 10 will do fine.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;sudo Xvfb :10 -ac&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;The parameter -ac makes xvfb run with access control off. The server should be running now.&lt;/p&gt;
+
+&lt;h3 id=&#34;headless-firefox:e440c2a4f60085f5f973ab25c52a888b&#34;&gt;Headless Firefox&lt;/h3&gt;
+
+&lt;p&gt;Before you can run a browser, you need to set the environment variable DISPLAY with the display number at which xvfb is running.&lt;/p&gt;
+
+&lt;p&gt;Open new tab in terminal and set the DISPLAY variable:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;export DISPLAY=:10&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;and start mozilla firefox:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;firefox&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Now you run firefox headlessly in Ubuntu, and you can run your cucumber scenarios with &lt;code&gt;@javascript&lt;/code&gt; flag.&lt;/p&gt;
+
+&lt;h3 id=&#34;start-virtual-x-server-automatically:e440c2a4f60085f5f973ab25c52a888b&#34;&gt;Start virtual X server automatically&lt;/h3&gt;
+
+&lt;p&gt;To run your X server automatically, after installing Xvfb, you will need to:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;put content of &lt;a href=&#34;https://gist.github.com/basti/2db0b71e893ee4d6d015&#34;&gt;this gist&lt;/a&gt; in &lt;code&gt;/etc/init.d/xvfb&lt;/code&gt; (hint use &lt;code&gt;sudo wget&lt;/code&gt; command to do that)&lt;/li&gt;
+&lt;li&gt;make it executable &lt;code&gt;sudo chmod a+x /etc/init.d/xvfb&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;start xvfb on display number 10 &lt;code&gt;export DISPLAY=:10&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;run X server &lt;code&gt;sudo /etc/init.d/xvfb start&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;when you want to stop X server &lt;code&gt;sudo /etc/init.d/xvfb stop&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;This is my way to run firefox headlessly in Virtual box Ubuntu, and to run cucumber scenarios with &lt;code&gt;@javascript&lt;/code&gt; flag.&lt;/p&gt;
+
+&lt;p&gt;References:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://www.installationpage.com/selenium/how-to-run-selenium-headless-firefox-in-ubuntu/&#34;&gt;Selenium Headless Automated Testing in Ubuntu&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://gist.github.com/jterrace/2911875&#34;&gt;Xvfb init script for Ubuntu&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Quick VirtualBox/Vagrant setup with Heroku-like box</title>
+      <link>http://blog.orangeiceberg.com/posts/quick-virtualbox/vagrant-setup-with-heroku-like-box</link>
+      <pubDate>Mon, 16 Sep 2013 09:00:00 +0100</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/quick-virtualbox/vagrant-setup-with-heroku-like-box</guid>
+      <description>&lt;p&gt;Here is a quick way to setup VirtualBox using Vagrant with Heroku-like box on Mac.&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;Install VirtualBox from &lt;a href=&#34;https://www.virtualbox.org/wiki/Downloads&#34; target=&#34;_blank&#34;&gt;&lt;a href=&#34;https://www.virtualbox.org/wiki/Downloads&#34;&gt;https://www.virtualbox.org/wiki/Downloads&lt;/a&gt;&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Install Vagrant from &lt;a href=&#34;http://downloads.vagrantup.com/&#34; target=&#34;_blank&#34;&gt;&lt;a href=&#34;http://downloads.vagrantup.com/&#34;&gt;http://downloads.vagrantup.com/&lt;/a&gt;&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Create Vagrantfile for Heroku-like box (based on &lt;a href=&#34;https://github.com/ejholmes/vagrant-heroku&#34; target=&#34;_blank&#34;&gt;&lt;a href=&#34;https://github.com/ejholmes/vagrant-heroku&#34;&gt;https://github.com/ejholmes/vagrant-heroku&lt;/a&gt;&lt;/a&gt;) that looks something like:&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;        Vagrant.configure(&amp;quot;2&amp;quot;) do |config|        
+	        config.vm.box = &amp;quot;heroku&amp;quot;
+	        config.vm.box_url = &amp;quot;https://dl.dropboxusercontent.com/s/rnc0p8zl91borei/heroku.box&amp;quot;
+          config.vm.synced_folder &amp;quot;.&amp;quot;, &amp;quot;/vagrant&amp;quot;, :nfs =&amp;gt; true
+	        config.vm.network :private_network, ip: &amp;quot;192.168.1.42&amp;quot;  # required for NFS
+        end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Beside telling Vagrant to use Heroku-like box from &lt;a href=&#34;https://github.com/ejholmes/vagrant-heroku&#34; target=&#34;_blank&#34;&gt;&lt;a href=&#34;https://github.com/ejholmes/vagrant-heroku&#34;&gt;https://github.com/ejholmes/vagrant-heroku&lt;/a&gt;&lt;/a&gt; it also sets up shared dir between host and VM machine. It will mount Vagrantfile dir (.) to /vagrant in VM.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;vagrant up&lt;/code&gt; will setup the VM and start it up.&lt;/p&gt;
+
+&lt;p&gt;Now you can use &lt;code&gt;vagrant ssh&lt;/code&gt; to login to VM.&lt;/p&gt;
+
+&lt;p&gt;Vagrant Heroku-like box comes with Postgresql, but if you want you can easily setup sqlite:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;sudo apt-get install libsqlite3-dev
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Bonus tip&lt;/strong&gt;: when you are working on multiple projects sometimes you can forget which VMs are running. You can list all running VMs using:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;VBoxManage list runningvms
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Further reading:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://docs.vagrantup.com/v2/&#34; target=&#34;_blank&#34;&gt;Vagrant docs&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/ejholmes/vagrant-heroku&#34; target=&#34;_blank&#34;&gt;Vagrant Heroku-like box&lt;/a&gt; which can be easily customized.&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://loudcoding.com/posts/how-to-use-vagrant-to-run-celadon-cedar-stack-on-heroku/&#34; target=&#34;_blank&#34;&gt;Another Vagrant setup tutorial&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.stackmachine.com/blog/web-development-on-a-vm-is-it-slower&#34; target=&#34;_blank&#34;&gt;VM speed benchmarks&lt;/a&gt; in case you doubt in VM speed.&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

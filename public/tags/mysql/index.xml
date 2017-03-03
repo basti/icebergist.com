@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Mysql on Icebergist</title>
+    <link>http://blog.orangeiceberg.com/tags/mysql/</link>
+    <description>Recent content in Mysql on Icebergist</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 02 Dec 2015 10:44:23 +0100</lastBuildDate>
+    <atom:link href="http://blog.orangeiceberg.com/tags/mysql/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Import and export MySQL dump</title>
+      <link>http://blog.orangeiceberg.com/posts/import-and-export-mysql-dump</link>
+      <pubDate>Wed, 02 Dec 2015 10:44:23 +0100</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/import-and-export-mysql-dump</guid>
+      <description>&lt;p&gt;Another simple task that&amp;rsquo;s often hard for beginners is importing and exporting MySQL dumps. Here is quick rundown on how to do it.&lt;/p&gt;
+
+&lt;p&gt;To export data you need to use &lt;code&gt;mysqldump&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;mysqldump -u db_user -p db_name &amp;gt; dump_name.sql
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Options given to &lt;code&gt;mysqldump&lt;/code&gt; are:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;-u db_user&lt;/code&gt; - connect as user &lt;code&gt;db_user&lt;/code&gt; to database&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-p&lt;/code&gt; - use password, it will ask you to enter your password&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;db_name&lt;/code&gt; is the name of MySQL database you want to dump&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;&amp;gt; dump_name.sql&lt;/code&gt; - by default &lt;code&gt;mysqldump&lt;/code&gt; will print out the dump to terminal, but simple output redirect with &lt;code&gt;&amp;gt;&lt;/code&gt; will instead write it to given filename, in this case &lt;code&gt;dump_name.sql&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Now that you have &lt;code&gt;dump_name.sql&lt;/code&gt; file with all SQL queries needed to replicate your database you can import it using general-purpose &lt;code&gt;mysql&lt;/code&gt; client:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;mysql -u db_user -p db_name &amp;lt; dump_name.sql
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;User, password, and database name options are the same as for &lt;code&gt;mysqldump&lt;/code&gt;. Since &lt;code&gt;mysql&lt;/code&gt; reads input from terminal this time we can use &lt;code&gt;&amp;lt;&lt;/code&gt; to read input from given file instead.&lt;/p&gt;
+
+&lt;p&gt;As always for more information you can consult manual using &lt;code&gt;man mysqldump&lt;/code&gt; and &lt;code&gt;man mysql&lt;/code&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>changing database starting id</title>
+      <link>http://blog.orangeiceberg.com/posts/changing-database-starting-id</link>
+      <pubDate>Mon, 01 Jun 2015 11:03:47 +0200</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/changing-database-starting-id</guid>
+      <description>&lt;p&gt;For our new project it was necessary to modify the starting id of our database. This can be handled through migration for creating table but we decided to create a rake task that handled this for us.&lt;/p&gt;
+
+&lt;p&gt;The rake task that we created detects what database is being used and executes appropriate changes according to that.&lt;/p&gt;
+
+&lt;p&gt;You can create a rake task using rails generate command for rake task:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;rails g task namespace task_name
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This will create your task in lib/tasks with chosen namespace and task name.&lt;/p&gt;
+
+&lt;p&gt;Here is our task and an explanation that follows.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;namespace :database do
+  desc &amp;quot;Detect database that&#39;s being used and then increment its id&amp;quot;
+  task autoincrement: :environment do
+  
+    db_name_downcase = ActiveRecord::Base.connection.adapter_name.downcase
+
+    if Link.maximum(:id).to_i &amp;lt; 1000
+      if db_name_downcase.start_with? &amp;quot;mysql&amp;quot;
+        ActiveRecord::Base.connection.execute(&amp;quot;ALTER TABLE links AUTO_INCREMENT = 1000&amp;quot;)
+      end
+      if db_name_downcase.start_with? &amp;quot;postgres&amp;quot;
+        ActiveRecord::Base.connection.execute(&amp;quot;ALTER SEQUENCE links_id_seq START with 1000 RESTART;&amp;quot;)
+      end
+      if db_name_downcase.start_with? &amp;quot;sqlite&amp;quot;
+        ActiveRecord::Base.connection.execute(&amp;quot;insert into sqlite_sequence(name,seq) values(&#39;links&#39;, 1000)&amp;quot;)
+      end
+    else
+      puts &amp;quot;To perform this task your database shouldn&#39;t have records with id number higher than 1000&amp;quot;
+    end
+    
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We need to change the starting id of our database to 1000 so we check that we don&amp;rsquo;t have a record with id higher than 1000. Link is our Active Record model and links is the name of our table.&lt;/p&gt;
+
+&lt;p&gt;ActiveRecord::Base.connection returns the connection currently associated with the class. We use it to detect the name of database and execute appropriate changes.
+###MySQL
+For MySQL we need to set AUTO_INCREMENT value to 1000, Auto-increment allows a unique number to be generated when a new record is inserted into a table. When first record is created it sets its primary key to 1 by default  and it will auto increment by 1 for each new record.
+###PostgreSQL
+For Postgres we have to explain what a sequence is. A sequence is a special kind of a database object designed for generating unique numeric identifiers. It is typically used to generate artificial primary keys. Sequences are similar to the Auto-increment concept in MySQL.
+###SQLite
+For SQlite we altered sqlite_sequence table, which is an internal table used to implement AUTOINCREMENT. It is created automatically whenever any ordinary table with an AUTOINCREMENT integer primary key is created.&lt;/p&gt;
+
+&lt;p&gt;You can check &lt;a href=&#34;http://stackoverflow.com/questions/2075331/change-starting-id-number&#34;&gt;this Stack Overflow discussion&lt;/a&gt; that was very helpful to me.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

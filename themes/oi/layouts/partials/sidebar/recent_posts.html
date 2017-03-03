@@ -1,0 +1,21 @@
+<section class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Recent Posts</h3>
+  </div>
+
+  <div id="recent_posts" class="list-group">
+    {{ $page_url := .Permalink }}
+
+    {{ range first 5 .Site.Pages }}
+      {{ $post_url := .Permalink }}
+      <a class="list-group-item{{ if eq $page_url $post_url }} active {{ end}}"
+         href="{{ .Permalink }}">
+         {{safeHTML .Title }}
+      </a>
+    {{ end }}
+  </div>
+
+  <div class="panel-heading">
+    <a href="/blog/archives/">See more posts</a>
+  </div>
+</section>

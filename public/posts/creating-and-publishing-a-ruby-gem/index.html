@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+
+
+<html class="no-js" lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>
+    
+    Icebergist
+  </title>
+  <meta name="author" content="Orange Iceberg">
+
+  <meta name="description" content="Icebergist is a place where Orange Iceberg team writes about Ruby and Ruby on Rails.">
+  
+
+  
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="canonical" href="http://blog.orangeiceberg.com/">
+  <link href="http://blog.orangeiceberg.com//favicon.ico" rel="icon">
+
+  
+  <link rel="apple-touch-icon" sizes="57x57" href="http://blog.orangeiceberg.com//assets/favicons/apple-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="http://blog.orangeiceberg.com//assets/favicons/apple-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="http://blog.orangeiceberg.com//assets/favicons/apple-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="http://blog.orangeiceberg.com//assets/favicons/apple-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="http://blog.orangeiceberg.com//assets/favicons/apple-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="http://blog.orangeiceberg.com//assets/favicons/apple-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="http://blog.orangeiceberg.com//assets/favicons/apple-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="http://blog.orangeiceberg.com//assets/favicons/apple-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="http://blog.orangeiceberg.com//assets/favicons/apple-icon-180x180.png">
+  <link rel="icon" type="image/png" sizes="192x192"  href="http://blog.orangeiceberg.com//assets/favicons/android-icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="http://blog.orangeiceberg.com//assets/favicons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="http://blog.orangeiceberg.com//assets/favicons/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="http://blog.orangeiceberg.com//assets/favicons/favicon-16x16.png">
+  <link rel="manifest" href="http://blog.orangeiceberg.com//assets/favicons/manifest.json">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="msapplication-TileImage" content="http://blog.orangeiceberg.com//assets/favicons/ms-icon-144x144.png">
+  <meta name="theme-color" content="#ffffff">
+  <script src="http://blog.orangeiceberg.com//js/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="http://blog.orangeiceberg.com//js/octopress.js" type="text/javascript"></script>
+
+  <script src="http://blog.orangeiceberg.com//js/libs/jquery/jquery-2.0.3.min.js"></script>
+
+  <link href="http://blog.orangeiceberg.com//assets/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+<link href="http://blog.orangeiceberg.com//assets/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css">
+<link href="http://blog.orangeiceberg.com//css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+
+  
+
+</head>
+
+
+
+
+
+
+<body>
+  <div id="wrap">
+    <header role="banner">
+      <nav class="navbar navbar-default" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <h1>
+              <a href="http://blog.orangeiceberg.com//">Icebergist</a>
+              
+                <small>Exploring hidden depths of web development</small>
+              
+            </h1>
+        </div>
+
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a class="subscribe-rss" href="http://feeds.feedburner.com/icebergist" title="subscribe via RSS">
+                        <span class="visible-xs">RSS</span>
+                        <img class="hidden-xs" src="http://blog.orangeiceberg.com//images/rss.png" alt="RSS">
+                    </a>
+                </li>
+                
+            </ul>
+            
+                <form class="search navbar-form navbar-right" action="http://google.com/search" method="GET">
+                    <input type="hidden" name="q" value="site:http://blog.orangeiceberg.com/">
+                    <div class="form-group">
+                        <input class="form-control" type="text" name="q" placeholder="Search">
+                    </div>
+                </form>
+            
+        </div>
+    </div>
+</nav>
+
+    </header>
+    <div id="main" class="container">
+      <div id="content">
+        <h1>Creating and publishing a ruby gem</h1>
+        <h2>Mon, Jun 8, 2015</h2>
+        
+
+<p>A gem is a simple way to distribute functionality, it can be a small plugin, a Ruby library or sometimes a whole program. Thanks to RubyGems, a gem hosting service, developers have a wide range of gems at their disposal allowing them to easily add functionality to their applications.</p>
+
+<p>But what if there is no gem available that will suit the functionality you need, and you find yourself writing the same code over and over again for different projects? Well, in that case you should consider making your own gem.</p>
+
+<p>It&rsquo;s considered a good practice to extract a gem out of an existing application, since that way you will have a better understanding of all the requirements as well as how the gem will be used. This blog post will illustrate just that on a real life example, and will take you through the process of creating a slug_converter gem.</p>
+
+<h3 id="slug-converter-gem:26b86b95592661b7092ab782e8d51bcd">Slug converter gem</h3>
+
+<p>Source code for slug_converter gem was developed while working on a link shortener application, in order to generate a string consisting of predefined characters, based on a given id number of a link. As it will be described in this blog post, this code was easily extracted from the application into an independent gem that was released on  RubyGems.</p>
+
+<p>Although it may seem like a complex task at first, creating a gem is not that difficult, if you have RubyGems and Bundler installed you are good to go. We already know what RubyGems is, and Bundler is a package manager that determines a full set of direct dependencies needed by your application.</p>
+
+<p>Now let&rsquo;s build a gem!</p>
+
+<h3 id="creating-a-gem:26b86b95592661b7092ab782e8d51bcd">Creating a gem</h3>
+
+<p>First step is to make sure that bundler gem is installed.</p>
+
+<pre><code class="language-sh">$ gem install bundler
+</code></pre>
+
+<p>once bundler is installed creating a structure for your new gem is easy,</p>
+
+<pre><code class="language-sh">	$ bundle gem slug_converter
+</code></pre>
+
+<p>The first time you use bundler to create a gem you will be prompted to answer a couple of questions:</p>
+
+<pre><code class="language-sh">	Do you want to include code of conduct in your gems you generate?
+	Do you want to licence your code permissively under the MIT licence?
+	Do you want to generate tests with your gem? 
+	Type rspec or minitest to generate those tests files now and in the future:
+</code></pre>
+
+<p>Answering these questions will help bundler configure and setup files that are being generated now and in the future. Here we answered yes to first 4 qestions and choose rspec for testing.</p>
+
+<p>Running <code>$ bundle gem slug_converter</code> command resulted with &ldquo;slug_converter&rdquo; directory with essential gem file structure being created, and git repository initialized, assuming that you are using git for version management (as you should).</p>
+
+<pre><code class="language-sh">Creating gem 'slug_converter'...
+ create  slug_converter/Gemfile
+ create  slug_converter/.gitignore
+ create  slug_converter/lib/slug_converter.rb
+ create  slug_converter/lib/slug_converter/version.rb
+ create  slug_converter/slug_converter.gemspec
+ create  slug_converter/Rakefile
+ create  slug_converter/README.md
+ create  slug_converter/bin/console
+ create  slug_converter/bin/setup
+ create  slug_converter/LICENSE.txt
+ create  slug_converter/.travis.yml
+ create  slug_converter/.rspec
+ create  slug_converter/spec/spec_helper.rb
+ create  slug_converter/spec/slug_converter_spec.rb
+</code></pre>
+
+<p>Let&rsquo;s go through files that bundler generated for us, .gemspec file is the &ldquo;heart&rdquo; of your gem so lets start with <code>slug_converter.gemspec</code></p>
+
+<pre><code class="language-ruby">lib = File.expand_path('../lib', __FILE__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+require 'slug_converter/version'
+
+Gem::Specification.new do |spec|
+  spec.name         = &quot;slug_converter&quot;
+  spec.version      = SlugConverter::VERSION
+  spec.authors      = [&quot;Your Name&quot;]
+  spec.email        = [&quot;youremail@example.com&quot;]
+
+  # if spec.respond_to?(:metadata)
+  #   spec.metadata['allowed_push_host'] = &quot;TODO: Set to 'http://mygemserver.com' to prevent pushes to rubygems.org, or delete to allow pushes to any server.&quot;
+  # end
+
+  spec.summary      = %q{Number &lt;-&gt; Slug converter}
+  spec.description  = %q{Generates a slug based on the given number and the other way around}
+  spec.homepage     = &quot;https://github.com/orangeiceberg/slug_converter&quot;
+  spec.license      = &quot;MIT&quot;
+
+  spec.files        = `git ls-files -z`.split(&quot;\x0&quot;).reject { |f| f.match(%r{^(test|spec|features)/}) }
+  spec.bindir       = &quot;exe&quot;
+  spec.executables  = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
+  spec.require_paths= [&quot;lib&quot;]
+
+  spec.add_development_dependency &quot;bundler&quot;, &quot;~&gt; 1.8&quot;
+  spec.add_development_dependency &quot;rake&quot;, &quot;~&gt; 10.0&quot;
+end
+</code></pre>
+
+<p>This file contains metadata about your gem and it can be populated directly, so here you can enter all the data such as name, description, licence&hellip; This file also contains information about what files should be packaged in your gem, as well as the load path to include the gem directory when the gem is first loaded. Most of these default settings will work for the majority of gems but you can always edit them if you want different behavior. At the bottom of the file add any gem dependencies that are required.</p>
+
+<p>The version number of the gem is set in <code>SlugConverter::VERSION</code> constant which is kept in a separate version.rb file, and you can change it there for every new version of your gem.</p>
+
+<pre><code>lib
+ |--slug_converter
+         |--version.rb
+</code></pre>
+
+<p>A very important part of every gem is the <code>README</code> file, where you can describe how to install and use the gem, and the <code>LICENCE</code> file where you can define the terms and conditions under which the gem can be used.</p>
+
+<p>In the lib directory there is a file which has the same name as your gem (recommended), and that file will be loaded when someone requires your gem. If the gem you are writing is simple all the code can be placed in this single file, or in case of more complex gems all the other files from the lib directory are required in this file.</p>
+
+<p>There is also a <code>Gemfile</code> generated, but this file doesn&rsquo;t have to be managed directly since all it does is look in <code>.gemspec</code> for required dependencies and then loads them through bundler. All the dependencies required by the gem should be specified in the <code>.gemspec</code> file.</p>
+
+<p>Another file that is generated by the bundler is <code>Rakefile</code> which just adds some gem tasks from bundler, and we can see those tasks with explanation by running</p>
+
+<pre><code class="language-sh">	rake -T
+	rake build    # Build slug_converter-0.0.1.gem into the pkg directory
+	rake install  # Build and install slug_converter-0.0.1.gem into system gems
+	rake release  # Create tag v0.0.1 and build and push slug_converter-0.1.0.gem to Rubygems
+</code></pre>
+
+<h3 id="writing-tests:26b86b95592661b7092ab782e8d51bcd">Writing tests</h3>
+
+<p>If you are following the principles of Test Driven Development you will probably like to start by writing tests for you gem, for that purpose I would suggest using RSpec.
+To do that you will need to add rspec as a development dependency to you gemspec file:
+    spec.add_development_dependency &lsquo;rspec&rsquo;</p>
+
+<p>As mentioned in the beginning, when running bundle gem for the first time, bundler will asks if you would like to generate test files for your gem and to choose if you want to use rspec or minitest. If you answer with yes, and choose rspec, bundler will generate a spec directory with two files:</p>
+
+<pre><code>|-- spec
+      |-- slug_converter_spec.rb
+      |-- spec_helper.rb
+</code></pre>
+
+<p>In the <code>spec_helper.rb</code> file you can reference any test globals or configuration.</p>
+
+<p>Since we are extracting code from an existing application we already have all the tests written so we just need to copy them into the generated <code>spec/slug_converter_spec.rb</code> file.</p>
+
+<pre><code class="language-ruby">require 'spec_helper'
+describe SlugConverter do
+  it 'has a version number' do
+    expect(SlugConverter::VERSION).not_to be nil
+  end
+  describe &quot;.number&quot; do
+  
+    it &quot;returns number when number is set&quot; do
+      converted_slug= SlugConverter.new(111)
+      expect(converted_slug.number).to eq(111)
+    end
+    
+    it &quot;returns decoded number for existing slug&quot; do
+      converted_slug = SlugConverter.new(&quot;vg&quot;)
+      expect(converted_slug.number).to eq(363)
+    end
+    
+  end
+  
+  describe &quot;.number&quot; do
+  
+    it &quot;sets number to given value&quot; do
+      converted_slug = SlugConverter.new(211)
+      expect(converted_slug.number=210).to eq(210)
+    end
+    
+    it &quot;sets slug to encoded value of number&quot; do
+      converted_slug = SlugConverter.new(211)
+      converted_slug.number=210
+      expect(converted_slug.slug).to eq(&quot;pb&quot;)
+    end
+    
+    it &quot;sets number to integer value of given number passed as string&quot; do
+      converted_slug = SlugConverter.new(&quot;210&quot;)
+      expect(converted_slug.number).to eq(210)
+    end
+    
+    it &quot;sets slug to encoded value of given number passed as string&quot; do
+      converted_slug = SlugConverter.new(&quot;210&quot;)
+      expect(converted_slug.slug).to eq(&quot;pb&quot;)
+    end
+    
+    it &quot;sets number to integer value of argument that starts with a number but also contains letters&quot; do
+      converted_slug = SlugConverter.new(&quot;210jj&quot;)
+      expect(converted_slug.number).to eq(210)
+    end
+    
+    it &quot;sets slug to encoded value of argument that starts with a number but also contains letters&quot; do
+      converted_slug = SlugConverter.new(&quot;210jj&quot;)
+      expect(converted_slug.slug).to eq(&quot;pb&quot;)
+    end
+    
+  end
+  
+  describe &quot;.slug&quot; do
+  
+     it &quot;returns slug when slug is set&quot; do
+        converted_slug = SlugConverter.new(&quot;hy&quot;)
+        expect(converted_slug.slug).to eq(&quot;hy&quot;)
+     end
+     
+     it &quot;returns encoded slug when link id is set&quot; do
+        converted_id = SlugConverter.new(113)
+        expect(converted_id.slug).to eq(&quot;hy&quot;)
+     end
+     
+  end
+  
+  describe &quot;.slug&quot; do
+  
+    it &quot;sets slug to given value&quot; do
+      converted_slug = SlugConverter.new(&quot;ezk&quot;)
+      expect(converted_slug.slug=(&quot;ebk&quot;)).to eq(&quot;ebk&quot;)
+    end
+    
+    it &quot;sets number to decoded value of slug&quot; do
+      converted_slug = SlugConverter.new(&quot;pb&quot;)
+      converted_slug.slug=(&quot;ezk&quot;)
+      expect(converted_slug.number).to eq(1483)
+    end
+    
+    it &quot;raises Arrgument Error exception if given value is an empty string&quot; do
+      expect { SlugConverter.new(&quot;&quot;) }.to raise_error(ArgumentError)
+    end
+    
+    it &quot;raises Arrgument Error exception if given value is nil&quot; do
+      expect { SlugConverter.new(nil) }.to raise_error(ArgumentError)
+    end
+    
+    it &quot;raises Arrgument Error exception if given value contains unpermitted letters&quot; do
+      expect { SlugConverter.new(&quot;iiii&quot;) }.to raise_error(ArgumentError)
+    end
+    
+    it &quot;raises Arrgument Error exception if given value starts with letter but contains numbers&quot; do
+      expect { SlugConverter.new(&quot;bb12&quot;) }.to raise_error(ArgumentError)
+    end
+    
+  end
+end
+</code></pre>
+
+<p>To make rspec rake task available we will setup tasks folder where we&rsquo;ll place our <code>rspec.rake</code> file containing only 2 lines:</p>
+
+<pre><code class="language-ruby">	require 'rspec/core/rake_task'
+	RSpec::Core::RakeTask.new(:spec)
+</code></pre>
+
+<p>and then we will import this file in our Rakefile that bundler provided automatically:</p>
+
+<pre><code class="language-ruby">	Dir.glob('tasks/**/*.rake').each(&amp;method(:import))
+</code></pre>
+
+<p>Now run:</p>
+
+<pre><code class="language-sh">bundle exec rake spec 
+</code></pre>
+
+<p>And watch your tests fail. :)</p>
+
+<h3 id="add-gem-functionality:26b86b95592661b7092ab782e8d51bcd">Add gem functionality</h3>
+
+<p>Now we need to make those test go green. To do that we will again copy the existing code from our application in the main gem file <code>lib/slug_converter.rb</code>:</p>
+
+<pre><code class="language-ruby">require &quot;slug_converter/version&quot;
+require 'set'
+require 'gem_config'
+
+class SlugConverter
+  include GemConfig::Base
+  with_configuration do
+    has :alphabet, default: &quot;qjeghxtrpnfmdzwvsybkuoca&quot;
+  end
+
+  def initialize(number_or_slug)
+     @alphabet = SlugConverter.configuration.alphabet.split(//)
+    if number_or_slug.to_i != 0
+      @number = number_or_slug.to_i
+    elsif validate_string(number_or_slug)
+      @slug = number_or_slug.downcase
+    else
+      raise ArgumentError, 'Argument must be integer value or non-empty string consisting of predefined letters'
+    end
+  end
+  
+  def number
+    if @number.nil?
+      @number = bijective_decode
+    else
+      @number
+    end
+  end
+  
+  def number=(new_number)
+    @number = new_number
+    @slug = bijective_encode
+    @number
+  end
+  
+  def slug
+    if @slug.nil?
+      @slug = bijective_encode
+    else
+      @slug
+    end
+  end
+  
+  def slug=(new_slug)
+    @slug = new_slug
+    @number = bijective_decode
+    @slug
+  end
+
+  private
+  
+    def bijective_encode
+      id = @number
+      return @alphabet[0] if id == 0
+      s = ''
+      base = @alphabet.length
+      while id &gt; 0
+        s &lt;&lt; @alphabet[id.modulo(base)]
+        id /= base
+      end
+      s.reverse
+    end
+    
+    def bijective_decode
+      i = 0
+      base = @alphabet.length
+      @slug.each_char { |c| i = i * base + @alphabet.index(c) }
+      i
+    end
+    
+    def validate_string(slug)
+      unless slug.nil?
+        alphabet = Set.new @alphabet
+        slug_letters = Set.new slug.downcase().split(//)
+        slug != &quot;&quot; &amp;&amp; (slug_letters.subset? alphabet)
+      end
+    end
+end
+</code></pre>
+
+<p>Now when we run the tests again, they should all pass.</p>
+
+<p>###Making your gem configurabile</p>
+
+<p>In order to allow users to set their own alphabet that will be used by the SlugConverter, we needed to make our gem configurabile. To do this we used <a href="https://github.com/krautcomputing/gem_config">https://github.com/krautcomputing/gem_config</a> gem.</p>
+
+<p>You will notice this code at the begining of the SlugConverter class:</p>
+
+<pre><code class="language-ruby">class SlugConverter
+  include GemConfig::Base
+  
+  with_configuration do
+    has :alphabet, default: &quot;qjeghxtrpnfmdzwvsybkuoca&quot;
+  end
+
+  def initialize(number_or_slug)
+     @alphabet = SlugConverter.configuration.alphabet.split(//)
+     # ...
+  end	  
+  
+  # rest of the code omitted    
+end
+</code></pre>
+
+<p>this code along with <code>spec.add_runtime_dependency 'gem_config'</code> added as a dependency in <code>slug_converter.gemspec</code> file, alows us to make the gem configureabile.</p>
+
+<p>Custom aphabet can than be defined by adding <code>config/initializers/slug_converter.rb</code> to your application, and defining the alphabet like this:</p>
+
+<pre><code class="language-ruby">SlugConverter.configuration.alphabet = &quot;your_custom_alphabet_here&quot;
+</code></pre>
+
+<h3 id="releasing-your-gem:26b86b95592661b7092ab782e8d51bcd">Releasing your gem</h3>
+
+<p>Now that we have the test passing and all the code in place it&rsquo;s time to make the gem available for everyone to use by releasing it on RubyGems, to do that you will need to have a RubyGems account. If this is the first time you release a gem you will be prompted to enter your RubyGems username and password. You will also need to have your repository setup on Github.</p>
+
+<p>Then with just one comand:</p>
+
+<pre><code class="language-sh">	$ bundle exec rake release
+</code></pre>
+
+<ul>
+<li>your code will be pushed to your Github repository,</li>
+<li>your git repository will be tagged with the version number using a name like &ldquo;v1.0.0&rdquo;.</li>
+<li>your gem released on RubyGems.</li>
+</ul>
+
+<p>The ruby gem described in this blog post can be found here <a href="https://rubygems.org/gems/slug_converter">https://rubygems.org/gems/slug_converter</a>, and all the code is in this GitHub repository <a href="https://github.com/orangeiceberg/slug_converter">https://github.com/orangeiceberg/slug_converter</a> .</p>
+
+      </div>
+    </div>
+  </div>
+  <p><a href="http://blog.orangeiceberg.com/">Home</a></p>
+
+  <div id="disqus_thread"></div>
+<script type="text/javascript">
+
+(function() {
+    
+    
+    if (window.location.hostname == "localhost")
+        return;
+
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    var disqus_shortname = 'icebergist';
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+  true
+</body>
+</html>

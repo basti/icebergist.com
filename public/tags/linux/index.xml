@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Linux on Icebergist</title>
+    <link>http://blog.orangeiceberg.com/tags/linux/</link>
+    <description>Recent content in Linux on Icebergist</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 02 Dec 2015 10:44:23 +0100</lastBuildDate>
+    <atom:link href="http://blog.orangeiceberg.com/tags/linux/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Import and export MySQL dump</title>
+      <link>http://blog.orangeiceberg.com/posts/import-and-export-mysql-dump</link>
+      <pubDate>Wed, 02 Dec 2015 10:44:23 +0100</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/import-and-export-mysql-dump</guid>
+      <description>&lt;p&gt;Another simple task that&amp;rsquo;s often hard for beginners is importing and exporting MySQL dumps. Here is quick rundown on how to do it.&lt;/p&gt;
+
+&lt;p&gt;To export data you need to use &lt;code&gt;mysqldump&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;mysqldump -u db_user -p db_name &amp;gt; dump_name.sql
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Options given to &lt;code&gt;mysqldump&lt;/code&gt; are:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;-u db_user&lt;/code&gt; - connect as user &lt;code&gt;db_user&lt;/code&gt; to database&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-p&lt;/code&gt; - use password, it will ask you to enter your password&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;db_name&lt;/code&gt; is the name of MySQL database you want to dump&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;&amp;gt; dump_name.sql&lt;/code&gt; - by default &lt;code&gt;mysqldump&lt;/code&gt; will print out the dump to terminal, but simple output redirect with &lt;code&gt;&amp;gt;&lt;/code&gt; will instead write it to given filename, in this case &lt;code&gt;dump_name.sql&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Now that you have &lt;code&gt;dump_name.sql&lt;/code&gt; file with all SQL queries needed to replicate your database you can import it using general-purpose &lt;code&gt;mysql&lt;/code&gt; client:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;mysql -u db_user -p db_name &amp;lt; dump_name.sql
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;User, password, and database name options are the same as for &lt;code&gt;mysqldump&lt;/code&gt;. Since &lt;code&gt;mysql&lt;/code&gt; reads input from terminal this time we can use &lt;code&gt;&amp;lt;&lt;/code&gt; to read input from given file instead.&lt;/p&gt;
+
+&lt;p&gt;As always for more information you can consult manual using &lt;code&gt;man mysqldump&lt;/code&gt; and &lt;code&gt;man mysql&lt;/code&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Create and extract archives using tar and gzip</title>
+      <link>http://blog.orangeiceberg.com/posts/create-and-extract-archives-using-tar-and-gzip</link>
+      <pubDate>Fri, 13 Nov 2015 13:28:36 +0100</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/create-and-extract-archives-using-tar-and-gzip</guid>
+      <description>&lt;p&gt;One of the simplest tasks is creating and extracting files using &lt;code&gt;tar&lt;/code&gt; and &lt;code&gt;gzip&lt;/code&gt;. Yet for most new developers this is a daunting task. These days &lt;code&gt;tar&lt;/code&gt; is mostly used to simply combine a few files into a single file and then &lt;code&gt;gzip&lt;/code&gt; is used to compress that file.&lt;/p&gt;
+
+&lt;p&gt;Here is a quick overview how to use &lt;code&gt;tar&lt;/code&gt; and &lt;code&gt;gzip&lt;/code&gt; to create and compress an archive:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;# archive individual files
+tar -cvzf myarchive.tar.gz /path/to/file1 /path/to/file2
+
+# archive whole directory
+tar -cvzf myarchive.tar.gz /path/to/dir
+
+# archive whole directory but don&#39;t store full path
+tar -cvzf myarchive.tar.gz -C /path/to/dir ./
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Options give to tar are: &lt;code&gt;c&lt;/code&gt; to create new archive, &lt;code&gt;v&lt;/code&gt; to be verbose, &lt;code&gt;z&lt;/code&gt; to compress resulting archive with &lt;code&gt;gzip&lt;/code&gt;, and &lt;code&gt;f&lt;/code&gt; to write the archive to specified file. After options you can list files and dirs you want to archive.&lt;/p&gt;
+
+&lt;p&gt;In all examples we provide a full path to a file or dir we want to archive. In this case &lt;code&gt;tar&lt;/code&gt; will store files in the archive using the full path. This means once you extract the files you&amp;rsquo;ll have a complete directory structure from root dir onwards.&lt;/p&gt;
+
+&lt;p&gt;The way to avoid this is either to manually &lt;code&gt;cd&lt;/code&gt; to dir in which files are stored, or to tell &lt;code&gt;tar&lt;/code&gt; using &lt;code&gt;C&lt;/code&gt; option to change dir before archiving files.&lt;/p&gt;
+
+&lt;p&gt;Finally to extract an archive:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;tar -xvzf myarchive.tar.gz
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The &lt;code&gt;x&lt;/code&gt; option tells &lt;code&gt;tar&lt;/code&gt; to extract the archive into current directory.&lt;/p&gt;
+
+&lt;p&gt;For more information you can consult manual using &lt;code&gt;man tar&lt;/code&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Restoring superblock on Ubutnu</title>
+      <link>http://blog.orangeiceberg.com/posts/restoring-superblock-on-ubutnu</link>
+      <pubDate>Sun, 09 Nov 2008 09:00:00 +0100</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/restoring-superblock-on-ubutnu</guid>
+      <description>&lt;p&gt;Recently I had a problem on my Torrent box (an old PC that I use as dedicated torrent client) that runs Ubuntu. For some reason my root partition was being mounted as read-only. Everything else seemed to work (all other partitions were mounted properly), but I couldn&amp;#8217;t change any of my config or do anything on root partition.&lt;/p&gt;
+
+&lt;p&gt;I did the usual stuff:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Run fsck checks and it said that everything is fine&lt;/li&gt;
+&lt;li&gt;Used Ubuntu&amp;#8217;s live CD to boot, which got me read-write access to root partition. I changed some things in fstab, tried to get it to be rw permanently. No matter what I did as soon as I rebooted the root partition was once again read-only.&lt;/li&gt;
+&lt;li&gt;I tried booting from some repair disks I have, but all checks passed and no problem was detected. &lt;img src=&#39;http://icebergist.com/wp-includes/images/smilies/icon_sad.gif&#39; alt=&#39;:(&#39; class=&#39;wp-smiley&#39; /&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Finally, I read somewhere that a similar problem was caused by faulty superblock on hard drive. Fortunately Ubuntu stores superblock backups in different places around disk, so I decided to try to restore it from one of those backups.&lt;/p&gt;
+
+&lt;p&gt;It turned out that all I needed was a single command (this &lt;a href=&#34;http://ubuntuforums.org/showpost.php?s=72da065bbe1506b27f41a8cfc252c732&amp;amp;p=1424786&amp;amp;postcount=5&#34; title=&#34;Bad superblock&#34;&gt;Ubuntu forum post helped&lt;/a&gt;) to restore superblock:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;e2fsck -b 32768 /dev/hdc1&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;After that my root partition was back to read-write mode. &lt;img src=&#39;http://icebergist.com/wp-includes/images/smilies/icon_smile.gif&#39; alt=&#39;:)&#39; class=&#39;wp-smiley&#39; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Before you do stuff like that to your computer I suggest that you read man pages for &lt;a href=&#34;http://linux.die.net/man/8/mke2fs&#34; title=&#34;mke2fs&#34;&gt;mke2fs&lt;/a&gt; and &lt;a href=&#34;http://linux.die.net/man/8/e2fsck&#34; title=&#34;e2fsck&#34;&gt;e2fsck&lt;/a&gt;. It will prevent you from doing something foolish like deleting your whole hard drive. &lt;img src=&#39;http://icebergist.com/wp-includes/images/smilies/icon_smile.gif&#39; alt=&#39;:)&#39; class=&#39;wp-smiley&#39; /&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

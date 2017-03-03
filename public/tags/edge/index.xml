@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Edge on Icebergist</title>
+    <link>http://blog.orangeiceberg.com/tags/edge/</link>
+    <description>Recent content in Edge on Icebergist</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 07 Jul 2008 09:00:00 +0100</lastBuildDate>
+    <atom:link href="http://blog.orangeiceberg.com/tags/edge/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Collection partial variable naming &amp;#8211; new in edge rails</title>
+      <link>http://blog.orangeiceberg.com/posts/collection-partial-variable-naming-</link>
+      <pubDate>Mon, 07 Jul 2008 09:00:00 +0100</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/collection-partial-variable-naming-</guid>
+      <description>&lt;p&gt;One thing that always annoyed me when rendering collection partials is that a local var in partial is named same as a partial template name. So, to go around this I always created another local variable in partial and gave it a more meaningful name.&lt;/p&gt;
+
+&lt;p&gt;No longer&amp;#8230; As the &lt;a href=&#34;http://ryandaigle.com/articles/2008/7/7/what-s-new-in-edge-rails-collection-partial-variable-naming&#34; title=&#34;What&#39;s New in Edge Rails: Collection Partial Variable Naming &#34;&gt;Ryan says&lt;/a&gt; from now on in the Edge Rails you can specify the name of the local variable in which each collection element will be exposed within a partial. You will can do this:&lt;/p&gt;
+
+&lt;pre&gt;render :partial =&amp;gt; &#39;employees&#39;, :collection =&amp;gt; @workers, :as =&amp;gt; :person&lt;/pre&gt;
+
+&lt;p&gt;It&amp;#8217;s a simple thing, but it&amp;#8217;s just one of the things that bugged me. I am glad it&amp;#8217;s gone now.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tips on Icebergist</title>
+    <link>http://blog.orangeiceberg.com/tags/tips/</link>
+    <description>Recent content in Tips on Icebergist</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 02 Dec 2015 10:44:23 +0100</lastBuildDate>
+    <atom:link href="http://blog.orangeiceberg.com/tags/tips/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Import and export MySQL dump</title>
+      <link>http://blog.orangeiceberg.com/posts/import-and-export-mysql-dump</link>
+      <pubDate>Wed, 02 Dec 2015 10:44:23 +0100</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/import-and-export-mysql-dump</guid>
+      <description>&lt;p&gt;Another simple task that&amp;rsquo;s often hard for beginners is importing and exporting MySQL dumps. Here is quick rundown on how to do it.&lt;/p&gt;
+
+&lt;p&gt;To export data you need to use &lt;code&gt;mysqldump&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;mysqldump -u db_user -p db_name &amp;gt; dump_name.sql
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Options given to &lt;code&gt;mysqldump&lt;/code&gt; are:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;-u db_user&lt;/code&gt; - connect as user &lt;code&gt;db_user&lt;/code&gt; to database&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-p&lt;/code&gt; - use password, it will ask you to enter your password&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;db_name&lt;/code&gt; is the name of MySQL database you want to dump&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;&amp;gt; dump_name.sql&lt;/code&gt; - by default &lt;code&gt;mysqldump&lt;/code&gt; will print out the dump to terminal, but simple output redirect with &lt;code&gt;&amp;gt;&lt;/code&gt; will instead write it to given filename, in this case &lt;code&gt;dump_name.sql&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Now that you have &lt;code&gt;dump_name.sql&lt;/code&gt; file with all SQL queries needed to replicate your database you can import it using general-purpose &lt;code&gt;mysql&lt;/code&gt; client:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;mysql -u db_user -p db_name &amp;lt; dump_name.sql
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;User, password, and database name options are the same as for &lt;code&gt;mysqldump&lt;/code&gt;. Since &lt;code&gt;mysql&lt;/code&gt; reads input from terminal this time we can use &lt;code&gt;&amp;lt;&lt;/code&gt; to read input from given file instead.&lt;/p&gt;
+
+&lt;p&gt;As always for more information you can consult manual using &lt;code&gt;man mysqldump&lt;/code&gt; and &lt;code&gt;man mysql&lt;/code&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Create and extract archives using tar and gzip</title>
+      <link>http://blog.orangeiceberg.com/posts/create-and-extract-archives-using-tar-and-gzip</link>
+      <pubDate>Fri, 13 Nov 2015 13:28:36 +0100</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/create-and-extract-archives-using-tar-and-gzip</guid>
+      <description>&lt;p&gt;One of the simplest tasks is creating and extracting files using &lt;code&gt;tar&lt;/code&gt; and &lt;code&gt;gzip&lt;/code&gt;. Yet for most new developers this is a daunting task. These days &lt;code&gt;tar&lt;/code&gt; is mostly used to simply combine a few files into a single file and then &lt;code&gt;gzip&lt;/code&gt; is used to compress that file.&lt;/p&gt;
+
+&lt;p&gt;Here is a quick overview how to use &lt;code&gt;tar&lt;/code&gt; and &lt;code&gt;gzip&lt;/code&gt; to create and compress an archive:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;# archive individual files
+tar -cvzf myarchive.tar.gz /path/to/file1 /path/to/file2
+
+# archive whole directory
+tar -cvzf myarchive.tar.gz /path/to/dir
+
+# archive whole directory but don&#39;t store full path
+tar -cvzf myarchive.tar.gz -C /path/to/dir ./
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Options give to tar are: &lt;code&gt;c&lt;/code&gt; to create new archive, &lt;code&gt;v&lt;/code&gt; to be verbose, &lt;code&gt;z&lt;/code&gt; to compress resulting archive with &lt;code&gt;gzip&lt;/code&gt;, and &lt;code&gt;f&lt;/code&gt; to write the archive to specified file. After options you can list files and dirs you want to archive.&lt;/p&gt;
+
+&lt;p&gt;In all examples we provide a full path to a file or dir we want to archive. In this case &lt;code&gt;tar&lt;/code&gt; will store files in the archive using the full path. This means once you extract the files you&amp;rsquo;ll have a complete directory structure from root dir onwards.&lt;/p&gt;
+
+&lt;p&gt;The way to avoid this is either to manually &lt;code&gt;cd&lt;/code&gt; to dir in which files are stored, or to tell &lt;code&gt;tar&lt;/code&gt; using &lt;code&gt;C&lt;/code&gt; option to change dir before archiving files.&lt;/p&gt;
+
+&lt;p&gt;Finally to extract an archive:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;tar -xvzf myarchive.tar.gz
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The &lt;code&gt;x&lt;/code&gt; option tells &lt;code&gt;tar&lt;/code&gt; to extract the archive into current directory.&lt;/p&gt;
+
+&lt;p&gt;For more information you can consult manual using &lt;code&gt;man tar&lt;/code&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>How to skip Devise trackable updates</title>
+      <link>http://blog.orangeiceberg.com/posts/how-to-skip-devise-trackable-updates</link>
+      <pubDate>Mon, 12 May 2014 19:10:06 +0200</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/how-to-skip-devise-trackable-updates</guid>
+      <description>&lt;p&gt;Devise has a very useful Trackable module used to track user&amp;rsquo;s sign in count, timestamps and IP address. There are some occasions when you need to disable tracking. For example for API requests where user signs in on every request; for instances where admin might sign in as an user; and similar.&lt;/p&gt;
+
+&lt;p&gt;To disable Devise Trackable module you need to set &lt;code&gt;request.env[&amp;quot;devise.skip_trackable&amp;quot;] = true&lt;/code&gt;. You have to do that before trying to authenticate user, so you&amp;rsquo;ll want to put it in a before_filter, or even better prepend_before_filter to make sure it&amp;rsquo;s before authentication.&lt;/p&gt;
+
+&lt;p&gt;Add this to your controller in which you want to disable tracking:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;prepend_before_filter :disable_devise_trackable
+
+protected
+  def disable_devise_trackable
+    request.env[&amp;quot;devise.skip_trackable&amp;quot;] = true
+  end
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Upgrade Ubuntu 8.04 LTS server</title>
+      <link>http://blog.orangeiceberg.com/posts/upgrade-ubuntu-8.04-lts-server</link>
+      <pubDate>Mon, 06 Jan 2014 11:36:43 +0100</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/upgrade-ubuntu-8.04-lts-server</guid>
+      <description>&lt;p&gt;Note to self: here is how to upgrade Ubuntu 8.04 LTS (or any other release that is no longer supported) to newer Ubuntu release.&lt;/p&gt;
+
+&lt;p&gt;When you are upgrading unsupported release of Ubuntu if you try to do the usual &lt;code&gt;sudo apt-get update&lt;/code&gt; it will most likely fail because&amp;hellip; well, it&amp;rsquo;s unsupported. The simple fix for this is to change your &lt;code&gt;/etc/apt/sources.list&lt;/code&gt; and replace repository URLs from something like &lt;code&gt;us.archive.ubuntu.com&lt;/code&gt; to &lt;code&gt;old-releases.ubuntu.com&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;After that you should be able follow normal upgrade procedure (use sudo if you are not root):&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;apt-get update
+apt-get install update-manager-core
+do-release-upgrade
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;References:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://rimuhosting.com/knowledgebase/linux/distros/ubuntu&#34; title=&#34;Rimuhosting&#39;s page on upgrading Ubuntu&#34;&gt;Rimuhosting&amp;rsquo;s page on upgrading Ubuntu&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://askubuntu.com/questions/91815/how-to-install-software-or-upgrade-from-old-unsupported-release&#34; title=&#34;Discussion on upgrading unsupported Ubuntu release&#34;&gt;Discussion on upgrading unsupported Ubuntu release&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>RailsDiff</title>
+      <link>http://blog.orangeiceberg.com/posts/railsdiff</link>
+      <pubDate>Tue, 10 Sep 2013 09:00:00 +0100</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/railsdiff</guid>
+      <description>&lt;p&gt;&lt;a title=&#34;RailsDiff - compare Rails default app&#34; href=&#34;http://railsdiff.org/&#34; target=&#34;_blank&#34;&gt;RailsDiff&lt;/a&gt;
+is a very useful site when upgrading Rails versions (for example, from Rails 3.2 to Rails 4). It will generate default Rails app using two different Rails versions and it will compare them. The result is that you can see all the configuration changes (like in application.rb) and all other changes &amp;#8211; which is really useful when upgrading to new Rails version.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>This should be interesting weekly &amp;#8211; week 28</title>
+      <link>http://blog.orangeiceberg.com/posts/this-should-be-interesting-weekly-</link>
+      <pubDate>Sun, 13 Jul 2008 09:00:00 +0100</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/this-should-be-interesting-weekly-</guid>
+      <description>&lt;ul&gt;
+&lt;li&gt;What&amp;#8217;s New in Edge Rails: &lt;a href=&#34;http://tumblelog.slobodankovacevic.com/post/41430445/whats-new-in-edge-rails-easy-join-table-conditions&#34;&gt;Easy Join Table Conditions.&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://tumblelog.slobodankovacevic.com/post/41483353/faces-of-millions&#34;&gt;Faces of Millions&lt;/a&gt; &amp;#8211; Art project which aims to gather one million photos of people faces and create 10m x 10m photo mosaic.&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://tumblelog.slobodankovacevic.com/post/41727168/uni-form&#34;&gt;Uni-Form&lt;/a&gt; is an attempt to standardize form markup (xhtml) and css.&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://tumblelog.slobodankovacevic.com/post/41886839/mac-fullscreen-quicklook-a-k-a-slideshow&#34;&gt;Mac OS X full screen QuickLook shortcut.&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;A guide to &lt;a href=&#34;http://tumblelog.slobodankovacevic.com/post/41978415/a-guide-to-css-support-in-email&#34;&gt;CSS support in Email&lt;/a&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;condensed from &amp;lsquo;&lt;a href=&#34;http://tumblelog.slobodankovacevic.com/&#34;&gt;this should be interesting&lt;/a&gt;&amp;rsquo; tumblelog&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

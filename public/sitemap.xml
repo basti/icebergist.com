@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  
+  <url>
+    <loc>http://blog.orangeiceberg.com/</loc>
+    <lastmod>2016-03-24T08:09:25+01:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://blog.orangeiceberg.com/posts/rake-dbschemaload-vs-rake-dbmigrate</loc>
+    <lastmod>2016-03-24T08:09:25+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://blog.orangeiceberg.com/posts/headless-firefox-in-ubuntu-on-virtualbox-for-cucumber-testing</loc>
+    <lastmod>2015-12-03T11:12:56+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://blog.orangeiceberg.com/posts/import-and-export-mysql-dump</loc>
+    <lastmod>2015-12-02T10:44:23+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://blog.orangeiceberg.com/posts/create-and-extract-archives-using-tar-and-gzip</loc>
+    <lastmod>2015-11-13T13:28:36+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://blog.orangeiceberg.com/posts/creating-and-publishing-a-ruby-gem</loc>
+    <lastmod>2015-06-08T09:12:04+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://blog.orangeiceberg.com/posts/changing-database-starting-id</loc>
+    <lastmod>2015-06-01T11:03:47+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://blog.orangeiceberg.com/posts/customize-devise-permitted-parameters</loc>
+    <lastmod>2015-05-04T16:07:22+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://blog.orangeiceberg.com/posts/how-to-skip-devise-trackable-updates</loc>
+    <lastmod>2014-05-12T19:10:06+02:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://blog.orangeiceberg.com/posts/upgrade-ubuntu-8.04-lts-server</loc>
+    <lastmod>2014-01-06T11:36:43+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://blog.orangeiceberg.com/posts/quick-virtualbox/vagrant-setup-with-heroku-like-box</loc>
+    <lastmod>2013-09-16T09:00:00+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://blog.orangeiceberg.com/posts/railsdiff</loc>
+    <lastmod>2013-09-10T09:00:00+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://blog.orangeiceberg.com/posts/rspec-and-factorygirl-setup-for-testing-carrierwave-uploaders</loc>
+    <lastmod>2013-09-07T09:00:00+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://blog.orangeiceberg.com/posts/random-rails-tips</loc>
+    <lastmod>2013-03-09T09:00:00+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://blog.orangeiceberg.com/posts/paperclip-heroku-and-amazon-s3-credentials</loc>
+    <lastmod>2011-01-24T09:00:00+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://blog.orangeiceberg.com/posts/rails-3-reading-list</loc>
+    <lastmod>2010-03-29T09:00:00+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://blog.orangeiceberg.com/posts/expected-x.rb-to-define-x-loaderror</loc>
+    <lastmod>2009-04-15T09:00:00+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://blog.orangeiceberg.com/posts/simple-password-protected-administration-with-codeigniter</loc>
+    <lastmod>2009-03-08T09:00:00+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://blog.orangeiceberg.com/posts/restoring-superblock-on-ubutnu</loc>
+    <lastmod>2008-11-09T09:00:00+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://blog.orangeiceberg.com/posts/mosso-hosting-cloud</loc>
+    <lastmod>2008-09-17T09:00:00+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://blog.orangeiceberg.com/posts/restful-admin-namespaced-controller-using-scaffolding</loc>
+    <lastmod>2008-09-17T09:00:00+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://blog.orangeiceberg.com/posts/innodb-per-table-tablespaces-</loc>
+    <lastmod>2008-07-24T09:00:00+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://blog.orangeiceberg.com/posts/this-should-be-interesting-weekly-</loc>
+    <lastmod>2008-07-13T09:00:00+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://blog.orangeiceberg.com/posts/collection-partial-variable-naming-</loc>
+    <lastmod>2008-07-07T09:00:00+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://blog.orangeiceberg.com/posts/this-should-be-interesting-weekly-</loc>
+    <lastmod>2008-07-06T09:00:00+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://blog.orangeiceberg.com/posts/mac-os-x-problems-upgrading-from-10.5.3-to-10.5.4</loc>
+    <lastmod>2008-07-04T09:00:00+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://blog.orangeiceberg.com/posts/sproutcore-</loc>
+    <lastmod>2008-07-03T09:00:00+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://blog.orangeiceberg.com/posts/so-it-begins</loc>
+    <lastmod>2008-06-24T09:00:00+01:00</lastmod>
+  </url>
+  
+</urlset>

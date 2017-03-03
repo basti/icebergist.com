@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Javascript on Icebergist</title>
+    <link>http://blog.orangeiceberg.com/categories/javascript/</link>
+    <description>Recent content in Javascript on Icebergist</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 03 Jul 2008 09:00:00 +0100</lastBuildDate>
+    <atom:link href="http://blog.orangeiceberg.com/categories/javascript/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>SproutCore &amp;#8211; a javascript framework</title>
+      <link>http://blog.orangeiceberg.com/posts/sproutcore-</link>
+      <pubDate>Thu, 03 Jul 2008 09:00:00 +0100</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/sproutcore-</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;http://www.sproutcore.com&#34; title=&#34;SproutCore - Javascript Framework&#34;&gt;SproutCore&lt;/a&gt; is a javascript framework which tries to enable developers to build web apps that look and act more like a desktop apps.&lt;/p&gt;
+
+&lt;p&gt;It steps away from a classic web app model by moving a lot of app into the browser itself, which then interacts with server via AJAX. As it says on the &lt;a href=&#34;http://www.sproutcore.com/about/&#34; title=&#34;About SproutCore&#34;&gt;SproutCore site&lt;/a&gt;:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;After lots of testing, we have found that the most efficient way to server a SproutCore application is as a …. static web page!&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;This means that a &amp;#8220;simple&amp;#8221; static HTML page (which is easily served by Apache) makes browser do most of the work (i.e. server doesn&amp;#8217;t have to generate the pages) which frees up server to respond only to AJAX initiated requests.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.sproutcore.com&#34; title=&#34;SproutCore - Javascript Framework written in Ruby&#34;&gt;SproutCore&lt;/a&gt; is written in Ruby, but once you build the app it will generate a set of HTML, JS and CSS files, so you don&amp;#8217;t need to know Ruby in order to use it. As the site says:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;The code you write with SproutCore will resemble a desktop app written in Cocoa more than it will a web application written in Rails.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;img class=&#34;alignright size-full wp-image-6&#34; title=&#34;SproutCore Photos Demo&#34; src=&#34;http://icebergist.com/wp-content/uploads/2008/07/sprout-photos-demo.jpg&#34; alt=&#34;SproutCore Photos Demo Screenshot&#34; width=&#34;500&#34; height=&#34;236&#34; /&gt;
+Another great thing about SproutCore is that it can be hooked up with any backend as long as it can communicate with it using HTTP. It can be anything: Rails, PHP, Perl, Java, ASP&amp;#8230;&lt;/p&gt;
+
+&lt;p&gt;Actions speak louder than words, so take a look at the SproutCore demos which shows you exactly what it&amp;#8217;s all about.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://www.sproutcore.com/static/photos/&#34; title=&#34;SproutCore demo photo gallery&#34;&gt;SproutCore based photo gallery&lt;/a&gt; &amp;#8211; iPhoto anyone? &lt;img src=&#39;http://icebergist.com/wp-includes/images/smilies/icon_smile.gif&#39; alt=&#39;:)&#39; class=&#39;wp-smiley&#39; /&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://www.sproutcore.com/static/sample_controls/&#34; title=&#34;SproutCore demo sample controls&#34;&gt;SproutCore sample controls&lt;/a&gt; &amp;#8211; demonstrates what kind of controls are already available in SproutCore.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;In next few days I will try to build a sample application powered by SproutCore and Rails to see how it goes. I will post my impressions here. After all if it&amp;#8217;s something Apple used for Mobile.me &amp;#8211; well, it can&amp;#8217;t be that bad. &lt;img src=&#39;http://icebergist.com/wp-includes/images/smilies/icon_wink.gif&#39; alt=&#39;;)&#39; class=&#39;wp-smiley&#39; /&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

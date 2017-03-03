@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Ubuntu on Icebergist</title>
+    <link>http://blog.orangeiceberg.com/tags/ubuntu/</link>
+    <description>Recent content in Ubuntu on Icebergist</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 03 Dec 2015 11:12:56 +0200</lastBuildDate>
+    <atom:link href="http://blog.orangeiceberg.com/tags/ubuntu/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Headless Firefox in Ubuntu on VirtualBox for Cucumber testing</title>
+      <link>http://blog.orangeiceberg.com/posts/headless-firefox-in-ubuntu-on-virtualbox-for-cucumber-testing</link>
+      <pubDate>Thu, 03 Dec 2015 11:12:56 +0200</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/headless-firefox-in-ubuntu-on-virtualbox-for-cucumber-testing</guid>
+      <description>
+
+&lt;p&gt;If you use &lt;a href=&#34;http://www.vagrantup.com/downloads.html&#34;&gt;Vagrant&lt;/a&gt;, &lt;a href=&#34;https://www.virtualbox.org/&#34;&gt;VirtualBox&lt;/a&gt; and Ubuntu to build your Rails apps and you want to test it with Cucumber scenarios, this is the right post for you. By default Vagrant and VirtualBox use Ubuntu without an X server and GUI.&lt;/p&gt;
+
+&lt;p&gt;Everything goes well until you need &lt;code&gt;@javascript&lt;/code&gt; flag for your cucumber scenario. &lt;code&gt;@javascript&lt;/code&gt; uses a javascript-aware system to process web requests (e.g. Selenium) instead of the default (non-javascript-aware) webrat browser.&lt;/p&gt;
+
+&lt;h3 id=&#34;install-mozilla-firefox:e440c2a4f60085f5f973ab25c52a888b&#34;&gt;Install Mozilla Firefox&lt;/h3&gt;
+
+&lt;p&gt;Selenium WebDriver is flexible and lets you run selenium headless in servers with no display. But in order to run, Selenium needs to launch a browser. If there is no display to the machine, the browsers are not launched. So in order to use selenium, you need to fake a display and let selenium and the browser think they are running in a machine with a display.&lt;/p&gt;
+
+&lt;p&gt;Install latest version of Mozilla Firefox:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;sudo apt-get install firefox&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Since Ubuntu is running without a X server Selenium cannot start Firefox because it requires an X server.&lt;/p&gt;
+
+&lt;h3 id=&#34;setting-up-virtual-x-server:e440c2a4f60085f5f973ab25c52a888b&#34;&gt;Setting up virtual X server&lt;/h3&gt;
+
+&lt;p&gt;Virtual X server is required to make browsers run normally by making them believe there is a display available, although it doesn&amp;rsquo;t create any visible windows.&lt;/p&gt;
+
+&lt;p&gt;Xvfb (X Virtual FrameBuffer) works fine for this. Xvfb lets you run X-Server in machines with no display devices.&lt;/p&gt;
+
+&lt;p&gt;Install xvfb on ubuntu:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;sudo apt-get install xvfb&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Lets run the Xvfb service in a display number which is less likely to clash even if you add a display at a later stage. Display 10 will do fine.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;sudo Xvfb :10 -ac&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;The parameter -ac makes xvfb run with access control off. The server should be running now.&lt;/p&gt;
+
+&lt;h3 id=&#34;headless-firefox:e440c2a4f60085f5f973ab25c52a888b&#34;&gt;Headless Firefox&lt;/h3&gt;
+
+&lt;p&gt;Before you can run a browser, you need to set the environment variable DISPLAY with the display number at which xvfb is running.&lt;/p&gt;
+
+&lt;p&gt;Open new tab in terminal and set the DISPLAY variable:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;export DISPLAY=:10&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;and start mozilla firefox:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;firefox&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Now you run firefox headlessly in Ubuntu, and you can run your cucumber scenarios with &lt;code&gt;@javascript&lt;/code&gt; flag.&lt;/p&gt;
+
+&lt;h3 id=&#34;start-virtual-x-server-automatically:e440c2a4f60085f5f973ab25c52a888b&#34;&gt;Start virtual X server automatically&lt;/h3&gt;
+
+&lt;p&gt;To run your X server automatically, after installing Xvfb, you will need to:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;put content of &lt;a href=&#34;https://gist.github.com/basti/2db0b71e893ee4d6d015&#34;&gt;this gist&lt;/a&gt; in &lt;code&gt;/etc/init.d/xvfb&lt;/code&gt; (hint use &lt;code&gt;sudo wget&lt;/code&gt; command to do that)&lt;/li&gt;
+&lt;li&gt;make it executable &lt;code&gt;sudo chmod a+x /etc/init.d/xvfb&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;start xvfb on display number 10 &lt;code&gt;export DISPLAY=:10&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;run X server &lt;code&gt;sudo /etc/init.d/xvfb start&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;when you want to stop X server &lt;code&gt;sudo /etc/init.d/xvfb stop&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;This is my way to run firefox headlessly in Virtual box Ubuntu, and to run cucumber scenarios with &lt;code&gt;@javascript&lt;/code&gt; flag.&lt;/p&gt;
+
+&lt;p&gt;References:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://www.installationpage.com/selenium/how-to-run-selenium-headless-firefox-in-ubuntu/&#34;&gt;Selenium Headless Automated Testing in Ubuntu&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://gist.github.com/jterrace/2911875&#34;&gt;Xvfb init script for Ubuntu&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Upgrade Ubuntu 8.04 LTS server</title>
+      <link>http://blog.orangeiceberg.com/posts/upgrade-ubuntu-8.04-lts-server</link>
+      <pubDate>Mon, 06 Jan 2014 11:36:43 +0100</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/upgrade-ubuntu-8.04-lts-server</guid>
+      <description>&lt;p&gt;Note to self: here is how to upgrade Ubuntu 8.04 LTS (or any other release that is no longer supported) to newer Ubuntu release.&lt;/p&gt;
+
+&lt;p&gt;When you are upgrading unsupported release of Ubuntu if you try to do the usual &lt;code&gt;sudo apt-get update&lt;/code&gt; it will most likely fail because&amp;hellip; well, it&amp;rsquo;s unsupported. The simple fix for this is to change your &lt;code&gt;/etc/apt/sources.list&lt;/code&gt; and replace repository URLs from something like &lt;code&gt;us.archive.ubuntu.com&lt;/code&gt; to &lt;code&gt;old-releases.ubuntu.com&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;After that you should be able follow normal upgrade procedure (use sudo if you are not root):&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;apt-get update
+apt-get install update-manager-core
+do-release-upgrade
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;References:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://rimuhosting.com/knowledgebase/linux/distros/ubuntu&#34; title=&#34;Rimuhosting&#39;s page on upgrading Ubuntu&#34;&gt;Rimuhosting&amp;rsquo;s page on upgrading Ubuntu&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://askubuntu.com/questions/91815/how-to-install-software-or-upgrade-from-old-unsupported-release&#34; title=&#34;Discussion on upgrading unsupported Ubuntu release&#34;&gt;Discussion on upgrading unsupported Ubuntu release&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Restoring superblock on Ubutnu</title>
+      <link>http://blog.orangeiceberg.com/posts/restoring-superblock-on-ubutnu</link>
+      <pubDate>Sun, 09 Nov 2008 09:00:00 +0100</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/restoring-superblock-on-ubutnu</guid>
+      <description>&lt;p&gt;Recently I had a problem on my Torrent box (an old PC that I use as dedicated torrent client) that runs Ubuntu. For some reason my root partition was being mounted as read-only. Everything else seemed to work (all other partitions were mounted properly), but I couldn&amp;#8217;t change any of my config or do anything on root partition.&lt;/p&gt;
+
+&lt;p&gt;I did the usual stuff:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Run fsck checks and it said that everything is fine&lt;/li&gt;
+&lt;li&gt;Used Ubuntu&amp;#8217;s live CD to boot, which got me read-write access to root partition. I changed some things in fstab, tried to get it to be rw permanently. No matter what I did as soon as I rebooted the root partition was once again read-only.&lt;/li&gt;
+&lt;li&gt;I tried booting from some repair disks I have, but all checks passed and no problem was detected. &lt;img src=&#39;http://icebergist.com/wp-includes/images/smilies/icon_sad.gif&#39; alt=&#39;:(&#39; class=&#39;wp-smiley&#39; /&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Finally, I read somewhere that a similar problem was caused by faulty superblock on hard drive. Fortunately Ubuntu stores superblock backups in different places around disk, so I decided to try to restore it from one of those backups.&lt;/p&gt;
+
+&lt;p&gt;It turned out that all I needed was a single command (this &lt;a href=&#34;http://ubuntuforums.org/showpost.php?s=72da065bbe1506b27f41a8cfc252c732&amp;amp;p=1424786&amp;amp;postcount=5&#34; title=&#34;Bad superblock&#34;&gt;Ubuntu forum post helped&lt;/a&gt;) to restore superblock:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;e2fsck -b 32768 /dev/hdc1&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;After that my root partition was back to read-write mode. &lt;img src=&#39;http://icebergist.com/wp-includes/images/smilies/icon_smile.gif&#39; alt=&#39;:)&#39; class=&#39;wp-smiley&#39; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Before you do stuff like that to your computer I suggest that you read man pages for &lt;a href=&#34;http://linux.die.net/man/8/mke2fs&#34; title=&#34;mke2fs&#34;&gt;mke2fs&lt;/a&gt; and &lt;a href=&#34;http://linux.die.net/man/8/e2fsck&#34; title=&#34;e2fsck&#34;&gt;e2fsck&lt;/a&gt;. It will prevent you from doing something foolish like deleting your whole hard drive. &lt;img src=&#39;http://icebergist.com/wp-includes/images/smilies/icon_smile.gif&#39; alt=&#39;:)&#39; class=&#39;wp-smiley&#39; /&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

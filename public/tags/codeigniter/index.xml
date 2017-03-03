@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Codeigniter on Icebergist</title>
+    <link>http://blog.orangeiceberg.com/tags/codeigniter/</link>
+    <description>Recent content in Codeigniter on Icebergist</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 08 Mar 2009 09:00:00 +0100</lastBuildDate>
+    <atom:link href="http://blog.orangeiceberg.com/tags/codeigniter/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Simple password protected administration with CodeIgniter</title>
+      <link>http://blog.orangeiceberg.com/posts/simple-password-protected-administration-with-codeigniter</link>
+      <pubDate>Sun, 08 Mar 2009 09:00:00 +0100</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/simple-password-protected-administration-with-codeigniter</guid>
+      <description>&lt;p&gt;Last week I&amp;#8217;ve taken a break from Ruby/Rails development and I&amp;#8217;ve worked on a site that uses PHP with &lt;a href=&#34;http://codeigniter.com/&#34;&gt;CodeIgniter&lt;/a&gt; framework.&lt;/p&gt;
+
+&lt;p&gt;Despite the fact that CodeIgniter has a very nice documentation I found it very difficult to find a way to do some simple things, that are more or less obvious, but which can be a problem for someone who hasn&amp;#8217;t worked with CodeIgniter before. (for example, I found myself more than once looking at CI code to figure out how it works, so I can use it)&lt;/p&gt;
+
+&lt;p&gt;I had to make a simple password protected administration section. One admin user, one password, no user registrations, no roles &amp;#8211; simple as possible. As I was using CI framework I decided to find a plugin/library that does this. Unfortunately most CI authorization plugins/libraries are very bloated and too complicated for this simple task. I tried to find some examples how to handle this simple use case, but nothing came up.&lt;/p&gt;
+
+&lt;p&gt;Finally I&amp;#8217;ve found a small authorization plugin: &lt;a href=&#34;http://codeigniter.com/wiki/Erkana/&#34;&gt;Erkanaauth&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;First you need a user table (must be named &amp;#8216;users&amp;#8217;) which only needs to have an id field and all other fields are optional because you will manually specify what other columns will be used. I opted for simple id, username, password:&lt;/p&gt;
+
+&lt;pre&gt;CREATE TABLE IF NOT EXISTS `users` (
+  `id` int(11) NOT NULL auto_increment,
+  `username` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  PRIMARY KEY  (`id`)
+);&lt;/pre&gt;
+
+&lt;p&gt;We will need to &amp;#8220;install&amp;#8221; ErkanaAuth library. You should &lt;a href=&#34;http://codeigniter.com/wiki/File:erkanaauth.zip/&#34;&gt;download it&lt;/a&gt; and unzip it.&lt;/p&gt;
+
+&lt;p&gt;Next we should create an Admin controller which will handle all administration tasks (remember I&amp;#8217;m making simple admin here, so I don&amp;#8217;t need to protect multiple controllers).&lt;/p&gt;
+
+&lt;pre&gt;&amp;lt;?php
+class Admin extends Controller {
+  function Admin()
+  {
+    parent::Controller();   
+    $this-&gt;load-&gt;database();
+    $this-&gt;load-&gt;helper(array(&#39;url&#39;, &#39;form&#39;, &#39;date&#39;));
+    $this-&gt;load-&gt;library(array(&#39;form_validation&#39;, &#39;upload&#39;, &#39;Erkanaauth&#39;, &#39;session&#39;));
+  }
+}
+?&amp;gt;&lt;/pre&gt;
+
+&lt;p&gt;Constructor just connects to database and loads some standard helpers and libraries (including Erkanaauth) that are usually used.&lt;/p&gt;
+
+&lt;p&gt;Next step is to add a function which we can call to verify if user is logged in:&lt;/p&gt;
+
+&lt;pre&gt;private
+  function authorize()
+  {
+      if($this-&gt;erkanaauth-&gt;try_session_login())
+          return true;
+  
+      redirect(&#39;admin/login&#39;);
+  }
+&lt;/pre&gt;
+
+&lt;p&gt;Function uses Erkanaauth&amp;#8217;s try_session_login which checks if user is already logged in (checks session for user id). If user isn&amp;#8217;t logged in we&amp;#8217;ll redirect him to our login page:&lt;/p&gt;
+
+&lt;pre&gt;function login()
+  {
+    $username = $this-&gt;input-&gt;post(&#39;username&#39;, true);
+    $password = $this-&gt;input-&gt;post(&#39;password&#39;, true);
+    if($username || $password)
+    {
+      if($this-&gt;erkanaauth-&gt;try_login(array(&#39;username&#39; =&gt; $username, &#39;password&#39; =&gt; $password)))
+        redirect(&#39;admin&#39;);
+    }
+    
+    $this-&gt;load-&gt;view(&#39;admin_login&#39;);
+  }
+
+  function logout()
+  {
+    $this-&gt;erkanaauth-&gt;logout();
+    redirect(&#39;admin&#39;);
+  }
+&lt;/pre&gt;
+
+&lt;p&gt;Key command here is try_login in login function which tries to find an entry in users table that fulfills given conditions. If you have different users table than the one I made this is the place where you should enter your column names.&lt;/p&gt;
+
+&lt;p&gt;Logout function is has just a simple call to Erkana&amp;#8217;s logout function. Nothing special there.&lt;/p&gt;
+
+&lt;p&gt;Of course we also need a login page template which should contain a simple user/pass form. It&amp;#8217;s pretty basic and you can see it if you get the complete code (see at the end).&lt;/p&gt;
+
+&lt;p&gt;Finally we have everything needed to protect any page in Admin controller. In order to protect a page all you need to do is to add a call to authorize function to any function you want to protect. Like this:&lt;/p&gt;
+
+&lt;pre&gt;function index()
+  {
+    $this-&gt;authorize();
+    echo &#34;Do something useful... For now just display logout link: &#34;;
+    echo anchor(&#39;admin/logout&#39;, &#34;Logout&#34;);
+  }
+&lt;/pre&gt;
+
+&lt;p&gt;That&amp;#8217;s it. Now you have fully functional administration section which requires username and password authorization.&lt;/p&gt;
+
+&lt;p&gt;You can get the complete sample application from &lt;a href=&#34;http://github.com/basti/ci-admin-section/tree/master&#34;&gt;Github repository&lt;/a&gt;. Feel free to expand on it or use it any way you like.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

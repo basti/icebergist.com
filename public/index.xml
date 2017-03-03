@@ -1,0 +1,1024 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Icebergist</title>
+    <link>http://blog.orangeiceberg.com/</link>
+    <description>Recent content on Icebergist</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 24 Mar 2016 08:09:25 +0100</lastBuildDate>
+    <atom:link href="http://blog.orangeiceberg.com/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>rake db:schema:load vs rake db:migrate</title>
+      <link>http://blog.orangeiceberg.com/posts/rake-dbschemaload-vs-rake-dbmigrate</link>
+      <pubDate>Thu, 24 Mar 2016 08:09:25 +0100</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/rake-dbschemaload-vs-rake-dbmigrate</guid>
+      <description>
+
+&lt;p&gt;Sooner or later every new Ruby developer needs to understand  differences between this two common rake tasks. Basically, these simple definition tells us everything we need to know:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;rake db:migrate&lt;/code&gt; runs migrations that have not run yet&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;rake db:schema:load&lt;/code&gt; loads the schema.db file into database.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;but the real question is when to use one or the other.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Advice:&lt;/strong&gt; &lt;a id=&#34;advice&#34;&gt;&lt;/a&gt; when you are adding a new migration to an existing app then you need to run &lt;code&gt;rake db:migrate&lt;/code&gt;, but when you join to existing application (&lt;em&gt;especially some old application&lt;/em&gt;), or when you drop your applications database and you need to create it again, always run &lt;code&gt;rake db:schema:load&lt;/code&gt; to load schema.&lt;/p&gt;
+
+&lt;h3 id=&#34;example:bb0863f1c1f426893f44d7c5e616b367&#34;&gt;Example&lt;/h3&gt;
+
+&lt;p&gt;I am working on application which use &lt;a href=&#34;https://github.com/globalize/globalize&#34;&gt;globalize gem&lt;/a&gt; for ActiveRecord model/data translations. Globalize work this way:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;first specify attributes which need to be translatable&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;class Post &amp;lt; ActiveRecord::Base
+  translates :title, :text
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;then create translation tables&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code&gt;class CreatePosts &amp;lt; ActiveRecord::Migration
+  def up
+    create_table :posts do |t|
+      t.timestamps
+    end
+    Post.create_translation_table! title: :string, text: :text
+  end
+  def down
+    drop_table :posts
+    Post.drop_translation_table!
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Note&lt;/strong&gt; &lt;em&gt;that the ActiveRecord model Post must already exist and have listed attributes for translations&lt;/em&gt;.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;and run &lt;code&gt;rake db:migrate&lt;/code&gt; .&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Problem comes when you change your mind and decide to leave title to be untranslatable.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;remove title from post translations table&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code&gt;class RemoveTitleFromPostTranslations &amp;lt; ActiveRecord::Migration
+  def up
+    remove_column :post_translations, :title, :string
+  end
+
+  def down
+    Entry.add_translation_fields! title: :string
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;add title to posts table&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code&gt;class AddTitleToPosts &amp;lt; ActiveRecord::Migration
+  def change
+    add_column :posts, :title, :string
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;remove title attribute from model translations&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code&gt;class Post &amp;lt; ActiveRecord::Base
+  translates :text
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;and run &lt;code&gt;rake db:migrate&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Everything looking good, so where is the problem?&lt;/p&gt;
+
+&lt;p&gt;Here it is! If you decide to delete your database and create it again you need to use:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;rake db:drop&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;rake db:create&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;rake db:schema:load&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Because, if you try to use &lt;code&gt;rake db:migrate&lt;/code&gt; instead of &lt;code&gt;rake db:schema:load&lt;/code&gt; you will get &lt;strong&gt;BIG ERROR!&lt;/strong&gt;, because for your first migration &amp;ldquo;create_posts&amp;rdquo; it is necessary that you have defined translatable attributes :title and :text in Post model, but you removed :title from Post model translations.&lt;/p&gt;
+
+&lt;p&gt;So just follow &lt;a href=&#34;#advice&#34;&gt;advice&lt;/a&gt; above, and good luck.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Headless Firefox in Ubuntu on VirtualBox for Cucumber testing</title>
+      <link>http://blog.orangeiceberg.com/posts/headless-firefox-in-ubuntu-on-virtualbox-for-cucumber-testing</link>
+      <pubDate>Thu, 03 Dec 2015 11:12:56 +0200</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/headless-firefox-in-ubuntu-on-virtualbox-for-cucumber-testing</guid>
+      <description>
+
+&lt;p&gt;If you use &lt;a href=&#34;http://www.vagrantup.com/downloads.html&#34;&gt;Vagrant&lt;/a&gt;, &lt;a href=&#34;https://www.virtualbox.org/&#34;&gt;VirtualBox&lt;/a&gt; and Ubuntu to build your Rails apps and you want to test it with Cucumber scenarios, this is the right post for you. By default Vagrant and VirtualBox use Ubuntu without an X server and GUI.&lt;/p&gt;
+
+&lt;p&gt;Everything goes well until you need &lt;code&gt;@javascript&lt;/code&gt; flag for your cucumber scenario. &lt;code&gt;@javascript&lt;/code&gt; uses a javascript-aware system to process web requests (e.g. Selenium) instead of the default (non-javascript-aware) webrat browser.&lt;/p&gt;
+
+&lt;h3 id=&#34;install-mozilla-firefox:e440c2a4f60085f5f973ab25c52a888b&#34;&gt;Install Mozilla Firefox&lt;/h3&gt;
+
+&lt;p&gt;Selenium WebDriver is flexible and lets you run selenium headless in servers with no display. But in order to run, Selenium needs to launch a browser. If there is no display to the machine, the browsers are not launched. So in order to use selenium, you need to fake a display and let selenium and the browser think they are running in a machine with a display.&lt;/p&gt;
+
+&lt;p&gt;Install latest version of Mozilla Firefox:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;sudo apt-get install firefox&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Since Ubuntu is running without a X server Selenium cannot start Firefox because it requires an X server.&lt;/p&gt;
+
+&lt;h3 id=&#34;setting-up-virtual-x-server:e440c2a4f60085f5f973ab25c52a888b&#34;&gt;Setting up virtual X server&lt;/h3&gt;
+
+&lt;p&gt;Virtual X server is required to make browsers run normally by making them believe there is a display available, although it doesn&amp;rsquo;t create any visible windows.&lt;/p&gt;
+
+&lt;p&gt;Xvfb (X Virtual FrameBuffer) works fine for this. Xvfb lets you run X-Server in machines with no display devices.&lt;/p&gt;
+
+&lt;p&gt;Install xvfb on ubuntu:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;sudo apt-get install xvfb&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Lets run the Xvfb service in a display number which is less likely to clash even if you add a display at a later stage. Display 10 will do fine.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;sudo Xvfb :10 -ac&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;The parameter -ac makes xvfb run with access control off. The server should be running now.&lt;/p&gt;
+
+&lt;h3 id=&#34;headless-firefox:e440c2a4f60085f5f973ab25c52a888b&#34;&gt;Headless Firefox&lt;/h3&gt;
+
+&lt;p&gt;Before you can run a browser, you need to set the environment variable DISPLAY with the display number at which xvfb is running.&lt;/p&gt;
+
+&lt;p&gt;Open new tab in terminal and set the DISPLAY variable:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;export DISPLAY=:10&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;and start mozilla firefox:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;firefox&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Now you run firefox headlessly in Ubuntu, and you can run your cucumber scenarios with &lt;code&gt;@javascript&lt;/code&gt; flag.&lt;/p&gt;
+
+&lt;h3 id=&#34;start-virtual-x-server-automatically:e440c2a4f60085f5f973ab25c52a888b&#34;&gt;Start virtual X server automatically&lt;/h3&gt;
+
+&lt;p&gt;To run your X server automatically, after installing Xvfb, you will need to:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;put content of &lt;a href=&#34;https://gist.github.com/basti/2db0b71e893ee4d6d015&#34;&gt;this gist&lt;/a&gt; in &lt;code&gt;/etc/init.d/xvfb&lt;/code&gt; (hint use &lt;code&gt;sudo wget&lt;/code&gt; command to do that)&lt;/li&gt;
+&lt;li&gt;make it executable &lt;code&gt;sudo chmod a+x /etc/init.d/xvfb&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;start xvfb on display number 10 &lt;code&gt;export DISPLAY=:10&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;run X server &lt;code&gt;sudo /etc/init.d/xvfb start&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;when you want to stop X server &lt;code&gt;sudo /etc/init.d/xvfb stop&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;This is my way to run firefox headlessly in Virtual box Ubuntu, and to run cucumber scenarios with &lt;code&gt;@javascript&lt;/code&gt; flag.&lt;/p&gt;
+
+&lt;p&gt;References:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://www.installationpage.com/selenium/how-to-run-selenium-headless-firefox-in-ubuntu/&#34;&gt;Selenium Headless Automated Testing in Ubuntu&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://gist.github.com/jterrace/2911875&#34;&gt;Xvfb init script for Ubuntu&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Import and export MySQL dump</title>
+      <link>http://blog.orangeiceberg.com/posts/import-and-export-mysql-dump</link>
+      <pubDate>Wed, 02 Dec 2015 10:44:23 +0100</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/import-and-export-mysql-dump</guid>
+      <description>&lt;p&gt;Another simple task that&amp;rsquo;s often hard for beginners is importing and exporting MySQL dumps. Here is quick rundown on how to do it.&lt;/p&gt;
+
+&lt;p&gt;To export data you need to use &lt;code&gt;mysqldump&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;mysqldump -u db_user -p db_name &amp;gt; dump_name.sql
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Options given to &lt;code&gt;mysqldump&lt;/code&gt; are:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;-u db_user&lt;/code&gt; - connect as user &lt;code&gt;db_user&lt;/code&gt; to database&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-p&lt;/code&gt; - use password, it will ask you to enter your password&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;db_name&lt;/code&gt; is the name of MySQL database you want to dump&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;&amp;gt; dump_name.sql&lt;/code&gt; - by default &lt;code&gt;mysqldump&lt;/code&gt; will print out the dump to terminal, but simple output redirect with &lt;code&gt;&amp;gt;&lt;/code&gt; will instead write it to given filename, in this case &lt;code&gt;dump_name.sql&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Now that you have &lt;code&gt;dump_name.sql&lt;/code&gt; file with all SQL queries needed to replicate your database you can import it using general-purpose &lt;code&gt;mysql&lt;/code&gt; client:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;mysql -u db_user -p db_name &amp;lt; dump_name.sql
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;User, password, and database name options are the same as for &lt;code&gt;mysqldump&lt;/code&gt;. Since &lt;code&gt;mysql&lt;/code&gt; reads input from terminal this time we can use &lt;code&gt;&amp;lt;&lt;/code&gt; to read input from given file instead.&lt;/p&gt;
+
+&lt;p&gt;As always for more information you can consult manual using &lt;code&gt;man mysqldump&lt;/code&gt; and &lt;code&gt;man mysql&lt;/code&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Create and extract archives using tar and gzip</title>
+      <link>http://blog.orangeiceberg.com/posts/create-and-extract-archives-using-tar-and-gzip</link>
+      <pubDate>Fri, 13 Nov 2015 13:28:36 +0100</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/create-and-extract-archives-using-tar-and-gzip</guid>
+      <description>&lt;p&gt;One of the simplest tasks is creating and extracting files using &lt;code&gt;tar&lt;/code&gt; and &lt;code&gt;gzip&lt;/code&gt;. Yet for most new developers this is a daunting task. These days &lt;code&gt;tar&lt;/code&gt; is mostly used to simply combine a few files into a single file and then &lt;code&gt;gzip&lt;/code&gt; is used to compress that file.&lt;/p&gt;
+
+&lt;p&gt;Here is a quick overview how to use &lt;code&gt;tar&lt;/code&gt; and &lt;code&gt;gzip&lt;/code&gt; to create and compress an archive:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;# archive individual files
+tar -cvzf myarchive.tar.gz /path/to/file1 /path/to/file2
+
+# archive whole directory
+tar -cvzf myarchive.tar.gz /path/to/dir
+
+# archive whole directory but don&#39;t store full path
+tar -cvzf myarchive.tar.gz -C /path/to/dir ./
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Options give to tar are: &lt;code&gt;c&lt;/code&gt; to create new archive, &lt;code&gt;v&lt;/code&gt; to be verbose, &lt;code&gt;z&lt;/code&gt; to compress resulting archive with &lt;code&gt;gzip&lt;/code&gt;, and &lt;code&gt;f&lt;/code&gt; to write the archive to specified file. After options you can list files and dirs you want to archive.&lt;/p&gt;
+
+&lt;p&gt;In all examples we provide a full path to a file or dir we want to archive. In this case &lt;code&gt;tar&lt;/code&gt; will store files in the archive using the full path. This means once you extract the files you&amp;rsquo;ll have a complete directory structure from root dir onwards.&lt;/p&gt;
+
+&lt;p&gt;The way to avoid this is either to manually &lt;code&gt;cd&lt;/code&gt; to dir in which files are stored, or to tell &lt;code&gt;tar&lt;/code&gt; using &lt;code&gt;C&lt;/code&gt; option to change dir before archiving files.&lt;/p&gt;
+
+&lt;p&gt;Finally to extract an archive:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;tar -xvzf myarchive.tar.gz
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The &lt;code&gt;x&lt;/code&gt; option tells &lt;code&gt;tar&lt;/code&gt; to extract the archive into current directory.&lt;/p&gt;
+
+&lt;p&gt;For more information you can consult manual using &lt;code&gt;man tar&lt;/code&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Creating and publishing a ruby gem</title>
+      <link>http://blog.orangeiceberg.com/posts/creating-and-publishing-a-ruby-gem</link>
+      <pubDate>Mon, 08 Jun 2015 09:12:04 +0200</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/creating-and-publishing-a-ruby-gem</guid>
+      <description>
+
+&lt;p&gt;A gem is a simple way to distribute functionality, it can be a small plugin, a Ruby library or sometimes a whole program. Thanks to RubyGems, a gem hosting service, developers have a wide range of gems at their disposal allowing them to easily add functionality to their applications.&lt;/p&gt;
+
+&lt;p&gt;But what if there is no gem available that will suit the functionality you need, and you find yourself writing the same code over and over again for different projects? Well, in that case you should consider making your own gem.&lt;/p&gt;
+
+&lt;p&gt;It&amp;rsquo;s considered a good practice to extract a gem out of an existing application, since that way you will have a better understanding of all the requirements as well as how the gem will be used. This blog post will illustrate just that on a real life example, and will take you through the process of creating a slug_converter gem.&lt;/p&gt;
+
+&lt;h3 id=&#34;slug-converter-gem:26b86b95592661b7092ab782e8d51bcd&#34;&gt;Slug converter gem&lt;/h3&gt;
+
+&lt;p&gt;Source code for slug_converter gem was developed while working on a link shortener application, in order to generate a string consisting of predefined characters, based on a given id number of a link. As it will be described in this blog post, this code was easily extracted from the application into an independent gem that was released on  RubyGems.&lt;/p&gt;
+
+&lt;p&gt;Although it may seem like a complex task at first, creating a gem is not that difficult, if you have RubyGems and Bundler installed you are good to go. We already know what RubyGems is, and Bundler is a package manager that determines a full set of direct dependencies needed by your application.&lt;/p&gt;
+
+&lt;p&gt;Now let&amp;rsquo;s build a gem!&lt;/p&gt;
+
+&lt;h3 id=&#34;creating-a-gem:26b86b95592661b7092ab782e8d51bcd&#34;&gt;Creating a gem&lt;/h3&gt;
+
+&lt;p&gt;First step is to make sure that bundler gem is installed.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;$ gem install bundler
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;once bundler is installed creating a structure for your new gem is easy,&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;	$ bundle gem slug_converter
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The first time you use bundler to create a gem you will be prompted to answer a couple of questions:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;	Do you want to include code of conduct in your gems you generate?
+	Do you want to licence your code permissively under the MIT licence?
+	Do you want to generate tests with your gem? 
+	Type rspec or minitest to generate those tests files now and in the future:
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Answering these questions will help bundler configure and setup files that are being generated now and in the future. Here we answered yes to first 4 qestions and choose rspec for testing.&lt;/p&gt;
+
+&lt;p&gt;Running &lt;code&gt;$ bundle gem slug_converter&lt;/code&gt; command resulted with &amp;ldquo;slug_converter&amp;rdquo; directory with essential gem file structure being created, and git repository initialized, assuming that you are using git for version management (as you should).&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;Creating gem &#39;slug_converter&#39;...
+ create  slug_converter/Gemfile
+ create  slug_converter/.gitignore
+ create  slug_converter/lib/slug_converter.rb
+ create  slug_converter/lib/slug_converter/version.rb
+ create  slug_converter/slug_converter.gemspec
+ create  slug_converter/Rakefile
+ create  slug_converter/README.md
+ create  slug_converter/bin/console
+ create  slug_converter/bin/setup
+ create  slug_converter/LICENSE.txt
+ create  slug_converter/.travis.yml
+ create  slug_converter/.rspec
+ create  slug_converter/spec/spec_helper.rb
+ create  slug_converter/spec/slug_converter_spec.rb
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Let&amp;rsquo;s go through files that bundler generated for us, .gemspec file is the &amp;ldquo;heart&amp;rdquo; of your gem so lets start with &lt;code&gt;slug_converter.gemspec&lt;/code&gt;&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;lib = File.expand_path(&#39;../lib&#39;, __FILE__)
+$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
+require &#39;slug_converter/version&#39;
+
+Gem::Specification.new do |spec|
+  spec.name         = &amp;quot;slug_converter&amp;quot;
+  spec.version      = SlugConverter::VERSION
+  spec.authors      = [&amp;quot;Your Name&amp;quot;]
+  spec.email        = [&amp;quot;youremail@example.com&amp;quot;]
+
+  # if spec.respond_to?(:metadata)
+  #   spec.metadata[&#39;allowed_push_host&#39;] = &amp;quot;TODO: Set to &#39;http://mygemserver.com&#39; to prevent pushes to rubygems.org, or delete to allow pushes to any server.&amp;quot;
+  # end
+
+  spec.summary      = %q{Number &amp;lt;-&amp;gt; Slug converter}
+  spec.description  = %q{Generates a slug based on the given number and the other way around}
+  spec.homepage     = &amp;quot;https://github.com/orangeiceberg/slug_converter&amp;quot;
+  spec.license      = &amp;quot;MIT&amp;quot;
+
+  spec.files        = `git ls-files -z`.split(&amp;quot;\x0&amp;quot;).reject { |f| f.match(%r{^(test|spec|features)/}) }
+  spec.bindir       = &amp;quot;exe&amp;quot;
+  spec.executables  = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
+  spec.require_paths= [&amp;quot;lib&amp;quot;]
+
+  spec.add_development_dependency &amp;quot;bundler&amp;quot;, &amp;quot;~&amp;gt; 1.8&amp;quot;
+  spec.add_development_dependency &amp;quot;rake&amp;quot;, &amp;quot;~&amp;gt; 10.0&amp;quot;
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This file contains metadata about your gem and it can be populated directly, so here you can enter all the data such as name, description, licence&amp;hellip; This file also contains information about what files should be packaged in your gem, as well as the load path to include the gem directory when the gem is first loaded. Most of these default settings will work for the majority of gems but you can always edit them if you want different behavior. At the bottom of the file add any gem dependencies that are required.&lt;/p&gt;
+
+&lt;p&gt;The version number of the gem is set in &lt;code&gt;SlugConverter::VERSION&lt;/code&gt; constant which is kept in a separate version.rb file, and you can change it there for every new version of your gem.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;lib
+ |--slug_converter
+         |--version.rb
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;A very important part of every gem is the &lt;code&gt;README&lt;/code&gt; file, where you can describe how to install and use the gem, and the &lt;code&gt;LICENCE&lt;/code&gt; file where you can define the terms and conditions under which the gem can be used.&lt;/p&gt;
+
+&lt;p&gt;In the lib directory there is a file which has the same name as your gem (recommended), and that file will be loaded when someone requires your gem. If the gem you are writing is simple all the code can be placed in this single file, or in case of more complex gems all the other files from the lib directory are required in this file.&lt;/p&gt;
+
+&lt;p&gt;There is also a &lt;code&gt;Gemfile&lt;/code&gt; generated, but this file doesn&amp;rsquo;t have to be managed directly since all it does is look in &lt;code&gt;.gemspec&lt;/code&gt; for required dependencies and then loads them through bundler. All the dependencies required by the gem should be specified in the &lt;code&gt;.gemspec&lt;/code&gt; file.&lt;/p&gt;
+
+&lt;p&gt;Another file that is generated by the bundler is &lt;code&gt;Rakefile&lt;/code&gt; which just adds some gem tasks from bundler, and we can see those tasks with explanation by running&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;	rake -T
+	rake build    # Build slug_converter-0.0.1.gem into the pkg directory
+	rake install  # Build and install slug_converter-0.0.1.gem into system gems
+	rake release  # Create tag v0.0.1 and build and push slug_converter-0.1.0.gem to Rubygems
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;writing-tests:26b86b95592661b7092ab782e8d51bcd&#34;&gt;Writing tests&lt;/h3&gt;
+
+&lt;p&gt;If you are following the principles of Test Driven Development you will probably like to start by writing tests for you gem, for that purpose I would suggest using RSpec.
+To do that you will need to add rspec as a development dependency to you gemspec file:
+    spec.add_development_dependency &amp;lsquo;rspec&amp;rsquo;&lt;/p&gt;
+
+&lt;p&gt;As mentioned in the beginning, when running bundle gem for the first time, bundler will asks if you would like to generate test files for your gem and to choose if you want to use rspec or minitest. If you answer with yes, and choose rspec, bundler will generate a spec directory with two files:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;|-- spec
+      |-- slug_converter_spec.rb
+      |-- spec_helper.rb
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;In the &lt;code&gt;spec_helper.rb&lt;/code&gt; file you can reference any test globals or configuration.&lt;/p&gt;
+
+&lt;p&gt;Since we are extracting code from an existing application we already have all the tests written so we just need to copy them into the generated &lt;code&gt;spec/slug_converter_spec.rb&lt;/code&gt; file.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;require &#39;spec_helper&#39;
+describe SlugConverter do
+  it &#39;has a version number&#39; do
+    expect(SlugConverter::VERSION).not_to be nil
+  end
+  describe &amp;quot;.number&amp;quot; do
+  
+    it &amp;quot;returns number when number is set&amp;quot; do
+      converted_slug= SlugConverter.new(111)
+      expect(converted_slug.number).to eq(111)
+    end
+    
+    it &amp;quot;returns decoded number for existing slug&amp;quot; do
+      converted_slug = SlugConverter.new(&amp;quot;vg&amp;quot;)
+      expect(converted_slug.number).to eq(363)
+    end
+    
+  end
+  
+  describe &amp;quot;.number&amp;quot; do
+  
+    it &amp;quot;sets number to given value&amp;quot; do
+      converted_slug = SlugConverter.new(211)
+      expect(converted_slug.number=210).to eq(210)
+    end
+    
+    it &amp;quot;sets slug to encoded value of number&amp;quot; do
+      converted_slug = SlugConverter.new(211)
+      converted_slug.number=210
+      expect(converted_slug.slug).to eq(&amp;quot;pb&amp;quot;)
+    end
+    
+    it &amp;quot;sets number to integer value of given number passed as string&amp;quot; do
+      converted_slug = SlugConverter.new(&amp;quot;210&amp;quot;)
+      expect(converted_slug.number).to eq(210)
+    end
+    
+    it &amp;quot;sets slug to encoded value of given number passed as string&amp;quot; do
+      converted_slug = SlugConverter.new(&amp;quot;210&amp;quot;)
+      expect(converted_slug.slug).to eq(&amp;quot;pb&amp;quot;)
+    end
+    
+    it &amp;quot;sets number to integer value of argument that starts with a number but also contains letters&amp;quot; do
+      converted_slug = SlugConverter.new(&amp;quot;210jj&amp;quot;)
+      expect(converted_slug.number).to eq(210)
+    end
+    
+    it &amp;quot;sets slug to encoded value of argument that starts with a number but also contains letters&amp;quot; do
+      converted_slug = SlugConverter.new(&amp;quot;210jj&amp;quot;)
+      expect(converted_slug.slug).to eq(&amp;quot;pb&amp;quot;)
+    end
+    
+  end
+  
+  describe &amp;quot;.slug&amp;quot; do
+  
+     it &amp;quot;returns slug when slug is set&amp;quot; do
+        converted_slug = SlugConverter.new(&amp;quot;hy&amp;quot;)
+        expect(converted_slug.slug).to eq(&amp;quot;hy&amp;quot;)
+     end
+     
+     it &amp;quot;returns encoded slug when link id is set&amp;quot; do
+        converted_id = SlugConverter.new(113)
+        expect(converted_id.slug).to eq(&amp;quot;hy&amp;quot;)
+     end
+     
+  end
+  
+  describe &amp;quot;.slug&amp;quot; do
+  
+    it &amp;quot;sets slug to given value&amp;quot; do
+      converted_slug = SlugConverter.new(&amp;quot;ezk&amp;quot;)
+      expect(converted_slug.slug=(&amp;quot;ebk&amp;quot;)).to eq(&amp;quot;ebk&amp;quot;)
+    end
+    
+    it &amp;quot;sets number to decoded value of slug&amp;quot; do
+      converted_slug = SlugConverter.new(&amp;quot;pb&amp;quot;)
+      converted_slug.slug=(&amp;quot;ezk&amp;quot;)
+      expect(converted_slug.number).to eq(1483)
+    end
+    
+    it &amp;quot;raises Arrgument Error exception if given value is an empty string&amp;quot; do
+      expect { SlugConverter.new(&amp;quot;&amp;quot;) }.to raise_error(ArgumentError)
+    end
+    
+    it &amp;quot;raises Arrgument Error exception if given value is nil&amp;quot; do
+      expect { SlugConverter.new(nil) }.to raise_error(ArgumentError)
+    end
+    
+    it &amp;quot;raises Arrgument Error exception if given value contains unpermitted letters&amp;quot; do
+      expect { SlugConverter.new(&amp;quot;iiii&amp;quot;) }.to raise_error(ArgumentError)
+    end
+    
+    it &amp;quot;raises Arrgument Error exception if given value starts with letter but contains numbers&amp;quot; do
+      expect { SlugConverter.new(&amp;quot;bb12&amp;quot;) }.to raise_error(ArgumentError)
+    end
+    
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;To make rspec rake task available we will setup tasks folder where we&amp;rsquo;ll place our &lt;code&gt;rspec.rake&lt;/code&gt; file containing only 2 lines:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;	require &#39;rspec/core/rake_task&#39;
+	RSpec::Core::RakeTask.new(:spec)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;and then we will import this file in our Rakefile that bundler provided automatically:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;	Dir.glob(&#39;tasks/**/*.rake&#39;).each(&amp;amp;method(:import))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now run:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;bundle exec rake spec 
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And watch your tests fail. :)&lt;/p&gt;
+
+&lt;h3 id=&#34;add-gem-functionality:26b86b95592661b7092ab782e8d51bcd&#34;&gt;Add gem functionality&lt;/h3&gt;
+
+&lt;p&gt;Now we need to make those test go green. To do that we will again copy the existing code from our application in the main gem file &lt;code&gt;lib/slug_converter.rb&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;require &amp;quot;slug_converter/version&amp;quot;
+require &#39;set&#39;
+require &#39;gem_config&#39;
+
+class SlugConverter
+  include GemConfig::Base
+  with_configuration do
+    has :alphabet, default: &amp;quot;qjeghxtrpnfmdzwvsybkuoca&amp;quot;
+  end
+
+  def initialize(number_or_slug)
+     @alphabet = SlugConverter.configuration.alphabet.split(//)
+    if number_or_slug.to_i != 0
+      @number = number_or_slug.to_i
+    elsif validate_string(number_or_slug)
+      @slug = number_or_slug.downcase
+    else
+      raise ArgumentError, &#39;Argument must be integer value or non-empty string consisting of predefined letters&#39;
+    end
+  end
+  
+  def number
+    if @number.nil?
+      @number = bijective_decode
+    else
+      @number
+    end
+  end
+  
+  def number=(new_number)
+    @number = new_number
+    @slug = bijective_encode
+    @number
+  end
+  
+  def slug
+    if @slug.nil?
+      @slug = bijective_encode
+    else
+      @slug
+    end
+  end
+  
+  def slug=(new_slug)
+    @slug = new_slug
+    @number = bijective_decode
+    @slug
+  end
+
+  private
+  
+    def bijective_encode
+      id = @number
+      return @alphabet[0] if id == 0
+      s = &#39;&#39;
+      base = @alphabet.length
+      while id &amp;gt; 0
+        s &amp;lt;&amp;lt; @alphabet[id.modulo(base)]
+        id /= base
+      end
+      s.reverse
+    end
+    
+    def bijective_decode
+      i = 0
+      base = @alphabet.length
+      @slug.each_char { |c| i = i * base + @alphabet.index(c) }
+      i
+    end
+    
+    def validate_string(slug)
+      unless slug.nil?
+        alphabet = Set.new @alphabet
+        slug_letters = Set.new slug.downcase().split(//)
+        slug != &amp;quot;&amp;quot; &amp;amp;&amp;amp; (slug_letters.subset? alphabet)
+      end
+    end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now when we run the tests again, they should all pass.&lt;/p&gt;
+
+&lt;p&gt;###Making your gem configurabile&lt;/p&gt;
+
+&lt;p&gt;In order to allow users to set their own alphabet that will be used by the SlugConverter, we needed to make our gem configurabile. To do this we used &lt;a href=&#34;https://github.com/krautcomputing/gem_config&#34;&gt;https://github.com/krautcomputing/gem_config&lt;/a&gt; gem.&lt;/p&gt;
+
+&lt;p&gt;You will notice this code at the begining of the SlugConverter class:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;class SlugConverter
+  include GemConfig::Base
+  
+  with_configuration do
+    has :alphabet, default: &amp;quot;qjeghxtrpnfmdzwvsybkuoca&amp;quot;
+  end
+
+  def initialize(number_or_slug)
+     @alphabet = SlugConverter.configuration.alphabet.split(//)
+     # ...
+  end	  
+  
+  # rest of the code omitted    
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;this code along with &lt;code&gt;spec.add_runtime_dependency &#39;gem_config&#39;&lt;/code&gt; added as a dependency in &lt;code&gt;slug_converter.gemspec&lt;/code&gt; file, alows us to make the gem configureabile.&lt;/p&gt;
+
+&lt;p&gt;Custom aphabet can than be defined by adding &lt;code&gt;config/initializers/slug_converter.rb&lt;/code&gt; to your application, and defining the alphabet like this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;SlugConverter.configuration.alphabet = &amp;quot;your_custom_alphabet_here&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;releasing-your-gem:26b86b95592661b7092ab782e8d51bcd&#34;&gt;Releasing your gem&lt;/h3&gt;
+
+&lt;p&gt;Now that we have the test passing and all the code in place it&amp;rsquo;s time to make the gem available for everyone to use by releasing it on RubyGems, to do that you will need to have a RubyGems account. If this is the first time you release a gem you will be prompted to enter your RubyGems username and password. You will also need to have your repository setup on Github.&lt;/p&gt;
+
+&lt;p&gt;Then with just one comand:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;	$ bundle exec rake release
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;your code will be pushed to your Github repository,&lt;/li&gt;
+&lt;li&gt;your git repository will be tagged with the version number using a name like &amp;ldquo;v1.0.0&amp;rdquo;.&lt;/li&gt;
+&lt;li&gt;your gem released on RubyGems.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The ruby gem described in this blog post can be found here &lt;a href=&#34;https://rubygems.org/gems/slug_converter&#34;&gt;https://rubygems.org/gems/slug_converter&lt;/a&gt;, and all the code is in this GitHub repository &lt;a href=&#34;https://github.com/orangeiceberg/slug_converter&#34;&gt;https://github.com/orangeiceberg/slug_converter&lt;/a&gt; .&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>changing database starting id</title>
+      <link>http://blog.orangeiceberg.com/posts/changing-database-starting-id</link>
+      <pubDate>Mon, 01 Jun 2015 11:03:47 +0200</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/changing-database-starting-id</guid>
+      <description>&lt;p&gt;For our new project it was necessary to modify the starting id of our database. This can be handled through migration for creating table but we decided to create a rake task that handled this for us.&lt;/p&gt;
+
+&lt;p&gt;The rake task that we created detects what database is being used and executes appropriate changes according to that.&lt;/p&gt;
+
+&lt;p&gt;You can create a rake task using rails generate command for rake task:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;rails g task namespace task_name
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This will create your task in lib/tasks with chosen namespace and task name.&lt;/p&gt;
+
+&lt;p&gt;Here is our task and an explanation that follows.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;namespace :database do
+  desc &amp;quot;Detect database that&#39;s being used and then increment its id&amp;quot;
+  task autoincrement: :environment do
+  
+    db_name_downcase = ActiveRecord::Base.connection.adapter_name.downcase
+
+    if Link.maximum(:id).to_i &amp;lt; 1000
+      if db_name_downcase.start_with? &amp;quot;mysql&amp;quot;
+        ActiveRecord::Base.connection.execute(&amp;quot;ALTER TABLE links AUTO_INCREMENT = 1000&amp;quot;)
+      end
+      if db_name_downcase.start_with? &amp;quot;postgres&amp;quot;
+        ActiveRecord::Base.connection.execute(&amp;quot;ALTER SEQUENCE links_id_seq START with 1000 RESTART;&amp;quot;)
+      end
+      if db_name_downcase.start_with? &amp;quot;sqlite&amp;quot;
+        ActiveRecord::Base.connection.execute(&amp;quot;insert into sqlite_sequence(name,seq) values(&#39;links&#39;, 1000)&amp;quot;)
+      end
+    else
+      puts &amp;quot;To perform this task your database shouldn&#39;t have records with id number higher than 1000&amp;quot;
+    end
+    
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We need to change the starting id of our database to 1000 so we check that we don&amp;rsquo;t have a record with id higher than 1000. Link is our Active Record model and links is the name of our table.&lt;/p&gt;
+
+&lt;p&gt;ActiveRecord::Base.connection returns the connection currently associated with the class. We use it to detect the name of database and execute appropriate changes.
+###MySQL
+For MySQL we need to set AUTO_INCREMENT value to 1000, Auto-increment allows a unique number to be generated when a new record is inserted into a table. When first record is created it sets its primary key to 1 by default  and it will auto increment by 1 for each new record.
+###PostgreSQL
+For Postgres we have to explain what a sequence is. A sequence is a special kind of a database object designed for generating unique numeric identifiers. It is typically used to generate artificial primary keys. Sequences are similar to the Auto-increment concept in MySQL.
+###SQLite
+For SQlite we altered sqlite_sequence table, which is an internal table used to implement AUTOINCREMENT. It is created automatically whenever any ordinary table with an AUTOINCREMENT integer primary key is created.&lt;/p&gt;
+
+&lt;p&gt;You can check &lt;a href=&#34;http://stackoverflow.com/questions/2075331/change-starting-id-number&#34;&gt;this Stack Overflow discussion&lt;/a&gt; that was very helpful to me.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Customize Devise permitted parameters</title>
+      <link>http://blog.orangeiceberg.com/posts/customize-devise-permitted-parameters</link>
+      <pubDate>Mon, 04 May 2015 16:07:22 +0200</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/customize-devise-permitted-parameters</guid>
+      <description>&lt;p&gt;If you are using Devise gem for authentication and you have been adding custom fields to your model you’ll get in trouble when you try to create a new instance or update an existing one. All your added fields will be treated as unpermitted. The solution for this problem is to customise Devise’s configure_permited_parameters action. All you need to do is to add this action to your Application controller and push parameters that need to be permitted to devise_paremeter_sanitizer array. So let’s say you have a User Model and you have added company_name and website fields to your user’s table, to permit this parameters on sign_up you need to add this to your Application controller:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;def configure_permitted_parameters
+  devise_parameter_sanitizer.for(:sign_up).push(:company_name, :website)
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;It is the same principle for the :sign_in and :edit_account. You can see what are &lt;a href=&#34;https://github.com/plataformatec/devise/blob/master/lib/devise/parameter_sanitizer.rb#L83&#34;&gt;default permitted parameters here&lt;/a&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>How to skip Devise trackable updates</title>
+      <link>http://blog.orangeiceberg.com/posts/how-to-skip-devise-trackable-updates</link>
+      <pubDate>Mon, 12 May 2014 19:10:06 +0200</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/how-to-skip-devise-trackable-updates</guid>
+      <description>&lt;p&gt;Devise has a very useful Trackable module used to track user&amp;rsquo;s sign in count, timestamps and IP address. There are some occasions when you need to disable tracking. For example for API requests where user signs in on every request; for instances where admin might sign in as an user; and similar.&lt;/p&gt;
+
+&lt;p&gt;To disable Devise Trackable module you need to set &lt;code&gt;request.env[&amp;quot;devise.skip_trackable&amp;quot;] = true&lt;/code&gt;. You have to do that before trying to authenticate user, so you&amp;rsquo;ll want to put it in a before_filter, or even better prepend_before_filter to make sure it&amp;rsquo;s before authentication.&lt;/p&gt;
+
+&lt;p&gt;Add this to your controller in which you want to disable tracking:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;prepend_before_filter :disable_devise_trackable
+
+protected
+  def disable_devise_trackable
+    request.env[&amp;quot;devise.skip_trackable&amp;quot;] = true
+  end
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Upgrade Ubuntu 8.04 LTS server</title>
+      <link>http://blog.orangeiceberg.com/posts/upgrade-ubuntu-8.04-lts-server</link>
+      <pubDate>Mon, 06 Jan 2014 11:36:43 +0100</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/upgrade-ubuntu-8.04-lts-server</guid>
+      <description>&lt;p&gt;Note to self: here is how to upgrade Ubuntu 8.04 LTS (or any other release that is no longer supported) to newer Ubuntu release.&lt;/p&gt;
+
+&lt;p&gt;When you are upgrading unsupported release of Ubuntu if you try to do the usual &lt;code&gt;sudo apt-get update&lt;/code&gt; it will most likely fail because&amp;hellip; well, it&amp;rsquo;s unsupported. The simple fix for this is to change your &lt;code&gt;/etc/apt/sources.list&lt;/code&gt; and replace repository URLs from something like &lt;code&gt;us.archive.ubuntu.com&lt;/code&gt; to &lt;code&gt;old-releases.ubuntu.com&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;After that you should be able follow normal upgrade procedure (use sudo if you are not root):&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;apt-get update
+apt-get install update-manager-core
+do-release-upgrade
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;References:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://rimuhosting.com/knowledgebase/linux/distros/ubuntu&#34; title=&#34;Rimuhosting&#39;s page on upgrading Ubuntu&#34;&gt;Rimuhosting&amp;rsquo;s page on upgrading Ubuntu&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://askubuntu.com/questions/91815/how-to-install-software-or-upgrade-from-old-unsupported-release&#34; title=&#34;Discussion on upgrading unsupported Ubuntu release&#34;&gt;Discussion on upgrading unsupported Ubuntu release&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Quick VirtualBox/Vagrant setup with Heroku-like box</title>
+      <link>http://blog.orangeiceberg.com/posts/quick-virtualbox/vagrant-setup-with-heroku-like-box</link>
+      <pubDate>Mon, 16 Sep 2013 09:00:00 +0100</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/quick-virtualbox/vagrant-setup-with-heroku-like-box</guid>
+      <description>&lt;p&gt;Here is a quick way to setup VirtualBox using Vagrant with Heroku-like box on Mac.&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;Install VirtualBox from &lt;a href=&#34;https://www.virtualbox.org/wiki/Downloads&#34; target=&#34;_blank&#34;&gt;&lt;a href=&#34;https://www.virtualbox.org/wiki/Downloads&#34;&gt;https://www.virtualbox.org/wiki/Downloads&lt;/a&gt;&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Install Vagrant from &lt;a href=&#34;http://downloads.vagrantup.com/&#34; target=&#34;_blank&#34;&gt;&lt;a href=&#34;http://downloads.vagrantup.com/&#34;&gt;http://downloads.vagrantup.com/&lt;/a&gt;&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Create Vagrantfile for Heroku-like box (based on &lt;a href=&#34;https://github.com/ejholmes/vagrant-heroku&#34; target=&#34;_blank&#34;&gt;&lt;a href=&#34;https://github.com/ejholmes/vagrant-heroku&#34;&gt;https://github.com/ejholmes/vagrant-heroku&lt;/a&gt;&lt;/a&gt;) that looks something like:&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;        Vagrant.configure(&amp;quot;2&amp;quot;) do |config|        
+	        config.vm.box = &amp;quot;heroku&amp;quot;
+	        config.vm.box_url = &amp;quot;https://dl.dropboxusercontent.com/s/rnc0p8zl91borei/heroku.box&amp;quot;
+          config.vm.synced_folder &amp;quot;.&amp;quot;, &amp;quot;/vagrant&amp;quot;, :nfs =&amp;gt; true
+	        config.vm.network :private_network, ip: &amp;quot;192.168.1.42&amp;quot;  # required for NFS
+        end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Beside telling Vagrant to use Heroku-like box from &lt;a href=&#34;https://github.com/ejholmes/vagrant-heroku&#34; target=&#34;_blank&#34;&gt;&lt;a href=&#34;https://github.com/ejholmes/vagrant-heroku&#34;&gt;https://github.com/ejholmes/vagrant-heroku&lt;/a&gt;&lt;/a&gt; it also sets up shared dir between host and VM machine. It will mount Vagrantfile dir (.) to /vagrant in VM.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;vagrant up&lt;/code&gt; will setup the VM and start it up.&lt;/p&gt;
+
+&lt;p&gt;Now you can use &lt;code&gt;vagrant ssh&lt;/code&gt; to login to VM.&lt;/p&gt;
+
+&lt;p&gt;Vagrant Heroku-like box comes with Postgresql, but if you want you can easily setup sqlite:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;sudo apt-get install libsqlite3-dev
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Bonus tip&lt;/strong&gt;: when you are working on multiple projects sometimes you can forget which VMs are running. You can list all running VMs using:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;VBoxManage list runningvms
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Further reading:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://docs.vagrantup.com/v2/&#34; target=&#34;_blank&#34;&gt;Vagrant docs&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/ejholmes/vagrant-heroku&#34; target=&#34;_blank&#34;&gt;Vagrant Heroku-like box&lt;/a&gt; which can be easily customized.&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://loudcoding.com/posts/how-to-use-vagrant-to-run-celadon-cedar-stack-on-heroku/&#34; target=&#34;_blank&#34;&gt;Another Vagrant setup tutorial&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.stackmachine.com/blog/web-development-on-a-vm-is-it-slower&#34; target=&#34;_blank&#34;&gt;VM speed benchmarks&lt;/a&gt; in case you doubt in VM speed.&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>RailsDiff</title>
+      <link>http://blog.orangeiceberg.com/posts/railsdiff</link>
+      <pubDate>Tue, 10 Sep 2013 09:00:00 +0100</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/railsdiff</guid>
+      <description>&lt;p&gt;&lt;a title=&#34;RailsDiff - compare Rails default app&#34; href=&#34;http://railsdiff.org/&#34; target=&#34;_blank&#34;&gt;RailsDiff&lt;/a&gt;
+is a very useful site when upgrading Rails versions (for example, from Rails 3.2 to Rails 4). It will generate default Rails app using two different Rails versions and it will compare them. The result is that you can see all the configuration changes (like in application.rb) and all other changes &amp;#8211; which is really useful when upgrading to new Rails version.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>RSpec and FactoryGirl setup for testing Carrierwave uploaders</title>
+      <link>http://blog.orangeiceberg.com/posts/rspec-and-factorygirl-setup-for-testing-carrierwave-uploaders</link>
+      <pubDate>Sat, 07 Sep 2013 09:00:00 +0100</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/rspec-and-factorygirl-setup-for-testing-carrierwave-uploaders</guid>
+      <description>
+
+&lt;p&gt;Assume that you have the usual setup with model (MyFile) using simple Carrierwave uploader (MyFileUploader):&lt;/p&gt;
+
+&lt;pre&gt;# app/models/my_file.rb
+class MyFile &amp;lt; ActiveRecord::Base
+  mount_uploader :file, MyFileUploader
+end&lt;/pre&gt;
+
+&lt;p&gt;To be able to test Carrierwave uploaders with RSpec using FactoryGirl factories you need:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;span style=&#34;line-height: 13px;&#34;&gt;define factory with uploaded file&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;modify test environment storage so test file uploads are separated from other uploads&lt;/li&gt;
+&lt;li&gt;turn off image processing to speed up tests&lt;/li&gt;
+&lt;li&gt;perform cleanup after each test&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;define-factory:f55ec0979c7942ed3400c6817da421f3&#34;&gt;Define factory&lt;/h2&gt;
+
+&lt;pre&gt;# spec/factories/my_files.rb
+FactoryGirl.define do
+ factory :my_file do
+   photo Rack::Test::UploadedFile.new(File.open(File.join(Rails.root, &#39;/spec/fixtures/myfiles/myfile.jpg&#39;)))
+ end
+end&lt;/pre&gt;
+
+&lt;h2 id=&#34;setup-carrierwave:f55ec0979c7942ed3400c6817da421f3&#34;&gt;Setup Carrierwave&lt;/h2&gt;
+
+&lt;p&gt;First we need to make sure Carrierwave is using local file system for storage and to disable file processing for testing environments. Disabling file processing will speed up tests considerably. We can do that by adding following to Carrierwave initializer:&lt;/p&gt;
+
+&lt;pre&gt;if Rails.env.test? || Rails.env.cucumber?
+  CarrierWave.configure do |config|
+    config.storage = :file
+    config.enable_processing = false
+  end
+end&lt;/pre&gt;
+
+&lt;p&gt;Next we should separate test uploads from any other uploads. We can do that by modifying cache_dir and store_dir methods for all Carrierwave models (i.e. all models that are descendants of CarrierWave::Uploader::Base). So the whole Carrierwave initializer looks something like:&lt;/p&gt;
+
+&lt;pre&gt;# config/initializers/carrierwave.rb
+if Rails.env.test? || Rails.env.cucumber?
+  CarrierWave.configure do |config|
+    config.storage = :file
+    config.enable_processing = false
+  end
+
+  # make sure our uploader is auto-loaded
+  MyFileUploader
+
+  # use different dirs when testing
+  CarrierWave::Uploader::Base.descendants.each do |klass|
+    next if klass.anonymous?
+    klass.class_eval do
+      def cache_dir
+        &#34;#{Rails.root}/spec/support/uploads/tmp&#34;
+      end
+
+      def store_dir
+        &#34;#{Rails.root}/spec/support/uploads/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}&#34;
+      end
+    end
+  end
+end&lt;/pre&gt;
+
+&lt;h2 id=&#34;clean-up-uploaded-files:f55ec0979c7942ed3400c6817da421f3&#34;&gt;Clean up uploaded files&lt;/h2&gt;
+
+&lt;p&gt;Using factory defined above will create uploaded files in cache_dir and store_dir. These are just temporary files and should be removed after each test, so each of them has a clean slate. By adding after :each hook in RSpec configuration block we can remove these files simply by deleting spec/support/uploads dir.&lt;/p&gt;
+
+&lt;pre&gt;# spec_helper.rb
+RSpec.configure do |config|
+  config.after(:each) do
+    if Rails.env.test? || Rails.env.cucumber?
+      FileUtils.rm_rf(Dir[&#34;#{Rails.root}/spec/support/uploads&#34;])
+    end 
+  end
+end&lt;/pre&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Random Rails tips</title>
+      <link>http://blog.orangeiceberg.com/posts/random-rails-tips</link>
+      <pubDate>Sat, 09 Mar 2013 09:00:00 +0100</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/random-rails-tips</guid>
+      <description>&lt;p&gt;Here are some random Rails tips I&amp;#8217;ve found useful:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;rails console sandbox&lt;/strong&gt; &amp;#8211; if you open console like this it will rollback all database changes once you exit. Pretty useful for playing around without making any changes to database.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;rake db:migrate:status&lt;/strong&gt; &amp;#8211; useful when you want to see the status of current database. It will show the status of all migrations.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;User.pluck(:email)&lt;/strong&gt; &amp;#8211; since Rails 3.2.1 you can use [pluck][1] method to get an array of values in one particular column. It&amp;#8217;s the equvivalent of doing User.select(:email).map(&amp;amp;:email)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;[1]: &lt;a href=&#34;http://apidock.com/rails/ActiveRecord/Calculations/pluck&#34;&gt;http://apidock.com/rails/ActiveRecord/Calculations/pluck&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Paperclip, Heroku and Amazon S3 credentials</title>
+      <link>http://blog.orangeiceberg.com/posts/paperclip-heroku-and-amazon-s3-credentials</link>
+      <pubDate>Mon, 24 Jan 2011 09:00:00 +0100</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/paperclip-heroku-and-amazon-s3-credentials</guid>
+      <description>&lt;p&gt;Setting up Paperclip to use Amazon&amp;#8217;s S3 is as simple as setting :storage =&amp;gt; :s3 and providing right credentials to Paperclip by setting :s3_credentials option. Best way to provide S3 credentials is to use an YML file (usually config/s3.yml) which allows you to set different credentials for each environment. For example:&lt;/p&gt;
+
+&lt;pre&gt;# config/s3.yml
+development:
+  access_key_id: XYZXYZXYZ
+  secret_access_key: XYZXYZXYZ
+  bucket: mygreatapp-development
+production:
+  access_key_id: XYZXYZXYZ
+  secret_access_key: XYZXYZXYZ
+  bucket: mygreatapp-production
+&lt;/pre&gt;
+
+&lt;p&gt;Of course you want to treat s3.yml same as database.yml &amp;#8211; i.e. you don&amp;#8217;t want to track it with git and you want for each person/server to have it&amp;#8217;s own.&lt;/p&gt;
+
+&lt;p&gt;However, consider this: you are working on Open Source app in a public git repository and you are deploying it on Heroku. Heroku doesn&amp;#8217;t allow you to create files (unless they are in git repository) and you can&amp;#8217;t commit s3.yml with your credentials to public repository.&lt;/p&gt;
+
+&lt;p&gt;One solution is to define different :s3_credentials hash in one of the environment files or to load different YML file for each environment and generate hash from it. Downside is that you need to have a separate YML file for each environment and/or you need to convert YML to hash. Other solution could be to have separate local branch from which you will push to Heroku. Problem with this is that you have to have a local branch for deploying. This means if there are multiple developers who deploy to production each should have separate local branch.&lt;/p&gt;
+
+&lt;p&gt;Much simpler way to deploy Paperclip with different S3 credentials for each environment (with one of the environment being deployed on Heroku; and repository being public) is to create s3.yml file as usual (and don&amp;#8217;t commit it to git), but define values only for local environment.&lt;/p&gt;
+
+&lt;p&gt;For production deployment on Heroku you can write initializer which will set :s3_credentials from ENV variables.&lt;/p&gt;
+
+&lt;pre&gt;# initializers/s3.rb
+if Rails.env == &#34;production&#34;
+  # set credentials from ENV hash
+  S3_CREDENTIALS = { :access_key_id =&gt; ENV[&#39;S3_KEY&#39;], :secret_access_key =&gt; ENV[&#39;S3_SECRET&#39;], :bucket =&gt; &#34;sharedearth-production&#34;}
+else
+  # get credentials from YML file
+  S3_CREDENTIALS = Rails.root.join(&#34;config/s3.yml&#34;)
+end
+
+# in your model
+has_attached_file :photo, :storage =&gt; :s3, :s3_credentials =&gt; S3_CREDENTIALS
+&lt;/pre&gt;
+
+&lt;p&gt;and you can easily set persistant ENV vars on Heroku with:&lt;/p&gt;
+
+&lt;pre&gt;$ heroku config:add S3_KEY=XYZXYZ S3_SECRET=XYZXYZ
+&lt;/pre&gt;
+
+&lt;p&gt;(&lt;a href=&#34;http://docs.heroku.com/config-vars#quick-example&#34;&gt;according to Heroku docs&lt;/a&gt;)&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Rails 3 reading list</title>
+      <link>http://blog.orangeiceberg.com/posts/rails-3-reading-list</link>
+      <pubDate>Mon, 29 Mar 2010 09:00:00 +0100</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/rails-3-reading-list</guid>
+      <description>&lt;p&gt;I&amp;#8217;ve been planning to catchup with all the new Rails 3 stuff. To get me started I&amp;#8217;ve compiled a small Rails 3 related reading list.&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;a href=&#34;http://guides.rails.info/3_0_release_notes.html&#34;&gt;Ruby on Rails 3.0 Release Notes&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://m.onkey.org/2010/1/22/active-record-query-interface&#34;&gt;Active Record Query Interface 3.0&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://edgerails.info/articles/what-s-new-in-edge-rails/2010/02/23/the-skinny-on-scopes-formerly-named-scope/&#34;&gt;The Skinny on Scopes (Formerly named_scope)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://blog.envylabs.com/2010/02/rails-3-beautiful-code/&#34;&gt;Rails 3 Beautiful Code&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://railscasts.com/tags/27&#34;&gt;Railscasts &amp;#8211; rails-3.0 episodes&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://joshhuckabee.com/jquery-rails-3&#34;&gt;jQuery with Rails 3&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://litanyagainstfear.com/blog/2010/02/03/the-rails-module/&#34;&gt;The Rails Module (in Rails 3)&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Once I&amp;#8217;m done with it I plan to get even more from:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://edgerails.info/articles/what-s-new-in-edge-rails/2010/02/10/rails-3-resources/&#34;&gt;Rails 3 Resources&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://www.rubyinside.com/rails-3-0-beta-links-2966.html&#34;&gt;Rails 3.0 Beta: 36 Links and Resources To Get You Going&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,10 @@
+<span class="glyphicon glyphicon-user"></span>
+<span class="byline author vcard">Posted by
+  <span class="fn">
+    {{ if eq .Params.author "Slobodan Kovačević" }}
+      <a href="https://plus.google.com/113548610124685160907?rel=author">{{ .Params.author }}</a>
+    {{ else }}
+      <a href="http://orangeiceberg.com/about/">{{ .Params.author }}</a>
+    {{ end }}
+  </span>
+</span>

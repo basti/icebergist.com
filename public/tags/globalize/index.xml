@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Globalize on Icebergist</title>
+    <link>http://blog.orangeiceberg.com/tags/globalize/</link>
+    <description>Recent content in Globalize on Icebergist</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 24 Mar 2016 08:09:25 +0100</lastBuildDate>
+    <atom:link href="http://blog.orangeiceberg.com/tags/globalize/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>rake db:schema:load vs rake db:migrate</title>
+      <link>http://blog.orangeiceberg.com/posts/rake-dbschemaload-vs-rake-dbmigrate</link>
+      <pubDate>Thu, 24 Mar 2016 08:09:25 +0100</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/rake-dbschemaload-vs-rake-dbmigrate</guid>
+      <description>
+
+&lt;p&gt;Sooner or later every new Ruby developer needs to understand  differences between this two common rake tasks. Basically, these simple definition tells us everything we need to know:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;rake db:migrate&lt;/code&gt; runs migrations that have not run yet&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;rake db:schema:load&lt;/code&gt; loads the schema.db file into database.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;but the real question is when to use one or the other.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Advice:&lt;/strong&gt; &lt;a id=&#34;advice&#34;&gt;&lt;/a&gt; when you are adding a new migration to an existing app then you need to run &lt;code&gt;rake db:migrate&lt;/code&gt;, but when you join to existing application (&lt;em&gt;especially some old application&lt;/em&gt;), or when you drop your applications database and you need to create it again, always run &lt;code&gt;rake db:schema:load&lt;/code&gt; to load schema.&lt;/p&gt;
+
+&lt;h3 id=&#34;example:bb0863f1c1f426893f44d7c5e616b367&#34;&gt;Example&lt;/h3&gt;
+
+&lt;p&gt;I am working on application which use &lt;a href=&#34;https://github.com/globalize/globalize&#34;&gt;globalize gem&lt;/a&gt; for ActiveRecord model/data translations. Globalize work this way:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;first specify attributes which need to be translatable&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;class Post &amp;lt; ActiveRecord::Base
+  translates :title, :text
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;then create translation tables&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code&gt;class CreatePosts &amp;lt; ActiveRecord::Migration
+  def up
+    create_table :posts do |t|
+      t.timestamps
+    end
+    Post.create_translation_table! title: :string, text: :text
+  end
+  def down
+    drop_table :posts
+    Post.drop_translation_table!
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Note&lt;/strong&gt; &lt;em&gt;that the ActiveRecord model Post must already exist and have listed attributes for translations&lt;/em&gt;.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;and run &lt;code&gt;rake db:migrate&lt;/code&gt; .&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Problem comes when you change your mind and decide to leave title to be untranslatable.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;remove title from post translations table&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code&gt;class RemoveTitleFromPostTranslations &amp;lt; ActiveRecord::Migration
+  def up
+    remove_column :post_translations, :title, :string
+  end
+
+  def down
+    Entry.add_translation_fields! title: :string
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;add title to posts table&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code&gt;class AddTitleToPosts &amp;lt; ActiveRecord::Migration
+  def change
+    add_column :posts, :title, :string
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;remove title attribute from model translations&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code&gt;class Post &amp;lt; ActiveRecord::Base
+  translates :text
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;and run &lt;code&gt;rake db:migrate&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Everything looking good, so where is the problem?&lt;/p&gt;
+
+&lt;p&gt;Here it is! If you decide to delete your database and create it again you need to use:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;rake db:drop&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;rake db:create&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;rake db:schema:load&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Because, if you try to use &lt;code&gt;rake db:migrate&lt;/code&gt; instead of &lt;code&gt;rake db:schema:load&lt;/code&gt; you will get &lt;strong&gt;BIG ERROR!&lt;/strong&gt;, because for your first migration &amp;ldquo;create_posts&amp;rdquo; it is necessary that you have defined translatable attributes :title and :text in Post model, but you removed :title from Post model translations.&lt;/p&gt;
+
+&lt;p&gt;So just follow &lt;a href=&#34;#advice&#34;&gt;advice&lt;/a&gt; above, and good luck.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

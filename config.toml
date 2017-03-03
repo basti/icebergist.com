@@ -1,0 +1,61 @@
+baseurl = "http://blog.orangeiceberg.com/"
+languageCode = "en-us"
+title = "Icebergist"
+theme = "oi"
+googleAnalytics = "UA-4735545-2"
+simple_search = "http://google.com/search"
+disqusShortname = "icebergist"
+preserveTaxonomyNames = true
+MetaDataFormat = "yaml"
+
+pygmentsCodeFencesGuessSyntax = true
+# color-codes for highlighting derived from this style
+#pygmentsStyle =              "monokai"
+# true: use pygments-css or false: color-codes directly
+pygmentsUseClasses =         true
+
+[permalinks]
+  posts = "/posts/:title"
+
+# populate .Site.Params variable for use in templates
+[params]
+  subtitle = "Exploring hidden depths of web development"
+  description = "Icebergist is a place where Orange Iceberg team writes about Ruby and Ruby on Rails."
+  author = "Orange Iceberg"
+  disqus_short_name = "icebergist"
+  disqus_show_comment_count = true
+  subscribe_rss = "http://feeds.feedburner.com/icebergist"
+  simple_search = "http://google.com/search"
+  CopyrightHTML = "Copyright &#xA9; 2016"
+  recent_posts = 5
+
+  # Posts per page on the blog index
+  paginate = 10
+  # paginatePath = "page"
+
+  # Twitter
+  twitter_user = "icebergist"
+  twitter_tweet_button = true
+
+  # Google +1
+  google_plus_one = true
+  google_plus_one_size = "medium"
+
+  # Google Plus Profile
+  # Hidden: No visible button, just add author information to search results
+  googleplus_user = "113548610124685160907"
+  googleplus_hidden = true
+
+  # Facebook Like
+  facebook_like = true
+
+  # Google Analytics
+  google_analytics_tracking_id = "UA-4735545-2"
+
+  # "Continue reading" link text at the bottom of excerpted articles
+  excerpt_link = "Read on"
+
+[taxonomies]
+  tag = "tags"
+  category = "categories"
+

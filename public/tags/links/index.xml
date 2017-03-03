@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Links on Icebergist</title>
+    <link>http://blog.orangeiceberg.com/tags/links/</link>
+    <description>Recent content in Links on Icebergist</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 10 Sep 2013 09:00:00 +0100</lastBuildDate>
+    <atom:link href="http://blog.orangeiceberg.com/tags/links/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>RailsDiff</title>
+      <link>http://blog.orangeiceberg.com/posts/railsdiff</link>
+      <pubDate>Tue, 10 Sep 2013 09:00:00 +0100</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/railsdiff</guid>
+      <description>&lt;p&gt;&lt;a title=&#34;RailsDiff - compare Rails default app&#34; href=&#34;http://railsdiff.org/&#34; target=&#34;_blank&#34;&gt;RailsDiff&lt;/a&gt;
+is a very useful site when upgrading Rails versions (for example, from Rails 3.2 to Rails 4). It will generate default Rails app using two different Rails versions and it will compare them. The result is that you can see all the configuration changes (like in application.rb) and all other changes &amp;#8211; which is really useful when upgrading to new Rails version.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Rails 3 reading list</title>
+      <link>http://blog.orangeiceberg.com/posts/rails-3-reading-list</link>
+      <pubDate>Mon, 29 Mar 2010 09:00:00 +0100</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/rails-3-reading-list</guid>
+      <description>&lt;p&gt;I&amp;#8217;ve been planning to catchup with all the new Rails 3 stuff. To get me started I&amp;#8217;ve compiled a small Rails 3 related reading list.&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;a href=&#34;http://guides.rails.info/3_0_release_notes.html&#34;&gt;Ruby on Rails 3.0 Release Notes&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://m.onkey.org/2010/1/22/active-record-query-interface&#34;&gt;Active Record Query Interface 3.0&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://edgerails.info/articles/what-s-new-in-edge-rails/2010/02/23/the-skinny-on-scopes-formerly-named-scope/&#34;&gt;The Skinny on Scopes (Formerly named_scope)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://blog.envylabs.com/2010/02/rails-3-beautiful-code/&#34;&gt;Rails 3 Beautiful Code&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://railscasts.com/tags/27&#34;&gt;Railscasts &amp;#8211; rails-3.0 episodes&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://joshhuckabee.com/jquery-rails-3&#34;&gt;jQuery with Rails 3&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://litanyagainstfear.com/blog/2010/02/03/the-rails-module/&#34;&gt;The Rails Module (in Rails 3)&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Once I&amp;#8217;m done with it I plan to get even more from:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://edgerails.info/articles/what-s-new-in-edge-rails/2010/02/10/rails-3-resources/&#34;&gt;Rails 3 Resources&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://www.rubyinside.com/rails-3-0-beta-links-2966.html&#34;&gt;Rails 3.0 Beta: 36 Links and Resources To Get You Going&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>This should be interesting weekly &amp;#8211; week 27</title>
+      <link>http://blog.orangeiceberg.com/posts/this-should-be-interesting-weekly-</link>
+      <pubDate>Sun, 06 Jul 2008 09:00:00 +0100</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/this-should-be-interesting-weekly-</guid>
+      <description>&lt;p&gt;This is the first weekly condensed edition of my &lt;a href=&#34;http://tumblelog.slobodankovacevic.com/&#34; title=&#34;Tumblelog by Slobodan Kovacevic&#34;&gt;&amp;#8220;This should be interesting&amp;#8221; tumblelog&lt;/a&gt;. Every Sunday I will re-post most interesting posts here on the Icebergist.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://tumblelog.slobodankovacevic.com/post/40966961/new-free-book-ruby-on-rails-2-1-whats-new&#34; title=&#34;Free Book: &amp;quot;Ruby on Rails 2.1 - What’s new&amp;quot;&#34;&gt;Free Book: &amp;#8220;Ruby on Rails 2.1 &amp;#8211; What’s new&amp;#8221;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://tumblelog.slobodankovacevic.com/post/40888615/better-blockquotes-blockquotes-examples&#34; title=&#34;Better Blockquotes - Blockquotes examples&#34;&gt;Better Blockquotes&lt;/a&gt; &amp;#8211; blockquotes CSS styling examples&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://tumblelog.slobodankovacevic.com/post/39785793/slife-free-automatic-time-tracking-for-mac&#34; title=&#34;Slife - free automatic time tracking for Mac&#34;&gt;Slife&lt;/a&gt; &amp;#8211; free automatic time tracking for Mac&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://tumblelog.slobodankovacevic.com/post/39263529/unfocus-history-keeper-back-button-enabling-deep&#34; title=&#34;unfocus-history-keeper&#34;&gt;unfocus-history-keeper&lt;/a&gt; &amp;#8211; back button enabling, deep linking, event driven Javascrpt/DHTML/Ajax Library (works for Flash too)&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

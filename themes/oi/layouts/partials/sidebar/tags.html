@@ -1,0 +1,44 @@
+<section class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Tags</h3>
+  </div>
+  <div class="tag-cloud">
+      {{ $len := len .Site.Taxonomies.tags }}
+      {{ $tags := .Site.Taxonomies.tags.ByCount }}
+      {{ $max_count := (index $tags 0).Count }}
+      {{ $min_count := 1 }}
+      {{ $average_count := (div $max_count 5) }}
+
+      {{ range $name, $taxonomy := .Site.Taxonomies.tags }}
+        {{ $rank_5 := (seq $min_count (mul $average_count 1)) }}
+        {{ $rank_4 := (seq (add (mul $average_count 1) 1) (mul $average_count 2)) }}
+        {{ $rank_3 := (seq (add (mul $average_count 2) 1) (mul $average_count 3)) }}
+        {{ $rank_2 := (seq (add (mul $average_count 3) 1) (mul $average_count 4)) }}
+        {{ $rank_1 := (seq (add (mul $average_count 4) 1) (mul $max_count 1)) }}
+
+        {{if in $rank_5 .Count }}
+          {{ $.Scratch.Set "rank" 5 }}
+        {{ end}}
+
+        {{if in $rank_4 .Count }}
+          {{ $.Scratch.Set "rank" 4 }}
+        {{ end}}
+
+        {{if in $rank_3 .Count }}
+          {{ $.Scratch.Set "rank" 3 }}
+        {{ end}}
+
+        {{if in $rank_2 .Count }}
+          {{ $.Scratch.Set "rank" 2 }}
+        {{ end}}
+
+        {{if in $rank_1 .Count }}
+          {{ $.Scratch.Set "rank" 1 }}
+        {{ end}}
+
+        <span class='rank-{{ $.Scratch.Get "rank" }}'>
+          <a href="/tags/{{ $name | urlize }}">{{ $name }}</a>
+        </span>
+      {{ end }}
+  </div>
+</section>

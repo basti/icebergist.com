@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Mac on Icebergist</title>
+    <link>http://blog.orangeiceberg.com/tags/mac/</link>
+    <description>Recent content in Mac on Icebergist</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 04 Jul 2008 09:00:00 +0100</lastBuildDate>
+    <atom:link href="http://blog.orangeiceberg.com/tags/mac/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Mac OS X problems upgrading from 10.5.3 to 10.5.4</title>
+      <link>http://blog.orangeiceberg.com/posts/mac-os-x-problems-upgrading-from-10.5.3-to-10.5.4</link>
+      <pubDate>Fri, 04 Jul 2008 09:00:00 +0100</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/mac-os-x-problems-upgrading-from-10.5.3-to-10.5.4</guid>
+      <description>&lt;p&gt;Today I tried to upgrade my Mac from 10.5.3 to 10.5.4 using normal Software Update. That didn&amp;#8217;t go as planned as installation hanged at &amp;#8220;Configuring Installation&amp;#8221; and only thing I could do is shutdown the computer.&lt;/p&gt;
+
+&lt;p&gt;After some research and few unsuccessful retries I have finally managed to solve the upgrade problem by downloading standalone 10.5.4 update from &lt;a href=&#34;http://www.apple.com/support/downloads/&#34; title=&#34;Download Apple Mac OS X update&#34;&gt;Apple download section&lt;/a&gt;; booting in safe mode (hold shift key when booting) and then installing the update.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

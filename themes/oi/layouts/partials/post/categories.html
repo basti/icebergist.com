@@ -1,0 +1,7 @@
+<span class="glyphicon glyphicon-tags"></span>&nbsp;
+<span class="categories">
+  {{ range $index, $category := .Params.categories }}
+    {{ if gt $index 0 }}, {{ end }}
+    <a href="{{ "/categories/" | relURL }}{{ . | urlize }}">{{ . }}</a>
+  {{ end }}
+</span>

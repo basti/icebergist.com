@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Cloud Computing on Icebergist</title>
+    <link>http://blog.orangeiceberg.com/tags/cloud-computing/</link>
+    <description>Recent content in Cloud Computing on Icebergist</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 17 Sep 2008 09:00:00 +0100</lastBuildDate>
+    <atom:link href="http://blog.orangeiceberg.com/tags/cloud-computing/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Mosso hosting cloud</title>
+      <link>http://blog.orangeiceberg.com/posts/mosso-hosting-cloud</link>
+      <pubDate>Wed, 17 Sep 2008 09:00:00 +0100</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/mosso-hosting-cloud</guid>
+      <description>&lt;p&gt;&lt;a class=&#34;external&#34; href=&#34;http://www.mosso.com/&#34;&gt;Mosso&amp;#8217;s hosting cloud&lt;/a&gt;
+at $100 / month seems like a good solution to get a scalable server. However one thing bugs me, actually two things&amp;#8230;&lt;/p&gt;
+
+&lt;p&gt;First one: they offer &lt;strong&gt;FTP only access&lt;/strong&gt;. Meaning you cannot deploy sites directly from code repositories (i.e. git or svn). That sucks.&lt;/p&gt;
+
+&lt;p&gt;Second thing that bugs me: for $100 you get quite a lot of computing power which can be used to run multiple sites &amp;#8211; but &lt;strong&gt;you are only allowed to have one Rails app running&lt;/strong&gt;. Only one. If you want additional Rails apps (for example to have a test server) you need to pay an extra fee.&lt;/p&gt;
+
+&lt;p&gt;I know it&amp;#8217;s cloud computing and that you have to be able to run it with any additional configuration (that&amp;#8217;s why I think it&amp;#8217;s ok that you have to freeze your gems in Rails apps, because you cannot install any gems yourself)&amp;#8230; but not being able to checkout my code from repository and having to upload the whole app each time you make changes &lt;strong&gt;is really annoying&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;In their defense, the support guy said that they are working on it, but he could give me an ETA when they&amp;#8217;ll allow something like that.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

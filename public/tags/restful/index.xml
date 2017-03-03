@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Restful on Icebergist</title>
+    <link>http://blog.orangeiceberg.com/tags/restful/</link>
+    <description>Recent content in Restful on Icebergist</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 17 Sep 2008 09:00:00 +0100</lastBuildDate>
+    <atom:link href="http://blog.orangeiceberg.com/tags/restful/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>RESTful admin namespaced controller using scaffolding</title>
+      <link>http://blog.orangeiceberg.com/posts/restful-admin-namespaced-controller-using-scaffolding</link>
+      <pubDate>Wed, 17 Sep 2008 09:00:00 +0100</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/restful-admin-namespaced-controller-using-scaffolding</guid>
+      <description>&lt;p&gt;Most of my clients prefer to have a separate admin section. In turn, I like to have separate controllers for admin section and front-end in my Rails app. This is not as straightforward as it might seem, especially if you like to use scaffolding for admin controller.&lt;/p&gt;
+
+&lt;p&gt;The goal is to get 2 separate RESTful controllers, admin &amp;amp; front-end controller, one model and for admin pages to have scaffolding.&lt;/p&gt;
+
+&lt;p&gt;Here is the easiest way I found so far to accomplish this. This example generates categories model and controllers for it.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;./script/generate controller admin/categories&amp;lt;br /&amp;gt;
+./script/generate scaffold category name:string&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;This will generate an empty controller in admin namespace and a scaffolded resource for front-end controller.&lt;/p&gt;
+
+&lt;p&gt;Now we have everything generated we just need to make it work with admin controller and not with front-end.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;move all templates from app/views/categories to app/views/&lt;strong&gt;admin&lt;/strong&gt;/categories&lt;/li&gt;
+&lt;li&gt;copy all functions from categories_controller.rb to admin/categories_controller.rb&lt;/li&gt;
+&lt;li&gt;add namespace for admin controller in routes.rb:&lt;code&gt;map.namespace :admin do |admin|&amp;lt;br /&amp;gt;
+admin.resources :categories&amp;lt;br /&amp;gt;
+end&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;in admin/categories_controller.rb replace in 3 places redirect_to calls to work with admin namespace. It will have something like redirect_to(@category), but to work with namespace it needs to have redirect_to([:admin, @category])&lt;/li&gt;
+&lt;li&gt;make similar changes in all templates, i.e. make it work within an admin namespace. You need to make following changes:
+
+&lt;ul&gt;
+&lt;li&gt;form_for(@category) =&amp;gt; &lt;strong&gt;form_for([:admin, @category])&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&amp;lt;%= link_to &amp;#8216;Show&amp;#8217;, @category %&amp;gt; =&amp;gt; &lt;strong&gt;&amp;lt;%= link_to &amp;#8216;Show&amp;#8217;, [:admin, @category] %&amp;gt;&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;categories_path =&amp;gt; &lt;strong&gt;admin_categories_path&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;edit_category_path(@category) =&amp;gt; &lt;strong&gt;edit_admin_category_path(@category)&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;new_category_path =&amp;gt; &lt;strong&gt;new_admin_category_path&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;That&amp;#8217;s it. Now you&amp;#8217;ll have /admin/categories for all administrative tasks and you have a free controller for front-end actions.&lt;/p&gt;
+
+&lt;p&gt;You might wonder why not just generate scaffold for admin/categories&amp;#8230; The reason is that you&amp;#8217;ll also get a model that is namespaced in admin (i.e. model would be Admin::Category). Scaffolded views also wouldn&amp;#8217;t work as it seems that generator doesn&amp;#8217;t take into account the fact that you are using a namespace.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

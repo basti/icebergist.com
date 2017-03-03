@@ -1,0 +1,68 @@
+{{ partial "head.html" . }}
+<body>
+  <div id="wrap">
+    <header role="banner">
+      {{ partial "navigation.html" . }}
+    </header>
+    <div id="main" class="container">
+      <div id="content">
+        <!-- content -->
+        <div class="row">
+          <div class="page-content col-md-9">
+            <article class="hentry" role="article">
+              <header class="page-header">
+                <p class="meta text-muted">
+                  {{ partial "post/date.html" . }} |
+                  {{ partial "post/author.html" . }} |
+
+                  {{ if eq .Params.comments true }}
+                   <a href="{{ .Permalink }}#disqus_thread" class="disqus-comment-count" data-disqus-identifier="{{ .Permalink }}">
+                     Comments
+                   </a>
+                  {{ end }}
+                  <h1 class="entry-title">
+                    {{safeHTML .Title}}
+                  </h1>
+                </p>
+              </header>
+
+              <div class="entry-content clearfix">{{ .Content }}</div>
+
+              <footer>
+                <p class="meta text-muted">
+                  {{ partial "post/author.html" . }}{{ partial "post/date.html" . }}
+                  {{ partial "post/categories.html" . }}
+                  {{ partial "post/tags.html" . }}
+                </p>
+                  {{ partial "post/sharing.html" . }}
+                  {{ partial "post/neighbors.html" . }}
+              </footer>
+            </article>
+
+            <section>
+              <h1>Comments</h1>
+              <div id="disqus_thread" aria-live="polite">
+                {{ partial "post/disqus_thread.html" . }}
+              </div>
+            </section>
+          </div>
+
+          <aside class="sidebar col-md-3">
+            {{ partial "sidebar/about.html" . }}
+            {{ partial "sidebar/recent_posts.html" . }}
+            {{ partial "sidebar/category_list.html" . }}
+            {{ partial "sidebar/tags.html" . }}
+          </aside>
+        </div>
+        <!-- end content -->
+      </div>
+    </div>
+  </div>
+  <!-- start footer -->
+  <footer role="contentinfo">
+    {{ partial "footer.html" . }}
+  </footer>
+  {{ partial "after_footer.html" . }}
+</body>
+</html>
+

@@ -1,0 +1,6 @@
+
+<span class="glyphicon glyphicon-calendar"></span> <time>{{ .Date.Format "Jan 2, 2006" }}</time>
+
+{{ with .Params.updated_date }}
+  <span class="glyphicon glyphicon-calendar"></span> <time datetime="updated" class="updated">Updated {{ . | dateFormat "Jan 2, 2006" }}</time>
+{{ end }}

@@ -1,0 +1,16 @@
+<section class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Categories</h3>
+  </div>
+  <div class="list-group">
+    {{ $page_url := .URL }}
+
+    {{ range .Site.Taxonomies.categories.ByCount }}
+      {{ $category_url := .Name | urlize | printf "%s%s" "/categories/" | printf "%s/" }}
+      <a class="list-group-item{{ if eq $page_url $category_url }} active {{ end}}"
+          href="/categories/{{ .Name | urlize }}">
+          <span class="badge">{{ .Count }}</span>{{ .Name }}
+      </a>
+    {{ end }}
+  </div>
+</section>

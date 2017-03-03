@@ -1,0 +1,44 @@
+<nav class="navbar navbar-default" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <h1>
+              <a href="{{ .Site.BaseURL }}/">{{ .Site.Title }}</a>
+              {{ if .Site.Params.subtitle }}
+                <small>{{ .Site.Params.subtitle }}</small>
+              {{ end }}
+            </h1>
+        </div>
+
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a class="subscribe-rss" href="{{ .Site.Params.subscribe_rss }}" title="subscribe via RSS">
+                        <span class="visible-xs">RSS</span>
+                        <img class="hidden-xs" src="{{ .Site.BaseURL }}/images/rss.png" alt="RSS">
+                    </a>
+                </li>
+                {{ if .Site.Params.subscribe_email }}
+                <li>
+                    <a class="subscribe-email" href="{{ .Site.Params.subscribe_email }}" title="subscribe via email">
+                        <span class="visible-xs">Email</span>
+                        <img class="hidden-xs" src="{{ .Site.BaseURL }}/images/email.png" alt="Email">
+                    </a>
+                </li>
+                {{ end }}
+            </ul>
+            {{ if .Site.Params.simple_search }}
+                <form class="search navbar-form navbar-right" action="{{ .Site.Params.simple_search }}" method="GET">
+                    <input type="hidden" name="q" value="site:{{ .Site.BaseURL }}">
+                    <div class="form-group">
+                        <input class="form-control" type="text" name="q" placeholder="Search">
+                    </div>
+                </form>
+            {{ end }}
+        </div>
+    </div>
+</nav>

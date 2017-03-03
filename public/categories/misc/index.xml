@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Misc on Icebergist</title>
+    <link>http://blog.orangeiceberg.com/categories/misc/</link>
+    <description>Recent content in Misc on Icebergist</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 02 Dec 2015 10:44:23 +0100</lastBuildDate>
+    <atom:link href="http://blog.orangeiceberg.com/categories/misc/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Import and export MySQL dump</title>
+      <link>http://blog.orangeiceberg.com/posts/import-and-export-mysql-dump</link>
+      <pubDate>Wed, 02 Dec 2015 10:44:23 +0100</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/import-and-export-mysql-dump</guid>
+      <description>&lt;p&gt;Another simple task that&amp;rsquo;s often hard for beginners is importing and exporting MySQL dumps. Here is quick rundown on how to do it.&lt;/p&gt;
+
+&lt;p&gt;To export data you need to use &lt;code&gt;mysqldump&lt;/code&gt;:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;mysqldump -u db_user -p db_name &amp;gt; dump_name.sql
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Options given to &lt;code&gt;mysqldump&lt;/code&gt; are:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;-u db_user&lt;/code&gt; - connect as user &lt;code&gt;db_user&lt;/code&gt; to database&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-p&lt;/code&gt; - use password, it will ask you to enter your password&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;db_name&lt;/code&gt; is the name of MySQL database you want to dump&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;&amp;gt; dump_name.sql&lt;/code&gt; - by default &lt;code&gt;mysqldump&lt;/code&gt; will print out the dump to terminal, but simple output redirect with &lt;code&gt;&amp;gt;&lt;/code&gt; will instead write it to given filename, in this case &lt;code&gt;dump_name.sql&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Now that you have &lt;code&gt;dump_name.sql&lt;/code&gt; file with all SQL queries needed to replicate your database you can import it using general-purpose &lt;code&gt;mysql&lt;/code&gt; client:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;mysql -u db_user -p db_name &amp;lt; dump_name.sql
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;User, password, and database name options are the same as for &lt;code&gt;mysqldump&lt;/code&gt;. Since &lt;code&gt;mysql&lt;/code&gt; reads input from terminal this time we can use &lt;code&gt;&amp;lt;&lt;/code&gt; to read input from given file instead.&lt;/p&gt;
+
+&lt;p&gt;As always for more information you can consult manual using &lt;code&gt;man mysqldump&lt;/code&gt; and &lt;code&gt;man mysql&lt;/code&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Create and extract archives using tar and gzip</title>
+      <link>http://blog.orangeiceberg.com/posts/create-and-extract-archives-using-tar-and-gzip</link>
+      <pubDate>Fri, 13 Nov 2015 13:28:36 +0100</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/create-and-extract-archives-using-tar-and-gzip</guid>
+      <description>&lt;p&gt;One of the simplest tasks is creating and extracting files using &lt;code&gt;tar&lt;/code&gt; and &lt;code&gt;gzip&lt;/code&gt;. Yet for most new developers this is a daunting task. These days &lt;code&gt;tar&lt;/code&gt; is mostly used to simply combine a few files into a single file and then &lt;code&gt;gzip&lt;/code&gt; is used to compress that file.&lt;/p&gt;
+
+&lt;p&gt;Here is a quick overview how to use &lt;code&gt;tar&lt;/code&gt; and &lt;code&gt;gzip&lt;/code&gt; to create and compress an archive:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;# archive individual files
+tar -cvzf myarchive.tar.gz /path/to/file1 /path/to/file2
+
+# archive whole directory
+tar -cvzf myarchive.tar.gz /path/to/dir
+
+# archive whole directory but don&#39;t store full path
+tar -cvzf myarchive.tar.gz -C /path/to/dir ./
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Options give to tar are: &lt;code&gt;c&lt;/code&gt; to create new archive, &lt;code&gt;v&lt;/code&gt; to be verbose, &lt;code&gt;z&lt;/code&gt; to compress resulting archive with &lt;code&gt;gzip&lt;/code&gt;, and &lt;code&gt;f&lt;/code&gt; to write the archive to specified file. After options you can list files and dirs you want to archive.&lt;/p&gt;
+
+&lt;p&gt;In all examples we provide a full path to a file or dir we want to archive. In this case &lt;code&gt;tar&lt;/code&gt; will store files in the archive using the full path. This means once you extract the files you&amp;rsquo;ll have a complete directory structure from root dir onwards.&lt;/p&gt;
+
+&lt;p&gt;The way to avoid this is either to manually &lt;code&gt;cd&lt;/code&gt; to dir in which files are stored, or to tell &lt;code&gt;tar&lt;/code&gt; using &lt;code&gt;C&lt;/code&gt; option to change dir before archiving files.&lt;/p&gt;
+
+&lt;p&gt;Finally to extract an archive:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;tar -xvzf myarchive.tar.gz
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The &lt;code&gt;x&lt;/code&gt; option tells &lt;code&gt;tar&lt;/code&gt; to extract the archive into current directory.&lt;/p&gt;
+
+&lt;p&gt;For more information you can consult manual using &lt;code&gt;man tar&lt;/code&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Upgrade Ubuntu 8.04 LTS server</title>
+      <link>http://blog.orangeiceberg.com/posts/upgrade-ubuntu-8.04-lts-server</link>
+      <pubDate>Mon, 06 Jan 2014 11:36:43 +0100</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/upgrade-ubuntu-8.04-lts-server</guid>
+      <description>&lt;p&gt;Note to self: here is how to upgrade Ubuntu 8.04 LTS (or any other release that is no longer supported) to newer Ubuntu release.&lt;/p&gt;
+
+&lt;p&gt;When you are upgrading unsupported release of Ubuntu if you try to do the usual &lt;code&gt;sudo apt-get update&lt;/code&gt; it will most likely fail because&amp;hellip; well, it&amp;rsquo;s unsupported. The simple fix for this is to change your &lt;code&gt;/etc/apt/sources.list&lt;/code&gt; and replace repository URLs from something like &lt;code&gt;us.archive.ubuntu.com&lt;/code&gt; to &lt;code&gt;old-releases.ubuntu.com&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;After that you should be able follow normal upgrade procedure (use sudo if you are not root):&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;apt-get update
+apt-get install update-manager-core
+do-release-upgrade
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;References:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://rimuhosting.com/knowledgebase/linux/distros/ubuntu&#34; title=&#34;Rimuhosting&#39;s page on upgrading Ubuntu&#34;&gt;Rimuhosting&amp;rsquo;s page on upgrading Ubuntu&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://askubuntu.com/questions/91815/how-to-install-software-or-upgrade-from-old-unsupported-release&#34; title=&#34;Discussion on upgrading unsupported Ubuntu release&#34;&gt;Discussion on upgrading unsupported Ubuntu release&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Quick VirtualBox/Vagrant setup with Heroku-like box</title>
+      <link>http://blog.orangeiceberg.com/posts/quick-virtualbox/vagrant-setup-with-heroku-like-box</link>
+      <pubDate>Mon, 16 Sep 2013 09:00:00 +0100</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/quick-virtualbox/vagrant-setup-with-heroku-like-box</guid>
+      <description>&lt;p&gt;Here is a quick way to setup VirtualBox using Vagrant with Heroku-like box on Mac.&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;Install VirtualBox from &lt;a href=&#34;https://www.virtualbox.org/wiki/Downloads&#34; target=&#34;_blank&#34;&gt;&lt;a href=&#34;https://www.virtualbox.org/wiki/Downloads&#34;&gt;https://www.virtualbox.org/wiki/Downloads&lt;/a&gt;&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Install Vagrant from &lt;a href=&#34;http://downloads.vagrantup.com/&#34; target=&#34;_blank&#34;&gt;&lt;a href=&#34;http://downloads.vagrantup.com/&#34;&gt;http://downloads.vagrantup.com/&lt;/a&gt;&lt;/a&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Create Vagrantfile for Heroku-like box (based on &lt;a href=&#34;https://github.com/ejholmes/vagrant-heroku&#34; target=&#34;_blank&#34;&gt;&lt;a href=&#34;https://github.com/ejholmes/vagrant-heroku&#34;&gt;https://github.com/ejholmes/vagrant-heroku&lt;/a&gt;&lt;/a&gt;) that looks something like:&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;        Vagrant.configure(&amp;quot;2&amp;quot;) do |config|        
+	        config.vm.box = &amp;quot;heroku&amp;quot;
+	        config.vm.box_url = &amp;quot;https://dl.dropboxusercontent.com/s/rnc0p8zl91borei/heroku.box&amp;quot;
+          config.vm.synced_folder &amp;quot;.&amp;quot;, &amp;quot;/vagrant&amp;quot;, :nfs =&amp;gt; true
+	        config.vm.network :private_network, ip: &amp;quot;192.168.1.42&amp;quot;  # required for NFS
+        end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Beside telling Vagrant to use Heroku-like box from &lt;a href=&#34;https://github.com/ejholmes/vagrant-heroku&#34; target=&#34;_blank&#34;&gt;&lt;a href=&#34;https://github.com/ejholmes/vagrant-heroku&#34;&gt;https://github.com/ejholmes/vagrant-heroku&lt;/a&gt;&lt;/a&gt; it also sets up shared dir between host and VM machine. It will mount Vagrantfile dir (.) to /vagrant in VM.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;vagrant up&lt;/code&gt; will setup the VM and start it up.&lt;/p&gt;
+
+&lt;p&gt;Now you can use &lt;code&gt;vagrant ssh&lt;/code&gt; to login to VM.&lt;/p&gt;
+
+&lt;p&gt;Vagrant Heroku-like box comes with Postgresql, but if you want you can easily setup sqlite:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;sudo apt-get install libsqlite3-dev
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;Bonus tip&lt;/strong&gt;: when you are working on multiple projects sometimes you can forget which VMs are running. You can list all running VMs using:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;VBoxManage list runningvms
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Further reading:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://docs.vagrantup.com/v2/&#34; target=&#34;_blank&#34;&gt;Vagrant docs&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/ejholmes/vagrant-heroku&#34; target=&#34;_blank&#34;&gt;Vagrant Heroku-like box&lt;/a&gt; which can be easily customized.&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://loudcoding.com/posts/how-to-use-vagrant-to-run-celadon-cedar-stack-on-heroku/&#34; target=&#34;_blank&#34;&gt;Another Vagrant setup tutorial&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.stackmachine.com/blog/web-development-on-a-vm-is-it-slower&#34; target=&#34;_blank&#34;&gt;VM speed benchmarks&lt;/a&gt; in case you doubt in VM speed.&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Restoring superblock on Ubutnu</title>
+      <link>http://blog.orangeiceberg.com/posts/restoring-superblock-on-ubutnu</link>
+      <pubDate>Sun, 09 Nov 2008 09:00:00 +0100</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/restoring-superblock-on-ubutnu</guid>
+      <description>&lt;p&gt;Recently I had a problem on my Torrent box (an old PC that I use as dedicated torrent client) that runs Ubuntu. For some reason my root partition was being mounted as read-only. Everything else seemed to work (all other partitions were mounted properly), but I couldn&amp;#8217;t change any of my config or do anything on root partition.&lt;/p&gt;
+
+&lt;p&gt;I did the usual stuff:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Run fsck checks and it said that everything is fine&lt;/li&gt;
+&lt;li&gt;Used Ubuntu&amp;#8217;s live CD to boot, which got me read-write access to root partition. I changed some things in fstab, tried to get it to be rw permanently. No matter what I did as soon as I rebooted the root partition was once again read-only.&lt;/li&gt;
+&lt;li&gt;I tried booting from some repair disks I have, but all checks passed and no problem was detected. &lt;img src=&#39;http://icebergist.com/wp-includes/images/smilies/icon_sad.gif&#39; alt=&#39;:(&#39; class=&#39;wp-smiley&#39; /&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Finally, I read somewhere that a similar problem was caused by faulty superblock on hard drive. Fortunately Ubuntu stores superblock backups in different places around disk, so I decided to try to restore it from one of those backups.&lt;/p&gt;
+
+&lt;p&gt;It turned out that all I needed was a single command (this &lt;a href=&#34;http://ubuntuforums.org/showpost.php?s=72da065bbe1506b27f41a8cfc252c732&amp;amp;p=1424786&amp;amp;postcount=5&#34; title=&#34;Bad superblock&#34;&gt;Ubuntu forum post helped&lt;/a&gt;) to restore superblock:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;e2fsck -b 32768 /dev/hdc1&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;After that my root partition was back to read-write mode. &lt;img src=&#39;http://icebergist.com/wp-includes/images/smilies/icon_smile.gif&#39; alt=&#39;:)&#39; class=&#39;wp-smiley&#39; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Before you do stuff like that to your computer I suggest that you read man pages for &lt;a href=&#34;http://linux.die.net/man/8/mke2fs&#34; title=&#34;mke2fs&#34;&gt;mke2fs&lt;/a&gt; and &lt;a href=&#34;http://linux.die.net/man/8/e2fsck&#34; title=&#34;e2fsck&#34;&gt;e2fsck&lt;/a&gt;. It will prevent you from doing something foolish like deleting your whole hard drive. &lt;img src=&#39;http://icebergist.com/wp-includes/images/smilies/icon_smile.gif&#39; alt=&#39;:)&#39; class=&#39;wp-smiley&#39; /&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Mosso hosting cloud</title>
+      <link>http://blog.orangeiceberg.com/posts/mosso-hosting-cloud</link>
+      <pubDate>Wed, 17 Sep 2008 09:00:00 +0100</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/mosso-hosting-cloud</guid>
+      <description>&lt;p&gt;&lt;a class=&#34;external&#34; href=&#34;http://www.mosso.com/&#34;&gt;Mosso&amp;#8217;s hosting cloud&lt;/a&gt;
+at $100 / month seems like a good solution to get a scalable server. However one thing bugs me, actually two things&amp;#8230;&lt;/p&gt;
+
+&lt;p&gt;First one: they offer &lt;strong&gt;FTP only access&lt;/strong&gt;. Meaning you cannot deploy sites directly from code repositories (i.e. git or svn). That sucks.&lt;/p&gt;
+
+&lt;p&gt;Second thing that bugs me: for $100 you get quite a lot of computing power which can be used to run multiple sites &amp;#8211; but &lt;strong&gt;you are only allowed to have one Rails app running&lt;/strong&gt;. Only one. If you want additional Rails apps (for example to have a test server) you need to pay an extra fee.&lt;/p&gt;
+
+&lt;p&gt;I know it&amp;#8217;s cloud computing and that you have to be able to run it with any additional configuration (that&amp;#8217;s why I think it&amp;#8217;s ok that you have to freeze your gems in Rails apps, because you cannot install any gems yourself)&amp;#8230; but not being able to checkout my code from repository and having to upload the whole app each time you make changes &lt;strong&gt;is really annoying&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;p&gt;In their defense, the support guy said that they are working on it, but he could give me an ETA when they&amp;#8217;ll allow something like that.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>InnoDB per-table tablespaces &amp;#8211; split ibdata1 to smaller chunks</title>
+      <link>http://blog.orangeiceberg.com/posts/innodb-per-table-tablespaces-</link>
+      <pubDate>Thu, 24 Jul 2008 09:00:00 +0100</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/innodb-per-table-tablespaces-</guid>
+      <description>&lt;p&gt;Today I had to import 3GB of InnoDB tables in MySQL. Unfortunately, while importing the server run out of disk space &amp;#8211; which caused whole server to grind to a halt. Naively I tried to delete imported data to free up space&amp;#8230; I was in for an unpleasant surprise.&lt;/p&gt;
+
+&lt;p&gt;By default when MySQL uses InnoDB engine it stores most of the information in single file called ibdata1. One downside is that once ibdata1 file grows it cannot shrink &amp;#8211; even if you delete all InnoDB tables. For some reason MySQL is set to use single file instead of per-table tablespaces similar to MyISAM.&lt;/p&gt;
+
+&lt;p&gt;Enabling per-table tablespaces is easy just add &lt;a href=&#34;http://dev.mysql.com/doc/refman/5.0/en/multiple-tablespaces.html&#34; title=&#34;InnoDB Per-table tablespaces&#34;&gt;innodb_file_per_table&lt;/a&gt; to my.cnf file. Problem is that &lt;strong&gt;all newly created tables&lt;/strong&gt;, only new tables, will be in separate files. It seems that there&amp;#8217;s no easy way to convert old tables and reclaim the space taken by ibdata1.&lt;/p&gt;
+
+&lt;p&gt;There are 3 ways and two are basically export-drop-delete-import type of solutions:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Convert all InnoDB tables to MyISAM&lt;/li&gt;
+&lt;li&gt;Export only InnoDB tables, drop them, delete ibdata1 and import InnoDB tables.&lt;/li&gt;
+&lt;li&gt;Export all databases, delete ibdata1 and import everything back.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;I choose option 2 because I luckily had only 40 InnoDB tables and much more using MyISAM. For details on how to apply each solution and down/up sides of each read &lt;a href=&#34;http://vdachev.net/blog/2007/02/22/mysql-reducing-ibdata1/en/&#34; title=&#34;MySQL Reducing ibdata1&#34;&gt;MySQL: Reducing ibdata1&lt;/a&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>This should be interesting weekly &amp;#8211; week 28</title>
+      <link>http://blog.orangeiceberg.com/posts/this-should-be-interesting-weekly-</link>
+      <pubDate>Sun, 13 Jul 2008 09:00:00 +0100</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/this-should-be-interesting-weekly-</guid>
+      <description>&lt;ul&gt;
+&lt;li&gt;What&amp;#8217;s New in Edge Rails: &lt;a href=&#34;http://tumblelog.slobodankovacevic.com/post/41430445/whats-new-in-edge-rails-easy-join-table-conditions&#34;&gt;Easy Join Table Conditions.&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://tumblelog.slobodankovacevic.com/post/41483353/faces-of-millions&#34;&gt;Faces of Millions&lt;/a&gt; &amp;#8211; Art project which aims to gather one million photos of people faces and create 10m x 10m photo mosaic.&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://tumblelog.slobodankovacevic.com/post/41727168/uni-form&#34;&gt;Uni-Form&lt;/a&gt; is an attempt to standardize form markup (xhtml) and css.&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://tumblelog.slobodankovacevic.com/post/41886839/mac-fullscreen-quicklook-a-k-a-slideshow&#34;&gt;Mac OS X full screen QuickLook shortcut.&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;A guide to &lt;a href=&#34;http://tumblelog.slobodankovacevic.com/post/41978415/a-guide-to-css-support-in-email&#34;&gt;CSS support in Email&lt;/a&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;condensed from &amp;lsquo;&lt;a href=&#34;http://tumblelog.slobodankovacevic.com/&#34;&gt;this should be interesting&lt;/a&gt;&amp;rsquo; tumblelog&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>This should be interesting weekly &amp;#8211; week 27</title>
+      <link>http://blog.orangeiceberg.com/posts/this-should-be-interesting-weekly-</link>
+      <pubDate>Sun, 06 Jul 2008 09:00:00 +0100</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/this-should-be-interesting-weekly-</guid>
+      <description>&lt;p&gt;This is the first weekly condensed edition of my &lt;a href=&#34;http://tumblelog.slobodankovacevic.com/&#34; title=&#34;Tumblelog by Slobodan Kovacevic&#34;&gt;&amp;#8220;This should be interesting&amp;#8221; tumblelog&lt;/a&gt;. Every Sunday I will re-post most interesting posts here on the Icebergist.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://tumblelog.slobodankovacevic.com/post/40966961/new-free-book-ruby-on-rails-2-1-whats-new&#34; title=&#34;Free Book: &amp;quot;Ruby on Rails 2.1 - What’s new&amp;quot;&#34;&gt;Free Book: &amp;#8220;Ruby on Rails 2.1 &amp;#8211; What’s new&amp;#8221;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://tumblelog.slobodankovacevic.com/post/40888615/better-blockquotes-blockquotes-examples&#34; title=&#34;Better Blockquotes - Blockquotes examples&#34;&gt;Better Blockquotes&lt;/a&gt; &amp;#8211; blockquotes CSS styling examples&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://tumblelog.slobodankovacevic.com/post/39785793/slife-free-automatic-time-tracking-for-mac&#34; title=&#34;Slife - free automatic time tracking for Mac&#34;&gt;Slife&lt;/a&gt; &amp;#8211; free automatic time tracking for Mac&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://tumblelog.slobodankovacevic.com/post/39263529/unfocus-history-keeper-back-button-enabling-deep&#34; title=&#34;unfocus-history-keeper&#34;&gt;unfocus-history-keeper&lt;/a&gt; &amp;#8211; back button enabling, deep linking, event driven Javascrpt/DHTML/Ajax Library (works for Flash too)&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Mac OS X problems upgrading from 10.5.3 to 10.5.4</title>
+      <link>http://blog.orangeiceberg.com/posts/mac-os-x-problems-upgrading-from-10.5.3-to-10.5.4</link>
+      <pubDate>Fri, 04 Jul 2008 09:00:00 +0100</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/mac-os-x-problems-upgrading-from-10.5.3-to-10.5.4</guid>
+      <description>&lt;p&gt;Today I tried to upgrade my Mac from 10.5.3 to 10.5.4 using normal Software Update. That didn&amp;#8217;t go as planned as installation hanged at &amp;#8220;Configuring Installation&amp;#8221; and only thing I could do is shutdown the computer.&lt;/p&gt;
+
+&lt;p&gt;After some research and few unsuccessful retries I have finally managed to solve the upgrade problem by downloading standalone 10.5.4 update from &lt;a href=&#34;http://www.apple.com/support/downloads/&#34; title=&#34;Download Apple Mac OS X update&#34;&gt;Apple download section&lt;/a&gt;; booting in safe mode (hold shift key when booting) and then installing the update.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>So it begins&amp;#8230;</title>
+      <link>http://blog.orangeiceberg.com/posts/so-it-begins</link>
+      <pubDate>Tue, 24 Jun 2008 09:00:00 +0100</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/so-it-begins</guid>
+      <description>&lt;p&gt;Welcome to an icebergist blog. The Icebergist will be a blog about both technical and business stuff I deal with daily. From Ruby on Rails programming to time organizing, everything that’s important in my daily work as a freelance developer.&lt;/p&gt;
+
+&lt;p&gt;As you can see I just setup the Icebergist blog, so at the moment it&amp;#8217;s content-free. While I write some posts you can checkout &lt;a href=&#34;http://www.google.com/search?hl=en&amp;amp;rlz=1B3GGGL_enYU233YU234&amp;amp;q=%22Posted+by+Slobodan+Kovacevic%22+site%3Aarraystudio.com+inurl%3Ahtml&amp;amp;btnG=Search&#34; title=&#34;Slobodan Kovacevic&#39;s blog posts in AS Workshop&#34;&gt;my posts from my previous blog AS Workshop&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Also I maintain a tumble log called &amp;ldquo;&lt;a href=&#34;http://tumblelog.slobodankovacevic.com/&#34; title=&#34;Tumblelog by Slobodan Kovacevic&#34;&gt;this should be interesting&lt;/a&gt;&amp;rdquo; where I post small bits of information which I find useful or interesting.&lt;/p&gt;
+
+&lt;p&gt;If that&amp;#8217;s not enough for you then check out my &lt;a href=&#34;http://twitter.com/thebasti&#34; title=&#34;Slobodan Kovacevic&#39;s Twitter feed&#34;&gt;Twitter feed&lt;/a&gt; where I ramble daily (unless I am to lazy or too busy to do so).&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

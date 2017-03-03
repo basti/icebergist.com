@@ -1,0 +1,75 @@
+{{ partial "head.html" . }}
+<body>
+  <div id="wrap">
+    <header role="banner">
+      {{ partial "navigation.html" . }}
+    </header>
+    <div id="main" class="container">
+      <div id="content">
+        <!-- content -->
+        <div class="row">
+          <div class="page-content col-md-9">
+            <div class="blog-index">
+              {{ range ( where .Paginator.Pages "Type" "posts" ) }}
+              <article class="post">
+                <header class="page-header">
+                  <p class="meta text-muted">
+                    {{ partial "post/date.html" . }} |
+                    {{ partial "post/author.html" . }} |
+
+                    <a href="{{ .Permalink }}#disqus_thread" class="disqus-comment-count" data-disqus-identifier="{{ .Permalink }}">
+                      Comments
+                    </a>
+                  </p>
+
+                  <h1 class="entry-title">
+                    <a href="{{ .Permalink }}">{{safeHTML .Title }}</a>
+                  </h1>
+                </header>
+
+                <div class="entry-content clearfix">
+                  {{ if .Params.has_divider}}
+                    {{ .Summary }}
+
+                     <footer>
+                        <a class="btn btn-default" rel="full-article" href="{{ .RelPermalink }}">{{ .Site.Params.excerpt_link }} &rarr;</a>
+                      </footer>
+                  {{ else }}
+                    {{ .Content }}
+                  {{ end }}
+                </div>
+              </article>
+              {{ end }}
+            </div>
+
+            <ul class="pager">
+              {{ if .Paginator.HasNext }}
+                <li class="previous"><a href="{{.Paginator.Next.URL}}">&larr;&nbsp;Older</a></li>
+              {{ else }}
+                <li class="previous disabled"><a href="#">&larr;&nbsp;Older</a></li>
+              {{ end }}
+              <li><a href="/blog/archives">Blog Archives</a></li>
+              {{ if .Paginator.HasPrev }}
+                <li class="next"><a href="{{.Paginator.Prev.URL}}">Newer&nbsp;&rarr;</a></li>
+              {{ else }}
+                <li class="next disabled"><a href="#">Newer&nbsp;&rarr;</a></li>
+              {{ end }}
+            </ul>
+          </div>
+          <aside class="sidebar col-md-3">
+            {{ partial "sidebar/about.html" . }}
+            {{ partial "sidebar/recent_posts.html" . }}
+            {{ partial "sidebar/category_list.html" . }}
+            {{ partial "sidebar/tags.html" . }}
+          </aside>
+        </div>
+        <!-- end content -->
+      </div>
+    </div>
+  </div>
+  <footer role="contentinfo">
+    {{ partial "footer.html" }}
+  </footer>
+  {{ partial "after_footer.html" }}
+</body>
+</html>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Amazon S3 on Icebergist</title>
+    <link>http://blog.orangeiceberg.com/tags/amazon-s3/</link>
+    <description>Recent content in Amazon S3 on Icebergist</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 24 Jan 2011 09:00:00 +0100</lastBuildDate>
+    <atom:link href="http://blog.orangeiceberg.com/tags/amazon-s3/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Paperclip, Heroku and Amazon S3 credentials</title>
+      <link>http://blog.orangeiceberg.com/posts/paperclip-heroku-and-amazon-s3-credentials</link>
+      <pubDate>Mon, 24 Jan 2011 09:00:00 +0100</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/paperclip-heroku-and-amazon-s3-credentials</guid>
+      <description>&lt;p&gt;Setting up Paperclip to use Amazon&amp;#8217;s S3 is as simple as setting :storage =&amp;gt; :s3 and providing right credentials to Paperclip by setting :s3_credentials option. Best way to provide S3 credentials is to use an YML file (usually config/s3.yml) which allows you to set different credentials for each environment. For example:&lt;/p&gt;
+
+&lt;pre&gt;# config/s3.yml
+development:
+  access_key_id: XYZXYZXYZ
+  secret_access_key: XYZXYZXYZ
+  bucket: mygreatapp-development
+production:
+  access_key_id: XYZXYZXYZ
+  secret_access_key: XYZXYZXYZ
+  bucket: mygreatapp-production
+&lt;/pre&gt;
+
+&lt;p&gt;Of course you want to treat s3.yml same as database.yml &amp;#8211; i.e. you don&amp;#8217;t want to track it with git and you want for each person/server to have it&amp;#8217;s own.&lt;/p&gt;
+
+&lt;p&gt;However, consider this: you are working on Open Source app in a public git repository and you are deploying it on Heroku. Heroku doesn&amp;#8217;t allow you to create files (unless they are in git repository) and you can&amp;#8217;t commit s3.yml with your credentials to public repository.&lt;/p&gt;
+
+&lt;p&gt;One solution is to define different :s3_credentials hash in one of the environment files or to load different YML file for each environment and generate hash from it. Downside is that you need to have a separate YML file for each environment and/or you need to convert YML to hash. Other solution could be to have separate local branch from which you will push to Heroku. Problem with this is that you have to have a local branch for deploying. This means if there are multiple developers who deploy to production each should have separate local branch.&lt;/p&gt;
+
+&lt;p&gt;Much simpler way to deploy Paperclip with different S3 credentials for each environment (with one of the environment being deployed on Heroku; and repository being public) is to create s3.yml file as usual (and don&amp;#8217;t commit it to git), but define values only for local environment.&lt;/p&gt;
+
+&lt;p&gt;For production deployment on Heroku you can write initializer which will set :s3_credentials from ENV variables.&lt;/p&gt;
+
+&lt;pre&gt;# initializers/s3.rb
+if Rails.env == &#34;production&#34;
+  # set credentials from ENV hash
+  S3_CREDENTIALS = { :access_key_id =&gt; ENV[&#39;S3_KEY&#39;], :secret_access_key =&gt; ENV[&#39;S3_SECRET&#39;], :bucket =&gt; &#34;sharedearth-production&#34;}
+else
+  # get credentials from YML file
+  S3_CREDENTIALS = Rails.root.join(&#34;config/s3.yml&#34;)
+end
+
+# in your model
+has_attached_file :photo, :storage =&gt; :s3, :s3_credentials =&gt; S3_CREDENTIALS
+&lt;/pre&gt;
+
+&lt;p&gt;and you can easily set persistant ENV vars on Heroku with:&lt;/p&gt;
+
+&lt;pre&gt;$ heroku config:add S3_KEY=XYZXYZ S3_SECRET=XYZXYZ
+&lt;/pre&gt;
+
+&lt;p&gt;(&lt;a href=&#34;http://docs.heroku.com/config-vars#quick-example&#34;&gt;according to Heroku docs&lt;/a&gt;)&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

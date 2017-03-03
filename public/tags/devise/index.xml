@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Devise on Icebergist</title>
+    <link>http://blog.orangeiceberg.com/tags/devise/</link>
+    <description>Recent content in Devise on Icebergist</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 04 May 2015 16:07:22 +0200</lastBuildDate>
+    <atom:link href="http://blog.orangeiceberg.com/tags/devise/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Customize Devise permitted parameters</title>
+      <link>http://blog.orangeiceberg.com/posts/customize-devise-permitted-parameters</link>
+      <pubDate>Mon, 04 May 2015 16:07:22 +0200</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/customize-devise-permitted-parameters</guid>
+      <description>&lt;p&gt;If you are using Devise gem for authentication and you have been adding custom fields to your model you’ll get in trouble when you try to create a new instance or update an existing one. All your added fields will be treated as unpermitted. The solution for this problem is to customise Devise’s configure_permited_parameters action. All you need to do is to add this action to your Application controller and push parameters that need to be permitted to devise_paremeter_sanitizer array. So let’s say you have a User Model and you have added company_name and website fields to your user’s table, to permit this parameters on sign_up you need to add this to your Application controller:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;def configure_permitted_parameters
+  devise_parameter_sanitizer.for(:sign_up).push(:company_name, :website)
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;It is the same principle for the :sign_in and :edit_account. You can see what are &lt;a href=&#34;https://github.com/plataformatec/devise/blob/master/lib/devise/parameter_sanitizer.rb#L83&#34;&gt;default permitted parameters here&lt;/a&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>How to skip Devise trackable updates</title>
+      <link>http://blog.orangeiceberg.com/posts/how-to-skip-devise-trackable-updates</link>
+      <pubDate>Mon, 12 May 2014 19:10:06 +0200</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/how-to-skip-devise-trackable-updates</guid>
+      <description>&lt;p&gt;Devise has a very useful Trackable module used to track user&amp;rsquo;s sign in count, timestamps and IP address. There are some occasions when you need to disable tracking. For example for API requests where user signs in on every request; for instances where admin might sign in as an user; and similar.&lt;/p&gt;
+
+&lt;p&gt;To disable Devise Trackable module you need to set &lt;code&gt;request.env[&amp;quot;devise.skip_trackable&amp;quot;] = true&lt;/code&gt;. You have to do that before trying to authenticate user, so you&amp;rsquo;ll want to put it in a before_filter, or even better prepend_before_filter to make sure it&amp;rsquo;s before authentication.&lt;/p&gt;
+
+&lt;p&gt;Add this to your controller in which you want to disable tracking:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;prepend_before_filter :disable_devise_trackable
+
+protected
+  def disable_devise_trackable
+    request.env[&amp;quot;devise.skip_trackable&amp;quot;] = true
+  end
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

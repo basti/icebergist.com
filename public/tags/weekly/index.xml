@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Weekly on Icebergist</title>
+    <link>http://blog.orangeiceberg.com/tags/weekly/</link>
+    <description>Recent content in Weekly on Icebergist</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 13 Jul 2008 09:00:00 +0100</lastBuildDate>
+    <atom:link href="http://blog.orangeiceberg.com/tags/weekly/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>This should be interesting weekly &amp;#8211; week 28</title>
+      <link>http://blog.orangeiceberg.com/posts/this-should-be-interesting-weekly-</link>
+      <pubDate>Sun, 13 Jul 2008 09:00:00 +0100</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/this-should-be-interesting-weekly-</guid>
+      <description>&lt;ul&gt;
+&lt;li&gt;What&amp;#8217;s New in Edge Rails: &lt;a href=&#34;http://tumblelog.slobodankovacevic.com/post/41430445/whats-new-in-edge-rails-easy-join-table-conditions&#34;&gt;Easy Join Table Conditions.&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://tumblelog.slobodankovacevic.com/post/41483353/faces-of-millions&#34;&gt;Faces of Millions&lt;/a&gt; &amp;#8211; Art project which aims to gather one million photos of people faces and create 10m x 10m photo mosaic.&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://tumblelog.slobodankovacevic.com/post/41727168/uni-form&#34;&gt;Uni-Form&lt;/a&gt; is an attempt to standardize form markup (xhtml) and css.&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://tumblelog.slobodankovacevic.com/post/41886839/mac-fullscreen-quicklook-a-k-a-slideshow&#34;&gt;Mac OS X full screen QuickLook shortcut.&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;A guide to &lt;a href=&#34;http://tumblelog.slobodankovacevic.com/post/41978415/a-guide-to-css-support-in-email&#34;&gt;CSS support in Email&lt;/a&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;condensed from &amp;lsquo;&lt;a href=&#34;http://tumblelog.slobodankovacevic.com/&#34;&gt;this should be interesting&lt;/a&gt;&amp;rsquo; tumblelog&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>This should be interesting weekly &amp;#8211; week 27</title>
+      <link>http://blog.orangeiceberg.com/posts/this-should-be-interesting-weekly-</link>
+      <pubDate>Sun, 06 Jul 2008 09:00:00 +0100</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/this-should-be-interesting-weekly-</guid>
+      <description>&lt;p&gt;This is the first weekly condensed edition of my &lt;a href=&#34;http://tumblelog.slobodankovacevic.com/&#34; title=&#34;Tumblelog by Slobodan Kovacevic&#34;&gt;&amp;#8220;This should be interesting&amp;#8221; tumblelog&lt;/a&gt;. Every Sunday I will re-post most interesting posts here on the Icebergist.&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://tumblelog.slobodankovacevic.com/post/40966961/new-free-book-ruby-on-rails-2-1-whats-new&#34; title=&#34;Free Book: &amp;quot;Ruby on Rails 2.1 - What’s new&amp;quot;&#34;&gt;Free Book: &amp;#8220;Ruby on Rails 2.1 &amp;#8211; What’s new&amp;#8221;&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://tumblelog.slobodankovacevic.com/post/40888615/better-blockquotes-blockquotes-examples&#34; title=&#34;Better Blockquotes - Blockquotes examples&#34;&gt;Better Blockquotes&lt;/a&gt; &amp;#8211; blockquotes CSS styling examples&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://tumblelog.slobodankovacevic.com/post/39785793/slife-free-automatic-time-tracking-for-mac&#34; title=&#34;Slife - free automatic time tracking for Mac&#34;&gt;Slife&lt;/a&gt; &amp;#8211; free automatic time tracking for Mac&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://tumblelog.slobodankovacevic.com/post/39263529/unfocus-history-keeper-back-button-enabling-deep&#34; title=&#34;unfocus-history-keeper&#34;&gt;unfocus-history-keeper&lt;/a&gt; &amp;#8211; back button enabling, deep linking, event driven Javascrpt/DHTML/Ajax Library (works for Flash too)&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
