@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Amazon S3 on Icebergist</title>
+    <title>Amazon s3 on Icebergist</title>
     <link>http://blog.orangeiceberg.com/tags/amazon-s3/</link>
-    <description>Recent content in Amazon S3 on Icebergist</description>
+    <description>Recent content in Amazon s3 on Icebergist</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Mon, 24 Jan 2011 09:00:00 +0100</lastBuildDate>
@@ -17,7 +17,7 @@
       <guid>http://blog.orangeiceberg.com/posts/paperclip-heroku-and-amazon-s3-credentials</guid>
       <description>&lt;p&gt;Setting up Paperclip to use Amazon&amp;#8217;s S3 is as simple as setting :storage =&amp;gt; :s3 and providing right credentials to Paperclip by setting :s3_credentials option. Best way to provide S3 credentials is to use an YML file (usually config/s3.yml) which allows you to set different credentials for each environment. For example:&lt;/p&gt;
 
-&lt;pre&gt;# config/s3.yml
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;# config/s3.yml
 development:
   access_key_id: XYZXYZXYZ
   secret_access_key: XYZXYZXYZ
@@ -26,7 +26,7 @@ production:
   access_key_id: XYZXYZXYZ
   secret_access_key: XYZXYZXYZ
   bucket: mygreatapp-production
-&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Of course you want to treat s3.yml same as database.yml &amp;#8211; i.e. you don&amp;#8217;t want to track it with git and you want for each person/server to have it&amp;#8217;s own.&lt;/p&gt;
 
@@ -38,23 +38,23 @@ production:
 
 &lt;p&gt;For production deployment on Heroku you can write initializer which will set :s3_credentials from ENV variables.&lt;/p&gt;
 
-&lt;pre&gt;# initializers/s3.rb
-if Rails.env == &#34;production&#34;
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;# initializers/s3.rb
+if Rails.env == &amp;quot;production&amp;quot;
   # set credentials from ENV hash
-  S3_CREDENTIALS = { :access_key_id =&gt; ENV[&#39;S3_KEY&#39;], :secret_access_key =&gt; ENV[&#39;S3_SECRET&#39;], :bucket =&gt; &#34;sharedearth-production&#34;}
+  S3_CREDENTIALS = { :access_key_id =&amp;gt; ENV[&#39;S3_KEY&#39;], :secret_access_key =&amp;gt; ENV[&#39;S3_SECRET&#39;], :bucket =&amp;gt; &amp;quot;sharedearth-production&amp;quot;}
 else
   # get credentials from YML file
-  S3_CREDENTIALS = Rails.root.join(&#34;config/s3.yml&#34;)
+  S3_CREDENTIALS = Rails.root.join(&amp;quot;config/s3.yml&amp;quot;)
 end
 
 # in your model
-has_attached_file :photo, :storage =&gt; :s3, :s3_credentials =&gt; S3_CREDENTIALS
-&lt;/pre&gt;
+has_attached_file :photo, :storage =&amp;gt; :s3, :s3_credentials =&amp;gt; S3_CREDENTIALS
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;and you can easily set persistant ENV vars on Heroku with:&lt;/p&gt;
 
-&lt;pre&gt;$ heroku config:add S3_KEY=XYZXYZ S3_SECRET=XYZXYZ
-&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;$ heroku config:add S3_KEY=XYZXYZ S3_SECRET=XYZXYZ
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;(&lt;a href=&#34;http://docs.heroku.com/config-vars#quick-example&#34;&gt;according to Heroku docs&lt;/a&gt;)&lt;/p&gt;
 </description>

@@ -10,12 +10,14 @@
     <atom:link href="http://blog.orangeiceberg.com/tags/sqlite/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
-      <title>changing database starting id</title>
+      <title>Changing database starting id</title>
       <link>http://blog.orangeiceberg.com/posts/changing-database-starting-id</link>
       <pubDate>Mon, 01 Jun 2015 11:03:47 +0200</pubDate>
       
       <guid>http://blog.orangeiceberg.com/posts/changing-database-starting-id</guid>
-      <description>&lt;p&gt;For our new project it was necessary to modify the starting id of our database. This can be handled through migration for creating table but we decided to create a rake task that handled this for us.&lt;/p&gt;
+      <description>
+
+&lt;p&gt;For our new project it was necessary to modify the starting id of our database. This can be handled through migration for creating table but we decided to create a rake task that handled this for us.&lt;/p&gt;
 
 &lt;p&gt;The rake task that we created detects what database is being used and executes appropriate changes according to that.&lt;/p&gt;
 
@@ -31,7 +33,7 @@
 &lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;namespace :database do
   desc &amp;quot;Detect database that&#39;s being used and then increment its id&amp;quot;
   task autoincrement: :environment do
-  
+
     db_name_downcase = ActiveRecord::Base.connection.adapter_name.downcase
 
     if Link.maximum(:id).to_i &amp;lt; 1000
@@ -47,20 +49,26 @@
     else
       puts &amp;quot;To perform this task your database shouldn&#39;t have records with id number higher than 1000&amp;quot;
     end
-    
+
   end
 end
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;We need to change the starting id of our database to 1000 so we check that we don&amp;rsquo;t have a record with id higher than 1000. Link is our Active Record model and links is the name of our table.&lt;/p&gt;
 
-&lt;p&gt;ActiveRecord::Base.connection returns the connection currently associated with the class. We use it to detect the name of database and execute appropriate changes.
-###MySQL
-For MySQL we need to set AUTO_INCREMENT value to 1000, Auto-increment allows a unique number to be generated when a new record is inserted into a table. When first record is created it sets its primary key to 1 by default  and it will auto increment by 1 for each new record.
-###PostgreSQL
-For Postgres we have to explain what a sequence is. A sequence is a special kind of a database object designed for generating unique numeric identifiers. It is typically used to generate artificial primary keys. Sequences are similar to the Auto-increment concept in MySQL.
-###SQLite
-For SQlite we altered sqlite_sequence table, which is an internal table used to implement AUTOINCREMENT. It is created automatically whenever any ordinary table with an AUTOINCREMENT integer primary key is created.&lt;/p&gt;
+&lt;p&gt;ActiveRecord::Base.connection returns the connection currently associated with the class. We use it to detect the name of database and execute appropriate changes.&lt;/p&gt;
+
+&lt;h3 id=&#34;mysql:d15bb8f4407f58e2ce472d247df169d1&#34;&gt;MySQL&lt;/h3&gt;
+
+&lt;p&gt;For MySQL we need to set AUTO_INCREMENT value to 1000, Auto-increment allows a unique number to be generated when a new record is inserted into a table. When first record is created it sets its primary key to 1 by default  and it will auto increment by 1 for each new record.&lt;/p&gt;
+
+&lt;h3 id=&#34;postgresql:d15bb8f4407f58e2ce472d247df169d1&#34;&gt;PostgreSQL&lt;/h3&gt;
+
+&lt;p&gt;For Postgres we have to explain what a sequence is. A sequence is a special kind of a database object designed for generating unique numeric identifiers. It is typically used to generate artificial primary keys. Sequences are similar to the Auto-increment concept in MySQL.&lt;/p&gt;
+
+&lt;h3 id=&#34;sqlite:d15bb8f4407f58e2ce472d247df169d1&#34;&gt;SQLite&lt;/h3&gt;
+
+&lt;p&gt;For SQlite we altered sqlite_sequence table, which is an internal table used to implement AUTOINCREMENT. It is created automatically whenever any ordinary table with an AUTOINCREMENT integer primary key is created.&lt;/p&gt;
 
 &lt;p&gt;You can check &lt;a href=&#34;http://stackoverflow.com/questions/2075331/change-starting-id-number&#34;&gt;this Stack Overflow discussion&lt;/a&gt; that was very helpful to me.&lt;/p&gt;
 </description>

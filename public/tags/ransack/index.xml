@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Ransack on Icebergist</title>
+    <link>http://blog.orangeiceberg.com/tags/ransack/</link>
+    <description>Recent content in Ransack on Icebergist</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 20 Jun 2016 12:39:42 +0200</lastBuildDate>
+    <atom:link href="http://blog.orangeiceberg.com/tags/ransack/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Using Ransackers to search for a key in PostgreSQL JSON column</title>
+      <link>http://blog.orangeiceberg.com/posts/using-ransackers-to-search-for-a-key-in-postgresql-json-column</link>
+      <pubDate>Mon, 20 Jun 2016 12:39:42 +0200</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/using-ransackers-to-search-for-a-key-in-postgresql-json-column</guid>
+      <description>&lt;p&gt;Starting with v9.2, PostgreSQL added native JSON support which enabled us to take advantage of some benefits that come with NoSQL database within a traditional relational database such as PostgreSQL.&lt;/p&gt;
+
+&lt;p&gt;While working on a Ruby on Rails application that used PostgreSQL database to store data, we came a across an issue where we needed to implement a search by key within a JSON column.&lt;/p&gt;
+
+&lt;p&gt;We were alredy using &lt;a href=&#34;https://github.com/activerecord-hackery/ransack&#34;&gt;Ransack&lt;/a&gt; for building search forms within the application, so we needed a way of telling Ransack to perform a search by given key in our JSON column.&lt;/p&gt;
+
+&lt;p&gt;This is where &lt;a href=&#34;https://github.com/activerecord-hackery/ransack/wiki/using-ransackers&#34;&gt;Ransackers&lt;/a&gt; come in.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;The premise behind Ransack is to provide access to Arel predicate methods.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;You can find more information on Arel &lt;a href=&#34;https://github.com/rails/arel&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;In our case we needed to perform a search within &lt;code&gt;transactions&lt;/code&gt; table and &lt;code&gt;payload&lt;/code&gt; JSON column, looking for records containing a key called &lt;code&gt;invoice_number&lt;/code&gt;. To achieve this we added the following ransacker to our &lt;code&gt;Transaction&lt;/code&gt; model&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;ransacker :invoice_number do |parent|
+   Arel::Nodes::InfixOperation.new(&#39;-&amp;gt;&amp;gt;&#39;, parent.table[:payload], &#39;invoice_number&#39;)
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now with our search set on &lt;code&gt;link_type_cont&lt;/code&gt; (cont being just one of Ransack available search predicates), if the user entered for example  &lt;code&gt;123&lt;/code&gt; in the search filed, it would generate a query like this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;SELECT  &amp;quot;transactions&amp;quot;.* FROM &amp;quot;transactions&amp;quot;  WHERE (&amp;quot;transactions&amp;quot;.&amp;quot;payload&amp;quot; -&amp;gt;&amp;gt; &#39;invoice_number&#39; ILIKE &#39;%123%&#39;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;basically performing a search for records in &lt;code&gt;transactions&lt;/code&gt; table that have a key called &lt;code&gt;invoice_number&lt;/code&gt; with value containing a string &lt;code&gt;123&lt;/code&gt;, within a JSON column &lt;code&gt;payload&lt;/code&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>PostgreSQL on Icebergist</title>
+    <link>http://blog.orangeiceberg.com/tags/postgresql/</link>
+    <description>Recent content in PostgreSQL on Icebergist</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 18 Oct 2016 07:05:38 +0200</lastBuildDate>
+    <atom:link href="http://blog.orangeiceberg.com/tags/postgresql/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Backup and Restore a PostgreSQL Database</title>
+      <link>http://blog.orangeiceberg.com/posts/backup-and-restore-a-postgresql-database</link>
+      <pubDate>Tue, 18 Oct 2016 07:05:38 +0200</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/backup-and-restore-a-postgresql-database</guid>
+      <description>
+
+&lt;p&gt;While working on different projects and in different environments, we often need to export a dump from one database and then import it into another. A while ago &lt;a href=&#34;http://http://orangeiceberg.com/about/&#34; title=&#34;About Slobodan&#34;&gt;Slobodan&lt;/a&gt; wrote how to &lt;a href=&#34;http://icebergist.com/posts/import-and-export-mysql-dump/&#34; title=&#34;Import and Export mySQL dump&#34;&gt;export and import a mySQL dump&lt;/a&gt;, and here is a guide how do it for PostgreSQL.&lt;/p&gt;
+
+&lt;h2 id=&#34;export-a-postgresql-database-dump:84d8e3d5c8f415260e623e37a1cf3f9b&#34;&gt;Export a PostgreSQL database dump&lt;/h2&gt;
+
+&lt;p&gt;To export PostgreSQL database we will need to use the &lt;a href=&#34;https://www.postgresql.org/docs/current/static/backup-dump.html&#34; title=&#34;PostgreSQL&#34;&gt;pg_dump&lt;/a&gt; tool, which will dump all the contents of a selected database into a single file.
+We need to run &lt;code&gt;pg_dump&lt;/code&gt; in the command line on the computer where the database is stored. So, if the database is stored on a remote server, you will need to SSH to that server in order to run the following command:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;pg_dump -U db_user -W -F t db_name &amp;gt; /path/to/your/file/dump_name.tar
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Here we used the following options:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;-U&lt;/code&gt; to specify which user will connect to the PostgreSQL database server.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-W&lt;/code&gt; or &lt;code&gt;--password&lt;/code&gt; will force pg_dump to prompt for a password before connecting to the server.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-F&lt;/code&gt; is used to specify the format of the output file, which can be one of the following:
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;p&lt;/code&gt; - plain-text SQL script&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;c&lt;/code&gt; - custom-format archive&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;d&lt;/code&gt; - directory-format archive&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;t&lt;/code&gt; - tar-format archive&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;sup&gt;&lt;em&gt;custom&lt;/em&gt;, &lt;em&gt;directory&lt;/em&gt; and &lt;em&gt;tar&lt;/em&gt; formats are suitable for input into pg_restore.&lt;/sup&gt;&lt;/p&gt;
+
+&lt;p&gt;To see a list of all the available options use &lt;code&gt;pg_dump -?&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;With given options &lt;code&gt;pg_dump&lt;/code&gt; will first prompt for a password for the database user &lt;code&gt;db_user&lt;/code&gt; and then connect as that user to the database named &lt;code&gt;db_name&lt;/code&gt;. After it successfully connects, &lt;code&gt;&amp;gt;&lt;/code&gt; will write the output produced by pg_dump to a file with a given name, in this case &lt;code&gt;dump_name.tar&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;File created in the described process contains all the SQL queries that are required in order to replicate your database.&lt;/p&gt;
+
+&lt;h2 id=&#34;import-a-postgresql-database-dump:84d8e3d5c8f415260e623e37a1cf3f9b&#34;&gt;Import a PostgreSQL database dump&lt;/h2&gt;
+
+&lt;p&gt;There are two ways to restore a PostgreSQL database:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;code&gt;psql&lt;/code&gt; for restoring from a plain SQL script file created with &lt;code&gt;pg_dump&lt;/code&gt;,&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;pg_restore&lt;/code&gt; for restoring from a .tar file, directory, or custom format created with &lt;code&gt;pg_dump&lt;/code&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&#34;1-restore-a-database-with-psql:84d8e3d5c8f415260e623e37a1cf3f9b&#34;&gt;1. Restore a database with psql&lt;/h3&gt;
+
+&lt;p&gt;If your backup is a plain-text file containing SQL script, then you can restore your database by using &lt;a href=&#34;https://www.postgresql.org/docs/current/static/app-psql.html&#34;&gt;PostgreSQL interactive terminal&lt;/a&gt;, and running the following command:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;psql -U db_user db_name &amp;lt; dump_name.sql
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;where &lt;code&gt;db_user&lt;/code&gt; is the database user, &lt;code&gt;db_name&lt;/code&gt; is the database name, and &lt;code&gt;dump_name.sql&lt;/code&gt; is the name of your backup file.&lt;/p&gt;
+
+&lt;h3 id=&#34;2-restore-a-database-with-pg-restore:84d8e3d5c8f415260e623e37a1cf3f9b&#34;&gt;2. Restore a database with pg_restore&lt;/h3&gt;
+
+&lt;p&gt;If you choose custom, directory, or archive format when creating a backup file, then you will need to use pg_restore in order to restore your database:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;pg_restore -d db_name /path/to/your/file/dump_name.tar -c -U db_user&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;If you use pg_restore you have various options available, for example:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;-c&lt;/code&gt; to drop database objects before recreating them,&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-C&lt;/code&gt; to create a database before restoring into it,&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-e&lt;/code&gt; exit if an error has encountered,&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-F format&lt;/code&gt; to specify the format of the archive.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Use &lt;code&gt;pg_restore -?&lt;/code&gt; to get the full list of available options.&lt;/p&gt;
+
+&lt;p&gt;You can find more info on using mentioned tools by running &lt;code&gt;man pg_dump&lt;/code&gt;, &lt;code&gt;man psql&lt;/code&gt; and &lt;code&gt;man pg_restore&lt;/code&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Using Ransackers to search for a key in PostgreSQL JSON column</title>
+      <link>http://blog.orangeiceberg.com/posts/using-ransackers-to-search-for-a-key-in-postgresql-json-column</link>
+      <pubDate>Mon, 20 Jun 2016 12:39:42 +0200</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/using-ransackers-to-search-for-a-key-in-postgresql-json-column</guid>
+      <description>&lt;p&gt;Starting with v9.2, PostgreSQL added native JSON support which enabled us to take advantage of some benefits that come with NoSQL database within a traditional relational database such as PostgreSQL.&lt;/p&gt;
+
+&lt;p&gt;While working on a Ruby on Rails application that used PostgreSQL database to store data, we came a across an issue where we needed to implement a search by key within a JSON column.&lt;/p&gt;
+
+&lt;p&gt;We were alredy using &lt;a href=&#34;https://github.com/activerecord-hackery/ransack&#34;&gt;Ransack&lt;/a&gt; for building search forms within the application, so we needed a way of telling Ransack to perform a search by given key in our JSON column.&lt;/p&gt;
+
+&lt;p&gt;This is where &lt;a href=&#34;https://github.com/activerecord-hackery/ransack/wiki/using-ransackers&#34;&gt;Ransackers&lt;/a&gt; come in.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;The premise behind Ransack is to provide access to Arel predicate methods.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;You can find more information on Arel &lt;a href=&#34;https://github.com/rails/arel&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;In our case we needed to perform a search within &lt;code&gt;transactions&lt;/code&gt; table and &lt;code&gt;payload&lt;/code&gt; JSON column, looking for records containing a key called &lt;code&gt;invoice_number&lt;/code&gt;. To achieve this we added the following ransacker to our &lt;code&gt;Transaction&lt;/code&gt; model&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;ransacker :invoice_number do |parent|
+   Arel::Nodes::InfixOperation.new(&#39;-&amp;gt;&amp;gt;&#39;, parent.table[:payload], &#39;invoice_number&#39;)
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now with our search set on &lt;code&gt;link_type_cont&lt;/code&gt; (cont being just one of Ransack available search predicates), if the user entered for example  &lt;code&gt;123&lt;/code&gt; in the search filed, it would generate a query like this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;SELECT  &amp;quot;transactions&amp;quot;.* FROM &amp;quot;transactions&amp;quot;  WHERE (&amp;quot;transactions&amp;quot;.&amp;quot;payload&amp;quot; -&amp;gt;&amp;gt; &#39;invoice_number&#39; ILIKE &#39;%123%&#39;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;basically performing a search for records in &lt;code&gt;transactions&lt;/code&gt; table that have a key called &lt;code&gt;invoice_number&lt;/code&gt; with value containing a string &lt;code&gt;123&lt;/code&gt;, within a JSON column &lt;code&gt;payload&lt;/code&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

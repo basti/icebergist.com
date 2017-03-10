@@ -6,6 +6,8 @@
   <meta charset="utf-8">
   <title>
     
+      Import and export MySQL dump -
+    
     Icebergist
   </title>
   <meta name="author" content="Orange Iceberg">
@@ -18,7 +20,7 @@
   <meta name="MobileOptimized" content="320">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <link rel="canonical" href="http://blog.orangeiceberg.com/">
+  <link rel="canonical" href="http://blog.orangeiceberg.com/posts/import-and-export-mysql-dump">
   <link href="http://blog.orangeiceberg.com//favicon.ico" rel="icon">
 
   
@@ -47,18 +49,30 @@
   <script src="http://blog.orangeiceberg.com//js/libs/jquery/jquery-2.0.3.min.js"></script>
 
   <link href="http://blog.orangeiceberg.com//assets/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">
-<link href="http://blog.orangeiceberg.com//assets/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css">
-<link href="http://blog.orangeiceberg.com//css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="http://blog.orangeiceberg.com//assets/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css">
+  <link href="http://blog.orangeiceberg.com//css/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/styles/github.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
 
 
   
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-4735545-2']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
 
 </head>
-
-
-
-
-
 
 <body>
   <div id="wrap">
@@ -104,9 +118,39 @@
     </header>
     <div id="main" class="container">
       <div id="content">
-        <h1>Import and export MySQL dump</h1>
-        <h2>Wed, Dec 2, 2015</h2>
-        <p>Another simple task that&rsquo;s often hard for beginners is importing and exporting MySQL dumps. Here is quick rundown on how to do it.</p>
+        
+        <div class="row">
+          <div class="page-content col-md-9">
+            <article class="hentry" role="article">
+              <header class="page-header">
+                <p class="meta text-muted">
+                  
+<span class="glyphicon glyphicon-calendar"></span> <time>Dec 2, 2015</time>
+
+
+ |
+                  <span class="glyphicon glyphicon-user"></span>
+<span class="byline author vcard">Posted by
+  <span class="fn">
+    
+      <a href="https://plus.google.com/113548610124685160907?rel=author">Slobodan Kovačević</a>
+    
+  </span>
+</span>
+ |
+
+                  
+                   <a href="http://blog.orangeiceberg.com/posts/import-and-export-mysql-dump#disqus_thread" class="disqus-comment-count" data-disqus-identifier="http://blog.orangeiceberg.com/posts/import-and-export-mysql-dump">
+                     Comments
+                   </a>
+                  
+                  <h1 class="entry-title">
+                    Import and export MySQL dump
+                  </h1>
+                </p>
+              </header>
+
+              <div class="entry-content clearfix"><p>Another simple task that&rsquo;s often hard for beginners is importing and exporting MySQL dumps. Here is quick rundown on how to do it.</p>
 
 <p>To export data you need to use <code>mysqldump</code>:</p>
 
@@ -130,31 +174,1489 @@
 <p>User, password, and database name options are the same as for <code>mysqldump</code>. Since <code>mysql</code> reads input from terminal this time we can use <code>&lt;</code> to read input from given file instead.</p>
 
 <p>As always for more information you can consult manual using <code>man mysqldump</code> and <code>man mysql</code>.</p>
+</div>
 
-      </div>
-    </div>
-  </div>
-  <p><a href="http://blog.orangeiceberg.com/">Home</a></p>
+              <footer>
+                <p class="meta text-muted">
+                  <span class="glyphicon glyphicon-user"></span>
+<span class="byline author vcard">Posted by
+  <span class="fn">
+    
+      <a href="https://plus.google.com/113548610124685160907?rel=author">Slobodan Kovačević</a>
+    
+  </span>
+</span>
 
-  <div id="disqus_thread"></div>
+<span class="glyphicon glyphicon-calendar"></span> <time>Dec 2, 2015</time>
+
+
+
+                  <span class="glyphicon glyphicon-tags"></span>&nbsp;
+<span class="categories">
+  
+    
+    <a href="/categories/misc">Misc</a>
+  
+</span>
+
+                  
+  <span class="tags">
+    Tags:
+    
+      
+      <a href="/tags/mysql">mysql</a>
+    
+      , 
+      <a href="/tags/howto">howto</a>
+    
+      , 
+      <a href="/tags/linux">linux</a>
+    
+      , 
+      <a href="/tags/tips">tips</a>
+    
+  </span>
+
+
+                </p>
+                  <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://blog.orangeiceberg.com/http://blog.orangeiceberg.com/posts/import-and-export-mysql-dump" data-via="icebergist" data-counturl="http://blog.orangeiceberg.com/http://blog.orangeiceberg.com/posts/import-and-export-mysql-dump" >Tweet</a>
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+  
+  <div class="g-plusone" data-size="medium"></div>
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+  
+  <div class="fb-like" data-send="true" data-width="450" data-show-faces="false"></div>
+  <div id="fb-root"></div>
+  <script>(function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) {return;}
+    js = d.createElement(s); js.id = id; js.async = true;
+    js.src = "//connect.facebook.net/en_US/all.js#appId=212934732101925&xfbml=1";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));</script>
+
+
+</div>
+
+
+                  
+  <ul class="meta text-muted pager">
+    
+    <li class="previous"><a href="http://blog.orangeiceberg.com/posts/create-and-extract-archives-using-tar-and-gzip" title="Previous Post: Create and extract archives using tar and gzip">&laquo; Create and extract archives using tar and gzip</a></li>
+    
+    
+    <li class="next"><a href="http://blog.orangeiceberg.com/posts/headless-firefox-in-ubuntu-on-virtualbox-for-cucumber-testing" title="Next Post: Headless Firefox in Ubuntu on VirtualBox for Cucumber testing">Headless Firefox in Ubuntu on VirtualBox for Cucumber testing &raquo;</a></li>
+    
+  </ul>
+
+
+              </footer>
+            </article>
+
+            <section>
+              <h1>Comments</h1>
+              <div id="disqus_thread" aria-live="polite">
+                <div id="disqus_thread"></div>
 <script type="text/javascript">
 
 (function() {
     
     
     if (window.location.hostname == "localhost")
-        return;
+      return;
 
     var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
     var disqus_shortname = 'icebergist';
-    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+
     (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
 })();
 </script>
 <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 <a href="http://disqus.com/" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
 
+              </div>
+            </section>
+          </div>
 
-  true
+          <aside class="sidebar col-md-3">
+            <section>
+  <h2>About us</h2>
+  <div>
+    <a href="http://orangeiceberg.com">
+      <img src="http://orangeiceberg.com/images/oi-logo-footer.png" class="sidebar_avatar" alt="Orange Iceberg web development consultancy" />
+    </a>
+  </div>
+  <div id="sidebar-about">
+    <p>
+      Hello!
+      We are <a href="http://orangeiceberg.com">Orange Iceberg</a> a team of Ruby developers.
+    </p>
+    <p>
+      <strong>Icebergist</strong> is a place where we write about technical challenges we face.
+      We build Ruby on Rails web applications, so it's mainly about Ruby and Ruby on Rails.
+    </p>
+    <p class="hire-us-box">
+      <strong>We are available for hire.</strong>
+      <br />
+      <a href="http://orangeiceberg.com/contact">Find out how we can help you.</a>
+    </p>
+  </div>
+</section>
+
+            <section class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Recent Posts</h3>
+  </div>
+
+  <div id="recent_posts" class="list-group">
+    
+
+    
+      
+      <a class="list-group-item"
+         href="http://blog.orangeiceberg.com/posts/introduction-to-ember-closure-actions">
+         Introduction to Ember Closure Actions
+      </a>
+    
+      
+      <a class="list-group-item"
+         href="http://blog.orangeiceberg.com/posts/copy-and-sync-files-from/to-remote-server">
+         Copy and sync files from/to remote server
+      </a>
+    
+      
+      <a class="list-group-item"
+         href="http://blog.orangeiceberg.com/posts/backup-and-restore-a-postgresql-database">
+         Backup and Restore a PostgreSQL Database
+      </a>
+    
+      
+      <a class="list-group-item"
+         href="http://blog.orangeiceberg.com/posts/using-ransackers-to-search-for-a-key-in-postgresql-json-column">
+         Using Ransackers to search for a key in PostgreSQL JSON column
+      </a>
+    
+      
+      <a class="list-group-item"
+         href="http://blog.orangeiceberg.com/posts/show-part-of-a-rails-template-in-other-locale">
+         Show part of a Rails template in other locale
+      </a>
+    
+  </div>
+
+  <div class="panel-heading">
+    <a href="/blog/archives/">See more posts</a>
+  </div>
+</section>
+
+            <section class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Categories</h3>
+  </div>
+  <div class="list-group">
+    
+
+    
+      
+      <a class="list-group-item"
+          href="/categories/ruby-and-rails">
+          <span class="badge">20</span>Ruby and Rails
+      </a>
+    
+      
+      <a class="list-group-item"
+          href="/categories/misc">
+          <span class="badge">13</span>Misc
+      </a>
+    
+      
+      <a class="list-group-item"
+          href="/categories/testing">
+          <span class="badge">2</span>Testing
+      </a>
+    
+      
+      <a class="list-group-item"
+          href="/categories/this-should-be-interesting---weekly">
+          <span class="badge">2</span>This should be interesting - weekly
+      </a>
+    
+      
+      <a class="list-group-item"
+          href="/categories/php">
+          <span class="badge">1</span>PHP
+      </a>
+    
+      
+      <a class="list-group-item"
+          href="/categories/javascript">
+          <span class="badge">1</span>Javascript
+      </a>
+    
+      
+      <a class="list-group-item"
+          href="/categories/ember">
+          <span class="badge">1</span>Ember
+      </a>
+    
+  </div>
+</section>
+
+            <section class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title">Tags</h3>
+  </div>
+  <div class="tag-cloud">
+      
+      
+      
+      
+      
+
+      
+        
+        
+        
+        
+        
+
+        
+          
+        
+
+        
+
+        
+
+        
+
+        
+
+        <span class='rank-5'>
+          <a href="/tags/i18n.locale">I18n.locale</a>
+        </span>
+      
+        
+        
+        
+        
+        
+
+        
+          
+        
+
+        
+
+        
+
+        
+
+        
+
+        <span class='rank-5'>
+          <a href="/tags/javascript">Javascript</a>
+        </span>
+      
+        
+        
+        
+        
+        
+
+        
+          
+        
+
+        
+
+        
+
+        
+
+        
+
+        <span class='rank-5'>
+          <a href="/tags/php">PHP</a>
+        </span>
+      
+        
+        
+        
+        
+        
+
+        
+          
+        
+
+        
+
+        
+
+        
+
+        
+
+        <span class='rank-5'>
+          <a href="/tags/admin">admin</a>
+        </span>
+      
+        
+        
+        
+        
+        
+
+        
+          
+        
+
+        
+
+        
+
+        
+
+        
+
+        <span class='rank-5'>
+          <a href="/tags/amazon-s3">amazon s3</a>
+        </span>
+      
+        
+        
+        
+        
+        
+
+        
+          
+        
+
+        
+
+        
+
+        
+
+        
+
+        <span class='rank-5'>
+          <a href="/tags/apprenticeship">apprenticeship</a>
+        </span>
+      
+        
+        
+        
+        
+        
+
+        
+          
+        
+
+        
+
+        
+
+        
+
+        
+
+        <span class='rank-5'>
+          <a href="/tags/capistrano-3">capistrano 3</a>
+        </span>
+      
+        
+        
+        
+        
+        
+
+        
+          
+        
+
+        
+
+        
+
+        
+
+        
+
+        <span class='rank-5'>
+          <a href="/tags/capistrano-rails">capistrano-rails</a>
+        </span>
+      
+        
+        
+        
+        
+        
+
+        
+          
+        
+
+        
+
+        
+
+        
+
+        
+
+        <span class='rank-5'>
+          <a href="/tags/capistrano-rbenv">capistrano-rbenv</a>
+        </span>
+      
+        
+        
+        
+        
+        
+
+        
+          
+        
+
+        
+
+        
+
+        
+
+        
+
+        <span class='rank-5'>
+          <a href="/tags/carrierwave">carrierwave</a>
+        </span>
+      
+        
+        
+        
+        
+        
+
+        
+          
+        
+
+        
+
+        
+
+        
+
+        
+
+        <span class='rank-5'>
+          <a href="/tags/cloud-computing">cloud computing</a>
+        </span>
+      
+        
+        
+        
+        
+        
+
+        
+          
+        
+
+        
+
+        
+
+        
+
+        
+
+        <span class='rank-5'>
+          <a href="/tags/codeigniter">codeigniter</a>
+        </span>
+      
+        
+        
+        
+        
+        
+
+        
+          
+        
+
+        
+
+        
+
+        
+
+        
+
+        <span class='rank-5'>
+          <a href="/tags/css">css</a>
+        </span>
+      
+        
+        
+        
+        
+        
+
+        
+          
+        
+
+        
+
+        
+
+        
+
+        
+
+        <span class='rank-5'>
+          <a href="/tags/cucumber">cucumber</a>
+        </span>
+      
+        
+        
+        
+        
+        
+
+        
+          
+        
+
+        
+
+        
+
+        
+
+        
+
+        <span class='rank-5'>
+          <a href="/tags/deployment">deployment</a>
+        </span>
+      
+        
+        
+        
+        
+        
+
+        
+          
+        
+
+        
+
+        
+
+        
+
+        
+
+        <span class='rank-5'>
+          <a href="/tags/devise">devise</a>
+        </span>
+      
+        
+        
+        
+        
+        
+
+        
+          
+        
+
+        
+
+        
+
+        
+
+        
+
+        <span class='rank-5'>
+          <a href="/tags/edge">edge</a>
+        </span>
+      
+        
+        
+        
+        
+        
+
+        
+          
+        
+
+        
+
+        
+
+        
+
+        
+
+        <span class='rank-5'>
+          <a href="/tags/ember">ember</a>
+        </span>
+      
+        
+        
+        
+        
+        
+
+        
+          
+        
+
+        
+
+        
+
+        
+
+        
+
+        <span class='rank-5'>
+          <a href="/tags/erkanaauth">erkanaauth</a>
+        </span>
+      
+        
+        
+        
+        
+        
+
+        
+          
+        
+
+        
+
+        
+
+        
+
+        
+
+        <span class='rank-5'>
+          <a href="/tags/factory_girl">factory_girl</a>
+        </span>
+      
+        
+        
+        
+        
+        
+
+        
+          
+        
+
+        
+
+        
+
+        
+
+        
+
+        <span class='rank-5'>
+          <a href="/tags/factorygirl">factorygirl</a>
+        </span>
+      
+        
+        
+        
+        
+        
+
+        
+          
+        
+
+        
+
+        
+
+        
+
+        
+
+        <span class='rank-5'>
+          <a href="/tags/globalize">globalize</a>
+        </span>
+      
+        
+        
+        
+        
+        
+
+        
+          
+        
+
+        
+
+        
+
+        
+
+        
+
+        <span class='rank-5'>
+          <a href="/tags/heroku">heroku</a>
+        </span>
+      
+        
+        
+        
+        
+        
+
+        
+          
+        
+
+        
+
+        
+
+        
+
+        
+
+        <span class='rank-5'>
+          <a href="/tags/hosting">hosting</a>
+        </span>
+      
+        
+        
+        
+        
+        
+
+        
+
+        
+          
+        
+
+        
+
+        
+
+        
+
+        <span class='rank-4'>
+          <a href="/tags/howto">howto</a>
+        </span>
+      
+        
+        
+        
+        
+        
+
+        
+          
+        
+
+        
+
+        
+
+        
+
+        
+
+        <span class='rank-5'>
+          <a href="/tags/javascript">javascript</a>
+        </span>
+      
+        
+        
+        
+        
+        
+
+        
+          
+        
+
+        
+
+        
+
+        
+
+        
+
+        <span class='rank-5'>
+          <a href="/tags/links">links</a>
+        </span>
+      
+        
+        
+        
+        
+        
+
+        
+
+        
+          
+        
+
+        
+
+        
+
+        
+
+        <span class='rank-4'>
+          <a href="/tags/linux">linux</a>
+        </span>
+      
+        
+        
+        
+        
+        
+
+        
+          
+        
+
+        
+
+        
+
+        
+
+        
+
+        <span class='rank-5'>
+          <a href="/tags/mac">mac</a>
+        </span>
+      
+        
+        
+        
+        
+        
+
+        
+          
+        
+
+        
+
+        
+
+        
+
+        
+
+        <span class='rank-5'>
+          <a href="/tags/mysql">mysql</a>
+        </span>
+      
+        
+        
+        
+        
+        
+
+        
+          
+        
+
+        
+
+        
+
+        
+
+        
+
+        <span class='rank-5'>
+          <a href="/tags/paperclip">paperclip</a>
+        </span>
+      
+        
+        
+        
+        
+        
+
+        
+          
+        
+
+        
+
+        
+
+        
+
+        
+
+        <span class='rank-5'>
+          <a href="/tags/password-protected">password protected</a>
+        </span>
+      
+        
+        
+        
+        
+        
+
+        
+          
+        
+
+        
+
+        
+
+        
+
+        
+
+        <span class='rank-5'>
+          <a href="/tags/postgresql">postgreSQL</a>
+        </span>
+      
+        
+        
+        
+        
+        
+
+        
+          
+        
+
+        
+
+        
+
+        
+
+        
+
+        <span class='rank-5'>
+          <a href="/tags/postgres">postgres</a>
+        </span>
+      
+        
+        
+        
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+          
+        
+
+        <span class='rank-1'>
+          <a href="/tags/rails">rails</a>
+        </span>
+      
+        
+        
+        
+        
+        
+
+        
+          
+        
+
+        
+
+        
+
+        
+
+        
+
+        <span class='rank-5'>
+          <a href="/tags/rails3">rails3</a>
+        </span>
+      
+        
+        
+        
+        
+        
+
+        
+          
+        
+
+        
+
+        
+
+        
+
+        
+
+        <span class='rank-5'>
+          <a href="/tags/rails4">rails4</a>
+        </span>
+      
+        
+        
+        
+        
+        
+
+        
+          
+        
+
+        
+
+        
+
+        
+
+        
+
+        <span class='rank-5'>
+          <a href="/tags/rake-task">rake task</a>
+        </span>
+      
+        
+        
+        
+        
+        
+
+        
+          
+        
+
+        
+
+        
+
+        
+
+        
+
+        <span class='rank-5'>
+          <a href="/tags/ransack">ransack</a>
+        </span>
+      
+        
+        
+        
+        
+        
+
+        
+          
+        
+
+        
+
+        
+
+        
+
+        
+
+        <span class='rank-5'>
+          <a href="/tags/resources">resources</a>
+        </span>
+      
+        
+        
+        
+        
+        
+
+        
+          
+        
+
+        
+
+        
+
+        
+
+        
+
+        <span class='rank-5'>
+          <a href="/tags/rest">rest</a>
+        </span>
+      
+        
+        
+        
+        
+        
+
+        
+          
+        
+
+        
+
+        
+
+        
+
+        
+
+        <span class='rank-5'>
+          <a href="/tags/restful">restful</a>
+        </span>
+      
+        
+        
+        
+        
+        
+
+        
+          
+        
+
+        
+
+        
+
+        
+
+        
+
+        <span class='rank-5'>
+          <a href="/tags/rspec">rspec</a>
+        </span>
+      
+        
+        
+        
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+          
+        
+
+        <span class='rank-1'>
+          <a href="/tags/ruby">ruby</a>
+        </span>
+      
+        
+        
+        
+        
+        
+
+        
+          
+        
+
+        
+
+        
+
+        
+
+        
+
+        <span class='rank-5'>
+          <a href="/tags/scaffold">scaffold</a>
+        </span>
+      
+        
+        
+        
+        
+        
+
+        
+          
+        
+
+        
+
+        
+
+        
+
+        
+
+        <span class='rank-5'>
+          <a href="/tags/selenium-webdriver">selenium-webdriver</a>
+        </span>
+      
+        
+        
+        
+        
+        
+
+        
+          
+        
+
+        
+
+        
+
+        
+
+        
+
+        <span class='rank-5'>
+          <a href="/tags/sqlite">sqlite</a>
+        </span>
+      
+        
+        
+        
+        
+        
+
+        
+          
+        
+
+        
+
+        
+
+        
+
+        
+
+        <span class='rank-5'>
+          <a href="/tags/tdd">tdd</a>
+        </span>
+      
+        
+        
+        
+        
+        
+
+        
+
+        
+
+        
+          
+        
+
+        
+
+        
+
+        <span class='rank-3'>
+          <a href="/tags/tips">tips</a>
+        </span>
+      
+        
+        
+        
+        
+        
+
+        
+          
+        
+
+        
+
+        
+
+        
+
+        
+
+        <span class='rank-5'>
+          <a href="/tags/tutorial">tutorial</a>
+        </span>
+      
+        
+        
+        
+        
+        
+
+        
+
+        
+          
+        
+
+        
+
+        
+
+        
+
+        <span class='rank-4'>
+          <a href="/tags/ubuntu">ubuntu</a>
+        </span>
+      
+        
+        
+        
+        
+        
+
+        
+          
+        
+
+        
+
+        
+
+        
+
+        
+
+        <span class='rank-5'>
+          <a href="/tags/vagrant">vagrant</a>
+        </span>
+      
+        
+        
+        
+        
+        
+
+        
+          
+        
+
+        
+
+        
+
+        
+
+        
+
+        <span class='rank-5'>
+          <a href="/tags/virtualbox">virtualbox</a>
+        </span>
+      
+        
+        
+        
+        
+        
+
+        
+          
+        
+
+        
+
+        
+
+        
+
+        
+
+        <span class='rank-5'>
+          <a href="/tags/weekly">weekly</a>
+        </span>
+      
+  </div>
+</section>
+
+          </aside>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+  
+  <footer role="contentinfo">
+    <div class="container">
+    <p class="text-muted credits">
+      <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">
+        <img alt="Creative Commons License" style="border-width:0;float:left;padding-right:5px;" src="http://i.creativecommons.org/l/by-sa/3.0/88x31.png" />
+      </a>
+      <span xmlns:dc="http://purl.org/dc/elements/1.1/">icebergist.com</span> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-Share Alike 3.0 Unported License</a>.
+
+      
+      <br />
+      <small>
+          <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>,
+          <span class="credit">customized with <a href="https://github.com/kAworu/octostrap3">octostrap3</a></span>.
+      </small>
+    </p>
+</div>
+
+  </footer>
+  <script src="http://blog.orangeiceberg.com//assets/bootstrap/dist/js/bootstrap.min.js"></script>
+<script type="text/javascript" id="dsq-count-scr" src="//icebergist.disqus.com/count.js" async></script>
+
 </body>
 </html>
+

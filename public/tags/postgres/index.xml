@@ -6,16 +6,98 @@
     <description>Recent content in Postgres on Icebergist</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 01 Jun 2015 11:03:47 +0200</lastBuildDate>
+    <lastBuildDate>Tue, 18 Oct 2016 07:05:38 +0200</lastBuildDate>
     <atom:link href="http://blog.orangeiceberg.com/tags/postgres/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
-      <title>changing database starting id</title>
+      <title>Backup and Restore a PostgreSQL Database</title>
+      <link>http://blog.orangeiceberg.com/posts/backup-and-restore-a-postgresql-database</link>
+      <pubDate>Tue, 18 Oct 2016 07:05:38 +0200</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/backup-and-restore-a-postgresql-database</guid>
+      <description>
+
+&lt;p&gt;While working on different projects and in different environments, we often need to export a dump from one database and then import it into another. A while ago &lt;a href=&#34;http://http://orangeiceberg.com/about/&#34; title=&#34;About Slobodan&#34;&gt;Slobodan&lt;/a&gt; wrote how to &lt;a href=&#34;http://icebergist.com/posts/import-and-export-mysql-dump/&#34; title=&#34;Import and Export mySQL dump&#34;&gt;export and import a mySQL dump&lt;/a&gt;, and here is a guide how do it for PostgreSQL.&lt;/p&gt;
+
+&lt;h2 id=&#34;export-a-postgresql-database-dump:84d8e3d5c8f415260e623e37a1cf3f9b&#34;&gt;Export a PostgreSQL database dump&lt;/h2&gt;
+
+&lt;p&gt;To export PostgreSQL database we will need to use the &lt;a href=&#34;https://www.postgresql.org/docs/current/static/backup-dump.html&#34; title=&#34;PostgreSQL&#34;&gt;pg_dump&lt;/a&gt; tool, which will dump all the contents of a selected database into a single file.
+We need to run &lt;code&gt;pg_dump&lt;/code&gt; in the command line on the computer where the database is stored. So, if the database is stored on a remote server, you will need to SSH to that server in order to run the following command:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;pg_dump -U db_user -W -F t db_name &amp;gt; /path/to/your/file/dump_name.tar
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Here we used the following options:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;-U&lt;/code&gt; to specify which user will connect to the PostgreSQL database server.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-W&lt;/code&gt; or &lt;code&gt;--password&lt;/code&gt; will force pg_dump to prompt for a password before connecting to the server.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-F&lt;/code&gt; is used to specify the format of the output file, which can be one of the following:
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;p&lt;/code&gt; - plain-text SQL script&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;c&lt;/code&gt; - custom-format archive&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;d&lt;/code&gt; - directory-format archive&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;t&lt;/code&gt; - tar-format archive&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;sup&gt;&lt;em&gt;custom&lt;/em&gt;, &lt;em&gt;directory&lt;/em&gt; and &lt;em&gt;tar&lt;/em&gt; formats are suitable for input into pg_restore.&lt;/sup&gt;&lt;/p&gt;
+
+&lt;p&gt;To see a list of all the available options use &lt;code&gt;pg_dump -?&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;With given options &lt;code&gt;pg_dump&lt;/code&gt; will first prompt for a password for the database user &lt;code&gt;db_user&lt;/code&gt; and then connect as that user to the database named &lt;code&gt;db_name&lt;/code&gt;. After it successfully connects, &lt;code&gt;&amp;gt;&lt;/code&gt; will write the output produced by pg_dump to a file with a given name, in this case &lt;code&gt;dump_name.tar&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;File created in the described process contains all the SQL queries that are required in order to replicate your database.&lt;/p&gt;
+
+&lt;h2 id=&#34;import-a-postgresql-database-dump:84d8e3d5c8f415260e623e37a1cf3f9b&#34;&gt;Import a PostgreSQL database dump&lt;/h2&gt;
+
+&lt;p&gt;There are two ways to restore a PostgreSQL database:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;code&gt;psql&lt;/code&gt; for restoring from a plain SQL script file created with &lt;code&gt;pg_dump&lt;/code&gt;,&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;pg_restore&lt;/code&gt; for restoring from a .tar file, directory, or custom format created with &lt;code&gt;pg_dump&lt;/code&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&#34;1-restore-a-database-with-psql:84d8e3d5c8f415260e623e37a1cf3f9b&#34;&gt;1. Restore a database with psql&lt;/h3&gt;
+
+&lt;p&gt;If your backup is a plain-text file containing SQL script, then you can restore your database by using &lt;a href=&#34;https://www.postgresql.org/docs/current/static/app-psql.html&#34;&gt;PostgreSQL interactive terminal&lt;/a&gt;, and running the following command:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;psql -U db_user db_name &amp;lt; dump_name.sql
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;where &lt;code&gt;db_user&lt;/code&gt; is the database user, &lt;code&gt;db_name&lt;/code&gt; is the database name, and &lt;code&gt;dump_name.sql&lt;/code&gt; is the name of your backup file.&lt;/p&gt;
+
+&lt;h3 id=&#34;2-restore-a-database-with-pg-restore:84d8e3d5c8f415260e623e37a1cf3f9b&#34;&gt;2. Restore a database with pg_restore&lt;/h3&gt;
+
+&lt;p&gt;If you choose custom, directory, or archive format when creating a backup file, then you will need to use pg_restore in order to restore your database:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;pg_restore -d db_name /path/to/your/file/dump_name.tar -c -U db_user&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;If you use pg_restore you have various options available, for example:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;-c&lt;/code&gt; to drop database objects before recreating them,&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-C&lt;/code&gt; to create a database before restoring into it,&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-e&lt;/code&gt; exit if an error has encountered,&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-F format&lt;/code&gt; to specify the format of the archive.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Use &lt;code&gt;pg_restore -?&lt;/code&gt; to get the full list of available options.&lt;/p&gt;
+
+&lt;p&gt;You can find more info on using mentioned tools by running &lt;code&gt;man pg_dump&lt;/code&gt;, &lt;code&gt;man psql&lt;/code&gt; and &lt;code&gt;man pg_restore&lt;/code&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Changing database starting id</title>
       <link>http://blog.orangeiceberg.com/posts/changing-database-starting-id</link>
       <pubDate>Mon, 01 Jun 2015 11:03:47 +0200</pubDate>
       
       <guid>http://blog.orangeiceberg.com/posts/changing-database-starting-id</guid>
-      <description>&lt;p&gt;For our new project it was necessary to modify the starting id of our database. This can be handled through migration for creating table but we decided to create a rake task that handled this for us.&lt;/p&gt;
+      <description>
+
+&lt;p&gt;For our new project it was necessary to modify the starting id of our database. This can be handled through migration for creating table but we decided to create a rake task that handled this for us.&lt;/p&gt;
 
 &lt;p&gt;The rake task that we created detects what database is being used and executes appropriate changes according to that.&lt;/p&gt;
 
@@ -31,7 +113,7 @@
 &lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;namespace :database do
   desc &amp;quot;Detect database that&#39;s being used and then increment its id&amp;quot;
   task autoincrement: :environment do
-  
+
     db_name_downcase = ActiveRecord::Base.connection.adapter_name.downcase
 
     if Link.maximum(:id).to_i &amp;lt; 1000
@@ -47,20 +129,26 @@
     else
       puts &amp;quot;To perform this task your database shouldn&#39;t have records with id number higher than 1000&amp;quot;
     end
-    
+
   end
 end
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;We need to change the starting id of our database to 1000 so we check that we don&amp;rsquo;t have a record with id higher than 1000. Link is our Active Record model and links is the name of our table.&lt;/p&gt;
 
-&lt;p&gt;ActiveRecord::Base.connection returns the connection currently associated with the class. We use it to detect the name of database and execute appropriate changes.
-###MySQL
-For MySQL we need to set AUTO_INCREMENT value to 1000, Auto-increment allows a unique number to be generated when a new record is inserted into a table. When first record is created it sets its primary key to 1 by default  and it will auto increment by 1 for each new record.
-###PostgreSQL
-For Postgres we have to explain what a sequence is. A sequence is a special kind of a database object designed for generating unique numeric identifiers. It is typically used to generate artificial primary keys. Sequences are similar to the Auto-increment concept in MySQL.
-###SQLite
-For SQlite we altered sqlite_sequence table, which is an internal table used to implement AUTOINCREMENT. It is created automatically whenever any ordinary table with an AUTOINCREMENT integer primary key is created.&lt;/p&gt;
+&lt;p&gt;ActiveRecord::Base.connection returns the connection currently associated with the class. We use it to detect the name of database and execute appropriate changes.&lt;/p&gt;
+
+&lt;h3 id=&#34;mysql:d15bb8f4407f58e2ce472d247df169d1&#34;&gt;MySQL&lt;/h3&gt;
+
+&lt;p&gt;For MySQL we need to set AUTO_INCREMENT value to 1000, Auto-increment allows a unique number to be generated when a new record is inserted into a table. When first record is created it sets its primary key to 1 by default  and it will auto increment by 1 for each new record.&lt;/p&gt;
+
+&lt;h3 id=&#34;postgresql:d15bb8f4407f58e2ce472d247df169d1&#34;&gt;PostgreSQL&lt;/h3&gt;
+
+&lt;p&gt;For Postgres we have to explain what a sequence is. A sequence is a special kind of a database object designed for generating unique numeric identifiers. It is typically used to generate artificial primary keys. Sequences are similar to the Auto-increment concept in MySQL.&lt;/p&gt;
+
+&lt;h3 id=&#34;sqlite:d15bb8f4407f58e2ce472d247df169d1&#34;&gt;SQLite&lt;/h3&gt;
+
+&lt;p&gt;For SQlite we altered sqlite_sequence table, which is an internal table used to implement AUTOINCREMENT. It is created automatically whenever any ordinary table with an AUTOINCREMENT integer primary key is created.&lt;/p&gt;
 
 &lt;p&gt;You can check &lt;a href=&#34;http://stackoverflow.com/questions/2075331/change-starting-id-number&#34;&gt;this Stack Overflow discussion&lt;/a&gt; that was very helpful to me.&lt;/p&gt;
 </description>

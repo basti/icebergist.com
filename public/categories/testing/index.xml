@@ -94,10 +94,11 @@
 
 &lt;p&gt;Assume that you have the usual setup with model (MyFile) using simple Carrierwave uploader (MyFileUploader):&lt;/p&gt;
 
-&lt;pre&gt;# app/models/my_file.rb
-class MyFile &amp;lt; ActiveRecord::Base
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;# app/models/my_file.rb
+class MyFile &amp;amp;lt; ActiveRecord::Base
   mount_uploader :file, MyFileUploader
-end&lt;/pre&gt;
+end
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;To be able to test Carrierwave uploaders with RSpec using FactoryGirl factories you need:&lt;/p&gt;
 
@@ -110,27 +111,29 @@ end&lt;/pre&gt;
 
 &lt;h2 id=&#34;define-factory:f55ec0979c7942ed3400c6817da421f3&#34;&gt;Define factory&lt;/h2&gt;
 
-&lt;pre&gt;# spec/factories/my_files.rb
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;# spec/factories/my_files.rb
 FactoryGirl.define do
  factory :my_file do
    photo Rack::Test::UploadedFile.new(File.open(File.join(Rails.root, &#39;/spec/fixtures/myfiles/myfile.jpg&#39;)))
  end
-end&lt;/pre&gt;
+end
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;h2 id=&#34;setup-carrierwave:f55ec0979c7942ed3400c6817da421f3&#34;&gt;Setup Carrierwave&lt;/h2&gt;
 
 &lt;p&gt;First we need to make sure Carrierwave is using local file system for storage and to disable file processing for testing environments. Disabling file processing will speed up tests considerably. We can do that by adding following to Carrierwave initializer:&lt;/p&gt;
 
-&lt;pre&gt;if Rails.env.test? || Rails.env.cucumber?
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;if Rails.env.test? || Rails.env.cucumber?
   CarrierWave.configure do |config|
     config.storage = :file
     config.enable_processing = false
   end
-end&lt;/pre&gt;
+end
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Next we should separate test uploads from any other uploads. We can do that by modifying cache_dir and store_dir methods for all Carrierwave models (i.e. all models that are descendants of CarrierWave::Uploader::Base). So the whole Carrierwave initializer looks something like:&lt;/p&gt;
 
-&lt;pre&gt;# config/initializers/carrierwave.rb
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;# config/initializers/carrierwave.rb
 if Rails.env.test? || Rails.env.cucumber?
   CarrierWave.configure do |config|
     config.storage = :file
@@ -145,28 +148,30 @@ if Rails.env.test? || Rails.env.cucumber?
     next if klass.anonymous?
     klass.class_eval do
       def cache_dir
-        &#34;#{Rails.root}/spec/support/uploads/tmp&#34;
+        &amp;quot;#{Rails.root}/spec/support/uploads/tmp&amp;quot;
       end
 
       def store_dir
-        &#34;#{Rails.root}/spec/support/uploads/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}&#34;
+        &amp;quot;#{Rails.root}/spec/support/uploads/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}&amp;quot;
       end
     end
   end
-end&lt;/pre&gt;
+end
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;h2 id=&#34;clean-up-uploaded-files:f55ec0979c7942ed3400c6817da421f3&#34;&gt;Clean up uploaded files&lt;/h2&gt;
 
 &lt;p&gt;Using factory defined above will create uploaded files in cache_dir and store_dir. These are just temporary files and should be removed after each test, so each of them has a clean slate. By adding after :each hook in RSpec configuration block we can remove these files simply by deleting spec/support/uploads dir.&lt;/p&gt;
 
-&lt;pre&gt;# spec_helper.rb
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;# spec_helper.rb
 RSpec.configure do |config|
   config.after(:each) do
     if Rails.env.test? || Rails.env.cucumber?
-      FileUtils.rm_rf(Dir[&#34;#{Rails.root}/spec/support/uploads&#34;])
-    end 
+      FileUtils.rm_rf(Dir[&amp;quot;#{Rails.root}/spec/support/uploads&amp;quot;])
+    end
   end
-end&lt;/pre&gt;
+end
+&lt;/code&gt;&lt;/pre&gt;
 </description>
     </item>
     

@@ -6,8 +6,299 @@
     <description>Recent content in Ruby on Icebergist</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 24 Mar 2016 08:09:25 +0100</lastBuildDate>
+    <lastBuildDate>Mon, 20 Jun 2016 12:39:42 +0200</lastBuildDate>
     <atom:link href="http://blog.orangeiceberg.com/tags/ruby/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Using Ransackers to search for a key in PostgreSQL JSON column</title>
+      <link>http://blog.orangeiceberg.com/posts/using-ransackers-to-search-for-a-key-in-postgresql-json-column</link>
+      <pubDate>Mon, 20 Jun 2016 12:39:42 +0200</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/using-ransackers-to-search-for-a-key-in-postgresql-json-column</guid>
+      <description>&lt;p&gt;Starting with v9.2, PostgreSQL added native JSON support which enabled us to take advantage of some benefits that come with NoSQL database within a traditional relational database such as PostgreSQL.&lt;/p&gt;
+
+&lt;p&gt;While working on a Ruby on Rails application that used PostgreSQL database to store data, we came a across an issue where we needed to implement a search by key within a JSON column.&lt;/p&gt;
+
+&lt;p&gt;We were alredy using &lt;a href=&#34;https://github.com/activerecord-hackery/ransack&#34;&gt;Ransack&lt;/a&gt; for building search forms within the application, so we needed a way of telling Ransack to perform a search by given key in our JSON column.&lt;/p&gt;
+
+&lt;p&gt;This is where &lt;a href=&#34;https://github.com/activerecord-hackery/ransack/wiki/using-ransackers&#34;&gt;Ransackers&lt;/a&gt; come in.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;The premise behind Ransack is to provide access to Arel predicate methods.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;You can find more information on Arel &lt;a href=&#34;https://github.com/rails/arel&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;In our case we needed to perform a search within &lt;code&gt;transactions&lt;/code&gt; table and &lt;code&gt;payload&lt;/code&gt; JSON column, looking for records containing a key called &lt;code&gt;invoice_number&lt;/code&gt;. To achieve this we added the following ransacker to our &lt;code&gt;Transaction&lt;/code&gt; model&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;ransacker :invoice_number do |parent|
+   Arel::Nodes::InfixOperation.new(&#39;-&amp;gt;&amp;gt;&#39;, parent.table[:payload], &#39;invoice_number&#39;)
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now with our search set on &lt;code&gt;link_type_cont&lt;/code&gt; (cont being just one of Ransack available search predicates), if the user entered for example  &lt;code&gt;123&lt;/code&gt; in the search filed, it would generate a query like this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;SELECT  &amp;quot;transactions&amp;quot;.* FROM &amp;quot;transactions&amp;quot;  WHERE (&amp;quot;transactions&amp;quot;.&amp;quot;payload&amp;quot; -&amp;gt;&amp;gt; &#39;invoice_number&#39; ILIKE &#39;%123%&#39;)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;basically performing a search for records in &lt;code&gt;transactions&lt;/code&gt; table that have a key called &lt;code&gt;invoice_number&lt;/code&gt; with value containing a string &lt;code&gt;123&lt;/code&gt;, within a JSON column &lt;code&gt;payload&lt;/code&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Show part of a Rails template in other locale</title>
+      <link>http://blog.orangeiceberg.com/posts/show-part-of-a-rails-template-in-other-locale</link>
+      <pubDate>Mon, 30 May 2016 10:06:00 +0200</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/show-part-of-a-rails-template-in-other-locale</guid>
+      <description>
+
+&lt;p&gt;I recently worked on a Rails project, which had parts of pages in different languages. That may be a problem if you have already translated their entire text to all required languages. You can even be tempted to hardcode parts of the text into other languages. Fortunately, there is an elegant way to solve that problem, just wrap parts of template or partials into blocks with desired locale, like this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;&amp;lt;% I18n.with_locale(&#39;en&#39;) do %&amp;gt;
+  ...part of your template
+  or
+  &amp;lt;%= render partial: &#39;some/partial&#39; %&amp;gt;
+&amp;lt;% end %&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;example:87119108ea1faf72eb52a6c753eb4dc7&#34;&gt;Example&lt;/h3&gt;
+
+&lt;p&gt;Suppose, there is a template with only header and two paragraphs.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;&amp;lt;h1&amp;gt;&amp;lt;%= t(&#39;my_great_header&#39;) %&amp;gt;&amp;lt;/h1&amp;gt;
+
+&amp;lt;p&amp;gt;&amp;lt;%= t(&#39;first_paragraph&#39;) %&amp;gt;&amp;lt;/p&amp;gt;
+
+&amp;lt;p&amp;gt;&amp;lt;%= t(&#39;second_paragraph&#39;) %&amp;gt;&amp;lt;/p&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And locale in English and French for that template.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;# in config/locales/en.yml
+en:
+  my_great_header: &amp;quot;My English great header&amp;quot;
+  first_paragraph: &amp;quot;First English paragraph&amp;quot;
+  second_paragraph: &amp;quot;Second English paragraph&amp;quot;
+
+# in config/locales/fr.yml
+fr:
+  my_great_header: &amp;quot;My French great header&amp;quot;
+  first_paragraph: &amp;quot;First French paragraph&amp;quot;
+  second_paragraph: &amp;quot;Second French paragraph&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And client wants first paragraph to always be in English.&lt;/p&gt;
+
+&lt;p&gt;Just wrap first paragraph in block with locale &lt;code&gt;&#39;en&lt;/code&gt;, like this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;&amp;lt;h1&amp;gt;&amp;lt;%= t(&#39;my_great_header&#39;) %&amp;gt;&amp;lt;/h1&amp;gt;
+
+&amp;lt;% I18n.with_locale(&#39;en&#39;) do %&amp;gt;
+  &amp;lt;p&amp;gt;&amp;lt;%= t(&#39;first_paragraph&#39;) %&amp;gt;&amp;lt;/p&amp;gt;
+&amp;lt;% end %&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;%= t(&#39;second_paragraph&#39;) %&amp;gt;&amp;lt;/p&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;and when you switch language to Franch result will be:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-text&#34;&gt;My French great header
+
+First English paragraph
+
+Second French paragraph
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;I hope that this helps. Have a nice day.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Deploying Rails app with Capistrano 3</title>
+      <link>http://blog.orangeiceberg.com/posts/deploying-rails-app-with-capistrano-3</link>
+      <pubDate>Wed, 25 May 2016 10:42:17 +0200</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/deploying-rails-app-with-capistrano-3</guid>
+      <description>
+
+&lt;p&gt;In the lifetime of every application the time comes for it to be presented to everyone. That&amp;rsquo;s why we have to put our application on a special server which is designed for this purpose. In one word, we need to &lt;strong&gt;deploy&lt;/strong&gt; our application. In this post you will see how to deploy app with &lt;a href=&#34;http://www.capistranorb.com/&#34;&gt;Capistrano 3&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Capistrano is a great developers tool that is used to automatically deploy projects to remote server.&lt;/p&gt;
+
+&lt;h3 id=&#34;add-capistrano-to-rails-app:5a134459841b76e99627f89a0f6507b6&#34;&gt;Add Capistrano to Rails app&lt;/h3&gt;
+
+&lt;p&gt;I will assume you already have a server set up and an application ready to be deployed remotely.&lt;/p&gt;
+
+&lt;p&gt;We will use gem &lt;a href=&#34;https://github.com/capistrano/rails&#34;&gt;&amp;lsquo;capistrano-rails&amp;rsquo;&lt;/a&gt;, so we need to add this gems to Gemfile:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;group :development do
+  gem &#39;capistrano&#39;, &#39;~&amp;gt; 3.5&#39;
+  gem &#39;capistrano-rails&#39;, &#39;~&amp;gt; 1.1.6&#39;
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;and install gems with &lt;code&gt;$ bundle install&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h3 id=&#34;initialize-capistrano:5a134459841b76e99627f89a0f6507b6&#34;&gt;Initialize Capistrano&lt;/h3&gt;
+
+&lt;p&gt;Then run the following command to create configuration files:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ bundle exec cap install
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This command  creates all the necessary configuration files and directory structure with two stages, staging and production:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Capfile
+config/deploy.rb
+config/deploy/production.rb
+config/deploy/staging.rb
+lib/capistrano/tasks
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;require-needed-gems-in-capfile:5a134459841b76e99627f89a0f6507b6&#34;&gt;Require needed gems in Capfile&lt;/h3&gt;
+
+&lt;p&gt;Open the &lt;code&gt;Capfile&lt;/code&gt; and add or uncomment this lines:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;require &#39;capistrano/setup&#39;
+require &#39;capistrano/deploy&#39;
+require &#39;capistrano/bundler&#39;
+require &#39;capistrano/rails/assets&#39;
+require &#39;capistrano/rails/migrations&#39;
+Dir.glob(&#39;lib/capistrano/tasks/*.rake&#39;).each { |r| import r }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;add-capistrano-rbenv-gem:5a134459841b76e99627f89a0f6507b6&#34;&gt;Add capistrano-rbenv gem&lt;/h4&gt;
+
+&lt;p&gt;The &lt;a href=&#34;https://github.com/capistrano/rbenv&#34;&gt;capistrano-rbenv&lt;/a&gt; gem provides rbenv support for Capistrano 3.&lt;/p&gt;
+
+&lt;p&gt;Add this line to the Gemfile:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;group :development do
+  gem &#39;capistrano&#39;, &#39;~&amp;gt; 3.5&#39;
+  gem &#39;capistrano-rails&#39;, &#39;~&amp;gt; 1.1.6&#39;
+  gem &#39;capistrano-rbenv&#39;, &#39;~&amp;gt; 2.0&#39;, require: false
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And require this gem in Capfile &lt;code&gt;require &#39;capistrano/rbenv&#39;&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h4 id=&#34;add-capistrano-passenger-gem:5a134459841b76e99627f89a0f6507b6&#34;&gt;Add capistrano-passenger gem&lt;/h4&gt;
+
+&lt;p&gt;The &lt;a href=&#34;https://github.com/capistrano/passenger&#34;&gt;capistrano-passenger&lt;/a&gt; gem adds a task to restart your application after deployment via Capistrano.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;group :development do
+  ...
+  gem &#39;capistrano-rbenv&#39;, &#39;~&amp;gt; 2.0&#39;, require: false
+  gem &#39;capistrano-passenger&#39;, &#39;~&amp;gt; 0.2.0&#39;
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And require this gem in Capfile &lt;code&gt;require &#39;capistrano/passenger&#39;&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h3 id=&#34;configure-deploy-rb-file:5a134459841b76e99627f89a0f6507b6&#34;&gt;Configure deploy.rb file&lt;/h3&gt;
+
+&lt;p&gt;Open &lt;code&gt;config/deploy.rb&lt;/code&gt; and add options for deployment:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;set all needed variables, this is the variant with two servers (&lt;em&gt;staging and production&lt;/em&gt;) and with user created on server (&lt;em&gt;server setup is theme for different post&lt;/em&gt;)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;set :application, &#39;app-name&#39;   # application name
+set :deploy_user, &#39;user-name&#39;   # name of user who is set on server
+set :repo_url, &#39;git@github.com:nickname/repo_name.git&#39;   # your repository url from github
+set :branch, ENV.fetch(&#39;BRANCH&#39;, &#39;master&#39;)   # branch which you want to deploy from
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;set the path where you want to find your app on server, starting from server&amp;rsquo;s root&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;set :deploy_to, -&amp;gt; { &amp;quot;/path/to/app/#{fetch(:rails_env)}-#{fetch(:application)}&amp;quot; }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;set config files, Capistrano uses a folder called shared to manage files and directories that should persist across releases&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;set :linked_files, fetch(:linked_files, []).push(&#39;config/database.yml&#39;, &#39;config/secrets.yml&#39;)
+
+set :linked_dirs, fetch(:linked_dirs, []).push(&#39;log&#39;, &#39;tmp/pids&#39;, &#39;tmp/cache&#39;, &#39;tmp/sockets&#39;, &#39;vendor/bundle&#39;, &#39;public/system&#39;)
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;set ruby version, we use &lt;code&gt;gem &#39;capistrano-rbenv&#39;&lt;/code&gt; for this setup&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;set :rbenv_type, :user
+set :rbenv_ruby, &#39;2.2.2&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;set option for restarting your application after deployment with &lt;code&gt;gem &#39;capistrano-passenger&#39;&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;set :passenger_restart_with_touch, true
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;here you can put all kinds of rake tasks for different needs that you can run every time when you deploy your application.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;namespace :deploy do
+  desc &amp;quot;Description of task&amp;quot;
+  task :name_of_task do
+      # do something
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;capistrano-s-server-settings:5a134459841b76e99627f89a0f6507b6&#34;&gt;Capistrano&amp;rsquo;s server settings&lt;/h3&gt;
+
+&lt;p&gt;You need to tell Capistrano where to find your server.
+This is an example of server&amp;rsquo;s settings for application where everything is on same machine (application, server, database).&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;In &lt;code&gt;config/deploy/staging&lt;/code&gt; set:&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;server &#39;your.staging.server.com&#39;, user: fetch(:deploy_user), roles: %w{app db web}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;and set rails environment&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;set :rails_env, &#39;staging&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Also set the same configuration for production server.&lt;/p&gt;
+
+&lt;p&gt;In &lt;code&gt;config/deploy/production&lt;/code&gt; add:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;server &#39;your.production.server.com&#39;, user: fetch(:deploy_user), roles: %w{app db web}
+set :rails_env, &#39;production&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;deploy-your-application:5a134459841b76e99627f89a0f6507b6&#34;&gt;Deploy your application&lt;/h3&gt;
+
+&lt;p&gt;Just run &lt;code&gt;deploy&lt;/code&gt; task:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;bundle exec cap staging deploy
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;or&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;bundle exec cap production deploy
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;and that is it, your app is live and you can visit it on server&amp;rsquo;s name url, in our example case &lt;em&gt;your.staging.server.com&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;Note: you can find complete documentation on &lt;a href=&#34;http://capistranorb.com/&#34;&gt;Capistrano site&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Have a nice day!&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>rake db:schema:load vs rake db:migrate</title>
@@ -45,7 +336,7 @@ end
 &lt;li&gt;then create translation tables&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;pre&gt;&lt;code&gt;class CreatePosts &amp;lt; ActiveRecord::Migration
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;class CreatePosts &amp;lt; ActiveRecord::Migration
   def up
     create_table :posts do |t|
       t.timestamps
@@ -71,7 +362,7 @@ end
 &lt;li&gt;remove title from post translations table&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;pre&gt;&lt;code&gt;class RemoveTitleFromPostTranslations &amp;lt; ActiveRecord::Migration
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;class RemoveTitleFromPostTranslations &amp;lt; ActiveRecord::Migration
   def up
     remove_column :post_translations, :title, :string
   end
@@ -86,7 +377,7 @@ end
 &lt;li&gt;add title to posts table&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;pre&gt;&lt;code&gt;class AddTitleToPosts &amp;lt; ActiveRecord::Migration
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;class AddTitleToPosts &amp;lt; ActiveRecord::Migration
   def change
     add_column :posts, :title, :string
   end
@@ -97,7 +388,7 @@ end
 &lt;li&gt;remove title attribute from model translations&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;pre&gt;&lt;code&gt;class Post &amp;lt; ActiveRecord::Base
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;class Post &amp;lt; ActiveRecord::Base
   translates :text
 end
 &lt;/code&gt;&lt;/pre&gt;
@@ -228,15 +519,15 @@ end
 
 &lt;p&gt;once bundler is installed creating a structure for your new gem is easy,&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;	$ bundle gem slug_converter
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;$ bundle gem slug_converter
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;The first time you use bundler to create a gem you will be prompted to answer a couple of questions:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;	Do you want to include code of conduct in your gems you generate?
-	Do you want to licence your code permissively under the MIT licence?
-	Do you want to generate tests with your gem? 
-	Type rspec or minitest to generate those tests files now and in the future:
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;Do you want to include code of conduct in your gems you generate?
+Do you want to licence your code permissively under the MIT licence?
+Do you want to generate tests with your gem?
+Type rspec or minitest to generate those tests files now and in the future:
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Answering these questions will help bundler configure and setup files that are being generated now and in the future. Here we answered yes to first 4 qestions and choose rspec for testing.&lt;/p&gt;
@@ -308,17 +599,19 @@ end
 
 &lt;p&gt;Another file that is generated by the bundler is &lt;code&gt;Rakefile&lt;/code&gt; which just adds some gem tasks from bundler, and we can see those tasks with explanation by running&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;	rake -T
-	rake build    # Build slug_converter-0.0.1.gem into the pkg directory
-	rake install  # Build and install slug_converter-0.0.1.gem into system gems
-	rake release  # Create tag v0.0.1 and build and push slug_converter-0.1.0.gem to Rubygems
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;rake -T
+rake build    # Build slug_converter-0.0.1.gem into the pkg directory
+rake install  # Build and install slug_converter-0.0.1.gem into system gems
+rake release  # Create tag v0.0.1 and build and push slug_converter-0.1.0.gem to Rubygems
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;h3 id=&#34;writing-tests:26b86b95592661b7092ab782e8d51bcd&#34;&gt;Writing tests&lt;/h3&gt;
 
 &lt;p&gt;If you are following the principles of Test Driven Development you will probably like to start by writing tests for you gem, for that purpose I would suggest using RSpec.
-To do that you will need to add rspec as a development dependency to you gemspec file:
-    spec.add_development_dependency &amp;lsquo;rspec&amp;rsquo;&lt;/p&gt;
+To do that you will need to add rspec as a development dependency to you gemspec file:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;spec.add_development_dependency &#39;rspec&#39;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;As mentioned in the beginning, when running bundle gem for the first time, bundler will asks if you would like to generate test files for your gem and to choose if you want to use rspec or minitest. If you answer with yes, and choose rspec, bundler will generate a spec directory with two files:&lt;/p&gt;
 
@@ -337,115 +630,115 @@ describe SlugConverter do
     expect(SlugConverter::VERSION).not_to be nil
   end
   describe &amp;quot;.number&amp;quot; do
-  
+
     it &amp;quot;returns number when number is set&amp;quot; do
       converted_slug= SlugConverter.new(111)
       expect(converted_slug.number).to eq(111)
     end
-    
+
     it &amp;quot;returns decoded number for existing slug&amp;quot; do
       converted_slug = SlugConverter.new(&amp;quot;vg&amp;quot;)
       expect(converted_slug.number).to eq(363)
     end
-    
+
   end
-  
+
   describe &amp;quot;.number&amp;quot; do
-  
+
     it &amp;quot;sets number to given value&amp;quot; do
       converted_slug = SlugConverter.new(211)
       expect(converted_slug.number=210).to eq(210)
     end
-    
+
     it &amp;quot;sets slug to encoded value of number&amp;quot; do
       converted_slug = SlugConverter.new(211)
       converted_slug.number=210
       expect(converted_slug.slug).to eq(&amp;quot;pb&amp;quot;)
     end
-    
+
     it &amp;quot;sets number to integer value of given number passed as string&amp;quot; do
       converted_slug = SlugConverter.new(&amp;quot;210&amp;quot;)
       expect(converted_slug.number).to eq(210)
     end
-    
+
     it &amp;quot;sets slug to encoded value of given number passed as string&amp;quot; do
       converted_slug = SlugConverter.new(&amp;quot;210&amp;quot;)
       expect(converted_slug.slug).to eq(&amp;quot;pb&amp;quot;)
     end
-    
+
     it &amp;quot;sets number to integer value of argument that starts with a number but also contains letters&amp;quot; do
       converted_slug = SlugConverter.new(&amp;quot;210jj&amp;quot;)
       expect(converted_slug.number).to eq(210)
     end
-    
+
     it &amp;quot;sets slug to encoded value of argument that starts with a number but also contains letters&amp;quot; do
       converted_slug = SlugConverter.new(&amp;quot;210jj&amp;quot;)
       expect(converted_slug.slug).to eq(&amp;quot;pb&amp;quot;)
     end
-    
+
   end
-  
+
   describe &amp;quot;.slug&amp;quot; do
-  
+
      it &amp;quot;returns slug when slug is set&amp;quot; do
         converted_slug = SlugConverter.new(&amp;quot;hy&amp;quot;)
         expect(converted_slug.slug).to eq(&amp;quot;hy&amp;quot;)
      end
-     
+
      it &amp;quot;returns encoded slug when link id is set&amp;quot; do
         converted_id = SlugConverter.new(113)
         expect(converted_id.slug).to eq(&amp;quot;hy&amp;quot;)
      end
-     
+
   end
-  
+
   describe &amp;quot;.slug&amp;quot; do
-  
+
     it &amp;quot;sets slug to given value&amp;quot; do
       converted_slug = SlugConverter.new(&amp;quot;ezk&amp;quot;)
       expect(converted_slug.slug=(&amp;quot;ebk&amp;quot;)).to eq(&amp;quot;ebk&amp;quot;)
     end
-    
+
     it &amp;quot;sets number to decoded value of slug&amp;quot; do
       converted_slug = SlugConverter.new(&amp;quot;pb&amp;quot;)
       converted_slug.slug=(&amp;quot;ezk&amp;quot;)
       expect(converted_slug.number).to eq(1483)
     end
-    
+
     it &amp;quot;raises Arrgument Error exception if given value is an empty string&amp;quot; do
       expect { SlugConverter.new(&amp;quot;&amp;quot;) }.to raise_error(ArgumentError)
     end
-    
+
     it &amp;quot;raises Arrgument Error exception if given value is nil&amp;quot; do
       expect { SlugConverter.new(nil) }.to raise_error(ArgumentError)
     end
-    
+
     it &amp;quot;raises Arrgument Error exception if given value contains unpermitted letters&amp;quot; do
       expect { SlugConverter.new(&amp;quot;iiii&amp;quot;) }.to raise_error(ArgumentError)
     end
-    
+
     it &amp;quot;raises Arrgument Error exception if given value starts with letter but contains numbers&amp;quot; do
       expect { SlugConverter.new(&amp;quot;bb12&amp;quot;) }.to raise_error(ArgumentError)
     end
-    
+
   end
 end
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;To make rspec rake task available we will setup tasks folder where we&amp;rsquo;ll place our &lt;code&gt;rspec.rake&lt;/code&gt; file containing only 2 lines:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;	require &#39;rspec/core/rake_task&#39;
-	RSpec::Core::RakeTask.new(:spec)
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;require &#39;rspec/core/rake_task&#39;
+RSpec::Core::RakeTask.new(:spec)
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;and then we will import this file in our Rakefile that bundler provided automatically:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;	Dir.glob(&#39;tasks/**/*.rake&#39;).each(&amp;amp;method(:import))
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;Dir.glob(&#39;tasks/**/*.rake&#39;).each(&amp;amp;method(:import))
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Now run:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;bundle exec rake spec 
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;bundle exec rake spec
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;And watch your tests fail. :)&lt;/p&gt;
@@ -474,7 +767,7 @@ class SlugConverter
       raise ArgumentError, &#39;Argument must be integer value or non-empty string consisting of predefined letters&#39;
     end
   end
-  
+
   def number
     if @number.nil?
       @number = bijective_decode
@@ -482,13 +775,13 @@ class SlugConverter
       @number
     end
   end
-  
+
   def number=(new_number)
     @number = new_number
     @slug = bijective_encode
     @number
   end
-  
+
   def slug
     if @slug.nil?
       @slug = bijective_encode
@@ -496,7 +789,7 @@ class SlugConverter
       @slug
     end
   end
-  
+
   def slug=(new_slug)
     @slug = new_slug
     @number = bijective_decode
@@ -504,7 +797,7 @@ class SlugConverter
   end
 
   private
-  
+
     def bijective_encode
       id = @number
       return @alphabet[0] if id == 0
@@ -516,14 +809,14 @@ class SlugConverter
       end
       s.reverse
     end
-    
+
     def bijective_decode
       i = 0
       base = @alphabet.length
       @slug.each_char { |c| i = i * base + @alphabet.index(c) }
       i
     end
-    
+
     def validate_string(slug)
       unless slug.nil?
         alphabet = Set.new @alphabet
@@ -536,7 +829,7 @@ end
 
 &lt;p&gt;Now when we run the tests again, they should all pass.&lt;/p&gt;
 
-&lt;p&gt;###Making your gem configurabile&lt;/p&gt;
+&lt;h3 id=&#34;making-your-gem-configurabile:26b86b95592661b7092ab782e8d51bcd&#34;&gt;Making your gem configurabile&lt;/h3&gt;
 
 &lt;p&gt;In order to allow users to set their own alphabet that will be used by the SlugConverter, we needed to make our gem configurabile. To do this we used &lt;a href=&#34;https://github.com/krautcomputing/gem_config&#34;&gt;https://github.com/krautcomputing/gem_config&lt;/a&gt; gem.&lt;/p&gt;
 
@@ -544,7 +837,7 @@ end
 
 &lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;class SlugConverter
   include GemConfig::Base
-  
+
   with_configuration do
     has :alphabet, default: &amp;quot;qjeghxtrpnfmdzwvsybkuoca&amp;quot;
   end
@@ -552,9 +845,9 @@ end
   def initialize(number_or_slug)
      @alphabet = SlugConverter.configuration.alphabet.split(//)
      # ...
-  end	  
-  
-  # rest of the code omitted    
+  end
+
+  # rest of the code omitted
 end
 &lt;/code&gt;&lt;/pre&gt;
 
@@ -571,7 +864,7 @@ end
 
 &lt;p&gt;Then with just one comand:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;	$ bundle exec rake release
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;$ bundle exec rake release
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;ul&gt;
@@ -585,12 +878,14 @@ end
     </item>
     
     <item>
-      <title>changing database starting id</title>
+      <title>Changing database starting id</title>
       <link>http://blog.orangeiceberg.com/posts/changing-database-starting-id</link>
       <pubDate>Mon, 01 Jun 2015 11:03:47 +0200</pubDate>
       
       <guid>http://blog.orangeiceberg.com/posts/changing-database-starting-id</guid>
-      <description>&lt;p&gt;For our new project it was necessary to modify the starting id of our database. This can be handled through migration for creating table but we decided to create a rake task that handled this for us.&lt;/p&gt;
+      <description>
+
+&lt;p&gt;For our new project it was necessary to modify the starting id of our database. This can be handled through migration for creating table but we decided to create a rake task that handled this for us.&lt;/p&gt;
 
 &lt;p&gt;The rake task that we created detects what database is being used and executes appropriate changes according to that.&lt;/p&gt;
 
@@ -606,7 +901,7 @@ end
 &lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;namespace :database do
   desc &amp;quot;Detect database that&#39;s being used and then increment its id&amp;quot;
   task autoincrement: :environment do
-  
+
     db_name_downcase = ActiveRecord::Base.connection.adapter_name.downcase
 
     if Link.maximum(:id).to_i &amp;lt; 1000
@@ -622,20 +917,26 @@ end
     else
       puts &amp;quot;To perform this task your database shouldn&#39;t have records with id number higher than 1000&amp;quot;
     end
-    
+
   end
 end
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;We need to change the starting id of our database to 1000 so we check that we don&amp;rsquo;t have a record with id higher than 1000. Link is our Active Record model and links is the name of our table.&lt;/p&gt;
 
-&lt;p&gt;ActiveRecord::Base.connection returns the connection currently associated with the class. We use it to detect the name of database and execute appropriate changes.
-###MySQL
-For MySQL we need to set AUTO_INCREMENT value to 1000, Auto-increment allows a unique number to be generated when a new record is inserted into a table. When first record is created it sets its primary key to 1 by default  and it will auto increment by 1 for each new record.
-###PostgreSQL
-For Postgres we have to explain what a sequence is. A sequence is a special kind of a database object designed for generating unique numeric identifiers. It is typically used to generate artificial primary keys. Sequences are similar to the Auto-increment concept in MySQL.
-###SQLite
-For SQlite we altered sqlite_sequence table, which is an internal table used to implement AUTOINCREMENT. It is created automatically whenever any ordinary table with an AUTOINCREMENT integer primary key is created.&lt;/p&gt;
+&lt;p&gt;ActiveRecord::Base.connection returns the connection currently associated with the class. We use it to detect the name of database and execute appropriate changes.&lt;/p&gt;
+
+&lt;h3 id=&#34;mysql:d15bb8f4407f58e2ce472d247df169d1&#34;&gt;MySQL&lt;/h3&gt;
+
+&lt;p&gt;For MySQL we need to set AUTO_INCREMENT value to 1000, Auto-increment allows a unique number to be generated when a new record is inserted into a table. When first record is created it sets its primary key to 1 by default  and it will auto increment by 1 for each new record.&lt;/p&gt;
+
+&lt;h3 id=&#34;postgresql:d15bb8f4407f58e2ce472d247df169d1&#34;&gt;PostgreSQL&lt;/h3&gt;
+
+&lt;p&gt;For Postgres we have to explain what a sequence is. A sequence is a special kind of a database object designed for generating unique numeric identifiers. It is typically used to generate artificial primary keys. Sequences are similar to the Auto-increment concept in MySQL.&lt;/p&gt;
+
+&lt;h3 id=&#34;sqlite:d15bb8f4407f58e2ce472d247df169d1&#34;&gt;SQLite&lt;/h3&gt;
+
+&lt;p&gt;For SQlite we altered sqlite_sequence table, which is an internal table used to implement AUTOINCREMENT. It is created automatically whenever any ordinary table with an AUTOINCREMENT integer primary key is created.&lt;/p&gt;
 
 &lt;p&gt;You can check &lt;a href=&#34;http://stackoverflow.com/questions/2075331/change-starting-id-number&#34;&gt;this Stack Overflow discussion&lt;/a&gt; that was very helpful to me.&lt;/p&gt;
 </description>
@@ -649,7 +950,7 @@ For SQlite we altered sqlite_sequence table, which is an internal table used to 
       <guid>http://blog.orangeiceberg.com/posts/customize-devise-permitted-parameters</guid>
       <description>&lt;p&gt;If you are using Devise gem for authentication and you have been adding custom fields to your model you’ll get in trouble when you try to create a new instance or update an existing one. All your added fields will be treated as unpermitted. The solution for this problem is to customise Devise’s configure_permited_parameters action. All you need to do is to add this action to your Application controller and push parameters that need to be permitted to devise_paremeter_sanitizer array. So let’s say you have a User Model and you have added company_name and website fields to your user’s table, to permit this parameters on sign_up you need to add this to your Application controller:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;def configure_permitted_parameters
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;def configure_permitted_parameters
   devise_parameter_sanitizer.for(:sign_up).push(:company_name, :website)
 end
 &lt;/code&gt;&lt;/pre&gt;
@@ -670,7 +971,7 @@ end
 
 &lt;p&gt;Add this to your controller in which you want to disable tracking:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;prepend_before_filter :disable_devise_trackable
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;prepend_before_filter :disable_devise_trackable
 
 protected
   def disable_devise_trackable
@@ -701,10 +1002,11 @@ is a very useful site when upgrading Rails versions (for example, from Rails 3.2
 
 &lt;p&gt;Assume that you have the usual setup with model (MyFile) using simple Carrierwave uploader (MyFileUploader):&lt;/p&gt;
 
-&lt;pre&gt;# app/models/my_file.rb
-class MyFile &amp;lt; ActiveRecord::Base
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;# app/models/my_file.rb
+class MyFile &amp;amp;lt; ActiveRecord::Base
   mount_uploader :file, MyFileUploader
-end&lt;/pre&gt;
+end
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;To be able to test Carrierwave uploaders with RSpec using FactoryGirl factories you need:&lt;/p&gt;
 
@@ -717,27 +1019,29 @@ end&lt;/pre&gt;
 
 &lt;h2 id=&#34;define-factory:f55ec0979c7942ed3400c6817da421f3&#34;&gt;Define factory&lt;/h2&gt;
 
-&lt;pre&gt;# spec/factories/my_files.rb
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;# spec/factories/my_files.rb
 FactoryGirl.define do
  factory :my_file do
    photo Rack::Test::UploadedFile.new(File.open(File.join(Rails.root, &#39;/spec/fixtures/myfiles/myfile.jpg&#39;)))
  end
-end&lt;/pre&gt;
+end
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;h2 id=&#34;setup-carrierwave:f55ec0979c7942ed3400c6817da421f3&#34;&gt;Setup Carrierwave&lt;/h2&gt;
 
 &lt;p&gt;First we need to make sure Carrierwave is using local file system for storage and to disable file processing for testing environments. Disabling file processing will speed up tests considerably. We can do that by adding following to Carrierwave initializer:&lt;/p&gt;
 
-&lt;pre&gt;if Rails.env.test? || Rails.env.cucumber?
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;if Rails.env.test? || Rails.env.cucumber?
   CarrierWave.configure do |config|
     config.storage = :file
     config.enable_processing = false
   end
-end&lt;/pre&gt;
+end
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Next we should separate test uploads from any other uploads. We can do that by modifying cache_dir and store_dir methods for all Carrierwave models (i.e. all models that are descendants of CarrierWave::Uploader::Base). So the whole Carrierwave initializer looks something like:&lt;/p&gt;
 
-&lt;pre&gt;# config/initializers/carrierwave.rb
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;# config/initializers/carrierwave.rb
 if Rails.env.test? || Rails.env.cucumber?
   CarrierWave.configure do |config|
     config.storage = :file
@@ -752,28 +1056,30 @@ if Rails.env.test? || Rails.env.cucumber?
     next if klass.anonymous?
     klass.class_eval do
       def cache_dir
-        &#34;#{Rails.root}/spec/support/uploads/tmp&#34;
+        &amp;quot;#{Rails.root}/spec/support/uploads/tmp&amp;quot;
       end
 
       def store_dir
-        &#34;#{Rails.root}/spec/support/uploads/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}&#34;
+        &amp;quot;#{Rails.root}/spec/support/uploads/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}&amp;quot;
       end
     end
   end
-end&lt;/pre&gt;
+end
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;h2 id=&#34;clean-up-uploaded-files:f55ec0979c7942ed3400c6817da421f3&#34;&gt;Clean up uploaded files&lt;/h2&gt;
 
 &lt;p&gt;Using factory defined above will create uploaded files in cache_dir and store_dir. These are just temporary files and should be removed after each test, so each of them has a clean slate. By adding after :each hook in RSpec configuration block we can remove these files simply by deleting spec/support/uploads dir.&lt;/p&gt;
 
-&lt;pre&gt;# spec_helper.rb
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;# spec_helper.rb
 RSpec.configure do |config|
   config.after(:each) do
     if Rails.env.test? || Rails.env.cucumber?
-      FileUtils.rm_rf(Dir[&#34;#{Rails.root}/spec/support/uploads&#34;])
-    end 
+      FileUtils.rm_rf(Dir[&amp;quot;#{Rails.root}/spec/support/uploads&amp;quot;])
+    end
   end
-end&lt;/pre&gt;
+end
+&lt;/code&gt;&lt;/pre&gt;
 </description>
     </item>
     
@@ -785,7 +1091,7 @@ end&lt;/pre&gt;
       <guid>http://blog.orangeiceberg.com/posts/paperclip-heroku-and-amazon-s3-credentials</guid>
       <description>&lt;p&gt;Setting up Paperclip to use Amazon&amp;#8217;s S3 is as simple as setting :storage =&amp;gt; :s3 and providing right credentials to Paperclip by setting :s3_credentials option. Best way to provide S3 credentials is to use an YML file (usually config/s3.yml) which allows you to set different credentials for each environment. For example:&lt;/p&gt;
 
-&lt;pre&gt;# config/s3.yml
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;# config/s3.yml
 development:
   access_key_id: XYZXYZXYZ
   secret_access_key: XYZXYZXYZ
@@ -794,7 +1100,7 @@ production:
   access_key_id: XYZXYZXYZ
   secret_access_key: XYZXYZXYZ
   bucket: mygreatapp-production
-&lt;/pre&gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Of course you want to treat s3.yml same as database.yml &amp;#8211; i.e. you don&amp;#8217;t want to track it with git and you want for each person/server to have it&amp;#8217;s own.&lt;/p&gt;
 
@@ -806,23 +1112,23 @@ production:
 
 &lt;p&gt;For production deployment on Heroku you can write initializer which will set :s3_credentials from ENV variables.&lt;/p&gt;
 
-&lt;pre&gt;# initializers/s3.rb
-if Rails.env == &#34;production&#34;
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;# initializers/s3.rb
+if Rails.env == &amp;quot;production&amp;quot;
   # set credentials from ENV hash
-  S3_CREDENTIALS = { :access_key_id =&gt; ENV[&#39;S3_KEY&#39;], :secret_access_key =&gt; ENV[&#39;S3_SECRET&#39;], :bucket =&gt; &#34;sharedearth-production&#34;}
+  S3_CREDENTIALS = { :access_key_id =&amp;gt; ENV[&#39;S3_KEY&#39;], :secret_access_key =&amp;gt; ENV[&#39;S3_SECRET&#39;], :bucket =&amp;gt; &amp;quot;sharedearth-production&amp;quot;}
 else
   # get credentials from YML file
-  S3_CREDENTIALS = Rails.root.join(&#34;config/s3.yml&#34;)
+  S3_CREDENTIALS = Rails.root.join(&amp;quot;config/s3.yml&amp;quot;)
 end
 
 # in your model
-has_attached_file :photo, :storage =&gt; :s3, :s3_credentials =&gt; S3_CREDENTIALS
-&lt;/pre&gt;
+has_attached_file :photo, :storage =&amp;gt; :s3, :s3_credentials =&amp;gt; S3_CREDENTIALS
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;and you can easily set persistant ENV vars on Heroku with:&lt;/p&gt;
 
-&lt;pre&gt;$ heroku config:add S3_KEY=XYZXYZ S3_SECRET=XYZXYZ
-&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;$ heroku config:add S3_KEY=XYZXYZ S3_SECRET=XYZXYZ
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;(&lt;a href=&#34;http://docs.heroku.com/config-vars#quick-example&#34;&gt;according to Heroku docs&lt;/a&gt;)&lt;/p&gt;
 </description>
@@ -899,11 +1205,11 @@ end&lt;/code&gt;&lt;/li&gt;
     </item>
     
     <item>
-      <title>SproutCore &amp;#8211; a javascript framework</title>
-      <link>http://blog.orangeiceberg.com/posts/sproutcore-</link>
+      <title>SproutCore &amp;#8211; a Javascript framework</title>
+      <link>http://blog.orangeiceberg.com/posts/sproutcore-javascript-framework</link>
       <pubDate>Thu, 03 Jul 2008 09:00:00 +0100</pubDate>
       
-      <guid>http://blog.orangeiceberg.com/posts/sproutcore-</guid>
+      <guid>http://blog.orangeiceberg.com/posts/sproutcore-javascript-framework</guid>
       <description>&lt;p&gt;&lt;a href=&#34;http://www.sproutcore.com&#34; title=&#34;SproutCore - Javascript Framework&#34;&gt;SproutCore&lt;/a&gt; is a javascript framework which tries to enable developers to build web apps that look and act more like a desktop apps.&lt;/p&gt;
 
 &lt;p&gt;It steps away from a classic web app model by moving a lot of app into the browser itself, which then interacts with server via AJAX. As it says on the &lt;a href=&#34;http://www.sproutcore.com/about/&#34; title=&#34;About SproutCore&#34;&gt;SproutCore site&lt;/a&gt;:&lt;/p&gt;
@@ -926,11 +1232,13 @@ Another great thing about SproutCore is that it can be hooked up with any backen
 &lt;p&gt;Actions speak louder than words, so take a look at the SproutCore demos which shows you exactly what it&amp;#8217;s all about.&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;http://www.sproutcore.com/static/photos/&#34; title=&#34;SproutCore demo photo gallery&#34;&gt;SproutCore based photo gallery&lt;/a&gt; &amp;#8211; iPhoto anyone? &lt;img src=&#39;http://icebergist.com/wp-includes/images/smilies/icon_smile.gif&#39; alt=&#39;:)&#39; class=&#39;wp-smiley&#39; /&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://www.sproutcore.com/static/photos/&#34; title=&#34;SproutCore demo photo gallery&#34;&gt;SproutCore based photo gallery&lt;/a&gt; &amp;#8211; iPhoto anyone? :-)
+&lt;!-- &lt;img src=&#39;http://icebergist.com/wp-includes/images/smilies/icon_smile.gif&#39; alt=&#39;:)&#39; class=&#39;wp-smiley&#39; /&gt; --&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;http://www.sproutcore.com/static/sample_controls/&#34; title=&#34;SproutCore demo sample controls&#34;&gt;SproutCore sample controls&lt;/a&gt; &amp;#8211; demonstrates what kind of controls are already available in SproutCore.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;In next few days I will try to build a sample application powered by SproutCore and Rails to see how it goes. I will post my impressions here. After all if it&amp;#8217;s something Apple used for Mobile.me &amp;#8211; well, it can&amp;#8217;t be that bad. &lt;img src=&#39;http://icebergist.com/wp-includes/images/smilies/icon_wink.gif&#39; alt=&#39;;)&#39; class=&#39;wp-smiley&#39; /&gt;&lt;/p&gt;
+&lt;p&gt;In next few days I will try to build a sample application powered by SproutCore and Rails to see how it goes. I will post my impressions here. After all if it&amp;#8217;s something Apple used for Mobile.me &amp;#8211; well, it can&amp;#8217;t be that bad. ;-)
+&lt;!-- &lt;img src=&#39;http://icebergist.com/wp-includes/images/smilies/icon_wink.gif&#39; alt=&#39;;)&#39; class=&#39;wp-smiley&#39; /&gt; --&gt;&lt;/p&gt;
 </description>
     </item>
     

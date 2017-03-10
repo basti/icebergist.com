@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Ember on Icebergist</title>
+    <link>http://blog.orangeiceberg.com/tags/ember/</link>
+    <description>Recent content in Ember on Icebergist</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 03 Feb 2017 15:07:40 +0100</lastBuildDate>
+    <atom:link href="http://blog.orangeiceberg.com/tags/ember/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Introduction to Ember Closure Actions</title>
+      <link>http://blog.orangeiceberg.com/posts/introduction-to-ember-closure-actions</link>
+      <pubDate>Fri, 03 Feb 2017 15:07:40 +0100</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/introduction-to-ember-closure-actions</guid>
+      <description>
+
+&lt;p&gt;Closure actions were introduced in Ember v.1.13.0 and they brought a lot of improvements over old action handling mechanism in Ember. These improvements enabled Ember to adopt new data flow model called - Data Down Actions Up (DDAU) that simplified communication between parent and child components.&lt;/p&gt;
+
+&lt;h2 id=&#34;what-are-closure-actions:cd31b1a8953faed5014f17c722aa7ebc&#34;&gt;What are closure actions?&lt;/h2&gt;
+
+&lt;p&gt;Closure actions are based on JavaScript closures which are basically functions that remember environment in which they were created. So closure actions are just functions that remember context in which they were defined. Since they are just functions we can pass them as a value and call them directly as a callback. This enables us to pass them to inner components and call them directly from components.
+With the old approach we had to use &lt;code&gt;sendAction()&lt;/code&gt; from component and call action on controller or route.&lt;/p&gt;
+
+&lt;h2 id=&#34;how-to-create-closure-actions:cd31b1a8953faed5014f17c722aa7ebc&#34;&gt;How to create closure actions?&lt;/h2&gt;
+
+&lt;p&gt;Every action defined in controller can become a closure action. It’s important to note that it’s possible to make actions defined in routes closure actions but you need to use &lt;a href=&#34;https://github.com/DockYard/ember-route-action-helper&#34;&gt;ember-route-action-helper&lt;/a&gt; addon for that. Closure actions are created in template using &lt;code&gt;action&lt;/code&gt; helper which wrapps the action in the current context and returns it as a closure function.&lt;/p&gt;
+
+&lt;h2 id=&#34;example:cd31b1a8953faed5014f17c722aa7ebc&#34;&gt;Example&lt;/h2&gt;
+
+&lt;p&gt;Let’s define action inside our application controller.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;//controllers/application.js
+export default Ember.Controller.extend({
+  actions: {
+    submit() {
+      //some logic
+    }
+  }
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;In application.hbs we create closure action using &lt;code&gt;action&lt;/code&gt; helper and we assign it to example-comp&amp;rsquo;s save attribute.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;{{example-comp save=(action &#39;submit&#39;)}}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Submit action is now assigned to save attribute of example-comp component so we can call it directly inside component.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;&amp;lt;!-- example-comp.hbs --&amp;gt;
+
+&amp;lt;button onclick={{action &#39;saveItem&#39;}}&amp;gt;Save&amp;lt;/button&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;//example-comp.js
+export default Ember.Component.extend({
+  actions: {
+    saveItem() {
+      this.save();
+      // Calling save directly
+    }
+  }
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Passing closure action through multiple levels of components is easy.
+Let&amp;rsquo;s say we want to call submit action in example-comp-child component. Since we have save attribute inside example-comp with submit action assigned to it we just need to pass it one level down.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;{{example-comp-child save=(action save)}}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Calling action from example-comp-child is the same as for example-comp component.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;//example-comp-child.js
+export default Ember.Component.extend({
+  actions: {
+    saveItem() {
+      this.save();
+    }
+  }
+});
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Closure actions simplify action passing mechanism in Ember but they can also return values, enable currying and much more. It definitely worth spending your time learning all closure actions features and I hope this introduction can help with that.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

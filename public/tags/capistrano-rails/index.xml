@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Capistrano-rails on Icebergist</title>
+    <link>http://blog.orangeiceberg.com/tags/capistrano-rails/</link>
+    <description>Recent content in Capistrano-rails on Icebergist</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 25 May 2016 10:42:17 +0200</lastBuildDate>
+    <atom:link href="http://blog.orangeiceberg.com/tags/capistrano-rails/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Deploying Rails app with Capistrano 3</title>
+      <link>http://blog.orangeiceberg.com/posts/deploying-rails-app-with-capistrano-3</link>
+      <pubDate>Wed, 25 May 2016 10:42:17 +0200</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/deploying-rails-app-with-capistrano-3</guid>
+      <description>
+
+&lt;p&gt;In the lifetime of every application the time comes for it to be presented to everyone. That&amp;rsquo;s why we have to put our application on a special server which is designed for this purpose. In one word, we need to &lt;strong&gt;deploy&lt;/strong&gt; our application. In this post you will see how to deploy app with &lt;a href=&#34;http://www.capistranorb.com/&#34;&gt;Capistrano 3&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Capistrano is a great developers tool that is used to automatically deploy projects to remote server.&lt;/p&gt;
+
+&lt;h3 id=&#34;add-capistrano-to-rails-app:5a134459841b76e99627f89a0f6507b6&#34;&gt;Add Capistrano to Rails app&lt;/h3&gt;
+
+&lt;p&gt;I will assume you already have a server set up and an application ready to be deployed remotely.&lt;/p&gt;
+
+&lt;p&gt;We will use gem &lt;a href=&#34;https://github.com/capistrano/rails&#34;&gt;&amp;lsquo;capistrano-rails&amp;rsquo;&lt;/a&gt;, so we need to add this gems to Gemfile:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;group :development do
+  gem &#39;capistrano&#39;, &#39;~&amp;gt; 3.5&#39;
+  gem &#39;capistrano-rails&#39;, &#39;~&amp;gt; 1.1.6&#39;
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;and install gems with &lt;code&gt;$ bundle install&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h3 id=&#34;initialize-capistrano:5a134459841b76e99627f89a0f6507b6&#34;&gt;Initialize Capistrano&lt;/h3&gt;
+
+&lt;p&gt;Then run the following command to create configuration files:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;$ bundle exec cap install
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This command  creates all the necessary configuration files and directory structure with two stages, staging and production:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Capfile
+config/deploy.rb
+config/deploy/production.rb
+config/deploy/staging.rb
+lib/capistrano/tasks
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;require-needed-gems-in-capfile:5a134459841b76e99627f89a0f6507b6&#34;&gt;Require needed gems in Capfile&lt;/h3&gt;
+
+&lt;p&gt;Open the &lt;code&gt;Capfile&lt;/code&gt; and add or uncomment this lines:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;require &#39;capistrano/setup&#39;
+require &#39;capistrano/deploy&#39;
+require &#39;capistrano/bundler&#39;
+require &#39;capistrano/rails/assets&#39;
+require &#39;capistrano/rails/migrations&#39;
+Dir.glob(&#39;lib/capistrano/tasks/*.rake&#39;).each { |r| import r }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&#34;add-capistrano-rbenv-gem:5a134459841b76e99627f89a0f6507b6&#34;&gt;Add capistrano-rbenv gem&lt;/h4&gt;
+
+&lt;p&gt;The &lt;a href=&#34;https://github.com/capistrano/rbenv&#34;&gt;capistrano-rbenv&lt;/a&gt; gem provides rbenv support for Capistrano 3.&lt;/p&gt;
+
+&lt;p&gt;Add this line to the Gemfile:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;group :development do
+  gem &#39;capistrano&#39;, &#39;~&amp;gt; 3.5&#39;
+  gem &#39;capistrano-rails&#39;, &#39;~&amp;gt; 1.1.6&#39;
+  gem &#39;capistrano-rbenv&#39;, &#39;~&amp;gt; 2.0&#39;, require: false
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And require this gem in Capfile &lt;code&gt;require &#39;capistrano/rbenv&#39;&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h4 id=&#34;add-capistrano-passenger-gem:5a134459841b76e99627f89a0f6507b6&#34;&gt;Add capistrano-passenger gem&lt;/h4&gt;
+
+&lt;p&gt;The &lt;a href=&#34;https://github.com/capistrano/passenger&#34;&gt;capistrano-passenger&lt;/a&gt; gem adds a task to restart your application after deployment via Capistrano.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;group :development do
+  ...
+  gem &#39;capistrano-rbenv&#39;, &#39;~&amp;gt; 2.0&#39;, require: false
+  gem &#39;capistrano-passenger&#39;, &#39;~&amp;gt; 0.2.0&#39;
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And require this gem in Capfile &lt;code&gt;require &#39;capistrano/passenger&#39;&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h3 id=&#34;configure-deploy-rb-file:5a134459841b76e99627f89a0f6507b6&#34;&gt;Configure deploy.rb file&lt;/h3&gt;
+
+&lt;p&gt;Open &lt;code&gt;config/deploy.rb&lt;/code&gt; and add options for deployment:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;set all needed variables, this is the variant with two servers (&lt;em&gt;staging and production&lt;/em&gt;) and with user created on server (&lt;em&gt;server setup is theme for different post&lt;/em&gt;)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;set :application, &#39;app-name&#39;   # application name
+set :deploy_user, &#39;user-name&#39;   # name of user who is set on server
+set :repo_url, &#39;git@github.com:nickname/repo_name.git&#39;   # your repository url from github
+set :branch, ENV.fetch(&#39;BRANCH&#39;, &#39;master&#39;)   # branch which you want to deploy from
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;set the path where you want to find your app on server, starting from server&amp;rsquo;s root&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;set :deploy_to, -&amp;gt; { &amp;quot;/path/to/app/#{fetch(:rails_env)}-#{fetch(:application)}&amp;quot; }
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;set config files, Capistrano uses a folder called shared to manage files and directories that should persist across releases&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;set :linked_files, fetch(:linked_files, []).push(&#39;config/database.yml&#39;, &#39;config/secrets.yml&#39;)
+
+set :linked_dirs, fetch(:linked_dirs, []).push(&#39;log&#39;, &#39;tmp/pids&#39;, &#39;tmp/cache&#39;, &#39;tmp/sockets&#39;, &#39;vendor/bundle&#39;, &#39;public/system&#39;)
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;set ruby version, we use &lt;code&gt;gem &#39;capistrano-rbenv&#39;&lt;/code&gt; for this setup&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;set :rbenv_type, :user
+set :rbenv_ruby, &#39;2.2.2&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;set option for restarting your application after deployment with &lt;code&gt;gem &#39;capistrano-passenger&#39;&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;set :passenger_restart_with_touch, true
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;here you can put all kinds of rake tasks for different needs that you can run every time when you deploy your application.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;namespace :deploy do
+  desc &amp;quot;Description of task&amp;quot;
+  task :name_of_task do
+      # do something
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;capistrano-s-server-settings:5a134459841b76e99627f89a0f6507b6&#34;&gt;Capistrano&amp;rsquo;s server settings&lt;/h3&gt;
+
+&lt;p&gt;You need to tell Capistrano where to find your server.
+This is an example of server&amp;rsquo;s settings for application where everything is on same machine (application, server, database).&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;In &lt;code&gt;config/deploy/staging&lt;/code&gt; set:&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;server &#39;your.staging.server.com&#39;, user: fetch(:deploy_user), roles: %w{app db web}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;ul&gt;
+&lt;li&gt;and set rails environment&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;set :rails_env, &#39;staging&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Also set the same configuration for production server.&lt;/p&gt;
+
+&lt;p&gt;In &lt;code&gt;config/deploy/production&lt;/code&gt; add:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;server &#39;your.production.server.com&#39;, user: fetch(:deploy_user), roles: %w{app db web}
+set :rails_env, &#39;production&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;deploy-your-application:5a134459841b76e99627f89a0f6507b6&#34;&gt;Deploy your application&lt;/h3&gt;
+
+&lt;p&gt;Just run &lt;code&gt;deploy&lt;/code&gt; task:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;bundle exec cap staging deploy
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;or&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;bundle exec cap production deploy
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;and that is it, your app is live and you can visit it on server&amp;rsquo;s name url, in our example case &lt;em&gt;your.staging.server.com&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;Note: you can find complete documentation on &lt;a href=&#34;http://capistranorb.com/&#34;&gt;Capistrano site&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Have a nice day!&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

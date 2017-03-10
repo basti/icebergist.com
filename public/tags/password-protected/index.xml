@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Password Protected on Icebergist</title>
+    <title>Password protected on Icebergist</title>
     <link>http://blog.orangeiceberg.com/tags/password-protected/</link>
-    <description>Recent content in Password Protected on Icebergist</description>
+    <description>Recent content in Password protected on Icebergist</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sun, 08 Mar 2009 09:00:00 +0100</lastBuildDate>
@@ -40,7 +40,7 @@
 class Admin extends Controller {
   function Admin()
   {
-    parent::Controller();   
+    parent::Controller();
     $this-&gt;load-&gt;database();
     $this-&gt;load-&gt;helper(array(&#39;url&#39;, &#39;form&#39;, &#39;date&#39;));
     $this-&gt;load-&gt;library(array(&#39;form_validation&#39;, &#39;upload&#39;, &#39;Erkanaauth&#39;, &#39;session&#39;));
@@ -57,7 +57,7 @@ class Admin extends Controller {
   {
       if($this-&gt;erkanaauth-&gt;try_session_login())
           return true;
-  
+
       redirect(&#39;admin/login&#39;);
   }
 &lt;/pre&gt;
@@ -73,7 +73,7 @@ class Admin extends Controller {
       if($this-&gt;erkanaauth-&gt;try_login(array(&#39;username&#39; =&gt; $username, &#39;password&#39; =&gt; $password)))
         redirect(&#39;admin&#39;);
     }
-    
+
     $this-&gt;load-&gt;view(&#39;admin_login&#39;);
   }
 

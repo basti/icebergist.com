@@ -11,10 +11,10 @@
     
     <item>
       <title>Upgrade Ubuntu 8.04 LTS server</title>
-      <link>http://blog.orangeiceberg.com/posts/upgrade-ubuntu-8.04-lts-server</link>
+      <link>http://blog.orangeiceberg.com/posts/upgrade-ubuntu-8-dot-04-lts-server</link>
       <pubDate>Mon, 06 Jan 2014 11:36:43 +0100</pubDate>
       
-      <guid>http://blog.orangeiceberg.com/posts/upgrade-ubuntu-8.04-lts-server</guid>
+      <guid>http://blog.orangeiceberg.com/posts/upgrade-ubuntu-8-dot-04-lts-server</guid>
       <description>&lt;p&gt;Note to self: here is how to upgrade Ubuntu 8.04 LTS (or any other release that is no longer supported) to newer Ubuntu release.&lt;/p&gt;
 
 &lt;p&gt;When you are upgrading unsupported release of Ubuntu if you try to do the usual &lt;code&gt;sudo apt-get update&lt;/code&gt; it will most likely fail because&amp;hellip; well, it&amp;rsquo;s unsupported. The simple fix for this is to change your &lt;code&gt;/etc/apt/sources.list&lt;/code&gt; and replace repository URLs from something like &lt;code&gt;us.archive.ubuntu.com&lt;/code&gt; to &lt;code&gt;old-releases.ubuntu.com&lt;/code&gt;.&lt;/p&gt;

@@ -17,7 +17,7 @@
       <guid>http://blog.orangeiceberg.com/posts/customize-devise-permitted-parameters</guid>
       <description>&lt;p&gt;If you are using Devise gem for authentication and you have been adding custom fields to your model you’ll get in trouble when you try to create a new instance or update an existing one. All your added fields will be treated as unpermitted. The solution for this problem is to customise Devise’s configure_permited_parameters action. All you need to do is to add this action to your Application controller and push parameters that need to be permitted to devise_paremeter_sanitizer array. So let’s say you have a User Model and you have added company_name and website fields to your user’s table, to permit this parameters on sign_up you need to add this to your Application controller:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;def configure_permitted_parameters
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;def configure_permitted_parameters
   devise_parameter_sanitizer.for(:sign_up).push(:company_name, :website)
 end
 &lt;/code&gt;&lt;/pre&gt;
@@ -38,7 +38,7 @@ end
 
 &lt;p&gt;Add this to your controller in which you want to disable tracking:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;prepend_before_filter :disable_devise_trackable
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;prepend_before_filter :disable_devise_trackable
 
 protected
   def disable_devise_trackable

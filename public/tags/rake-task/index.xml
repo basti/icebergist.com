@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Rake Task on Icebergist</title>
+    <title>Rake task on Icebergist</title>
     <link>http://blog.orangeiceberg.com/tags/rake-task/</link>
-    <description>Recent content in Rake Task on Icebergist</description>
+    <description>Recent content in Rake task on Icebergist</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Thu, 24 Mar 2016 08:09:25 +0100</lastBuildDate>
@@ -45,7 +45,7 @@ end
 &lt;li&gt;then create translation tables&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;pre&gt;&lt;code&gt;class CreatePosts &amp;lt; ActiveRecord::Migration
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;class CreatePosts &amp;lt; ActiveRecord::Migration
   def up
     create_table :posts do |t|
       t.timestamps
@@ -71,7 +71,7 @@ end
 &lt;li&gt;remove title from post translations table&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;pre&gt;&lt;code&gt;class RemoveTitleFromPostTranslations &amp;lt; ActiveRecord::Migration
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;class RemoveTitleFromPostTranslations &amp;lt; ActiveRecord::Migration
   def up
     remove_column :post_translations, :title, :string
   end
@@ -86,7 +86,7 @@ end
 &lt;li&gt;add title to posts table&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;pre&gt;&lt;code&gt;class AddTitleToPosts &amp;lt; ActiveRecord::Migration
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;class AddTitleToPosts &amp;lt; ActiveRecord::Migration
   def change
     add_column :posts, :title, :string
   end
@@ -97,7 +97,7 @@ end
 &lt;li&gt;remove title attribute from model translations&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;pre&gt;&lt;code&gt;class Post &amp;lt; ActiveRecord::Base
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;class Post &amp;lt; ActiveRecord::Base
   translates :text
 end
 &lt;/code&gt;&lt;/pre&gt;

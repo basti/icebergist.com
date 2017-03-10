@@ -6,8 +6,87 @@
     <description>Recent content in Tips on Icebergist</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 02 Dec 2015 10:44:23 +0100</lastBuildDate>
+    <lastBuildDate>Mon, 07 Nov 2016 16:55:52 +0200</lastBuildDate>
     <atom:link href="http://blog.orangeiceberg.com/tags/tips/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Copy and sync files from/to remote server</title>
+      <link>http://blog.orangeiceberg.com/posts/copy-and-sync-files-from/to-remote-server</link>
+      <pubDate>Mon, 07 Nov 2016 16:55:52 +0200</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/copy-and-sync-files-from/to-remote-server</guid>
+      <description>
+
+&lt;p&gt;Most modern web app deployments have automated scripts that perform all tasks needed to deploy the app. They handle all the dirty details, while the developer just needs to do something simple like &lt;code&gt;cap deploy&lt;/code&gt;. In other words, usually you don&amp;rsquo;t need to access the remote servers directly.&lt;/p&gt;
+
+&lt;p&gt;However, sometimes you run into one-time tasks (or less frequent tasks) that might not have been automated. For example, dumping production data and importing on local machine, syncing uploaded files between production and staging environments, etc.&lt;/p&gt;
+
+&lt;p&gt;These often involve transferring files between your local machine and remote server (or two remote servers). There are few ways you can handle this depending on what you need to transfer between servers. We are going to cover methods using &lt;code&gt;wget&lt;/code&gt;, &lt;code&gt;scp&lt;/code&gt;, and &lt;code&gt;rsync&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;wget:a9ea2420ab5888270878b6e98c285bbf&#34;&gt;wget&lt;/h2&gt;
+
+&lt;p&gt;Simplest option is to install &lt;code&gt;wget&lt;/code&gt; on destination machine. &lt;code&gt;wget&lt;/code&gt; is the non-interactive network downloader and you just give it the URL of the file you want to download.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;wget http://example.com/some/archive.tar.gz&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;That would download the file to current directory.&lt;/p&gt;
+
+&lt;p&gt;The downside is that you have to put the file somewhere accessible via web, like &lt;code&gt;public&lt;/code&gt; dir in Rails apps and also you should remember to remove it once you are done with it.&lt;/p&gt;
+
+&lt;p&gt;Also this only works if you have a single file, or you are able to create a single file (most likely by &lt;a href=&#34;http://blog.orangeiceberg.com/posts/create-and-extract-archives-using-tar-and-gzip/&#34;&gt;creating an archive using tar and gzip&lt;/a&gt;).&lt;/p&gt;
+
+&lt;h2 id=&#34;scp:a9ea2420ab5888270878b6e98c285bbf&#34;&gt;scp&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;scp&lt;/code&gt; is a remote file copy program and the name is short for &lt;strong&gt;s&lt;/strong&gt;ecure &lt;strong&gt;c&lt;/strong&gt;o&lt;strong&gt;p&lt;/strong&gt;y. It&amp;rsquo;s very similar to usual &lt;code&gt;cp&lt;/code&gt; command with the difference that it&amp;rsquo;s able to copy files across different computers using SSH.&lt;/p&gt;
+
+&lt;p&gt;Simplest forms of &lt;code&gt;scp&lt;/code&gt; have source and destination, both of which can be either a local file or a remote file.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;# copy file from server to current dir on local machine
+scp myuser@example.com:/home/myuser/databasedump.sql ./
+
+# copy file to remote server
+scp ./some/localfile.txt myuser@example.com:/home/myuser/
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;In a sense it works exactly like &lt;code&gt;cp&lt;/code&gt;. Difference is that when specifying a remote file the format looks like you concatenated SSH user@server string and normal file path (you are saying &amp;ldquo;as user at server get this file&amp;rdquo;).&lt;/p&gt;
+
+&lt;p&gt;There are some additional nice things about &lt;code&gt;scp&lt;/code&gt;:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;you can use &lt;code&gt;-r&lt;/code&gt; option which will recursively copy entire directories.&lt;/li&gt;
+&lt;li&gt;you can specify two remote files and it will copy them between remote servers.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;rsync:a9ea2420ab5888270878b6e98c285bbf&#34;&gt;rsync&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;scp&lt;/code&gt; is secure version of &lt;code&gt;rcp&lt;/code&gt; (remote copy) program. &lt;code&gt;rsync&lt;/code&gt; is faster, flexible replacement for &lt;code&gt;rcp&lt;/code&gt;. It copies files either to or from a remote host, or locally on the current host (it does not support copying files between two remote hosts).&lt;/p&gt;
+
+&lt;p&gt;There are many ways you can use &lt;code&gt;rsync&lt;/code&gt;. The most usual variants are:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;# copy all files recursively from one local dir to another
+rsync ./source_dir ./destination_dir
+
+# copy a file from local dir to remote server
+rsync -Pavz ./archive.tar.gz myuser@example.com:/home/myuser/somedata/
+
+
+# copy all files recursively from remote server to local dir
+rsync -Pavz myuser@example.com:/home/myuser/somedata ./data
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Options that were used are not strictly necessary for doing stated tasks, but they help. They are as follows:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;P&lt;/code&gt; - same as &amp;ndash;partial &amp;ndash;progress. It means it will show transfer progress and if transfer breaks keep a partial copy to possibly continue on retry. Very useful for large files.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;a&lt;/code&gt; - it is a quick way of saying you want recursion and want to preserve almost everything. This is equivalent to -rlptgoD.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;v&lt;/code&gt; - be verbose.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;z&lt;/code&gt; - compress file data during the transfer.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;I suggest that you consult &lt;code&gt;man rsync&lt;/code&gt; for more details.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Import and export MySQL dump</title>
@@ -91,7 +170,7 @@ tar -cvzf myarchive.tar.gz -C /path/to/dir ./
 
 &lt;p&gt;Add this to your controller in which you want to disable tracking:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;prepend_before_filter :disable_devise_trackable
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;prepend_before_filter :disable_devise_trackable
 
 protected
   def disable_devise_trackable
@@ -103,10 +182,10 @@ protected
     
     <item>
       <title>Upgrade Ubuntu 8.04 LTS server</title>
-      <link>http://blog.orangeiceberg.com/posts/upgrade-ubuntu-8.04-lts-server</link>
+      <link>http://blog.orangeiceberg.com/posts/upgrade-ubuntu-8-dot-04-lts-server</link>
       <pubDate>Mon, 06 Jan 2014 11:36:43 +0100</pubDate>
       
-      <guid>http://blog.orangeiceberg.com/posts/upgrade-ubuntu-8.04-lts-server</guid>
+      <guid>http://blog.orangeiceberg.com/posts/upgrade-ubuntu-8-dot-04-lts-server</guid>
       <description>&lt;p&gt;Note to self: here is how to upgrade Ubuntu 8.04 LTS (or any other release that is no longer supported) to newer Ubuntu release.&lt;/p&gt;
 
 &lt;p&gt;When you are upgrading unsupported release of Ubuntu if you try to do the usual &lt;code&gt;sudo apt-get update&lt;/code&gt; it will most likely fail because&amp;hellip; well, it&amp;rsquo;s unsupported. The simple fix for this is to change your &lt;code&gt;/etc/apt/sources.list&lt;/code&gt; and replace repository URLs from something like &lt;code&gt;us.archive.ubuntu.com&lt;/code&gt; to &lt;code&gt;old-releases.ubuntu.com&lt;/code&gt;.&lt;/p&gt;
@@ -139,11 +218,11 @@ is a very useful site when upgrading Rails versions (for example, from Rails 3.2
     </item>
     
     <item>
-      <title>This should be interesting weekly &amp;#8211; week 28</title>
-      <link>http://blog.orangeiceberg.com/posts/this-should-be-interesting-weekly-</link>
+      <title>This should be interesting weekly &amp;#8211; Week 28</title>
+      <link>http://blog.orangeiceberg.com/posts/this-should-be-interesting-weekly-week-28</link>
       <pubDate>Sun, 13 Jul 2008 09:00:00 +0100</pubDate>
       
-      <guid>http://blog.orangeiceberg.com/posts/this-should-be-interesting-weekly-</guid>
+      <guid>http://blog.orangeiceberg.com/posts/this-should-be-interesting-weekly-week-28</guid>
       <description>&lt;ul&gt;
 &lt;li&gt;What&amp;#8217;s New in Edge Rails: &lt;a href=&#34;http://tumblelog.slobodankovacevic.com/post/41430445/whats-new-in-edge-rails-easy-join-table-conditions&#34;&gt;Easy Join Table Conditions.&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;http://tumblelog.slobodankovacevic.com/post/41483353/faces-of-millions&#34;&gt;Faces of Millions&lt;/a&gt; &amp;#8211; Art project which aims to gather one million photos of people faces and create 10m x 10m photo mosaic.&lt;/li&gt;

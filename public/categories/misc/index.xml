@@ -6,8 +6,167 @@
     <description>Recent content in Misc on Icebergist</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 02 Dec 2015 10:44:23 +0100</lastBuildDate>
+    <lastBuildDate>Mon, 07 Nov 2016 16:55:52 +0200</lastBuildDate>
     <atom:link href="http://blog.orangeiceberg.com/categories/misc/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Copy and sync files from/to remote server</title>
+      <link>http://blog.orangeiceberg.com/posts/copy-and-sync-files-from/to-remote-server</link>
+      <pubDate>Mon, 07 Nov 2016 16:55:52 +0200</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/copy-and-sync-files-from/to-remote-server</guid>
+      <description>
+
+&lt;p&gt;Most modern web app deployments have automated scripts that perform all tasks needed to deploy the app. They handle all the dirty details, while the developer just needs to do something simple like &lt;code&gt;cap deploy&lt;/code&gt;. In other words, usually you don&amp;rsquo;t need to access the remote servers directly.&lt;/p&gt;
+
+&lt;p&gt;However, sometimes you run into one-time tasks (or less frequent tasks) that might not have been automated. For example, dumping production data and importing on local machine, syncing uploaded files between production and staging environments, etc.&lt;/p&gt;
+
+&lt;p&gt;These often involve transferring files between your local machine and remote server (or two remote servers). There are few ways you can handle this depending on what you need to transfer between servers. We are going to cover methods using &lt;code&gt;wget&lt;/code&gt;, &lt;code&gt;scp&lt;/code&gt;, and &lt;code&gt;rsync&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;wget:a9ea2420ab5888270878b6e98c285bbf&#34;&gt;wget&lt;/h2&gt;
+
+&lt;p&gt;Simplest option is to install &lt;code&gt;wget&lt;/code&gt; on destination machine. &lt;code&gt;wget&lt;/code&gt; is the non-interactive network downloader and you just give it the URL of the file you want to download.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;wget http://example.com/some/archive.tar.gz&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;That would download the file to current directory.&lt;/p&gt;
+
+&lt;p&gt;The downside is that you have to put the file somewhere accessible via web, like &lt;code&gt;public&lt;/code&gt; dir in Rails apps and also you should remember to remove it once you are done with it.&lt;/p&gt;
+
+&lt;p&gt;Also this only works if you have a single file, or you are able to create a single file (most likely by &lt;a href=&#34;http://blog.orangeiceberg.com/posts/create-and-extract-archives-using-tar-and-gzip/&#34;&gt;creating an archive using tar and gzip&lt;/a&gt;).&lt;/p&gt;
+
+&lt;h2 id=&#34;scp:a9ea2420ab5888270878b6e98c285bbf&#34;&gt;scp&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;scp&lt;/code&gt; is a remote file copy program and the name is short for &lt;strong&gt;s&lt;/strong&gt;ecure &lt;strong&gt;c&lt;/strong&gt;o&lt;strong&gt;p&lt;/strong&gt;y. It&amp;rsquo;s very similar to usual &lt;code&gt;cp&lt;/code&gt; command with the difference that it&amp;rsquo;s able to copy files across different computers using SSH.&lt;/p&gt;
+
+&lt;p&gt;Simplest forms of &lt;code&gt;scp&lt;/code&gt; have source and destination, both of which can be either a local file or a remote file.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;# copy file from server to current dir on local machine
+scp myuser@example.com:/home/myuser/databasedump.sql ./
+
+# copy file to remote server
+scp ./some/localfile.txt myuser@example.com:/home/myuser/
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;In a sense it works exactly like &lt;code&gt;cp&lt;/code&gt;. Difference is that when specifying a remote file the format looks like you concatenated SSH user@server string and normal file path (you are saying &amp;ldquo;as user at server get this file&amp;rdquo;).&lt;/p&gt;
+
+&lt;p&gt;There are some additional nice things about &lt;code&gt;scp&lt;/code&gt;:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;you can use &lt;code&gt;-r&lt;/code&gt; option which will recursively copy entire directories.&lt;/li&gt;
+&lt;li&gt;you can specify two remote files and it will copy them between remote servers.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;rsync:a9ea2420ab5888270878b6e98c285bbf&#34;&gt;rsync&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;scp&lt;/code&gt; is secure version of &lt;code&gt;rcp&lt;/code&gt; (remote copy) program. &lt;code&gt;rsync&lt;/code&gt; is faster, flexible replacement for &lt;code&gt;rcp&lt;/code&gt;. It copies files either to or from a remote host, or locally on the current host (it does not support copying files between two remote hosts).&lt;/p&gt;
+
+&lt;p&gt;There are many ways you can use &lt;code&gt;rsync&lt;/code&gt;. The most usual variants are:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;# copy all files recursively from one local dir to another
+rsync ./source_dir ./destination_dir
+
+# copy a file from local dir to remote server
+rsync -Pavz ./archive.tar.gz myuser@example.com:/home/myuser/somedata/
+
+
+# copy all files recursively from remote server to local dir
+rsync -Pavz myuser@example.com:/home/myuser/somedata ./data
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Options that were used are not strictly necessary for doing stated tasks, but they help. They are as follows:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;P&lt;/code&gt; - same as &amp;ndash;partial &amp;ndash;progress. It means it will show transfer progress and if transfer breaks keep a partial copy to possibly continue on retry. Very useful for large files.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;a&lt;/code&gt; - it is a quick way of saying you want recursion and want to preserve almost everything. This is equivalent to -rlptgoD.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;v&lt;/code&gt; - be verbose.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;z&lt;/code&gt; - compress file data during the transfer.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;I suggest that you consult &lt;code&gt;man rsync&lt;/code&gt; for more details.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Backup and Restore a PostgreSQL Database</title>
+      <link>http://blog.orangeiceberg.com/posts/backup-and-restore-a-postgresql-database</link>
+      <pubDate>Tue, 18 Oct 2016 07:05:38 +0200</pubDate>
+      
+      <guid>http://blog.orangeiceberg.com/posts/backup-and-restore-a-postgresql-database</guid>
+      <description>
+
+&lt;p&gt;While working on different projects and in different environments, we often need to export a dump from one database and then import it into another. A while ago &lt;a href=&#34;http://http://orangeiceberg.com/about/&#34; title=&#34;About Slobodan&#34;&gt;Slobodan&lt;/a&gt; wrote how to &lt;a href=&#34;http://icebergist.com/posts/import-and-export-mysql-dump/&#34; title=&#34;Import and Export mySQL dump&#34;&gt;export and import a mySQL dump&lt;/a&gt;, and here is a guide how do it for PostgreSQL.&lt;/p&gt;
+
+&lt;h2 id=&#34;export-a-postgresql-database-dump:84d8e3d5c8f415260e623e37a1cf3f9b&#34;&gt;Export a PostgreSQL database dump&lt;/h2&gt;
+
+&lt;p&gt;To export PostgreSQL database we will need to use the &lt;a href=&#34;https://www.postgresql.org/docs/current/static/backup-dump.html&#34; title=&#34;PostgreSQL&#34;&gt;pg_dump&lt;/a&gt; tool, which will dump all the contents of a selected database into a single file.
+We need to run &lt;code&gt;pg_dump&lt;/code&gt; in the command line on the computer where the database is stored. So, if the database is stored on a remote server, you will need to SSH to that server in order to run the following command:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;pg_dump -U db_user -W -F t db_name &amp;gt; /path/to/your/file/dump_name.tar
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Here we used the following options:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;-U&lt;/code&gt; to specify which user will connect to the PostgreSQL database server.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-W&lt;/code&gt; or &lt;code&gt;--password&lt;/code&gt; will force pg_dump to prompt for a password before connecting to the server.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-F&lt;/code&gt; is used to specify the format of the output file, which can be one of the following:
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;p&lt;/code&gt; - plain-text SQL script&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;c&lt;/code&gt; - custom-format archive&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;d&lt;/code&gt; - directory-format archive&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;t&lt;/code&gt; - tar-format archive&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;sup&gt;&lt;em&gt;custom&lt;/em&gt;, &lt;em&gt;directory&lt;/em&gt; and &lt;em&gt;tar&lt;/em&gt; formats are suitable for input into pg_restore.&lt;/sup&gt;&lt;/p&gt;
+
+&lt;p&gt;To see a list of all the available options use &lt;code&gt;pg_dump -?&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;With given options &lt;code&gt;pg_dump&lt;/code&gt; will first prompt for a password for the database user &lt;code&gt;db_user&lt;/code&gt; and then connect as that user to the database named &lt;code&gt;db_name&lt;/code&gt;. After it successfully connects, &lt;code&gt;&amp;gt;&lt;/code&gt; will write the output produced by pg_dump to a file with a given name, in this case &lt;code&gt;dump_name.tar&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;File created in the described process contains all the SQL queries that are required in order to replicate your database.&lt;/p&gt;
+
+&lt;h2 id=&#34;import-a-postgresql-database-dump:84d8e3d5c8f415260e623e37a1cf3f9b&#34;&gt;Import a PostgreSQL database dump&lt;/h2&gt;
+
+&lt;p&gt;There are two ways to restore a PostgreSQL database:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;code&gt;psql&lt;/code&gt; for restoring from a plain SQL script file created with &lt;code&gt;pg_dump&lt;/code&gt;,&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;pg_restore&lt;/code&gt; for restoring from a .tar file, directory, or custom format created with &lt;code&gt;pg_dump&lt;/code&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&#34;1-restore-a-database-with-psql:84d8e3d5c8f415260e623e37a1cf3f9b&#34;&gt;1. Restore a database with psql&lt;/h3&gt;
+
+&lt;p&gt;If your backup is a plain-text file containing SQL script, then you can restore your database by using &lt;a href=&#34;https://www.postgresql.org/docs/current/static/app-psql.html&#34;&gt;PostgreSQL interactive terminal&lt;/a&gt;, and running the following command:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;psql -U db_user db_name &amp;lt; dump_name.sql
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;where &lt;code&gt;db_user&lt;/code&gt; is the database user, &lt;code&gt;db_name&lt;/code&gt; is the database name, and &lt;code&gt;dump_name.sql&lt;/code&gt; is the name of your backup file.&lt;/p&gt;
+
+&lt;h3 id=&#34;2-restore-a-database-with-pg-restore:84d8e3d5c8f415260e623e37a1cf3f9b&#34;&gt;2. Restore a database with pg_restore&lt;/h3&gt;
+
+&lt;p&gt;If you choose custom, directory, or archive format when creating a backup file, then you will need to use pg_restore in order to restore your database:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;pg_restore -d db_name /path/to/your/file/dump_name.tar -c -U db_user&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;If you use pg_restore you have various options available, for example:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;-c&lt;/code&gt; to drop database objects before recreating them,&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-C&lt;/code&gt; to create a database before restoring into it,&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-e&lt;/code&gt; exit if an error has encountered,&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-F format&lt;/code&gt; to specify the format of the archive.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Use &lt;code&gt;pg_restore -?&lt;/code&gt; to get the full list of available options.&lt;/p&gt;
+
+&lt;p&gt;You can find more info on using mentioned tools by running &lt;code&gt;man pg_dump&lt;/code&gt;, &lt;code&gt;man psql&lt;/code&gt; and &lt;code&gt;man pg_restore&lt;/code&gt;.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Import and export MySQL dump</title>
@@ -81,10 +240,10 @@ tar -cvzf myarchive.tar.gz -C /path/to/dir ./
     
     <item>
       <title>Upgrade Ubuntu 8.04 LTS server</title>
-      <link>http://blog.orangeiceberg.com/posts/upgrade-ubuntu-8.04-lts-server</link>
+      <link>http://blog.orangeiceberg.com/posts/upgrade-ubuntu-8-dot-04-lts-server</link>
       <pubDate>Mon, 06 Jan 2014 11:36:43 +0100</pubDate>
       
-      <guid>http://blog.orangeiceberg.com/posts/upgrade-ubuntu-8.04-lts-server</guid>
+      <guid>http://blog.orangeiceberg.com/posts/upgrade-ubuntu-8-dot-04-lts-server</guid>
       <description>&lt;p&gt;Note to self: here is how to upgrade Ubuntu 8.04 LTS (or any other release that is no longer supported) to newer Ubuntu release.&lt;/p&gt;
 
 &lt;p&gt;When you are upgrading unsupported release of Ubuntu if you try to do the usual &lt;code&gt;sudo apt-get update&lt;/code&gt; it will most likely fail because&amp;hellip; well, it&amp;rsquo;s unsupported. The simple fix for this is to change your &lt;code&gt;/etc/apt/sources.list&lt;/code&gt; and replace repository URLs from something like &lt;code&gt;us.archive.ubuntu.com&lt;/code&gt; to &lt;code&gt;old-releases.ubuntu.com&lt;/code&gt;.&lt;/p&gt;
@@ -107,10 +266,10 @@ do-release-upgrade
     
     <item>
       <title>Quick VirtualBox/Vagrant setup with Heroku-like box</title>
-      <link>http://blog.orangeiceberg.com/posts/quick-virtualbox/vagrant-setup-with-heroku-like-box</link>
+      <link>http://blog.orangeiceberg.com/posts/quick-virtualboxvagrant-setup-with-heroku-like-box</link>
       <pubDate>Mon, 16 Sep 2013 09:00:00 +0100</pubDate>
       
-      <guid>http://blog.orangeiceberg.com/posts/quick-virtualbox/vagrant-setup-with-heroku-like-box</guid>
+      <guid>http://blog.orangeiceberg.com/posts/quick-virtualboxvagrant-setup-with-heroku-like-box</guid>
       <description>&lt;p&gt;Here is a quick way to setup VirtualBox using Vagrant with Heroku-like box on Mac.&lt;/p&gt;
 
 &lt;ol&gt;
@@ -121,12 +280,12 @@ do-release-upgrade
 &lt;li&gt;&lt;p&gt;Create Vagrantfile for Heroku-like box (based on &lt;a href=&#34;https://github.com/ejholmes/vagrant-heroku&#34; target=&#34;_blank&#34;&gt;&lt;a href=&#34;https://github.com/ejholmes/vagrant-heroku&#34;&gt;https://github.com/ejholmes/vagrant-heroku&lt;/a&gt;&lt;/a&gt;) that looks something like:&lt;/p&gt;&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;        Vagrant.configure(&amp;quot;2&amp;quot;) do |config|        
-	        config.vm.box = &amp;quot;heroku&amp;quot;
-	        config.vm.box_url = &amp;quot;https://dl.dropboxusercontent.com/s/rnc0p8zl91borei/heroku.box&amp;quot;
-          config.vm.synced_folder &amp;quot;.&amp;quot;, &amp;quot;/vagrant&amp;quot;, :nfs =&amp;gt; true
-	        config.vm.network :private_network, ip: &amp;quot;192.168.1.42&amp;quot;  # required for NFS
-        end
+&lt;pre&gt;&lt;code class=&#34;language-ruby&#34;&gt;Vagrant.configure(&amp;quot;2&amp;quot;) do |config|
+  config.vm.box = &amp;quot;heroku&amp;quot;
+  config.vm.box_url = &amp;quot;https://dl.dropboxusercontent.com/s/rnc0p8zl91borei/heroku.box&amp;quot;
+  config.vm.synced_folder &amp;quot;.&amp;quot;, &amp;quot;/vagrant&amp;quot;, :nfs =&amp;gt; true
+  config.vm.network :private_network, ip: &amp;quot;192.168.1.42&amp;quot;  # required for NFS
+end
 &lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Beside telling Vagrant to use Heroku-like box from &lt;a href=&#34;https://github.com/ejholmes/vagrant-heroku&#34; target=&#34;_blank&#34;&gt;&lt;a href=&#34;https://github.com/ejholmes/vagrant-heroku&#34;&gt;https://github.com/ejholmes/vagrant-heroku&lt;/a&gt;&lt;/a&gt; it also sets up shared dir between host and VM machine. It will mount Vagrantfile dir (.) to /vagrant in VM.&lt;/p&gt;
@@ -169,7 +328,8 @@ do-release-upgrade
 &lt;ul&gt;
 &lt;li&gt;Run fsck checks and it said that everything is fine&lt;/li&gt;
 &lt;li&gt;Used Ubuntu&amp;#8217;s live CD to boot, which got me read-write access to root partition. I changed some things in fstab, tried to get it to be rw permanently. No matter what I did as soon as I rebooted the root partition was once again read-only.&lt;/li&gt;
-&lt;li&gt;I tried booting from some repair disks I have, but all checks passed and no problem was detected. &lt;img src=&#39;http://icebergist.com/wp-includes/images/smilies/icon_sad.gif&#39; alt=&#39;:(&#39; class=&#39;wp-smiley&#39; /&gt;&lt;/li&gt;
+&lt;li&gt;I tried booting from some repair disks I have, but all checks passed and no problem was detected. :-(
+&lt;!-- &lt;img src=&#39;http://icebergist.com/wp-includes/images/smilies/icon_sad.gif&#39; alt=&#39;:(&#39; class=&#39;wp-smiley&#39; /&gt; --&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;Finally, I read somewhere that a similar problem was caused by faulty superblock on hard drive. Fortunately Ubuntu stores superblock backups in different places around disk, so I decided to try to restore it from one of those backups.&lt;/p&gt;
@@ -178,9 +338,11 @@ do-release-upgrade
 
 &lt;p&gt;&lt;code&gt;e2fsck -b 32768 /dev/hdc1&lt;/code&gt;&lt;/p&gt;
 
-&lt;p&gt;After that my root partition was back to read-write mode. &lt;img src=&#39;http://icebergist.com/wp-includes/images/smilies/icon_smile.gif&#39; alt=&#39;:)&#39; class=&#39;wp-smiley&#39; /&gt;&lt;/p&gt;
+&lt;p&gt;After that my root partition was back to read-write mode. :-)
+&lt;!-- &lt;img src=&#39;http://icebergist.com/wp-includes/images/smilies/icon_smile.gif&#39; alt=&#39;:)&#39; class=&#39;wp-smiley&#39; /&gt; --&gt;&lt;/p&gt;
 
-&lt;p&gt;Before you do stuff like that to your computer I suggest that you read man pages for &lt;a href=&#34;http://linux.die.net/man/8/mke2fs&#34; title=&#34;mke2fs&#34;&gt;mke2fs&lt;/a&gt; and &lt;a href=&#34;http://linux.die.net/man/8/e2fsck&#34; title=&#34;e2fsck&#34;&gt;e2fsck&lt;/a&gt;. It will prevent you from doing something foolish like deleting your whole hard drive. &lt;img src=&#39;http://icebergist.com/wp-includes/images/smilies/icon_smile.gif&#39; alt=&#39;:)&#39; class=&#39;wp-smiley&#39; /&gt;&lt;/p&gt;
+&lt;p&gt;Before you do stuff like that to your computer I suggest that you read man pages for &lt;a href=&#34;http://linux.die.net/man/8/mke2fs&#34; title=&#34;mke2fs&#34;&gt;mke2fs&lt;/a&gt; and &lt;a href=&#34;http://linux.die.net/man/8/e2fsck&#34; title=&#34;e2fsck&#34;&gt;e2fsck&lt;/a&gt;. It will prevent you from doing something foolish like deleting your whole hard drive. :-)
+&lt;!-- &lt;img src=&#39;http://icebergist.com/wp-includes/images/smilies/icon_smile.gif&#39; alt=&#39;:)&#39; class=&#39;wp-smiley&#39; /&gt; --&gt;&lt;/p&gt;
 </description>
     </item>
     
@@ -205,10 +367,10 @@ at $100 / month seems like a good solution to get a scalable server. However one
     
     <item>
       <title>InnoDB per-table tablespaces &amp;#8211; split ibdata1 to smaller chunks</title>
-      <link>http://blog.orangeiceberg.com/posts/innodb-per-table-tablespaces-</link>
+      <link>http://blog.orangeiceberg.com/posts/innodb-per-table-tablespaces-split-ibdata1-to-smaller-chunks</link>
       <pubDate>Thu, 24 Jul 2008 09:00:00 +0100</pubDate>
       
-      <guid>http://blog.orangeiceberg.com/posts/innodb-per-table-tablespaces-</guid>
+      <guid>http://blog.orangeiceberg.com/posts/innodb-per-table-tablespaces-split-ibdata1-to-smaller-chunks</guid>
       <description>&lt;p&gt;Today I had to import 3GB of InnoDB tables in MySQL. Unfortunately, while importing the server run out of disk space &amp;#8211; which caused whole server to grind to a halt. Naively I tried to delete imported data to free up space&amp;#8230; I was in for an unpleasant surprise.&lt;/p&gt;
 
 &lt;p&gt;By default when MySQL uses InnoDB engine it stores most of the information in single file called ibdata1. One downside is that once ibdata1 file grows it cannot shrink &amp;#8211; even if you delete all InnoDB tables. For some reason MySQL is set to use single file instead of per-table tablespaces similar to MyISAM.&lt;/p&gt;
@@ -228,11 +390,11 @@ at $100 / month seems like a good solution to get a scalable server. However one
     </item>
     
     <item>
-      <title>This should be interesting weekly &amp;#8211; week 28</title>
-      <link>http://blog.orangeiceberg.com/posts/this-should-be-interesting-weekly-</link>
+      <title>This should be interesting weekly &amp;#8211; Week 28</title>
+      <link>http://blog.orangeiceberg.com/posts/this-should-be-interesting-weekly-week-28</link>
       <pubDate>Sun, 13 Jul 2008 09:00:00 +0100</pubDate>
       
-      <guid>http://blog.orangeiceberg.com/posts/this-should-be-interesting-weekly-</guid>
+      <guid>http://blog.orangeiceberg.com/posts/this-should-be-interesting-weekly-week-28</guid>
       <description>&lt;ul&gt;
 &lt;li&gt;What&amp;#8217;s New in Edge Rails: &lt;a href=&#34;http://tumblelog.slobodankovacevic.com/post/41430445/whats-new-in-edge-rails-easy-join-table-conditions&#34;&gt;Easy Join Table Conditions.&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;http://tumblelog.slobodankovacevic.com/post/41483353/faces-of-millions&#34;&gt;Faces of Millions&lt;/a&gt; &amp;#8211; Art project which aims to gather one million photos of people faces and create 10m x 10m photo mosaic.&lt;/li&gt;
@@ -246,11 +408,11 @@ at $100 / month seems like a good solution to get a scalable server. However one
     </item>
     
     <item>
-      <title>This should be interesting weekly &amp;#8211; week 27</title>
-      <link>http://blog.orangeiceberg.com/posts/this-should-be-interesting-weekly-</link>
+      <title>This should be interesting weekly &amp;#8211; Week 27</title>
+      <link>http://blog.orangeiceberg.com/posts/this-should-be-interesting-weekly-week-27</link>
       <pubDate>Sun, 06 Jul 2008 09:00:00 +0100</pubDate>
       
-      <guid>http://blog.orangeiceberg.com/posts/this-should-be-interesting-weekly-</guid>
+      <guid>http://blog.orangeiceberg.com/posts/this-should-be-interesting-weekly-week-27</guid>
       <description>&lt;p&gt;This is the first weekly condensed edition of my &lt;a href=&#34;http://tumblelog.slobodankovacevic.com/&#34; title=&#34;Tumblelog by Slobodan Kovacevic&#34;&gt;&amp;#8220;This should be interesting&amp;#8221; tumblelog&lt;/a&gt;. Every Sunday I will re-post most interesting posts here on the Icebergist.&lt;/p&gt;
 
 &lt;ul&gt;
@@ -264,10 +426,10 @@ at $100 / month seems like a good solution to get a scalable server. However one
     
     <item>
       <title>Mac OS X problems upgrading from 10.5.3 to 10.5.4</title>
-      <link>http://blog.orangeiceberg.com/posts/mac-os-x-problems-upgrading-from-10.5.3-to-10.5.4</link>
+      <link>http://blog.orangeiceberg.com/posts/mac-os-x-problems-upgrading-from-1053-to-1054</link>
       <pubDate>Fri, 04 Jul 2008 09:00:00 +0100</pubDate>
       
-      <guid>http://blog.orangeiceberg.com/posts/mac-os-x-problems-upgrading-from-10.5.3-to-10.5.4</guid>
+      <guid>http://blog.orangeiceberg.com/posts/mac-os-x-problems-upgrading-from-1053-to-1054</guid>
       <description>&lt;p&gt;Today I tried to upgrade my Mac from 10.5.3 to 10.5.4 using normal Software Update. That didn&amp;#8217;t go as planned as installation hanged at &amp;#8220;Configuring Installation&amp;#8221; and only thing I could do is shutdown the computer.&lt;/p&gt;
 
 &lt;p&gt;After some research and few unsuccessful retries I have finally managed to solve the upgrade problem by downloading standalone 10.5.4 update from &lt;a href=&#34;http://www.apple.com/support/downloads/&#34; title=&#34;Download Apple Mac OS X update&#34;&gt;Apple download section&lt;/a&gt;; booting in safe mode (hold shift key when booting) and then installing the update.&lt;/p&gt;

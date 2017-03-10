@@ -10,11 +10,11 @@
     <atom:link href="http://blog.orangeiceberg.com/categories/javascript/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
-      <title>SproutCore &amp;#8211; a javascript framework</title>
-      <link>http://blog.orangeiceberg.com/posts/sproutcore-</link>
+      <title>SproutCore &amp;#8211; a Javascript framework</title>
+      <link>http://blog.orangeiceberg.com/posts/sproutcore-javascript-framework</link>
       <pubDate>Thu, 03 Jul 2008 09:00:00 +0100</pubDate>
       
-      <guid>http://blog.orangeiceberg.com/posts/sproutcore-</guid>
+      <guid>http://blog.orangeiceberg.com/posts/sproutcore-javascript-framework</guid>
       <description>&lt;p&gt;&lt;a href=&#34;http://www.sproutcore.com&#34; title=&#34;SproutCore - Javascript Framework&#34;&gt;SproutCore&lt;/a&gt; is a javascript framework which tries to enable developers to build web apps that look and act more like a desktop apps.&lt;/p&gt;
 
 &lt;p&gt;It steps away from a classic web app model by moving a lot of app into the browser itself, which then interacts with server via AJAX. As it says on the &lt;a href=&#34;http://www.sproutcore.com/about/&#34; title=&#34;About SproutCore&#34;&gt;SproutCore site&lt;/a&gt;:&lt;/p&gt;
@@ -37,11 +37,13 @@ Another great thing about SproutCore is that it can be hooked up with any backen
 &lt;p&gt;Actions speak louder than words, so take a look at the SproutCore demos which shows you exactly what it&amp;#8217;s all about.&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;http://www.sproutcore.com/static/photos/&#34; title=&#34;SproutCore demo photo gallery&#34;&gt;SproutCore based photo gallery&lt;/a&gt; &amp;#8211; iPhoto anyone? &lt;img src=&#39;http://icebergist.com/wp-includes/images/smilies/icon_smile.gif&#39; alt=&#39;:)&#39; class=&#39;wp-smiley&#39; /&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://www.sproutcore.com/static/photos/&#34; title=&#34;SproutCore demo photo gallery&#34;&gt;SproutCore based photo gallery&lt;/a&gt; &amp;#8211; iPhoto anyone? :-)
+&lt;!-- &lt;img src=&#39;http://icebergist.com/wp-includes/images/smilies/icon_smile.gif&#39; alt=&#39;:)&#39; class=&#39;wp-smiley&#39; /&gt; --&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;http://www.sproutcore.com/static/sample_controls/&#34; title=&#34;SproutCore demo sample controls&#34;&gt;SproutCore sample controls&lt;/a&gt; &amp;#8211; demonstrates what kind of controls are already available in SproutCore.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;In next few days I will try to build a sample application powered by SproutCore and Rails to see how it goes. I will post my impressions here. After all if it&amp;#8217;s something Apple used for Mobile.me &amp;#8211; well, it can&amp;#8217;t be that bad. &lt;img src=&#39;http://icebergist.com/wp-includes/images/smilies/icon_wink.gif&#39; alt=&#39;;)&#39; class=&#39;wp-smiley&#39; /&gt;&lt;/p&gt;
+&lt;p&gt;In next few days I will try to build a sample application powered by SproutCore and Rails to see how it goes. I will post my impressions here. After all if it&amp;#8217;s something Apple used for Mobile.me &amp;#8211; well, it can&amp;#8217;t be that bad. ;-)
+&lt;!-- &lt;img src=&#39;http://icebergist.com/wp-includes/images/smilies/icon_wink.gif&#39; alt=&#39;;)&#39; class=&#39;wp-smiley&#39; /&gt; --&gt;&lt;/p&gt;
 </description>
     </item>
     
