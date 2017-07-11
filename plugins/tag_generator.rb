@@ -118,6 +118,10 @@ module Jekyll
       end
     end
 
+    def axiomq_tag_url(tag)
+      "https://www.axiomq.com/blog/tags/#{tag.gsub(/_|\W/, '-')}/"
+    end
+
     # Outputs the post.date as formatted html, with hooks for CSS styling.
     #
     #  +date+ is the date object to format as HTML.
@@ -133,4 +137,3 @@ module Jekyll
   end
 
 end
-

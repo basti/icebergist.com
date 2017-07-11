@@ -176,6 +176,10 @@ ERR
       "<a class='category' href='/#{dir}/#{category.to_url}/'>#{category}</a>"
     end
 
+    def axiomq_category_url(category)
+      "https://www.axiomq.com/blog/categories/#{category.to_url}/"
+    end
+
     # Outputs the post.date as formatted html, with hooks for CSS styling.
     #
     #  +date+ is the date object to format as HTML.

@@ -1,15 +1,25 @@
+{% assign redirect_to = "https://www.axiomq.com/blog/" %}
+{% if page.is_tag %}
+  {% capture redirect_to %}{{ page.tag | axiomq_tag_url }}{% endcapture %}
+{% endif %}
+{% if page.is_category %}
+  {% capture redirect_to %}{{ page.category | axiomq_category_url }}{% endcapture %}
+{% endif %}
 {% if page.redirect_to %}
-  <html>
+  {% assign redirect_to = page.redirect_to %}
+{% endif %}
+{% if redirect_to %}
+<html>
   <head>
-    <meta http-equiv="refresh" content="0; url={{ page.redirect_to }}">
-    <link rel="canonical" href="{{ page.redirect_to }}" />
+    <meta http-equiv="refresh" content="0; url={{ redirect_to }}">
+    <link rel="canonical" href="{{ redirect_to }}" />
   </head>
   <body>
     <p>
       Orange Iceberg and Icebergist are now part of AxiomQ Ventures.
     </p>
     <p>
-      You'll be redirected soon to <a href="{{ page.redirect_to }}">{{ page.redirect_to }}</a>
+      You'll be redirected soon to <a href="{{ redirect_to }}">{{ redirect_to }}</a>
     </p>
   </body>
   </html>
