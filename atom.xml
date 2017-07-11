@@ -4,7 +4,7 @@
   <title><![CDATA[Icebergist]]></title>
   <link href="http://icebergist.com/atom.xml" rel="self"/>
   <link href="http://icebergist.com/"/>
-  <updated>2017-06-05T15:37:45+02:00</updated>
+  <updated>2017-07-11T19:24:08+02:00</updated>
   <id>http://icebergist.com/</id>
   <author>
     <name><![CDATA[Orange Iceberg]]></name>
@@ -582,7 +582,7 @@ We need to run <code>pg_dump</code> in the command line on the computer where th
 <span class='line-number'>4</span>
 </pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">set</span> <span class="ss">:application</span><span class="p">,</span> <span class="s1">&#39;app-name&#39;</span>   <span class="c1"># application name</span>
 </span><span class='line'><span class="n">set</span> <span class="ss">:deploy_user</span><span class="p">,</span> <span class="s1">&#39;user-name&#39;</span>   <span class="c1"># name of user who is set on server</span>
-</span><span class='line'><span class="n">set</span> <span class="ss">:repo_url</span><span class="p">,</span> <span class="s1">&#39;git@github.com:nickname/repo_name.git&#39;</span>   <span class="c1"># your repository url from github </span>
+</span><span class='line'><span class="n">set</span> <span class="ss">:repo_url</span><span class="p">,</span> <span class="s1">&#39;git@github.com:nickname/repo_name.git&#39;</span>   <span class="c1"># your repository url from github</span>
 </span><span class='line'><span class="n">set</span> <span class="ss">:branch</span><span class="p">,</span> <span class="no">ENV</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s1">&#39;BRANCH&#39;</span><span class="p">,</span> <span class="s1">&#39;master&#39;</span><span class="p">)</span>   <span class="c1"># branch which you want to deploy from</span>
 </span></code></pre></td></tr></table></div></figure>
 
@@ -2004,7 +2004,7 @@ RSpec.configure do |config|
   config.after(:each) do
     if Rails.env.test? || Rails.env.cucumber?
       FileUtils.rm_rf(Dir["#{Rails.root}/spec/support/uploads"])
-    end 
+    end
   end
 end</pre>
 
