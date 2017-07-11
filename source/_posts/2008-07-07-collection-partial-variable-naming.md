@@ -1,4 +1,5 @@
 ---
+redirect_to: https://www.axiomq.com/blog/collection-partial-variable-naming/
 date: 2008-07-07 09:00:00 +0100
 title: 'Collection partial variable naming &#8211; new in edge rails'
 author: Slobodan Kovačević

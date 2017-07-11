@@ -1,4 +1,5 @@
 ---
+redirect_to: https://www.axiomq.com/blog/upgrade-ubuntu-8-dot-04-lts-server/
 layout: post
 title: "Upgrade Ubuntu 8.04 LTS server"
 date: 2014-01-06 11:36:43 +0100

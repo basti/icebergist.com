@@ -1,12 +1,13 @@
 ---
+redirect_to: https://www.axiomq.com/blog/create-and-extract-archives-using-tar-and-gzip/
 layout: post
 title: "Create and extract archives using tar and gzip"
 date: 2015-11-13 13:28:36 +0100
 comments: true
 author: Slobodan Kovačević
-categories: 
+categories:
   - Misc
-tags: 
+tags:
   - tips
   - howto
   - linux

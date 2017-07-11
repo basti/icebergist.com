@@ -1,4 +1,5 @@
 ---
+redirect_to: https://www.axiomq.com/blog/simple-password-protected-administration-with-codeigniter/
 date: 2009-03-08 09:00:00 +0100
 title: Simple password protected administration with CodeIgniter
 author: Slobodan Kovačević
@@ -58,7 +59,7 @@ Next step is to add a function which we can call to verify if user is logged in:
   {
 	  if($this->erkanaauth->try_session_login())
 	      return true;
-  
+
 	  redirect('admin/login');
   }
 </pre>
@@ -74,7 +75,7 @@ Function uses Erkanaauth&#8217;s try\_session\_login which checks if user is alr
       if($this->erkanaauth->try_login(array('username' => $username, 'password' => $password)))
         redirect('admin');
     }
-    
+
     $this->load->view('admin_login');
   }
 

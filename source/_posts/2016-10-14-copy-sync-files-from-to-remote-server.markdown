@@ -1,12 +1,13 @@
 ---
+redirect_to: https://www.axiomq.com/blog/copy-sync-files-from-to-remote-server/
 layout: post
 title: "Copy and sync files from/to remote server"
 date: 2016-11-07 16:55:52 +0200
 comments: true
 author: Slobodan Kovačević
-categories: 
+categories:
   - Misc
-tags: 
+tags:
   - tips
   - linux
   - ubuntu

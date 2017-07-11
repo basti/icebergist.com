@@ -1,4 +1,5 @@
 ---
+redirect_to: https://www.axiomq.com/blog/how-to-skip-devise-trackable-updates/
 layout: post
 title: "How to skip Devise trackable updates"
 date: 2014-05-12 19:10:06 +0200

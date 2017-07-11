@@ -1,4 +1,5 @@
 ---
+redirect_to: https://www.axiomq.com/blog/deploying-with-capistrano-3/
 layout: post
 title: "Deploying Rails app with Capistrano 3"
 date: 2016-05-25 10:42:17 +0200
@@ -50,7 +51,7 @@ Capfile
 config/deploy.rb
 config/deploy/production.rb
 config/deploy/staging.rb
-lib/capistrano/tasks 
+lib/capistrano/tasks
 ```
 <!--more-->
 
@@ -74,7 +75,7 @@ Add this line to the Gemfile:
 
 ```
 group :development do
-  gem 'capistrano', '~> 3.5' 
+  gem 'capistrano', '~> 3.5'
   gem 'capistrano-rails', '~> 1.1.6'
   gem 'capistrano-rbenv', '~> 2.0', require: false
 end
@@ -104,7 +105,7 @@ Open `config/deploy.rb` and add options for deployment:
 ```
 set :application, 'app-name'   # application name
 set :deploy_user, 'user-name'   # name of user who is set on server
-set :repo_url, 'git@github.com:nickname/repo_name.git'   # your repository url from github 
+set :repo_url, 'git@github.com:nickname/repo_name.git'   # your repository url from github
 set :branch, ENV.fetch('BRANCH', 'master')   # branch which you want to deploy from
 ```
 + set the path where you want to find your app on server, starting from server's root

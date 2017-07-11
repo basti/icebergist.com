@@ -1,4 +1,5 @@
 ---
+redirect_to: https://www.axiomq.com/blog/rspec-and-factorygirl-setup-for-testing-carrierwave-uploaders/
 date: 2013-09-07 09:00:00 +0100
 title: RSpec and FactoryGirl setup for testing Carrierwave uploaders
 author: Slobodan Kovačević
@@ -87,6 +88,6 @@ RSpec.configure do |config|
   config.after(:each) do
     if Rails.env.test? || Rails.env.cucumber?
       FileUtils.rm_rf(Dir["#{Rails.root}/spec/support/uploads"])
-    end 
+    end
   end
 end</pre>

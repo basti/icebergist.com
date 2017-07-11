@@ -1,4 +1,5 @@
 ---
+redirect_to: https://www.axiomq.com/blog/sproutcore-javascript-framework/
 date: 2008-07-03 09:00:00 +0100
 title: 'SproutCore &#8211; a javascript framework'
 author: Slobodan Kovačević
@@ -30,10 +31,10 @@ Another great thing about SproutCore is that it can be hooked up with any backen
 
 Actions speak louder than words, so take a look at the SproutCore demos which shows you exactly what it&#8217;s all about.
 
-*   [SproutCore based photo gallery][4] &#8211; iPhoto anyone? <img src='http://icebergist.com/wp-includes/images/smilies/icon_smile.gif' alt=':)' class='wp-smiley' /> 
+*   [SproutCore based photo gallery][4] &#8211; iPhoto anyone? <img src='http://icebergist.com/wp-includes/images/smilies/icon_smile.gif' alt=':)' class='wp-smiley' />
 *   [SproutCore sample controls][5] &#8211; demonstrates what kind of controls are already available in SproutCore.
 
-In next few days I will try to build a sample application powered by SproutCore and Rails to see how it goes. I will post my impressions here. After all if it&#8217;s something Apple used for Mobile.me &#8211; well, it can&#8217;t be that bad. <img src='http://icebergist.com/wp-includes/images/smilies/icon_wink.gif' alt=';)' class='wp-smiley' /> 
+In next few days I will try to build a sample application powered by SproutCore and Rails to see how it goes. I will post my impressions here. After all if it&#8217;s something Apple used for Mobile.me &#8211; well, it can&#8217;t be that bad. <img src='http://icebergist.com/wp-includes/images/smilies/icon_wink.gif' alt=';)' class='wp-smiley' />
 
 [1]: http://www.sproutcore.com "SproutCore - Javascript Framework"
 [2]: http://www.sproutcore.com/about/ "About SproutCore"

@@ -1,10 +1,11 @@
 ---
+redirect_to: https://www.axiomq.com/blog/import-and-export-mysql-dump/
 layout: post
 title: "Import and export MySQL dump"
 date: 2015-12-02 10:44:23 +0100
 comments: true
 author: Slobodan Kovačević
-categories: 
+categories:
   - Misc
 tags:
   - mysql

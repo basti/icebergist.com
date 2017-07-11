@@ -1,4 +1,5 @@
 ---
+redirect_to: https://www.axiomq.com/blog/restful-admin-namespaced-controller-using-scaffolding/
 date: 2008-09-17 09:00:00 +0100
 title: RESTful admin namespaced controller using scaffolding
 author: Slobodan Kovačević
@@ -34,7 +35,7 @@ Now we have everything generated we just need to make it work with admin control
 admin.resources :categories<br />
 end`
 *   in admin/categories\_controller.rb replace in 3 places redirect\_to calls to work with admin namespace. It will have something like redirect\_to(@category), but to work with namespace it needs to have redirect\_to([:admin, @category])
-*   make similar changes in all templates, i.e. make it work within an admin namespace. You need to make following changes: 
+*   make similar changes in all templates, i.e. make it work within an admin namespace. You need to make following changes:
     *   form_for(@category) => **form_for([:admin, @category])**
     *   <%= link_to &#8216;Show&#8217;, @category %> => **<%= link_to &#8216;Show&#8217;, [:admin, @category] %>**
     *   categories_path => **admin\_categories\_path**

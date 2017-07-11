@@ -1,12 +1,13 @@
 ---
+redirect_to: https://www.axiomq.com/blog/backup-and-restore-a-postresql-database/
 layout: post
 title: "Backup and Restore a PostgreSQL Database"
 date: 2016-10-18 07:05:38 +0200
 comments: true
 author: Jovana Dačić
-categories: 
+categories:
   - Misc
-tags: 
+tags:
   - postgreSQL
   - postgres
 published: true
@@ -45,8 +46,8 @@ File created in the described process contains all the SQL queries that are requ
 
 There are two ways to restore a PostgreSQL database:
 
-1. `psql` for restoring from a plain SQL script file created with `pg_dump`, 
-2. `pg_restore` for restoring from a .tar file, directory, or custom format created with `pg_dump`. 
+1. `psql` for restoring from a plain SQL script file created with `pg_dump`,
+2. `pg_restore` for restoring from a .tar file, directory, or custom format created with `pg_dump`.
 
 ###1. Restore a database with psql
 

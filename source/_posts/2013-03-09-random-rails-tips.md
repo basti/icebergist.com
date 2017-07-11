@@ -1,4 +1,5 @@
 ---
+redirect_to: https://www.axiomq.com/blog/random-rails-tips/
 date: 2013-03-09 09:00:00 +0100
 title: Random Rails tips
 author: Slobodan Kovačević

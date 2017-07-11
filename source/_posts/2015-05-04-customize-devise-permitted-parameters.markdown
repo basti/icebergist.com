@@ -1,12 +1,13 @@
 ---
+redirect_to: https://www.axiomq.com/blog/customize-devise-permitted-parameters/
 layout: post
 title: "Customize Devise permitted parameters"
 date: 2015-05-04 16:07:22 +0200
 comments: true
 author: Jovica Šuša
-categories: 
+categories:
   - Ruby and Rails
-tags: 
+tags:
   - ruby
   - rails
   - devise

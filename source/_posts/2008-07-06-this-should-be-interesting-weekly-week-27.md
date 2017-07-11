@@ -1,4 +1,5 @@
 ---
+redirect_to: https://www.axiomq.com/blog/this-should-be-interesting-weekly-week-27/
 date: 2008-07-06 09:00:00 +0100
 title: 'This should be interesting weekly &#8211; week 27'
 author: Slobodan Kovačević

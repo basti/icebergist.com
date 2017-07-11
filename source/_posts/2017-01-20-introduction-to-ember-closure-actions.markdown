@@ -1,4 +1,5 @@
 ---
+redirect_to: https://www.axiomq.com/blog/introduction-to-ember-closure-actions/
 layout: post
 title: "Introduction to Ember Closure Actions"
 date: 2017-02-03 15:07:40 +0100

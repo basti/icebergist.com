@@ -1,4 +1,5 @@
 ---
+redirect_to: https://www.axiomq.com/blog/mosso-hosting-cloud/
 date: 2008-09-17 09:00:00 +0100
 title: Mosso hosting cloud
 author: Slobodan Kovačević

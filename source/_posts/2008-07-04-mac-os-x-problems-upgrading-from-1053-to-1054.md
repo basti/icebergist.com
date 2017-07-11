@@ -1,4 +1,5 @@
 ---
+redirect_to: https://www.axiomq.com/blog/mac-os-x-problems-upgrading-from-1053-to-1054/
 date: 2008-07-04 09:00:00 +0100
 title: Mac OS X problems upgrading from 10.5.3 to 10.5.4
 author: Slobodan Kovačević

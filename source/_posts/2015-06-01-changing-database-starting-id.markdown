@@ -1,12 +1,13 @@
 ---
+redirect_to: https://www.axiomq.com/blog/changing-database-starting-id/
 layout: post
 title: "changing database starting id"
 date: 2015-06-01 11:03:47 +0200
 comments: true
 author: Jovica Šuša
-categories: 
+categories:
   - Ruby and Rails
-tags: 
+tags:
   - ruby
   - rails
   - sqlite
@@ -32,7 +33,7 @@ Here is our task and an explanation that follows.
 namespace :database do
   desc "Detect database that's being used and then increment its id"
   task autoincrement: :environment do
-  
+
     db_name_downcase = ActiveRecord::Base.connection.adapter_name.downcase
 
     if Link.maximum(:id).to_i < 1000
@@ -48,7 +49,7 @@ namespace :database do
     else
       puts "To perform this task your database shouldn't have records with id number higher than 1000"
     end
-    
+
   end
 end
 ```
@@ -63,5 +64,3 @@ For Postgres we have to explain what a sequence is. A sequence is a special kind
 For SQlite we altered sqlite_sequence table, which is an internal table used to implement AUTOINCREMENT. It is created automatically whenever any ordinary table with an AUTOINCREMENT integer primary key is created.
 
 You can check [this Stack Overflow discussion](http://stackoverflow.com/questions/2075331/change-starting-id-number) that was very helpful to me.
-
-    

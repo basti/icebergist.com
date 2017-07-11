@@ -1,4 +1,5 @@
 ---
+redirect_to: https://www.axiomq.com/blog/headless-firefox-in-ubuntu-on-virtual-box-for-cucumber-testing/
 layout: post
 title: "Headless Firefox in Ubuntu on VirtualBox for Cucumber testing"
 date: 2015-12-03 11:12:56 +0200

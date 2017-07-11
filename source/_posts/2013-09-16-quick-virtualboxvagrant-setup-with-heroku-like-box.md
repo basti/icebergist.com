@@ -1,4 +1,5 @@
 ---
+redirect_to: https://www.axiomq.com/blog/quick-virtualboxvagrant-setup-with-heroku-like-box/
 date: 2013-09-16 09:00:00 +0100
 title: Quick VirtualBox/Vagrant setup with Heroku-like box
 author: Slobodan Kovačević
@@ -39,19 +40,19 @@ Beside telling Vagrant to use Heroku-like box from <a href="https://github.com/e
 Now you can use `vagrant ssh` to login to VM.
 
 Vagrant Heroku-like box comes with Postgresql, but if you want you can easily setup sqlite:
-    
+
 ``` sh
 sudo apt-get install libsqlite3-dev
 ```
 
 **Bonus tip**: when you are working on multiple projects sometimes you can forget which VMs are running. You can list all running VMs using:
-    
+
 ``` sh
 VBoxManage list runningvms
 ```
-    
+
 Further reading:
-    
+
 * <a href="http://docs.vagrantup.com/v2/" target="_blank">Vagrant docs</a>
 * <a href="https://github.com/ejholmes/vagrant-heroku" target="_blank">Vagrant Heroku-like box</a> which can be easily customized.
 * <a href="http://loudcoding.com/posts/how-to-use-vagrant-to-run-celadon-cedar-stack-on-heroku/" target="_blank">Another Vagrant setup tutorial</a>

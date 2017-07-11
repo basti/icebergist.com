@@ -1,12 +1,13 @@
 ---
+redirect_to: https://www.axiomq.com/blog/using-ransackers-to-search-for-a-key-in-postgresql-json-column/
 layout: post
 title: "Using Ransackers to search for a key in PostgreSQL JSON column"
 date: 2016-06-20 12:39:42 +0200
 comments: true
 author: Jovana Dačić
-categories: 
+categories:
   - Ruby and Rails
-tags: 
+tags:
   - ruby
   - rails
   - postgreSQL
@@ -18,9 +19,9 @@ Starting with v9.2, PostgreSQL added native JSON support which enabled us to tak
 
 While working on a Ruby on Rails application that used PostgreSQL database to store data, we came a across an issue where we needed to implement a search by key within a JSON column.
 
-We were alredy using [Ransack](https://github.com/activerecord-hackery/ransack) for building search forms within the application, so we needed a way of telling Ransack to perform a search by given key in our JSON column. 
+We were alredy using [Ransack](https://github.com/activerecord-hackery/ransack) for building search forms within the application, so we needed a way of telling Ransack to perform a search by given key in our JSON column.
 
-This is where [Ransackers](https://github.com/activerecord-hackery/ransack/wiki/using-ransackers) come in. 
+This is where [Ransackers](https://github.com/activerecord-hackery/ransack/wiki/using-ransackers) come in.
 >The premise behind Ransack is to provide access to Arel predicate methods.
 
 You can find more information on Arel [here](https://github.com/rails/arel).

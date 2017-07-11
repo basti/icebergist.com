@@ -1,4 +1,5 @@
 ---
+redirect_to: https://www.axiomq.com/blog/display-part-of-rails-template-with-different-locale/
 layout: post
 title: "Show part of a Rails template in other locale"
 date: 2016-05-30 10:06:00 +0200
