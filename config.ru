@@ -1,0 +1,42 @@
+require 'rack/rewrite'
+
+use Rack::Rewrite do
+  r301 %r{/posts/so-it-begins}, 'https://www.axiomq.com/blog/so-it-begins'
+  r301 %r{/posts/sproutcore-javascript-framework}, 'https://www.axiomq.com/blog/sproutcore-javascript-framework'
+  r301 %r{/posts/mac-os-x-problems-upgrading-from-1053-to-1054}, 'https://www.axiomq.com/blog/mac-os-x-problems-upgrading-from-1053-to-1054'
+  r301 %r{/posts/this-should-be-interesting-weekly-week-27}, 'https://www.axiomq.com/blog/this-should-be-interesting-weekly-week-27'
+  r301 %r{/posts/collection-partial-variable-naming}, 'https://www.axiomq.com/blog/collection-partial-variable-naming'
+  r301 %r{/posts/this-should-be-interesting-weekly-week-28}, 'https://www.axiomq.com/blog/this-should-be-interesting-weekly-week-28'
+  r301 %r{/posts/innodb-per-table-tablespaces-split-ibdata1-to-smaller-chunks}, 'https://www.axiomq.com/blog/innodb-per-table-tablespaces-split-ibdata1-to-smaller-chunks'
+  r301 %r{/posts/mosso-hosting-cloud}, 'https://www.axiomq.com/blog/mosso-hosting-cloud'
+  r301 %r{/posts/restful-admin-namespaced-controller-using-scaffolding}, 'https://www.axiomq.com/blog/restful-admin-namespaced-controller-using-scaffolding'
+  r301 %r{/posts/restoring-superblock-on-ubutnu}, 'https://www.axiomq.com/blog/restoring-superblock-on-ubutnu'
+  r301 %r{/posts/simple-password-protected-administration-with-codeigniter}, 'https://www.axiomq.com/blog/simple-password-protected-administration-with-codeigniter'
+  r301 %r{/posts/expected-xrb-to-define-x-loaderror}, 'https://www.axiomq.com/blog/expected-xrb-to-define-x-loaderror'
+  r301 %r{/posts/rails-3-reading-list}, 'https://www.axiomq.com/blog/rails-3-reading-list'
+  r301 %r{/posts/paperclip-heroku-and-amazon-s3-credentials}, 'https://www.axiomq.com/blog/paperclip-heroku-and-amazon-s3-credentials'
+  r301 %r{/posts/random-rails-tips}, 'https://www.axiomq.com/blog/random-rails-tips'
+  r301 %r{/posts/rspec-and-factorygirl-setup-for-testing-carrierwave-uploaders}, 'https://www.axiomq.com/blog/rspec-and-factorygirl-setup-for-testing-carrierwave-uploaders'
+  r301 %r{/posts/railsdiff}, 'https://www.axiomq.com/blog/railsdiff'
+  r301 %r{/posts/quick-virtualboxvagrant-setup-with-heroku-like-box}, 'https://www.axiomq.com/blog/quick-virtualboxvagrant-setup-with-heroku-like-box'
+  r301 %r{/posts/upgrade-ubuntu-8-dot-04-lts-server/}, 'https://www.axiomq.com/blog/upgrade-ubuntu-8-dot-04-lts-server/'
+  r301 %r{/posts/how-to-skip-devise-trackable-updates/}, 'https://www.axiomq.com/blog/how-to-skip-devise-trackable-updates/'
+  r301 %r{/posts/customize-devise-permitted-parameters/}, 'https://www.axiomq.com/blog/customize-devise-permitted-parameters/'
+  r301 %r{/posts/changing-database-starting-id/}, 'https://www.axiomq.com/blog/changing-database-starting-id/'
+  r301 %r{/posts/creating-and-publishing-a-ruby-gem/}, 'https://www.axiomq.com/blog/creating-and-publishing-a-ruby-gem/'
+  r301 %r{/posts/create-and-extract-archives-using-tar-and-gzip/}, 'https://www.axiomq.com/blog/create-and-extract-archives-using-tar-and-gzip/'
+  r301 %r{/posts/import-and-export-mysql-dump/}, 'https://www.axiomq.com/blog/import-and-export-mysql-dump/'
+  r301 %r{/posts/headless-firefox-in-ubuntu-on-virtual-box-for-cucumber-testing/}, 'https://www.axiomq.com/blog/headless-firefox-in-ubuntu-on-virtual-box-for-cucumber-testing/'
+  r301 %r{/posts/rake-db-migrate-vs-rake-db-schema-load/}, 'https://www.axiomq.com/blog/rake-db-migrate-vs-rake-db-schema-load/'
+  r301 %r{/posts/deploying-with-capistrano-3/}, 'https://www.axiomq.com/blog/deploying-with-capistrano-3/'
+  r301 %r{/posts/display-part-of-rails-template-with-different-locale/}, 'https://www.axiomq.com/blog/display-part-of-rails-template-with-different-locale/'
+  r301 %r{/posts/using-ransackers-to-search-for-a-key-in-postgresql-json-column/}, 'https://www.axiomq.com/blog/using-ransackers-to-search-for-a-key-in-postgresql-json-column/'
+  r301 %r{/posts/backup-and-restore-a-postresql-database/}, 'https://www.axiomq.com/blog/backup-and-restore-a-postresql-database/'
+  r301 %r{/posts/copy-sync-files-from-to-remote-server/}, 'https://www.axiomq.com/blog/copy-sync-files-from-to-remote-server/'
+  r301 %r{/posts/introduction-to-ember-closure-actions/}, 'https://www.axiomq.com/blog/introduction-to-ember-closure-actions/'
+
+
+  # r301 %r{/google377fad0c45f8f3a8.html}, 'https://www.axiomq.com/google377fad0c45f8f3a8.html'
+end
+
+run lambda { |env| [301, {'Location'=>'https://www.axiomq.com/blog/'}, StringIO.new("")] }
